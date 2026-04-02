@@ -1,0 +1,1 @@
+/usr/bin/g++ CMakeFiles/lecture6.dir/main.cpp.o -o lecture6 

@@ -1,0 +1,276 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"jsonFile" : "directory-.-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "src/lecture1",
+					"jsonFile" : "directory-src.lecture1-df8a2974a28813c88d12.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture1",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "src/lecture2",
+					"jsonFile" : "directory-src.lecture2-28d8ff09da3bf958c0c1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture2",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "src/lecture3",
+					"jsonFile" : "directory-src.lecture3-daeec82427116d2a2163.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture3",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "src/lecture4",
+					"jsonFile" : "directory-src.lecture4-c34e5e63e4c8126f3389.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture4",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "src/lecture5",
+					"jsonFile" : "directory-src.lecture5-ff8dac8f2a169fb69e08.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture5",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "src/lecture6",
+					"jsonFile" : "directory-src.lecture6-a64d5bca23015bd0cc73.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture6",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "src/lecture7",
+					"jsonFile" : "directory-src.lecture7-7e471e2db3f67163ffc5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture7",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "src/lecture8",
+					"jsonFile" : "directory-src.lecture8-550a7933a3fd16607d00.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture8",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "src/lecture9",
+					"jsonFile" : "directory-src.lecture9-d24b6ad61bdb4b06d064.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src/lecture9",
+					"targetIndexes" : 
+					[
+						8
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"name" : "enpm702_cpp",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "lecture1::@5e5fb1a10cbc009956b1",
+					"jsonFile" : "target-lecture1-c71495465ad09df8e15e.json",
+					"name" : "lecture1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "lecture2::@6644962b459c86ac196f",
+					"jsonFile" : "target-lecture2-661edf15da4df38dd7b3.json",
+					"name" : "lecture2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "lecture3::@902181b122680e3e7a88",
+					"jsonFile" : "target-lecture3-4bbd26f8546baae1556d.json",
+					"name" : "lecture3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "lecture4::@55d6c783f033760e355d",
+					"jsonFile" : "target-lecture4-ceeafa5dfc717e8c01a5.json",
+					"name" : "lecture4",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "lecture5::@34d15826387e418c6332",
+					"jsonFile" : "target-lecture5-776324126996a029ccdf.json",
+					"name" : "lecture5",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "lecture6::@ae5619c04f45f9f39211",
+					"jsonFile" : "target-lecture6-ed3562685c3a297df343.json",
+					"name" : "lecture6",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "lecture7::@565a00fa9ec56e3cfc82",
+					"jsonFile" : "target-lecture7-b6eae8efbfd14efb8578.json",
+					"name" : "lecture7",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "lecture8::@e2d19e6cf8db6a54fd86",
+					"jsonFile" : "target-lecture8-ea8b30b48840ee78bb42.json",
+					"name" : "lecture8",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "lecture9::@8d5089ecaf7d66a1bb8d",
+					"jsonFile" : "target-lecture9-87f30aefdff51a85b454.json",
+					"name" : "lecture9",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/zeidk/github/code/enpm702-fall-2026-cpp/build",
+		"source" : "/home/zeidk/github/code/enpm702-fall-2026-cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
