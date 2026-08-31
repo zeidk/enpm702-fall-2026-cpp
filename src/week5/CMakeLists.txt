@@ -1,1 +1,1 @@
-add_executable(week5 main.cpp)
+add_executable(week5 src/main.cpp)

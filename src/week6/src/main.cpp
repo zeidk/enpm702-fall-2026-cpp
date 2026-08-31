@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "Lecture 3\n";
+    std::cout << "Week 6\n";
     return 0;
 }

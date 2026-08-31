@@ -4,7 +4,7 @@
 #   echo "source ~/enpm702-cpp/enpm702-cpp.sh" >> ~/.zshrc    # zsh users
 
 # ── Configuration ───────────────────────────────────────────────────────────
-ENPM702_WS="$HOME/enpm702-cpp"
+ENPM702_WS="$HOME/enpm702"
 ENPM702_SRC="$ENPM702_WS/src"
 ENPM702_BUILD="$ENPM702_WS/build"
 
