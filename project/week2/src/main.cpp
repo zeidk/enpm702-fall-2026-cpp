@@ -16,8 +16,8 @@
 //   1. Blocks marked "DOES NOT COMPILE" are on the slides to show you an error.
 //      Uncomment them on purpose, read the message, then comment them back.
 //   2. This target builds with -Wall -Wextra. Exactly three snippets warn, and
-//      each warning IS the lesson: -Wsign-compare on [Slide 36] and on the
-//      [Slide 54] exercise, and -Wsequence-point on the macro in [Slide 59].
+//      each warning IS the lesson: -Wsign-compare on [Slide 37] and on the
+//      [Slide 55] exercise, and -Wsequence-point on the macro in [Slide 60].
 //      Anything else you see is worth a second look.
 // =============================================================================
 
@@ -40,37 +40,37 @@
 // piece you need here, then uncomment its matching block inside main().
 // =============================================================================
 
-// --- [Slide 68] Global Scope -------------------------------------------------
+// --- [Slide 69] Global Scope -------------------------------------------------
 // int global_var{1};
 
-// --- [Slide 69] Where globals live -------------------------------------------
+// --- [Slide 70] Where globals live -------------------------------------------
 // int global_x;      // uninitialized -> BSS
 // int global_y{1};   // initialized   -> data
 
-// --- [Slide 59] Symbolic Constants (Macros) ----------------------------------
+// --- [Slide 60] Symbolic Constants (Macros) ----------------------------------
 // Avoid these in your own code. They are here so you can see why.
 // #define PI 3.14159         // not a variable: no type, no scope
 // #define SQUARE(x) ((x) * (x))
 
-// --- [Slide 72] Namespaces ---------------------------------------------------
+// --- [Slide 73] Namespaces ---------------------------------------------------
 // namespace MyNamespace {
 // int x{3};
 // int y{4};
 // }  // namespace MyNamespace
 
-// --- [Slide 73] Why to avoid "using namespace" -------------------------------
-// Uncomment ALL FOUR lines together, plus the [Slide 73] block in main().
+// --- [Slide 74] Why to avoid "using namespace" -------------------------------
+// Uncomment ALL FOUR lines together, plus the [Slide 74] block in main().
 // namespace Collide {
 // int cout{1};
 // }
 // using namespace std;
 // using namespace Collide;
 
-// --- [Slide 74] Aliases ------------------------------------------------------
+// --- [Slide 75] Aliases ------------------------------------------------------
 // using uint = unsigned int;
 // using JointAngles = std::vector<std::array<double, 6>>;
 
-// --- [Slide 75] Exercise 2 ---------------------------------------------------
+// --- [Slide 76] Exercise 2 ---------------------------------------------------
 // int counter{1};                       // global
 
 int main() {
@@ -82,7 +82,7 @@ int main() {
 
     // === Subsection: Basic Input and Output ==================================
 
-    // --- [Slide 6] Output ----------------------------------------------------
+    // --- [Slide 7] Output ----------------------------------------------------
     // {
     //     std::cout << "Hello, World!";           // text, no newline
     //     std::cout << '\n';                      // newline
@@ -90,7 +90,7 @@ int main() {
     //     std::cout << "Pi: " << 3.14159 << '\n';
     // }
 
-    // --- [Slide 7] Input -----------------------------------------------------
+    // --- [Slide 8] Input -----------------------------------------------------
     // {
     //     int age{};
     //     double height{};
@@ -107,7 +107,7 @@ int main() {
     // Try it: type 3.7 as the age. What is printed, and what did std::cin do
     // with the .7?
 
-    // --- [Slide 8] Stream Manipulators ---------------------------------------
+    // --- [Slide 9] Stream Manipulators ---------------------------------------
     // A manipulator is a value you insert with << that changes HOW the stream
     // formats, instead of printing anything itself.
     // {
@@ -134,7 +134,7 @@ int main() {
 
     // === Subsection: Variables ===============================================
 
-    // --- [Slide 17] Characteristics: all five, on one line -------------------
+    // --- [Slide 18] Characteristics: all five, on one line -------------------
     // {
     //     int number{2500};
     //     // Type: int   Name: number   Value: 2500
@@ -142,7 +142,7 @@ int main() {
     //     std::cout << number << '\n';
     // }
 
-    // --- [Slide 18] Naming (Identifiers) -------------------------------------
+    // --- [Slide 19] Naming (Identifiers) -------------------------------------
     // These four are fine.
     // {
     //     int break1{};     // OK
@@ -168,7 +168,7 @@ int main() {
     //     int class;      // 'class' is a reserved keyword
     // }
 
-    // --- [Slide 19] Course convention: snake_case ----------------------------
+    // --- [Slide 20] Course convention: snake_case ----------------------------
     // {
     //     int my_variable{};       // use this style
     //     int student_count{};
@@ -184,7 +184,7 @@ int main() {
     //               << '\n';
     // }
 
-    // --- [Slide 21] The sizeof operator --------------------------------------
+    // --- [Slide 22] The sizeof operator --------------------------------------
     // {
     //     int number{2500};
     //     std::cout << sizeof(number) << '\n';  // 4 on a typical x86-64 machine
@@ -205,7 +205,7 @@ int main() {
     //     std::cout << "bool        " << sizeof(bool)        << '\n';
     // }
 
-    // --- [Slide 22] Memory Allocation: the address-of operator ---------------
+    // --- [Slide 23] Memory Allocation: the address-of operator ---------------
     // {
     //     int number{2500};
     //     std::cout << &number << '\n';  // e.g. 0x7fff214aba04
@@ -213,7 +213,7 @@ int main() {
     //
     // Run it several times. The value changes from run to run.
 
-    // --- [Slide 24] Declarations and Assignments -----------------------------
+    // --- [Slide 25] Declarations and Assignments -----------------------------
     // {
     //     int number;                     // declaration (and definition)
     //
@@ -226,7 +226,7 @@ int main() {
     // Coming from Python? The name is NOT rebound to a new object here: the
     // same 4 bytes are rewritten in place. Print &number to convince yourself.
 
-    // --- [Slide 25] The three forms of initialization ------------------------
+    // --- [Slide 26] The three forms of initialization ------------------------
     // {
     //     int a = 1;   // copy initialization    - inherited from C
     //     int b(1);    // direct initialization  - little used now
@@ -234,7 +234,7 @@ int main() {
     //     std::cout << a << ' ' << b << ' ' << c << '\n';
     // }
 
-    // --- [Slide 26] Zero Initialization --------------------------------------
+    // --- [Slide 27] Zero Initialization --------------------------------------
     // {
     //     int a{};                 // 0
     //     double b{};              // 0.0
@@ -247,7 +247,7 @@ int main() {
     //     std::cout << std::boolalpha << c << std::noboolalpha << '\n';
     // }
 
-    // --- [Slide 27] Empty braces, or an explicit zero? -----------------------
+    // --- [Slide 28] Empty braces, or an explicit zero? -----------------------
     // {
     //     int a{};    // placeholder: a is assigned before it is read
     //     int b{0};   // the value 0 is meaningful here
@@ -257,7 +257,7 @@ int main() {
 
     // === Subsection: Undefined Behavior ======================================
 
-    // --- [Slide 27] Uninitialized Variables ----------------------------------
+    // --- [Slide 28] Uninitialized Variables ----------------------------------
     // UNDEFINED BEHAVIOR. It may print 0, may print garbage, may differ between
     // -O0 and -O2. A plausible-looking number here proves nothing.
     // {
@@ -271,7 +271,7 @@ int main() {
 
     // === Subsection: Integral Types ==========================================
 
-    // --- [Slide 35] Characters -----------------------------------------------
+    // --- [Slide 36] Characters -----------------------------------------------
     // A char holds ONE character, in single quotes. Double quotes make a
     // string literal, which is a different type.
     // {
@@ -299,7 +299,7 @@ int main() {
     //     std::cout << quote << backslash << static_cast<int>(nul) << '\n';
     // }
 
-    // --- [Slide 36] Signed vs Unsigned Pitfalls ------------------------------
+    // --- [Slide 37] Signed vs Unsigned Pitfalls ------------------------------
     // Comparisons can invert: -1 is converted to unsigned and becomes
     // 4,294,967,295. Build with -Wall and read the -Wsign-compare warning.
     // {
@@ -315,7 +315,7 @@ int main() {
 
     // === Subsection: Floating-point Number Types =============================
 
-    // --- [Slide 38] Float suffix ---------------------------------------------
+    // --- [Slide 39] Float suffix ---------------------------------------------
     // {
     //     std::cout << 1.05 << '\n';   // double literal
     //     std::cout << 1.05f << '\n';  // float literal
@@ -327,7 +327,7 @@ int main() {
     //     std::cout << 1f << '\n';
     // }
 
-    // --- [Slide 39] Controlling Output ---------------------------------------
+    // --- [Slide 40] Controlling Output ---------------------------------------
     // {
     //     std::cout << std::setprecision(9);
     //     std::cout << 0.33333333333f << '\n';           // 0.333333343
@@ -343,7 +343,7 @@ int main() {
 
     // === Subsection: Boolean Type ============================================
 
-    // --- [Slide 41] Printing Booleans ----------------------------------------
+    // --- [Slide 42] Printing Booleans ----------------------------------------
     // {
     //     bool is_today_sunny{true};
     //     bool is_today_cloudy{false};
@@ -363,7 +363,7 @@ int main() {
 
     // === Subsection: Type Conversion =========================================
 
-    // --- [Slide 44] Inspecting Types with typeid -----------------------------
+    // --- [Slide 45] Inspecting Types with typeid -----------------------------
     // {
     //     double num1{1.5};
     //     int num2 = num1;  // 1.5 converted to 1
@@ -377,7 +377,7 @@ int main() {
     //   b bool, c char, s short, i int, j unsigned int, l long,
     //   m unsigned long, x long long, y unsigned long long, f float, d double
 
-    // --- [Slide 46] Numeric Promotion ----------------------------------------
+    // --- [Slide 47] Numeric Promotion ----------------------------------------
     // {
     //     double num1{5.0};                // no promotion needed
     //     double num2{4.0f};               // float -> double
@@ -394,7 +394,7 @@ int main() {
     //     std::cout << num1 + num2 << '\n';
     // }
 
-    // --- [Slide 47] Numeric Conversion ---------------------------------------
+    // --- [Slide 48] Numeric Conversion ---------------------------------------
     // Unlike a promotion, a conversion MAY lose data.
     // {
     //     // Integral conversions
@@ -419,7 +419,7 @@ int main() {
     //               << d << '\n';
     // }
 
-    // --- [Slide 49] Narrowing conversions ------------------------------------
+    // --- [Slide 50] Narrowing conversions ------------------------------------
     // Lines 2, 3 and 4 all request the SAME conversion, but only the braced
     // form is rejected. DOES NOT COMPILE because of int d{3.5}.
     // {
@@ -438,7 +438,7 @@ int main() {
     //     std::cout << static_cast<int>(3.7) << '\n';       // 3, not 4
     // }
 
-    // --- [Slide 52] Arithmetic conversions: steps 1 and 3 --------------------
+    // --- [Slide 53] Arithmetic conversions: steps 1 and 3 --------------------
     // {
     //     int i{42};
     //     double d{3.14};
@@ -456,7 +456,7 @@ int main() {
     //     std::cout << us + ul << '\n';                // 700010
     // }
 
-    // --- [Slide 53] Arithmetic conversions: step 2 ---------------------------
+    // --- [Slide 54] Arithmetic conversions: step 2 ---------------------------
     // Neither short nor char survives step 2: both are promoted to int.
     // {
     //     short s1{100};
@@ -482,7 +482,7 @@ int main() {
     // SECTION: EXERCISE 1
     // #########################################################################
 
-    // --- [Slide 54] Predict first, then compile ------------------------------
+    // --- [Slide 55] Predict first, then compile ------------------------------
     // Write down all five answers BEFORE you run this. Then for (3) and (4),
     // name the conversion that fires and say whether it is a promotion or a
     // conversion. Built with -Wall -Wextra, exactly one line warns. Which?
@@ -506,7 +506,7 @@ int main() {
 
     // === Subsection: Literals, const and constexpr ===========================
 
-    // --- [Slide 57] Literal Constants ----------------------------------------
+    // --- [Slide 58] Literal Constants ----------------------------------------
     // {
     //     // Integral literals
     //     int dec{12};          // decimal
@@ -534,7 +534,7 @@ int main() {
     //     std::cout << yes << no << '\n';
     // }
 
-    // --- [Slide 58] Constant Variables ---------------------------------------
+    // --- [Slide 59] Constant Variables ---------------------------------------
     // {
     //     const double radius{3.5};   // "west const": preferred in this course
     //     double const radius2{3.5};  // "east const": legal, not our style
@@ -549,7 +549,7 @@ int main() {
     //     e = 2.7;             // Error: assignment of read-only variable 'e'
     // }
 
-    // --- [Slide 59] Symbolic Constants (Macros) ------------------------------
+    // --- [Slide 60] Symbolic Constants (Macros) ------------------------------
     // Uncomment the #define lines at the top of this file first.
     // {
     //     double r{2.0};
@@ -562,7 +562,7 @@ int main() {
     //     std::cout << bad << '\n';
     // }
     //
-    // [Slide 60] SEE THE SUBSTITUTION FOR YOURSELF. Stop after the preprocessor
+    // [Slide 61] SEE THE SUBSTITUTION FOR YOURSELF. Stop after the preprocessor
     // and read what the compiler is actually handed:
     //
     //     g++ -E -P src/main.cpp -o main.i
@@ -574,7 +574,7 @@ int main() {
     // A macro has no type, no scope, and does not survive into the debugger.
     // Use const or constexpr instead.
 
-    // --- [Slide 61] Compile-time and Runtime Constants -----------------------
+    // --- [Slide 62] Compile-time and Runtime Constants -----------------------
     // {
     //     const int a{10};         // compile-time: the initializer is a literal
     //
@@ -589,7 +589,7 @@ int main() {
     //     std::cout << a << ' ' << b << ' ' << c << '\n';
     // }
 
-    // --- [Slide 62] Why constexpr --------------------------------------------
+    // --- [Slide 63] Why constexpr --------------------------------------------
     // 1. A const of NON-INTEGRAL type is not usable in a constant expression.
     //    The area1 line DOES NOT COMPILE; the area2 line does.
     // {
@@ -621,7 +621,7 @@ int main() {
 
     // === Subsection: Compound Statements =====================================
 
-    // --- [Slide 64] Blocks ---------------------------------------------------
+    // --- [Slide 65] Blocks ---------------------------------------------------
     // A block can appear anywhere a single statement can, and there is NO
     // semicolon after its closing brace.
     // {
@@ -639,7 +639,7 @@ int main() {
 
     // === Subsection: Scopes ==================================================
 
-    // --- [Slide 66] Local Scope ----------------------------------------------
+    // --- [Slide 67] Local Scope ----------------------------------------------
     // Uncomment the whole block: it DOES NOT COMPILE, because b is used after
     // its block ended. Delete that one line and it builds.
     // {
@@ -654,7 +654,7 @@ int main() {
     //     int c{3};
     // }  // a and c go out of scope here
 
-    // --- [Slide 68] Global Scope ---------------------------------------------
+    // --- [Slide 69] Global Scope ---------------------------------------------
     // Uncomment global_var at the top of this file first.
     // ::name, with nothing on its left, names the GLOBAL namespace -- exactly
     // as std::cout names std. It reaches a global that a local is hiding.
@@ -673,7 +673,7 @@ int main() {
     //
     // -Wall -Wextra says NOTHING about that shadowing. -Wshadow is the flag.
 
-    // --- [Slide 69] Where globals live ---------------------------------------
+    // --- [Slide 70] Where globals live ---------------------------------------
     // Uncomment global_x and global_y at the top of this file first.
     // global_x is NOT garbage: globals in BSS are zeroed by the loader. That
     // is the one exception; the rule still holds for locals.
@@ -687,7 +687,7 @@ int main() {
 
     // === Subsection: Naming Collisions and Namespaces ========================
 
-    // --- [Slide 70] A naming collision ---------------------------------------
+    // --- [Slide 71] A naming collision ---------------------------------------
     // DOES NOT COMPILE - two identifiers with the same name in one scope.
     // {
     //     int x{1};
@@ -695,7 +695,7 @@ int main() {
     //     std::cout << x << '\n';
     // }
 
-    // --- [Slide 72] Namespaces -----------------------------------------------
+    // --- [Slide 73] Namespaces -----------------------------------------------
     // Uncomment namespace MyNamespace at the top of this file first.
     // {
     //     std::cout << MyNamespace::x << '\n';  // 3
@@ -710,7 +710,7 @@ int main() {
     //     // std::cout << y << '\n';    // Error: 'y' was not declared
     // }
 
-    // --- [Slide 73] Why to avoid "using namespace" ---------------------------
+    // --- [Slide 74] Why to avoid "using namespace" ---------------------------
     // Uncomment the Collide namespace AND both using-directives at the top.
     // DOES NOT COMPILE: two directives pulled in the same name.
     // {
@@ -724,7 +724,7 @@ int main() {
     // SECTION: ALIASES
     // #########################################################################
 
-    // --- [Slide 74] Type aliases ---------------------------------------------
+    // --- [Slide 75] Type aliases ---------------------------------------------
     // Uncomment the two using-declarations at the top of this file first.
     // An alias creates NO new type: uint and unsigned int are interchangeable,
     // and the compiler will not stop you from mixing them.
@@ -740,7 +740,7 @@ int main() {
     // SECTION: EXERCISE 2
     // #########################################################################
 
-    // --- [Slide 75] Predict first, then compile ------------------------------
+    // --- [Slide 76] Predict first, then compile ------------------------------
     // Uncomment counter at the top of this file first.
     //
     // Predict (1)-(4). Which SEGMENT holds each of the three counter variables,
