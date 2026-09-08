@@ -7,8 +7,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_compile_options(-Wall -Wextra)
 
-add_subdirectory(project/week1)
-# add_subdirectory(project/week2)
+# add_subdirectory(project/week1)
+add_subdirectory(project/week2)
 # add_subdirectory(project/week3)
 # add_subdirectory(project/week4)
 # add_subdirectory(project/week5)
