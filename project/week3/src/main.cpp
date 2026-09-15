@@ -21,7 +21,7 @@
 //      what actually happened:
 //          valgrind --leak-check=full ./build/project/week3/week3
 //   3. Build in Debug. Valgrind can only name the LINE that leaked when -g is
-//      there, and Debug is the variant that adds it. [Slide 5]
+//      there, and Debug is the variant that adds it. [Slide 6]
 // =============================================================================
 
 #include <cstddef>
@@ -35,10 +35,10 @@
 //
 // A couple of snippets cannot live inside main(): a type and the function
 // declarations that take it. Uncomment these together with the matching
-// [Slide 70] block inside main().
+// [Slide 71] block inside main().
 // =============================================================================
 
-// --- [Slide 70] Where references are actually used ---------------------------
+// --- [Slide 71] Where references are actually used ---------------------------
 // A stand-in for a real class. Classes are Lecture 8.
 // struct Battery {
 //     int charge_pct{0};
@@ -53,7 +53,7 @@ int main() {
     // SECTION: POINTERS
     // #########################################################################
 
-    // --- [Slide 9] What a pointer is -----------------------------------------
+    // --- [Slide 10] What a pointer is -----------------------------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};
@@ -66,7 +66,7 @@ int main() {
     // Two different addresses are in play: the one the pointer HOLDS, and the
     // one the pointer LIVES AT. They have nothing to do with each other.
 
-    // --- [Slide 13] Declaring a pointer ---------------------------------------
+    // --- [Slide 14] Declaring a pointer ---------------------------------------
     // Read the declaration inside-out, starting at the identifier.
     // {
     //     int* altitude_ptr;      // altitude_ptr is a pointer to an int
@@ -78,7 +78,7 @@ int main() {
     //     (void)altitude_handle;
     // }
 
-    // --- [Slide 14] The trap: one declaration per line -------------------------
+    // --- [Slide 15] The trap: one declaration per line -------------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr, target_m;  // only altitude_ptr is a pointer!
@@ -94,7 +94,7 @@ int main() {
     // Prints 8 4. The * bound to altitude_ptr only. The fix is one declaration
     // per line (Core Guidelines ES.10).
 
-    // --- [Slide 16] Wild pointers --- UNDEFINED BEHAVIOR ----------------------
+    // --- [Slide 17] Wild pointers --- UNDEFINED BEHAVIOR ----------------------
     // An uninitialized pointer holds whatever was already in those 8 bytes.
     // This may crash, or may quietly corrupt something far away.
     // {
@@ -105,7 +105,7 @@ int main() {
     // The fix is to give every pointer a value on the line that declares it.
     // If you have nothing to point at yet, that value is nullptr.
 
-    // --- [Slide 17] The address-of and dereference operators -------------------
+    // --- [Slide 18] The address-of and dereference operators -------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};  // & is the address-of operator
@@ -114,7 +114,7 @@ int main() {
     //     std::cout << *altitude_ptr << '\n';  // * is the dereference operator
     // }
 
-    // --- [Slide 18] Both directions in one program ----------------------------
+    // --- [Slide 19] Both directions in one program ----------------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};
@@ -127,7 +127,7 @@ int main() {
     //
     // & and * undo each other: *(&altitude_m) IS altitude_m.
 
-    // --- [Slide 21] Same address, and the same type ---------------------------
+    // --- [Slide 22] Same address, and the same type ---------------------------
     // &altitude_m does not produce "an address" in some generic sense. It
     // produces an int*, which is exactly the type of altitude_ptr.
     // {
@@ -144,7 +144,7 @@ int main() {
     // int". Run the program through c++filt to read it:
     //     ./build/project/week3/week3 | c++filt -t
 
-    // --- [Slide 22] Dereferencing is not read-only -----------------------------
+    // --- [Slide 23] Dereferencing is not read-only -----------------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};
@@ -158,7 +158,7 @@ int main() {
     // One * decides which variable you write to. altitude_ptr = ... writes to
     // the pointer; *altitude_ptr = ... writes to the object.
 
-    // --- [Slide 24] Exercise 1: trace it on paper ------------------------------
+    // --- [Slide 25] Exercise 1: trace it on paper ------------------------------
     // Do NOT run this first. Write down altitude_m, climb_m and what
     // target_ptr points to, line by line. Then run it and check.
     // {
@@ -180,7 +180,7 @@ int main() {
     // SECTION: NULL POINTERS
     // #########################################################################
 
-    // --- [Slide 25] Four ways to write a null pointer -------------------------
+    // --- [Slide 26] Four ways to write a null pointer -------------------------
     // {
     //     int* imu_ptr{nullptr};  // C++11 and later: the one to use
     //     int* gps_ptr{NULL};     // a C macro, usually 0; avoid in C++
@@ -190,7 +190,7 @@ int main() {
     //     std::cout << (imu_ptr == gps_ptr) << (mag_ptr == baro_ptr) << '\n';
     // }
 
-    // --- [Slide 26] Testing a pointer ------------------------------------------
+    // --- [Slide 27] Testing a pointer ------------------------------------------
     // A pointer converts to bool, and is false exactly when it is null.
     // {
     //     int* sensor_ptr{nullptr};
@@ -205,7 +205,7 @@ int main() {
     //     }
     // }
 
-    // --- [Slide 28] Comparing pointers -----------------------------------------
+    // --- [Slide 29] Comparing pointers -----------------------------------------
     // {
     //     int altitude_m{120};
     //     int battery_pct{88};  // an unrelated object
@@ -229,7 +229,7 @@ int main() {
     // SECTION: SIZE, AND WHAT THE TYPE IS FOR
     // #########################################################################
 
-    // --- [Slide 29] Size of a pointer ------------------------------------------
+    // --- [Slide 30] Size of a pointer ------------------------------------------
     // {
     //     int altitude_m{120};
     //     double voltage_v{11.1};
@@ -248,7 +248,7 @@ int main() {
     // The suffixes are UNITS: _m is metres, _v volts, _pct percent.
     // sizeof(p) is the pointer; sizeof(*p) is the object it points at.
 
-    // --- [Slide 34] The type is checked --- DOES NOT COMPILE ------------------
+    // --- [Slide 35] The type is checked --- DOES NOT COMPILE ------------------
     // {
     //     int altitude_m{120};
     //     double voltage_v{11.1};
@@ -258,7 +258,7 @@ int main() {
     //     altitude_ptr = &voltage_v;   // error: cannot convert double* to int*
     // }
 
-    // --- [Slide 34] auto hides the pointer from the reader ---------------------
+    // --- [Slide 35] auto hides the pointer from the reader ---------------------
     // {
     //     auto altitude_m{120};
     //     auto ptr{&altitude_m};  // ptr is int*, but the line does not say so
@@ -272,13 +272,13 @@ int main() {
     // SECTION: POINTER ARITHMETIC
     // #########################################################################
 
-    // [Slide 35] The operations, and the one rule behind all of them:
+    // [Slide 36] The operations, and the one rule behind all of them:
     //
     //     ptr + n     ptr - n     ++ptr     --ptr     ptr2 - ptr1
     //
     // Every one counts in OBJECTS, never in bytes.
 
-    // --- [Slide 36] p + 1 moves by one object, not one byte -------------------
+    // --- [Slide 37] p + 1 moves by one object, not one byte -------------------
     // {
     //     int altitude_m{120};
     //     double voltage_v{11.1};
@@ -292,7 +292,7 @@ int main() {
     //     std::cout << voltage_ptr + 1 << '\n';   // eight bytes on
     // }
 
-    // --- [Slide 37] Subtracting two pointers counts objects -------------------
+    // --- [Slide 38] Subtracting two pointers counts objects -------------------
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};
@@ -303,7 +303,7 @@ int main() {
     // + scales up by sizeof(*p); - scales back down by it. The 4 cancels out.
     // The result type is std::ptrdiff_t, which is SIGNED.
 
-    // --- [Slide 38] What is legal --- UNDEFINED BEHAVIOR ----------------------
+    // --- [Slide 39] What is legal --- UNDEFINED BEHAVIOR ----------------------
     // A lone variable counts as an array of one. You may name the object and
     // the one-past-the-end position, and nothing else.
     // {
@@ -323,7 +323,7 @@ int main() {
     // SECTION: CONST-CORRECTNESS
     // #########################################################################
 
-    // --- [Slide 41] The three combinations ------------------------------------
+    // --- [Slide 42] The three combinations ------------------------------------
     // Read right to left from the identifier, and read * as "pointer to".
     // {
     //     int altitude_m{120};
@@ -347,7 +347,7 @@ int main() {
     //     std::cout << *altitude_ptr1 << ' ' << *altitude_ptr3 << '\n';
     // }
 
-    // --- [Slide 42] Permission, not immutability -------------------------------
+    // --- [Slide 43] Permission, not immutability -------------------------------
     // {
     //     int altitude_m{120};
     //     const int* altitude_view{&altitude_m};
@@ -359,7 +359,7 @@ int main() {
     // const int* restricts THIS ACCESS PATH. It does not promise the object
     // never changes.
 
-    // --- [Slide 43] Discussion 1: who is const for? ----------------------------
+    // --- [Slide 44] Discussion 1: who is const for? ----------------------------
     // All four compile. Which can write? Which can be repointed? Which can be
     // given "no altitude at all"? What does sizeof report for each?
     // {
@@ -383,7 +383,7 @@ int main() {
     // SECTION: DYNAMIC MEMORY
     // #########################################################################
 
-    // --- [Slide 46] The new operator -------------------------------------------
+    // --- [Slide 47] The new operator -------------------------------------------
     // new does three things: asks the allocator for the bytes, creates the
     // object there, and yields its ADDRESS.
     // {
@@ -393,7 +393,7 @@ int main() {
     //     battery_pct = nullptr;
     // }
 
-    // --- [Slide 47] The object has no name --- LEAKS ON PURPOSE ---------------
+    // --- [Slide 48] The object has no name --- LEAKS ON PURPOSE ---------------
     // {
     //     int* battery_pct{new int{88}};  // the only address of that object
     //     (void)battery_pct;
@@ -402,7 +402,7 @@ int main() {
     //
     // Run this under Valgrind: 4 bytes "definitely lost".
 
-    // --- [Slide 48] The delete operator ----------------------------------------
+    // --- [Slide 49] The delete operator ----------------------------------------
     // Write the two lines as a pair, and in this order.
     // {
     //     int* battery_pct{new int{88}};
@@ -413,14 +413,14 @@ int main() {
     //
     // delete acts on the STORAGE, not on the pointer.
 
-    // --- [Slide 51] Rule 1: only delete what you new --- UNDEFINED BEHAVIOR ---
+    // --- [Slide 52] Rule 1: only delete what you new --- UNDEFINED BEHAVIOR ---
     // {
     //     int altitude_m{120};
     //     int* altitude_ptr{&altitude_m};
     //     delete altitude_ptr;  // UB: the allocator never handed this out
     // }
 
-    // --- [Slide 51] Rule 2: delete nullptr is safe ----------------------------
+    // --- [Slide 52] Rule 2: delete nullptr is safe ----------------------------
     // {
     //     int* battery_pct{nullptr};
     //     delete battery_pct;  // does nothing, guaranteed by the standard
@@ -428,7 +428,7 @@ int main() {
     //
     // So "if (ptr) { delete ptr; }" is redundant. Just write "delete ptr;".
 
-    // --- [Slide 51] Rule 3: delete exactly once --- UNDEFINED BEHAVIOR --------
+    // --- [Slide 52] Rule 3: delete exactly once --- UNDEFINED BEHAVIOR --------
     // {
     //     int* battery_pct{new int{88}};
     //     delete battery_pct;
@@ -438,7 +438,7 @@ int main() {
     // Setting battery_pct to nullptr after the first delete turns the second
     // into a harmless no-op (rule 2).
 
-    // --- [Slide 52] Exercise 2: where does it go wrong? -----------------------
+    // --- [Slide 53] Exercise 2: where does it go wrong? -----------------------
     // Compiles cleanly with -Wall -Wextra -Wpedantic. It has THREE distinct
     // memory bugs. Find them, name them, and give the minimal fix for each.
     // {
@@ -458,7 +458,7 @@ int main() {
     // SECTION: WHAT GOES WRONG
     // #########################################################################
 
-    // --- [Slide 54] Dangling pointers --- UNDEFINED BEHAVIOR ------------------
+    // --- [Slide 55] Dangling pointers --- UNDEFINED BEHAVIOR ------------------
     // Two ways to make one, and only the first involves the heap.
     // {
     //     // 1. deleting, and then forgetting
@@ -479,7 +479,7 @@ int main() {
     // The habit that costs nothing: delete p; then p = nullptr; always, in
     // that order, on the same pair of lines.
 
-    // --- [Slide 55] Memory leaks --- LEAKS ON PURPOSE -------------------------
+    // --- [Slide 56] Memory leaks --- LEAKS ON PURPOSE -------------------------
     // {
     //     for (int i{0}; i < 100000; ++i) {
     //         int* reading{new int{i}};  // allocated on every iteration
@@ -490,7 +490,7 @@ int main() {
     // Valgrind will report 400,000 bytes lost in 100,000 blocks. A robot's
     // control node is not a short-lived program.
 
-    // --- [Slide 56] Double delete --- UNDEFINED BEHAVIOR ----------------------
+    // --- [Slide 57] Double delete --- UNDEFINED BEHAVIOR ----------------------
     // {
     //     int* primary{new int{88}};
     //     int* backup{primary};  // owns nothing, but it looks like it does
@@ -503,7 +503,7 @@ int main() {
     // Copying a raw pointer copies the ADDRESS, not the OWNERSHIP. Nulling
     // primary does nothing to backup.
 
-    // --- [Slide 57] Null dereference --- UNDEFINED BEHAVIOR -------------------
+    // --- [Slide 58] Null dereference --- UNDEFINED BEHAVIOR -------------------
     // {
     //     int* sensor{nullptr};
     //     std::cout << *sensor << '\n';  // UB: immediate segmentation fault
@@ -516,7 +516,7 @@ int main() {
     // SECTION: FINDING THESE BUGS WITH VALGRIND
     // #########################################################################
 
-    // --- [Slide 60] A leak, as Valgrind reports it ----------------------------
+    // --- [Slide 61] A leak, as Valgrind reports it ----------------------------
     // Build Debug, then:
     //     valgrind --leak-check=full ./build/project/week3/week3
     // {
@@ -528,7 +528,7 @@ int main() {
     // Read the report from the bottom up: 4 bytes definitely lost, allocated
     // by operator new at THIS line. That line number is what -g bought you.
 
-    // --- [Slide 60] A use-after-free, as Valgrind reports it -----------------
+    // --- [Slide 61] A use-after-free, as Valgrind reports it -----------------
     // {
     //     int* battery_pct{new int{88}};
     //     delete battery_pct;
@@ -543,7 +543,7 @@ int main() {
     // SECTION: REFERENCES
     // #########################################################################
 
-    // --- [Slide 66] A reference is a second name ------------------------------
+    // --- [Slide 67] A reference is a second name ------------------------------
     // {
     //     int altitude_m{120};
     //     int& alt{altitude_m};  // alt is another name for altitude_m
@@ -554,13 +554,13 @@ int main() {
     //     std::cout << alt << '\n';         // 118
     // }
 
-    // --- [Slide 67] Property 1: must be initialized --- DOES NOT COMPILE ------
+    // --- [Slide 68] Property 1: must be initialized --- DOES NOT COMPILE ------
     // {
     //     int& alt1;    // error: a reference must bind to something
     //     int& alt2{};  // error: nothing to bind to
     // }
 
-    // --- [Slide 67] Property 3: no identity of its own ------------------------
+    // --- [Slide 68] Property 3: no identity of its own ------------------------
     // {
     //     int altitude_m{120};
     //     int& alt{altitude_m};
@@ -573,7 +573,7 @@ int main() {
     // &alt gives the address of altitude_m, because alt IS altitude_m. There
     // is no way to ask for "the address of the reference".
 
-    // --- [Slide 68] Property 4: cannot be reseated ----------------------------
+    // --- [Slide 69] Property 4: cannot be reseated ----------------------------
     // This is the one that surprises people.
     // {
     //     int altitude_m{120};
@@ -588,7 +588,7 @@ int main() {
     // r = b looks like rebinding and is not. A reference is bound once, at
     // initialization, for life.
 
-    // --- [Slide 70] Where references are actually used ------------------------
+    // --- [Slide 71] Where references are actually used ------------------------
     // Uncomment the Battery struct and the two declarations at the top of this
     // file as well. Parameter passing is Lecture 5; containers are Lecture 4.
     // {
@@ -612,7 +612,7 @@ int main() {
     // SECTION: EXERCISE 3
     // #########################################################################
 
-    // --- [Slide 74] Exercise 3: audit this code -------------------------------
+    // --- [Slide 75] Exercise 3: audit this code -------------------------------
     // Twelve lines, several bugs. For each line, say whether it is fine or
     // broken, and if broken, name the bug using the vocabulary of the lecture.
     // Then run it under Valgrind and compare with your answer.
