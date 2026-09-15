@@ -1,0 +1,35 @@
+# =============================================================================
+# ENPM702 house style.
+#
+# This file is what makes "Format Document" agree with the slides, on every
+# machine, in any editor. It is read automatically because VS Code's C/C++
+# extension defaults to C_Cpp.clang_format_style = "file", which means "look
+# for a .clang-format next to the source".
+#
+# Without this file the extension falls back to C_Cpp.clang_format_fallbackStyle,
+# whose default is "Visual Studio": that puts the brace on its own line and
+# writes "int *ptr", both of which contradict the lectures.
+#
+# Note: the C_Cpp.vcFormat.* settings in the VS Code UI do NOT apply here. They
+# belong to a different formatting engine and are only read when
+# C_Cpp.formatting is set to "vcFormat". This file drives clang-format instead.
+# =============================================================================
+Language: Cpp
+BasedOnStyle: LLVM
+
+# The course writes "int* altitude_ptr" and "int& alt", with the * and the &
+# next to the TYPE, because that is where the reader looks for them.
+PointerAlignment: Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false   # never infer alignment from the file
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# "int main() {", not a brace on its own line.
+BreakBeforeBraces: Attach
+
+ColumnLimit: 100
+ReflowComments: false           # leave the hand-drawn comment banners alone
+SortIncludes: Never             # include order is not something this course teaches
