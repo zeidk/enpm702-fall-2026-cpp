@@ -620,7 +620,7 @@ int main() {
     //     int* imu_reading{new int{10}};
     //     int* gps_reading{new int{20}};
     //     int& fused{*imu_reading};
-    //
+
     //     fused = *gps_reading;
     //     *gps_reading = 30;
     //     imu_reading = new int{40};
