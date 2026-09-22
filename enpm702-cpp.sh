@@ -157,7 +157,7 @@ enpm702() {
 
     # -- Quick compile of a single file (useful during lectures) --
     # Usage: 702g++ hello.cpp -o hello
-    alias 702g++="g++ -std=${ENPM702_STD} -Wall -Wextra -Wpedantic -g"
+    alias 702g++="g++ -std=${ENPM702_STD} -Wall -Wextra -pedantic-errors -g"
 
     # -- Valgrind shortcut for memory checking --
     # Usage: 702memcheck ./hello

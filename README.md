@@ -94,7 +94,7 @@ any time to print the list of commands again.
 |---|---|
 | `702exe` | List the executables currently present under `build/` |
 | `702run <exe> [args]` | Run an executable by name, wherever CMake placed it |
-| `702g++ <file.cpp>` | Compile a single file (`g++ -std=c++20 -Wall -Wextra -Wpedantic -g`) |
+| `702g++ <file.cpp>` | Compile a single file (`g++ -std=c++20 -Wall -Wextra -pedantic-errors -g`) |
 | `702memcheck <exe>` | Run Valgrind with full leak checking |
 | `702help` | Print the command list |
 
