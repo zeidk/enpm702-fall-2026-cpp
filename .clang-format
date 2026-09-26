@@ -19,8 +19,8 @@ BasedOnStyle: LLVM
 
 # The course writes "int* altitude_ptr" and "int& alt", with the * and the &
 # next to the TYPE, because that is where the reader looks for them.
-PointerAlignment: Left
-ReferenceAlignment: Left
+PointerAlignment: Right
+ReferenceAlignment: Right
 DerivePointerAlignment: false   # never infer alignment from the file
 
 IndentWidth: 4
