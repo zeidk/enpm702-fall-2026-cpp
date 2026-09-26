@@ -18,13 +18,31 @@ enpm702-fall-2026-cpp/
 │   │   ├── CMakeLists.txt
 │   │   └── src/
 │   ├── week2/
+│   ├── week5/            # two halves, so it is bigger than the others
+│   │   ├── CMakeLists.txt
+│   │   ├── playground/   # the slide snippets, one file, nothing documented
+│   │   │   └── src/
+│   │   └── doxygen_demo/ # the same program, complete and documented
+│   │       ├── include/  # headers: the declarations and their comments
+│   │       ├── src/      # source files: the definitions, and main.cpp
+│   │       └── docs/     # Doxyfile, and the html/ pages it generates
 │   └── ... week9/
 ├── enpm702-cpp.sh
 ├── LICENSE
 └── README.md
 ```
 
-The `build/` directory is created by `702configure` and is git-ignored.
+A week is a single `src/main.cpp` until the lecture needs more. Week 5 has two
+halves: `playground/` is the usual single file of snippets from the slides, and
+`doxygen_demo/` is the complete, documented, multi-file version of the same
+program. Only `doxygen_demo/` has `include/` and `docs/`.
+
+The demo is **not built by default**. When you reach the Documenting Functions
+section you uncomment the last four lines of `project/week5/CMakeLists.txt`,
+which is the one edit that turns it on.
+
+The `build/` directory is created by `702configure` and is git-ignored, and so
+is `docs/html/`. Commit the `Doxyfile`, never the pages it generates.
 
 ## Setup
 
@@ -126,6 +144,26 @@ For a quick one-off compile during a lecture, without CMake:
 ./example
 702memcheck ./example
 ```
+
+## Documentation with Doxygen
+
+In `project/week5/doxygen_demo/`, each function is documented with a Doxygen
+comment on its declaration, in the header. To build the reference pages:
+
+```bash
+sudo apt install doxygen doxygen-gui graphviz   # once
+702w5
+cd doxygen_demo/docs && doxygen Doxyfile
+xdg-open html/index.html
+```
+
+Run Doxygen **from the folder the `Doxyfile` is in**. Its `INPUT` paths are
+relative to the folder Doxygen runs in, not to the file, so
+`doxygen docs/Doxyfile` from the week folder finds no source and writes an
+empty `html/` in the wrong place.
+
+`doxywizard &` is the same thing with a window. Open `docs/Doxyfile` in it and
+it sets the working directory for you.
 
 ## Notes
 
