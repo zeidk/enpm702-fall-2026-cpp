@@ -45,7 +45,7 @@ build/
 
 # Doxygen output: commit the Doxyfile, never the pages it generates.
 # A pattern with a slash in it is anchored to this file's directory, so these
-# need the leading **/ to match project/week5/doxygen_demo/docs/html/.
+# need the leading **/ to match project/week5/arm_demo/docs/html/.
 **/docs/html/
 **/docs/latex/
 **/docs/xml/

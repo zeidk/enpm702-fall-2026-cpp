@@ -4,6 +4,7 @@
  */
 
 #include "kinematics.hpp"
+#include "joint_limits.hpp"
 
 #include <algorithm>
 #include <cmath>

@@ -20,9 +20,9 @@ enpm702-fall-2026-cpp/
 │   ├── week2/
 │   ├── week5/            # two halves, so it is bigger than the others
 │   │   ├── CMakeLists.txt
-│   │   ├── playground/   # the slide snippets, one file, nothing documented
+│   │   ├── playground/   # the slide snippets, one file, target week5_snippets
 │   │   │   └── src/
-│   │   └── doxygen_demo/ # the same program, complete and documented
+│   │   └── arm_demo/     # the same program, complete and documented
 │   │       ├── include/  # headers: the declarations and their comments
 │   │       ├── src/      # source files: the definitions, and main.cpp
 │   │       └── docs/     # Doxyfile, and the html/ pages it generates
@@ -33,13 +33,14 @@ enpm702-fall-2026-cpp/
 ```
 
 A week is a single `src/main.cpp` until the lecture needs more. Week 5 has two
-halves: `playground/` is the usual single file of snippets from the slides, and
-`doxygen_demo/` is the complete, documented, multi-file version of the same
-program. Only `doxygen_demo/` has `include/` and `docs/`.
+halves. `playground/src/snippets.cpp` holds every snippet from the slides
+(target `week5_snippets`). `arm_demo/` is the same program split into headers
+and source files and documented with Doxygen (target `week5_arm_demo`). The
+Header Files slides, Exercise 1 and the Documenting Functions section use it.
 
-The demo is **not built by default**. When you reach the Documenting Functions
-section you uncomment the last four lines of `project/week5/CMakeLists.txt`,
-which is the one edit that turns it on.
+The demo is **not built by default**. When you reach the Header Files section
+you uncomment the last four lines of `project/week5/CMakeLists.txt`, which is
+the one edit that turns it on.
 
 The `build/` directory is created by `702configure` and is git-ignored, and so
 is `docs/html/`. Commit the `Doxyfile`, never the pages it generates.
@@ -147,13 +148,13 @@ For a quick one-off compile during a lecture, without CMake:
 
 ## Documentation with Doxygen
 
-In `project/week5/doxygen_demo/`, each function is documented with a Doxygen
+In `project/week5/arm_demo/`, each function is documented with a Doxygen
 comment on its declaration, in the header. To build the reference pages:
 
 ```bash
 sudo apt install doxygen doxygen-gui graphviz   # once
 702w5
-cd doxygen_demo/docs && doxygen Doxyfile
+cd arm_demo/docs && doxygen Doxyfile
 xdg-open html/index.html
 ```
 
