@@ -37,6 +37,11 @@
 *.out
 *.app
 
+# A program built by hand next to its source (g++ main.cpp -o main) has no
+# extension. The build/ directory is where CMake puts executables.
+project/*/src/main
+project/*/*/src/main
+
 # debug information files
 *.dwo
 .vscode
