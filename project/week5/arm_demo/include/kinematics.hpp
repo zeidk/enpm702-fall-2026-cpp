@@ -25,8 +25,8 @@
  * @param q1 Shoulder angle in degrees, measured from the x axis.
  * @param q2 Elbow angle in degrees, relative to the previous link.
  * @param q3 Wrist angle in degrees, relative to the previous link.
- * @param x Set to the tool's x coordinate in metres.
- * @param y Set to the tool's y coordinate in metres.
+ * @param x Set to the tool's x coordinate in metres, measured from the base at (0, 0).
+ * @param y Set to the tool's y coordinate in metres, measured from the base at (0, 0).
  * @param limit The largest angle, in degrees, any joint may reach.
  */
 void forward_kinematics(double q1, double q2, double q3,
