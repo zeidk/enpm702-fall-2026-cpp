@@ -656,17 +656,23 @@ void descend(int depth) {
 #if 0
 constexpr int scale{2};
 
-void f(int& x, int y, int* z) {
-  static int calls{0};
-  ++calls;
-  x += y + *z;
+int e() {
+    static int calls{0};
+    ++calls;
+    return calls;
+}
+
+void f(int &x, int y, int *z) {
+    int first{e()};
+    int second{e()};
+    x += (y + *z) * (first + second);
 }
 
 int g(int a, int b) {
-  int result{};
-  result = a + b;
-  f(result, a, &b);
-  return result * scale;
+    int result{};
+    result = a + b;
+    f(result, a, &b);
+    return result * scale;
 }
 #endif
 
@@ -752,7 +758,7 @@ void print_tree(const fs::path& dir, int depth) {
  *             degrees; with none, the defaults inside are used.
  * @return 0 on success, 1 when the arguments are neither none nor three.
  */
-int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     // #########################################################################
     // SECTION: FUNCTIONS
     // #########################################################################
@@ -1215,7 +1221,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
         int y{20};
         int z{};
         z = g(x, y);
-        std::cout << z << '\n';  // 120
+        std::cout << z << '\n'; // 120
     }
 #endif
 
@@ -1276,17 +1282,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
 #if 0
     {
         std::cout << "Number of arguments: " << argc << '\n';
+
         for (int i{0}; i < argc; ++i) {
             std::cout << "argv[" << i << "]: " << argv[i] << '\n';
         }
-
-        // argv[argc] is always a null pointer.
-        std::cout << (argv[argc] == nullptr) << '\n';  // 1
-
-        // Two pointers are an iterator range, as Lecture 4 showed. Copy
-        // them into something safer before you use them.
-        std::vector<std::string_view> args(argv, argv + argc);
-        std::cout << args.size() << '\n';
     }
 #endif
 
