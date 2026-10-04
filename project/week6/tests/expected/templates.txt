@@ -1,0 +1,20 @@
+[Slide 37] One Body, Several Overloads
+100 100
+[Slide 38] Declaring a Template
+100 100
+[Slide 39] Instantiation
+100 100 50
+[Slide 43] Explicit Template Arguments
+100
+[Slide 45] Two Template Parameters
+95 82.5 82.5
+[Slide 46] Abbreviated Templates
+1 2 3 4 
+82.5 35 
+[Slide 47] Concepts
+49.875
+[Slide 48] A Call That Compiles and Is Wrong
+49.875
+49
+[Slide 49] Three Ways to Write a Constraint
+1 0 0

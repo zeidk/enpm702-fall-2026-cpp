@@ -1,0 +1,172 @@
+/**
+ * @file callables.cpp
+ * @brief L6 Section 5, Other Callables: the code of every slide, runnable.
+ *
+ * @details Build target: @c week6_callables. This file stands alone.
+ *
+ * @code
+ * 702build week6_callables
+ * 702run week6_callables        # every slide of the section, in order
+ * 702run week6_callables 71     # only [Slide 71]
+ * @endcode
+ *
+ * Code that does not compile is in @c ../diagnostics/. Calling an empty
+ * std::function is in @c ../throws/function_empty.cpp.
+ */
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <map>
+#include <source_location>
+#include <string>
+#include <string_view>
+
+// [Slide 68] Function Pointers
+namespace function_pointers {
+double to_fraction(double pct) {
+  return pct / 100.0;
+}
+double to_pct(double fraction) { return fraction * 100.0; }  // the inverse
+
+void run() {
+  double (*convert)(double){to_fraction};
+  std::cout << convert(82.5) << '\n';  // 0.825
+  convert = to_pct;
+  std::cout << convert(0.35) << '\n';  // 35
+}
+}  // namespace function_pointers
+
+// [Slide 69] Passing a Function
+// The call with a capturing lambda is in ../diagnostics/fnptr_capture.cpp.
+namespace passing_function {
+void convert_all(double* values, int n, double (*convert)(double)) {
+  for (int i{0}; i < n; ++i) { values[i] = convert(values[i]); }
+}
+
+void run() {
+  double battery[]{82.5, 35.0};
+  convert_all(battery, 2, [](double x) { return x / 100.0; });  // OK: no capture
+  std::cout << battery[0] << ' ' << battery[1] << '\n';          // 0.825 0.35
+  convert_all(battery, 2, function_pointers::to_pct);            // a function name
+  std::cout << battery[0] << ' ' << battery[1] << '\n';          // 82.5 35
+}
+}  // namespace passing_function
+
+// [Slide 70] std::function
+namespace std_function {
+void run() {
+  std::function<double(double)> f{function_pointers::to_fraction};
+  std::cout << f(64.0) << '\n';  // 0.64
+
+  double scale{2.0};
+  f = [scale](double x) { return scale * x; };
+  std::cout << f(64.0) << '\n';  // 128
+}
+}  // namespace std_function
+
+// [Slide 71] A Table of Commands
+namespace command_table {
+void run() {
+  std::map<std::string, std::function<void(int)>> on_command;
+
+  on_command["dock"] = [](int id) {
+    std::cout << "robot " << id << ": go to dock\n";
+  };
+  on_command["pause"] = [](int id) {
+    std::cout << "robot " << id << ": paused\n";
+  };
+
+  on_command["dock"](4);   // robot 4: go to dock
+  on_command["pause"](2);  // robot 2: paused
+}
+}  // namespace command_table
+
+// [Slide 73] Choosing a Parameter Type
+namespace choosing {
+void run() {
+  double (*p)(double){function_pointers::to_fraction};
+  std::function<double(double)> f{function_pointers::to_fraction};
+  std::cout << sizeof(p) << ' ' << sizeof(f) << '\n';  // 8 32
+}
+}  // namespace choosing
+
+// [Slide 74] std::bind
+namespace bind {
+double charge_time_h(double missing_pct, double rate_pct_per_h) {
+  return missing_pct / rate_pct_per_h;
+}
+
+void run() {
+  using namespace std::placeholders;                         // _1, _2, ...
+  auto at_fast_dock = std::bind(charge_time_h, _1, 40.0);  // (x, 40.0)
+  auto to_half = std::bind(charge_time_h, 50.0, _1);       // (50.0, x)
+  auto swapped = std::bind(charge_time_h, _2, _1);         // (y, x)
+
+  std::cout << at_fast_dock(60.0) << '\n';    // 1.5
+  std::cout << to_half(25.0) << '\n';         // 2
+  std::cout << swapped(20.0, 60.0) << '\n';   // 3
+}
+}  // namespace bind
+
+// [Slide 75] bind_front and Lambdas
+namespace bind_front {
+void run() {
+  auto to_half = std::bind_front(bind::charge_time_h, 50.0);  // C++20
+  std::cout << to_half(25.0) << '\n';                          // 2
+
+  auto fast_l = [](double x) { return bind::charge_time_h(x, 40.0); };
+  auto swap_l = [](double x, double y) { return bind::charge_time_h(y, x); };
+  std::cout << fast_l(60.0) << ' ' << swap_l(20.0, 60.0) << '\n';  // 1.5 3
+
+  using namespace std::placeholders;
+  auto at_fast_dock = std::bind(bind::charge_time_h, _1, 40.0);
+  std::cout << at_fast_dock(60.0, 99.0) << '\n';  // compiles, prints 1.5: 99.0 is dropped
+}
+}  // namespace bind_front
+
+// [Slide 77] std::source_location
+// At namespace scope, not in a namespace of its own, so function_name() prints
+// the plain names the slide shows.
+void log_message(
+  std::string_view text,
+  std::source_location at = std::source_location::current()) {
+  std::string_view file{at.file_name()};
+  file.remove_prefix(file.rfind('/') + 1);  // the name only
+  std::cout << file << ':' << at.line() << ' '
+            << at.function_name() << ": " << text << '\n';
+}
+
+void assign_task(int task_id, int robot_id) {
+  log_message("task " + std::to_string(task_id) + " to robot " + std::to_string(robot_id));
+}
+
+void end_shift() {
+  log_message("shift over");
+}
+
+namespace source_location_slide {
+void run() {
+  assign_task(17, 3);
+  end_shift();
+}
+}  // namespace source_location_slide
+
+// Runs one slide's code: always when only is 0, otherwise only on a match.
+// run is a pointer to a function, as on the Function Pointers slide.
+void show(int only, int slide, const char* title, void (*run)()) {
+  if (only != 0 && only != slide) { return; }
+  std::cout << "[Slide " << slide << "] " << title << '\n';
+  run();
+}
+
+int main(int argc, char* argv[]) {
+  const int only{argc > 1 ? std::atoi(argv[1]) : 0};
+  show(only, 68, "Function Pointers", function_pointers::run);
+  show(only, 69, "Passing a Function", passing_function::run);
+  show(only, 70, "std::function", std_function::run);
+  show(only, 71, "A Table of Commands", command_table::run);
+  show(only, 73, "Choosing a Parameter Type", choosing::run);
+  show(only, 74, "std::bind", bind::run);
+  show(only, 75, "bind_front and Lambdas", bind_front::run);
+  show(only, 77, "std::source_location", source_location_slide::run);
+}

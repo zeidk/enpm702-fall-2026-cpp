@@ -22,12 +22,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_compile_options(-Wall -Wextra -pedantic-errors -Wshadow)
 
+# 702test (ctest) runs the checks a week declares with add_test.
+enable_testing()
+
 # add_subdirectory(project/week1)
 # add_subdirectory(project/week2)
 # add_subdirectory(project/week3)
 add_subdirectory(project/week4)
 # add_subdirectory(project/week5)
-# add_subdirectory(project/week6)
+add_subdirectory(project/week6)
 # add_subdirectory(project/week7)
 # add_subdirectory(project/week8)
 # add_subdirectory(project/week9)
