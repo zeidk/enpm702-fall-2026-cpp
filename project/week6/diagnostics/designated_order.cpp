@@ -17,6 +17,6 @@ int main() {
   return a.id + b.id + c.id;
 }
 
-// [Slide 17] Designated Initializers (C++20)
+// [Slide 12] Designated Initializers (C++20)
 // DOES NOT COMPILE. The names must follow the order of the declaration.
 // Compile it by hand: 702g++ designated_order.cpp

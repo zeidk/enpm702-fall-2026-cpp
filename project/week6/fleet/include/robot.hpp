@@ -4,7 +4,7 @@
  * @brief The types every part of the fleet manager shares.
  *
  * @details The L6 slides build these two structs step by step in Section 1,
- * Types You Write. This header holds the finished version, with a default for
+ * Custom Types. This header holds the finished version, with a default for
  * every member.
  */
 

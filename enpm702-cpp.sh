@@ -117,23 +117,6 @@ _enpm702_run() {
     "$exe" "$@"
 }
 
-# Run the checks the weeks declare with add_test (CTest), or the ones whose
-# name matches a pattern. A failed check prints its output.
-# Usage: 702test                                 # every check
-#        702test week6                           # every week-6 check
-#        702test week6.AverageBattery            # one group of tests
-_enpm702_test() {
-    if [ ! -d "$ENPM702_BUILD" ]; then
-        echo "No build directory yet. Run 702configure first."
-        return 1
-    fi
-    if [ "$#" -eq 0 ]; then
-        ctest --test-dir "$ENPM702_BUILD" --output-on-failure
-    else
-        ctest --test-dir "$ENPM702_BUILD" --output-on-failure -R "$1"
-    fi
-}
-
 # Print the list of available commands.
 # Usage: 702help
 _enpm702_help() {
@@ -142,7 +125,6 @@ _enpm702_help() {
     echo "  Navigate  : 702ws, 702proj, 702bin, 702w[1-${ENPM702_WEEKS}]"
     echo "  Build     : 702configure, 702release, 702build [target], 702clean, 702rebuild"
     echo "  Run       : 702run <executable> [args], 702exe"
-    echo "  Test      : 702test [pattern]   (ctest, after 702build)"
     echo "  Compile   : 702g++ <file.cpp> [-o name]   (single file, ${ENPM702_STD})"
     echo "  Debug     : 702memcheck <executable>"
     echo "  Help      : 702help"
@@ -172,10 +154,6 @@ enpm702() {
     # Usage: 702run week3_main [args...] | 702exe
     alias 702run="_enpm702_run"
     alias 702exe="_enpm702_exe"
-
-    # -- Testing --
-    # Usage: 702test | 702test week6
-    alias 702test="_enpm702_test"
 
     # -- Quick compile of a single file (useful during lectures) --
     # Usage: 702g++ hello.cpp -o hello

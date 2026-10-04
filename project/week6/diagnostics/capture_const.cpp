@@ -4,6 +4,6 @@ int main() {
   assign();
 }
 
-// [Slide 60] mutable and Init-capture
+// [Slide 55] mutable and Init-capture
 // DOES NOT COMPILE. A copy captured by value is read-only inside the body.
 // mutable lifts that. Compile it by hand: 702g++ capture_const.cpp

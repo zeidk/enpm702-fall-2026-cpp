@@ -3,9 +3,7 @@
  * @file fleet_queries.hpp
  * @brief Questions the dispatcher asks about the fleet.
  *
- * @details Each function takes the fleet and returns a value, so each one can
- * be checked by a test with a known input and a known answer. The tests are in
- * @c ../../tests/test_fleet.cpp.
+ * @details Each function takes the fleet and returns a value.
  */
 #include <optional>
 #include <utility>
@@ -24,13 +22,6 @@
  * | 4  | 18.0 %  | (6, 2)   | idle  |
  */
 std::vector<RobotStatus> make_demo_fleet();
-
-/**
- * @brief Average of a list of battery levels.
- * @param battery_pct The battery levels, in percent.
- * @return Their average, or 0.0 for an empty list.
- */
-double average_battery(const std::vector<double>& battery_pct);
 
 /**
  * @brief Lowest and highest battery level in the fleet.

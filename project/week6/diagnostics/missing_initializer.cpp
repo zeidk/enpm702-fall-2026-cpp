@@ -15,7 +15,7 @@ int main() {
   return b.id;
 }
 
-// [Slide 15] Initializing a Struct
+// [Slide 10] Initializing a Struct
 // COMPILES, WITH A WARNING under -Wextra: the braced list stops before the
 // last three members. They are set to zero anyway; the warning asks whether
 // you meant it. Compile it by hand: 702g++ missing_initializer.cpp

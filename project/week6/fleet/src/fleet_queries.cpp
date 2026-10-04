@@ -14,17 +14,6 @@ std::vector<RobotStatus> make_demo_fleet() {
             {4, 18.0, {6.0, 2.0}, false}};
 }
 
-double average_battery(const std::vector<double>& battery_pct) {
-    if (battery_pct.empty()) {
-        return 0.0;
-    }
-    double sum{0.0};
-    for (double pct : battery_pct) {
-        sum += pct;
-    }
-    return sum / static_cast<double>(battery_pct.size());
-}
-
 std::pair<double, double> find_battery_range(const std::vector<RobotStatus>& fleet) {
     double lo{fleet.front().battery_pct};
     double hi{fleet.front().battery_pct};

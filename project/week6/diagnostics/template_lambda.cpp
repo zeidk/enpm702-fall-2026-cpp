@@ -9,6 +9,6 @@ int main() {
   larger_same(3, 7.5);  // rejected
 }
 
-// [Slide 65] Template Lambdas (C++20)
+// [Slide 60] Template Lambdas (C++20)
 // DOES NOT COMPILE, on purpose. T appears twice, so both arguments must have
 // one type. Compile it by hand: 702g++ template_lambda.cpp

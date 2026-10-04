@@ -8,7 +8,7 @@
  * @code
  * 702build week6_results
  * 702run week6_results        # every slide of the section, in order
- * 702run week6_results 25     # only [Slide 25]
+ * 702run week6_results 20     # only [Slide 20]
  * @endcode
  *
  * The two structs and the demo fleet are declared once, at the top, because
@@ -45,7 +45,7 @@ std::vector<RobotStatus> make_fleet() {
           {4, 18.0, {6.0, 2.0}, false}};
 }
 
-// [Slide 25] Returning Several Values
+// [Slide 20] Returning Several Values
 namespace returning_several {
 std::pair<double, double> find_battery_range(
     const std::vector<RobotStatus>& fleet) {
@@ -65,7 +65,7 @@ void run() {
 }
 }  // namespace returning_several
 
-// [Slide 26] Pair, Tuple or Struct
+// [Slide 21] Pair, Tuple or Struct
 namespace pair_tuple_struct {
 std::tuple<double, double, int> summarize(const std::vector<RobotStatus>& fleet) {
   double lo{fleet.front().battery_pct};
@@ -105,7 +105,7 @@ void run() {
 }
 }  // namespace pair_tuple_struct
 
-// [Slide 27] Structured Bindings
+// [Slide 22] Structured Bindings
 namespace structured_bindings {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
@@ -117,7 +117,7 @@ void run() {
 }
 }  // namespace structured_bindings
 
-// [Slide 28] By Value and by Reference
+// [Slide 23] By Value and by Reference
 namespace by_value_reference {
 void run() {
   RobotStatus r{3, 64.0, {2.0, 3.0}, false};
@@ -136,7 +136,7 @@ void run() {
 }
 }  // namespace by_value_reference
 
-// [Slide 29] The Lecture 4 Map Loop
+// [Slide 24] The Lecture 4 Map Loop
 namespace map_loop {
 void run() {
   std::map<int, std::string> zone_of{{1, "dock"}, {2, "aisle 4"}, {3, "aisle 7"}};
@@ -146,7 +146,7 @@ void run() {
 }
 }  // namespace map_loop
 
-// [Slide 31] std::optional
+// [Slide 26] std::optional
 namespace optional_def {
 // Id of the first idle robot with at least min_battery_pct, if there is one.
 std::optional<int> find_idle_robot(const std::vector<RobotStatus>& fleet,
@@ -162,7 +162,7 @@ void run() {
 }
 }  // namespace optional_def
 
-// [Slide 32] Reading an Optional
+// [Slide 27] Reading an Optional
 namespace reading_optional {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
@@ -178,7 +178,7 @@ void run() {
 }
 }  // namespace reading_optional
 
-// [Slide 34] Optional, Pointer or Special Value
+// [Slide 29] Optional, Pointer or Special Value
 namespace optional_pointer {
 void run() {
   std::cout << sizeof(std::optional<int>) << ' ' << sizeof(int) << '\n';  // 8 4
@@ -195,12 +195,12 @@ void show(int only, int slide, const char* title, void (*run)()) {
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 25, "Returning Several Values", returning_several::run);
-  show(only, 26, "Pair, Tuple or Struct", pair_tuple_struct::run);
-  show(only, 27, "Structured Bindings", structured_bindings::run);
-  show(only, 28, "By Value and by Reference", by_value_reference::run);
-  show(only, 29, "The Lecture 4 Map Loop", map_loop::run);
-  show(only, 31, "std::optional", optional_def::run);
-  show(only, 32, "Reading an Optional", reading_optional::run);
-  show(only, 34, "Optional, Pointer or Special Value", optional_pointer::run);
+  show(only, 20, "Returning Several Values", returning_several::run);
+  show(only, 21, "Pair, Tuple or Struct", pair_tuple_struct::run);
+  show(only, 22, "Structured Bindings", structured_bindings::run);
+  show(only, 23, "By Value and by Reference", by_value_reference::run);
+  show(only, 24, "The Lecture 4 Map Loop", map_loop::run);
+  show(only, 26, "std::optional", optional_def::run);
+  show(only, 27, "Reading an Optional", reading_optional::run);
+  show(only, 29, "Optional, Pointer or Special Value", optional_pointer::run);
 }

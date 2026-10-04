@@ -38,5 +38,5 @@ int main() {
             << find_lowest_battery({}).value_or(-1.0) << '\n';
 }
 
-// [Slide 35] Exercise 2: Bindings and Optionals
+// [Slide 30] Exercise 2: Bindings and Optionals
 // Write your answer first, then: 702build week6_ex2 && 702run week6_ex2

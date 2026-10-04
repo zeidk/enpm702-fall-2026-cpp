@@ -7,7 +7,7 @@
  * @code
  * 702build week6_lambdas
  * 702run week6_lambdas        # every slide of the section, in order
- * 702run week6_lambdas 58     # only [Slide 58]
+ * 702run week6_lambdas 53     # only [Slide 53]
  * @endcode
  *
  * The structs and the demo fleet are declared once, at the top. Code that does
@@ -46,7 +46,7 @@ void print_ids(const std::vector<RobotStatus>& fleet) {
   std::cout << '\n';
 }
 
-// [Slide 53] A Condition instead of a Value
+// [Slide 48] A Condition instead of a Value
 namespace condition {
 bool is_low(double pct) { return pct < 40.0; }  // outside main
 
@@ -57,7 +57,7 @@ void run() {
 }
 }  // namespace condition
 
-// [Slide 54] Lambda Expressions
+// [Slide 49] Lambda Expressions
 namespace lambda_expression {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -67,7 +67,7 @@ void run() {
 }
 }  // namespace lambda_expression
 
-// [Slide 55] Lambdas with Algorithms
+// [Slide 50] Lambdas with Algorithms
 namespace algorithms {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
@@ -90,7 +90,7 @@ void run() {
 }
 }  // namespace algorithms
 
-// [Slide 56] Projections (C++20)
+// [Slide 51] Projections (C++20)
 namespace projections {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace projections
 
-// [Slide 58] By Value and by Reference
+// [Slide 53] By Value and by Reference
 // The lambda with no capture is in ../diagnostics/capture_missing.cpp.
 namespace by_value_reference {
 void run() {
@@ -121,7 +121,7 @@ void run() {
 }
 }  // namespace by_value_reference
 
-// [Slide 60] mutable and Init-capture
+// [Slide 55] mutable and Init-capture
 // The lambda without mutable is in ../diagnostics/capture_const.cpp.
 namespace mutable_init {
 void run() {
@@ -134,7 +134,7 @@ void run() {
 }
 }  // namespace mutable_init
 
-// [Slide 61] What the Compiler Writes
+// [Slide 56] What the Compiler Writes
 namespace compiler_writes {
 struct IsLow {
   double limit_pct;  // the capture
@@ -156,7 +156,7 @@ void run() {
 }
 }  // namespace compiler_writes
 
-// [Slide 63] Generic Lambdas
+// [Slide 58] Generic Lambdas
 namespace generic {
 void run() {
   auto larger = [](const auto& a, const auto& b) { return a > b ? a : b; };
@@ -166,7 +166,7 @@ void run() {
 }
 }  // namespace generic
 
-// [Slide 64] The Return Type
+// [Slide 59] The Return Type
 // The version without -> double is in ../diagnostics/lambda_return.cpp.
 namespace return_type {
 void run() {
@@ -178,7 +178,7 @@ void run() {
 }
 }  // namespace return_type
 
-// [Slide 65] Template Lambdas (C++20)
+// [Slide 60] Template Lambdas (C++20)
 // The call with an int and a double is in ../diagnostics/template_lambda.cpp.
 namespace template_lambda {
 void run() {
@@ -197,14 +197,14 @@ void show(int only, int slide, const char* title, void (*run)()) {
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 53, "A Condition instead of a Value", condition::run);
-  show(only, 54, "Lambda Expressions", lambda_expression::run);
-  show(only, 55, "Lambdas with Algorithms", algorithms::run);
-  show(only, 56, "Projections (C++20)", projections::run);
-  show(only, 58, "By Value and by Reference", by_value_reference::run);
-  show(only, 60, "mutable and Init-capture", mutable_init::run);
-  show(only, 61, "What the Compiler Writes", compiler_writes::run);
-  show(only, 63, "Generic Lambdas", generic::run);
-  show(only, 64, "The Return Type", return_type::run);
-  show(only, 65, "Template Lambdas (C++20)", template_lambda::run);
+  show(only, 48, "A Condition instead of a Value", condition::run);
+  show(only, 49, "Lambda Expressions", lambda_expression::run);
+  show(only, 50, "Lambdas with Algorithms", algorithms::run);
+  show(only, 51, "Projections (C++20)", projections::run);
+  show(only, 53, "By Value and by Reference", by_value_reference::run);
+  show(only, 55, "mutable and Init-capture", mutable_init::run);
+  show(only, 56, "What the Compiler Writes", compiler_writes::run);
+  show(only, 58, "Generic Lambdas", generic::run);
+  show(only, 59, "The Return Type", return_type::run);
+  show(only, 60, "Template Lambdas (C++20)", template_lambda::run);
 }

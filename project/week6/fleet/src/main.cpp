@@ -3,8 +3,7 @@
  * @brief The fleet manager: the program the L6 slides build, in one piece.
  *
  * @details Build target: @c week6_fleet. It prints the fleet, a summary, the
- * robot chosen for one task, and the commands sent to two robots. Every
- * function it calls is checked by the tests in @c ../../tests/test_fleet.cpp.
+ * robot chosen for one task, and the commands sent to two robots.
  */
 #include <iostream>
 #include <optional>
@@ -16,6 +15,14 @@
 #include "robot.hpp"
 #include "stats.hpp"
 
+/**
+ * @brief Runs the fleet manager on the demo fleet.
+ *
+ * Prints the fleet, a summary of it, the robot chosen for a task at (5, 5),
+ * and the result of three commands, one of them unknown.
+ *
+ * @return 0.
+ */
 int main() {
     const std::vector<RobotStatus> fleet{make_demo_fleet()};
 
