@@ -9,6 +9,6 @@ int main() {
   convert_all(battery, 2, [scale](double x) { return scale * x; });
 }
 
-// [Slide 64] Passing a Function
+// [Slide 65] Passing a Function
 // DOES NOT COMPILE. A lambda that captures carries data, and a function pointer
 // has nowhere to put it. Compile it by hand: 702g++ fnptr_capture.cpp

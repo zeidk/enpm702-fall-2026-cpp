@@ -14,7 +14,7 @@ int main() {
   return a > b;
 }
 
-// [Slide 43] A Call That Compiles and Is Wrong
+// [Slide 44] A Call That Compiles and Is Wrong
 // DOES NOT COMPILE, on purpose. Without the concept, the int call compiles and
 // returns 49 instead of 49.25 (integer division). With it, the call is refused.
 // Compile it by hand: 702g++ average_int.cpp

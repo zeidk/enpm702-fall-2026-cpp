@@ -10,6 +10,6 @@ int main() {
   return pct > 50.0;
 }
 
-// [Slide 37] One T for Every Argument
+// [Slide 38] One T for Every Argument
 // DOES NOT COMPILE. 104 is an int and 0.0 a double: no single T fits all
 // three arguments. Compile it by hand: 702g++ deduce_conflict.cpp

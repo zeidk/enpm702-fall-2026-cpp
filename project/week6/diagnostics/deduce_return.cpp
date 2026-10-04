@@ -8,6 +8,6 @@ int main() {
   return z > 0.0;
 }
 
-// [Slide 39] Deduction Uses the Arguments Only
+// [Slide 40] Deduction Uses the Arguments Only
 // DOES NOT COMPILE. No argument mentions T, and the variable receiving the
 // result is not used for deduction. Compile it by hand: 702g++ deduce_return.cpp

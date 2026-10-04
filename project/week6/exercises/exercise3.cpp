@@ -14,7 +14,7 @@ int main() {
   auto e = half_of(9.0);               // 5
 }
 
-// [Slide 46] Exercise 3: Which Calls Compile?
+// [Slide 47] Exercise 3: Which Calls Compile?
 // This file is NOT a build target: some of its calls do not compile, which is
 // the exercise. Write your answer first, then compile it by hand and read the
 // errors: 702g++ exercise3.cpp

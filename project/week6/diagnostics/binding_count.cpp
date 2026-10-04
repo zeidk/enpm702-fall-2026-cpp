@@ -15,6 +15,6 @@ int main() {
   auto [id, battery_pct] = r;
 }
 
-// [Slide 25] One Name per Member
+// [Slide 26] One Name per Member
 // DOES NOT COMPILE. A structured binding needs one name for each of the four
 // members. Compile it by hand: 702g++ binding_count.cpp

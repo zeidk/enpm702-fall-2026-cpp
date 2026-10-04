@@ -5,6 +5,6 @@ int main() {
   };
 }
 
-// [Slide 59] The Return Type
+// [Slide 60] The Return Type
 // DOES NOT COMPILE. One return gives an int, the other a double.
 // Compile it by hand: 702g++ lambda_return.cpp

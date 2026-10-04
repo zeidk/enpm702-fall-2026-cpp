@@ -9,7 +9,7 @@
  * @code
  * 702build week6_types
  * 702run week6_types        # every slide of the section, in order
- * 702run week6_types 7     # only [Slide 7]
+ * 702run week6_types 8     # only [Slide 8]
  * @endcode
  * The number is the frame number in the slide's top-left corner. Each slide's
  * code sits in its own namespace, so two slides can both declare a
@@ -24,7 +24,7 @@
 #include <iostream>
 #include <vector>
 
-// [Slide 6] Three Values, One Status
+// [Slide 7] Three Values, One Status
 namespace three_values {
 // Without a struct: three reference parameters carry the answer back.
 void get_status(int id, double &battery_pct, double &x, double &y) {
@@ -65,7 +65,7 @@ void run() {
 }
 } // namespace three_values
 
-// [Slide 7] Declaring a Struct
+// [Slide 8] Declaring a Struct
 namespace declaring {
 struct Position {
     double x; // metres, warehouse frame
@@ -85,7 +85,7 @@ void run() {
 }
 } // namespace declaring
 
-// [Slide 8] Member Access
+// [Slide 9] Member Access
 namespace member_access {
 struct Position {
     double x;
@@ -109,7 +109,7 @@ void run() {
 }
 } // namespace member_access
 
-// [Slide 10] Initializing a Struct
+// [Slide 11] Initializing a Struct
 // RobotStatus b{3}; warns under -Wextra: see ../diagnostics/missing_initializer.cpp.
 // RobotStatus d; is not run here: reading d is undefined behavior.
 namespace aggregate_init {
@@ -138,7 +138,7 @@ void run() {
 }
 } // namespace aggregate_init
 
-// [Slide 11] Default Member Initializers
+// [Slide 12] Default Member Initializers
 namespace default_members {
 struct Position {
     double x{0.0};
@@ -169,7 +169,7 @@ void run() {
 }
 } // namespace default_members
 
-// [Slide 12] Designated Initializers (C++20)
+// [Slide 13] Designated Initializers (C++20)
 // The line in the wrong order is in ../diagnostics/designated_order.cpp.
 namespace designated {
 struct Position {
@@ -197,7 +197,7 @@ void run() {
 }
 } // namespace designated
 
-// [Slide 13] Structs in Memory
+// [Slide 14] Structs in Memory
 namespace padding {
 struct Position {
     double x;
@@ -220,7 +220,7 @@ void run() {
 }
 } // namespace padding
 
-// [Slide 14] Member Order
+// [Slide 15] Member Order
 namespace member_order {
 struct Position {
     double x;
@@ -242,7 +242,7 @@ void run() {
 }
 } // namespace member_order
 
-// [Slide 15] Structs and Functions
+// [Slide 16] Structs and Functions
 namespace struct_functions {
 struct Position {
     double x{0.0};
@@ -270,7 +270,7 @@ void run() {
 }
 } // namespace struct_functions
 
-// [Slide 16] A Vector of Structs
+// [Slide 17] A Vector of Structs
 namespace vector_of_structs {
 struct Position {
     double x{0.0};
@@ -308,14 +308,14 @@ void show(int only, int slide, const char *title, void (*run)()) {
 
 int main(int argc, char *argv[]) {
     const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-    show(only, 6, "Three Values, One Status", three_values::run);
-    show(only, 7, "Declaring a Struct", declaring::run);
-    show(only, 8, "Member Access", member_access::run);
-    show(only, 10, "Initializing a Struct", aggregate_init::run);
-    show(only, 11, "Default Member Initializers", default_members::run);
-    show(only, 12, "Designated Initializers (C++20)", designated::run);
-    show(only, 13, "Structs in Memory", padding::run);
-    show(only, 14, "Member Order", member_order::run);
-    show(only, 15, "Structs and Functions", struct_functions::run);
-    show(only, 16, "A Vector of Structs", vector_of_structs::run);
+    show(only, 7, "Three Values, One Status", three_values::run);
+    show(only, 8, "Declaring a Struct", declaring::run);
+    show(only, 9, "Member Access", member_access::run);
+    show(only, 11, "Initializing a Struct", aggregate_init::run);
+    show(only, 12, "Default Member Initializers", default_members::run);
+    show(only, 13, "Designated Initializers (C++20)", designated::run);
+    show(only, 14, "Structs in Memory", padding::run);
+    show(only, 15, "Member Order", member_order::run);
+    show(only, 16, "Structs and Functions", struct_functions::run);
+    show(only, 17, "A Vector of Structs", vector_of_structs::run);
 }

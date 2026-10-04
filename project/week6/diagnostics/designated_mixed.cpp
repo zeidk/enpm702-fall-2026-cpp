@@ -9,6 +9,6 @@ int main() {
   return d.id;
 }
 
-// [Slide 12] Designated Initializers (C++20)
+// [Slide 13] Designated Initializers (C++20)
 // DOES NOT COMPILE. Every value is named, or none is.
 // Compile it by hand: 702g++ designated_mixed.cpp

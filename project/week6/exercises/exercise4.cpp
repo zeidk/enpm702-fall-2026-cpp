@@ -12,5 +12,5 @@ int main() {
             << speed << '\n';
 }
 
-// [Slide 61] Exercise 4: Capture Timing
+// [Slide 62] Exercise 4: Capture Timing
 // Write your answer first, then: 702build week6_ex4 && 702run week6_ex4

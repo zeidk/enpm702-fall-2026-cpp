@@ -27,5 +27,5 @@ int main() {
   std::cout << t.id << ' ' << t.x << ' ' << t.y << ' ' << t.deadline_s << '\n';
 }
 
-// [Slide 18] Exercise 1: Sizes and Defaults
+// [Slide 19] Exercise 1: Sizes and Defaults
 // Write your answer first, then: 702build week6_ex1 && 702run week6_ex1

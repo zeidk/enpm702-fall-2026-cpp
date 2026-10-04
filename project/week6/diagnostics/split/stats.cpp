@@ -7,6 +7,6 @@ T clamp_value(T value, T low, T high) {
   return value;
 }
 
-// [Slide 35] Templates Go in Headers
+// [Slide 36] Templates Go in Headers
 // Compiled alone, this file produces no function at all: nothing here calls
 // clamp_value, so nothing is instantiated. Check: 702g++ -c stats.cpp && nm -C stats.o

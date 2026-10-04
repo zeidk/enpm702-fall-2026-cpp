@@ -5,6 +5,6 @@ struct Position {
 
 int main() {}
 
-// [Slide 7] Declaring a Struct
+// [Slide 8] Declaring a Struct
 // DOES NOT COMPILE. The final ; after the struct's closing brace is missing.
 // Compile it by hand to read the message: 702g++ missing_semicolon.cpp

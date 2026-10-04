@@ -5,7 +5,7 @@ int main() {
   return pct > 50.0;
 }
 
-// [Slide 35] Templates Go in Headers
+// [Slide 36] Templates Go in Headers
 // COMPILES, then FAILS TO LINK. main.cpp sees only the declaration, so it
 // cannot write clamp_value<double>, and stats.cpp never wrote it either.
 // Try it by hand: 702g++ main.cpp stats.cpp

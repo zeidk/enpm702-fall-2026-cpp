@@ -4,7 +4,7 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-6 program
 #   702run week6_types            run every snippet of Section 1
-#   702run week6_types 7         run only the snippet of [Slide 7]
+#   702run week6_types 8         run only the snippet of [Slide 8]
 #
 # Folders:
 #   fleet/        the finished program (week6_fleet), headers and sources
