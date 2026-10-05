@@ -11,7 +11,8 @@
  * @endcode
  *
  * The structs and the demo fleet are declared once, at the top. Code that does
- * not compile is left out; its slide shows the error. The dangling capture is in
+ * not compile is commented out where its slide shows it: uncomment it, build,
+ * and you get the slide's error. The dangling capture is in
  * @c ../undefined/dangling_capture.cpp, built with AddressSanitizer.
  */
 #include <algorithm>
@@ -104,8 +105,17 @@ void run() {
 }
 }  // namespace projections
 
+// [Slide 55] Captures
+namespace no_capture {
+void run() {
+  // Does not compile: limit_pct is not captured.
+  // double limit_pct{40.0};
+  // auto is_low = [](double pct) { return pct < limit_pct; };
+  std::cout << "does not compile: uncomment the lines in no_capture::run()\n";
+}
+}  // namespace no_capture
+
 // [Slide 56] By Value and by Reference
-// The lambda with no capture is left out: it does not compile (see the slide).
 namespace by_value_reference {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -122,9 +132,12 @@ void run() {
 }  // namespace by_value_reference
 
 // [Slide 58] mutable and Init-capture
-// The lambda without mutable is left out: it does not compile (see the slide).
 namespace mutable_init {
 void run() {
+  // Does not compile: a copy capture is read-only without mutable.
+  // int assigned{0};
+  // auto assign = [assigned]() { ++assigned; };
+
   auto next_task_id = [id = 100]() mutable { return ++id; };
   // prints 101 102 103
   std::cout << next_task_id() << ' ' << next_task_id() << ' ' << next_task_id() << '\n';
@@ -167,9 +180,16 @@ void run() {
 }  // namespace generic
 
 // [Slide 62] The Return Type
-// The version without -> double is left out: it does not compile (see the slide).
 namespace return_type {
 void run() {
+  // Does not compile: one return gives int, the other double.
+  // {
+  //   auto speed_for = [](double battery_pct) {
+  //     if (battery_pct < 20.0) { return 0; }
+  //     return 0.01 * battery_pct;
+  //   };
+  // }
+
   auto speed_for = [](double battery_pct) -> double {
     if (battery_pct < 20.0) { return 0; }  // 0 converts to 0.0
     return 0.01 * battery_pct;             // m/s
@@ -179,11 +199,12 @@ void run() {
 }  // namespace return_type
 
 // [Slide 63] Template Lambdas (C++20)
-// The call with an int and a double is left out: it does not compile (see the slide).
 namespace template_lambda {
 void run() {
   auto larger_same = []<typename T>(const T& a, const T& b) { return a > b ? a : b; };
   std::cout << larger_same(3, 7) << ' ' << larger_same(82.5, 64.0) << '\n';  // 7 82.5
+  // Does not compile: 3 says T is int, 7.5 says double.
+  // std::cout << larger_same(3, 7.5) << '\n';
 }
 }  // namespace template_lambda
 
@@ -201,6 +222,7 @@ int main(int argc, char* argv[]) {
   show(only, 52, "Lambda Expressions", lambda_expression::run);
   show(only, 53, "Lambdas with Algorithms", algorithms::run);
   show(only, 54, "Projections (C++20)", projections::run);
+  show(only, 55, "Captures", no_capture::run);
   show(only, 56, "By Value and by Reference", by_value_reference::run);
   show(only, 58, "mutable and Init-capture", mutable_init::run);
   show(only, 59, "What the Compiler Writes", compiler_writes::run);

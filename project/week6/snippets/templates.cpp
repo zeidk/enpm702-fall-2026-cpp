@@ -13,8 +13,9 @@
  *
  * The template clamp_value is declared once, at namespace scope, because most
  * slides of the section call it, and because the Instantiation slide lists its
- * instantiations with nm. Code that does not compile is left out; its slide
- * shows the error.
+ * instantiations with nm. Code that does not compile, or does not link, is
+ * commented out where its slide shows it: uncomment it, build, and you get the
+ * slide's error.
  */
 #include <concepts>
 #include <cstdlib>
@@ -65,6 +66,28 @@ void run() {
   std::cout << speed_pct << ' ' << battery_pct << ' ' << other_pct << '\n';
 }
 }  // namespace instantiation
+
+// [Slide 38] Templates Go in Headers
+// The slide uses three files. One file shows the same linker error: a template
+// that is declared and never defined.
+namespace in_headers {
+template <typename T> T clamp_value(T value, T low, T high);  // the declaration only
+
+void run() {
+  // Does not link: undefined reference to clamp_value<double>.
+  // double pct{clamp_value(104.2, 0.0, 100.0)};
+  std::cout << "does not link: uncomment the line in in_headers::run()\n";
+}
+}  // namespace in_headers
+
+// [Slide 40] One T for Every Argument
+namespace one_t {
+void run() {
+  // Does not compile: 104 says T is int, 0.0 says double.
+  // double pct{clamp_value(104, 0.0, 100.0)};
+  std::cout << "does not compile: uncomment the line in one_t::run()\n";
+}
+}  // namespace one_t
 
 // [Slide 41] Explicit Template Arguments
 namespace explicit_args {
@@ -122,7 +145,6 @@ void run() {
 }  // namespace constrained
 
 // [Slide 46] A Call That Compiles and Is Wrong
-// The constrained version rejects the int call, as the slide shows.
 namespace unconstrained {
 template <typename T>
 T average_of(const std::vector<T>& values) {
@@ -134,6 +156,8 @@ T average_of(const std::vector<T>& values) {
 void run() {
   std::cout << average_of(std::vector<double>{82.5, 35.0, 64.0, 18.0}) << '\n';  // 49.875
   std::cout << average_of(std::vector<int>{80, 35, 64, 18}) << '\n';  // 49, not 49.25
+  // Does not compile: the constrained version (Slide 45) rejects int.
+  // std::cout << constrained::average_of(std::vector<int>{80, 35, 64, 18}) << '\n';
 }
 }  // namespace unconstrained
 
@@ -175,6 +199,8 @@ int main(int argc, char* argv[]) {
   show(only, 35, "One Body, Several Overloads", overloads::run);
   show(only, 36, "Declaring a Template", declaring_template::run);
   show(only, 37, "Instantiation", instantiation::run);
+  show(only, 38, "Templates Go in Headers", in_headers::run);
+  show(only, 40, "One T for Every Argument", one_t::run);
   show(only, 41, "Explicit Template Arguments", explicit_args::run);
   show(only, 43, "Two Template Parameters", two_parameters::run);
   show(only, 44, "Abbreviated Templates", abbreviated::run);

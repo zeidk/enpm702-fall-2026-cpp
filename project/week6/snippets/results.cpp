@@ -12,9 +12,10 @@
  * @endcode
  *
  * The two structs and the demo fleet are declared once, at the top, because
- * every slide of this section uses them. Code that does not compile is left
- * out (its slide shows the error), code that throws is in @c ../throws/, and
- * code with undefined behavior in @c ../undefined/.
+ * every slide of this section uses them. Code that does not compile is
+ * commented out where its slide shows it: uncomment it, build, and you get the
+ * slide's error. Code that throws is in @c ../throws/, and code with undefined
+ * behavior in @c ../undefined/.
  */
 #include <cstdlib>
 #include <iostream>
@@ -146,6 +147,17 @@ void run() {
 }
 }  // namespace map_loop
 
+// [Slide 28] One Name per Member
+namespace binding_count {
+void run() {
+  RobotStatus r{3, 64.0};
+  // Does not compile: RobotStatus decomposes into 4 elements.
+  // auto [id, battery_pct] = r;
+  auto [robot_id, pct, where, busy] = r;  // four names
+  std::cout << robot_id << ' ' << pct << ' ' << where.x << ' ' << busy << '\n';  // 3 64 0 0
+}
+}  // namespace binding_count
+
 // [Slide 29] std::optional
 namespace optional_def {
 // Id of the first idle robot with at least min_battery_pct, if there is one.
@@ -200,6 +212,7 @@ int main(int argc, char* argv[]) {
   show(only, 25, "Structured Bindings", structured_bindings::run);
   show(only, 26, "By Value and by Reference", by_value_reference::run);
   show(only, 27, "The Lecture 4 Map Loop", map_loop::run);
+  show(only, 28, "One Name per Member", binding_count::run);
   show(only, 29, "std::optional", optional_def::run);
   show(only, 30, "Reading an Optional", reading_optional::run);
   show(only, 32, "Optional, Pointer or Special Value", optional_pointer::run);

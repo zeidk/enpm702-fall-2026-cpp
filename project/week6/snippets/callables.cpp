@@ -10,8 +10,9 @@
  * 702run week6_callables 67     # only [Slide 67]
  * @endcode
  *
- * Code that does not compile is left out; its slide shows the error. Calling an
- * empty std::function is in @c ../throws/function_empty.cpp.
+ * Code that does not compile is commented out where its slide shows it:
+ * uncomment it, build, and you get the slide's error. Calling an empty
+ * std::function is in @c ../throws/function_empty.cpp.
  */
 #include <cstdlib>
 #include <functional>
@@ -37,7 +38,6 @@ void run() {
 }  // namespace function_pointers
 
 // [Slide 67] Passing a Function
-// The call with a capturing lambda is left out: it does not compile (see the slide).
 namespace passing_function {
 void convert_all(double* values, int n, double (*convert)(double)) {
   for (int i{0}; i < n; ++i) { values[i] = convert(values[i]); }
@@ -46,6 +46,9 @@ void convert_all(double* values, int n, double (*convert)(double)) {
 void run() {
   double battery[]{82.5, 35.0};
   convert_all(battery, 2, [](double x) { return x / 100.0; });  // OK: no capture
+  // Does not compile: a lambda that captures is not a function pointer.
+  // double scale{2.0};
+  // convert_all(battery, 2, [scale](double x) { return scale * x; });
   std::cout << battery[0] << ' ' << battery[1] << '\n';          // 0.825 0.35
   convert_all(battery, 2, function_pointers::to_pct);            // a function name
   std::cout << battery[0] << ' ' << battery[1] << '\n';          // 82.5 35

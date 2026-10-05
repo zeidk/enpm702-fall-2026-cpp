@@ -16,8 +16,8 @@
  * @c RobotStatus without a clash. The comment above a namespace names its
  * slide, and @c main() at the bottom runs them.
  *
- * Code that does NOT compile, or that warns, is not in this file: the slide
- * shows the message.
+ * Code that does not compile, or that warns, is commented out where its slide
+ * shows it. Uncomment one line, build, and you get the slide's message.
  */
 #include <cstddef>
 #include <cstdlib>
@@ -85,9 +85,18 @@ void run() {
 }
 } // namespace declaring
 
+// [Slide 9] Where a struct Goes
+namespace where_struct_goes {
+struct RobotStatus; // declared, not defined
+
+void run() {
+    // Does not compile: an object needs the size.
+    // RobotStatus r{};
+    std::cout << "does not compile: uncomment the line in where_struct_goes::run()\n";
+}
+} // namespace where_struct_goes
+
 // [Slide 10] Initializing a struct
-// RobotStatus b{3}; is left out: it warns under -Wextra, as the slide shows.
-// RobotStatus d; is not run here: reading d is undefined behavior.
 namespace aggregate_init {
 struct Position {
     double x;
@@ -108,7 +117,11 @@ void print(const RobotStatus &r) {
 
 void run() {
     RobotStatus a{3, 64.0, {2.0, 3.0}, false};
+    // Warns under -Wextra: missing initializer for member 'battery_pct'.
+    // RobotStatus b{3};
     RobotStatus c{};
+    // Garbage: reading d is undefined behavior.
+    // RobotStatus d;
     print(a); // 3 64 (2, 3) idle
     print(c); // 0 0 (0, 0) idle
 }
@@ -146,7 +159,6 @@ void run() {
 } // namespace default_members
 
 // [Slide 12] Designated Initializers (C++20)
-// The line in the wrong order is left out: it does not compile (see the slide).
 namespace designated {
 struct Position {
     double x{0.0};
@@ -168,6 +180,8 @@ void print(const RobotStatus &r) {
 void run() {
     RobotStatus a{.id = 1, .battery_pct = 82.5}; // idle at (0, 0)
     RobotStatus b{.id = 2, .busy = true};        // battery 100
+    // Does not compile: wrong order.
+    // RobotStatus c{.battery_pct = 50.0, .id = 5};
     print(a);                                    // 1 82.5 (0, 0) idle
     print(b);                                    // 2 100 (0, 0) busy
 }
@@ -326,10 +340,6 @@ void run() {
 } // namespace push_emplace
 
 // [Slide 19] Braces and emplace_back
-// The three lines that do not compile are left out (see the slide):
-//   fleet.emplace_back({5, 90.0, {1.0, 1.0}, false});
-//   fleet.emplace_back(5, 90.0, {1.0, 1.0}, false);
-//   fleet.push_back({4.9, 50.0});
 namespace emplace_braces {
 struct Position {
     double x{0.0};
@@ -345,8 +355,13 @@ struct RobotStatus {
 
 void run() {
     std::vector<RobotStatus> fleet{};
+    // Does not compile: a braced list has no type.
+    // fleet.emplace_back({5, 90.0, {1.0, 1.0}, false});
+    // fleet.emplace_back(5, 90.0, {1.0, 1.0}, false);
     fleet.emplace_back(5, 90.0, Position{1.0, 1.0}, false); // OK
     fleet.emplace_back(4.9, 50.0);                          // OK, and the id is 4
+    // Does not compile: narrowing.
+    // fleet.push_back({4.9, 50.0});
     std::cout << fleet[0].id << ' ' << fleet[1].id << '\n'; // 5 4
 }
 } // namespace emplace_braces
@@ -365,6 +380,7 @@ int main(int argc, char *argv[]) {
     const int only{argc > 1 ? std::atoi(argv[1]) : 0};
     show(only, 7, "Three Values, One Status", three_values::run);
     show(only, 8, "Declaring a struct", declaring::run);
+    show(only, 9, "Where a struct Goes", where_struct_goes::run);
     show(only, 10, "Initializing a struct", aggregate_init::run);
     show(only, 11, "Default Member Initializers", default_members::run);
     show(only, 12, "Designated Initializers (C++20)", designated::run);
