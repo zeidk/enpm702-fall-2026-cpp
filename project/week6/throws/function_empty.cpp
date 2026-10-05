@@ -7,7 +7,7 @@ int main() {
   on_command["reboot"](2);  // no handler was ever stored
 }
 
-// [Slide 68] An Empty std::function
+// [Slide 70] An Empty std::function
 // THROWS. operator[] inserts an empty std::function for the missing key, and
 // calling an empty std::function throws std::bad_function_call.
 // Run: 702run week6_function_empty

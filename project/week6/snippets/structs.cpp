@@ -1,23 +1,23 @@
 /**
- * @file types.cpp
- * @brief L6 Section 1, Custom Types: the code of every slide, runnable.
+ * @file structs.cpp
+ * @brief L6 Section 1, struct: the code of every slide, runnable.
  *
- * @details Build target: @c week6_types. This file stands alone: it includes
+ * @details Build target: @c week6_structs. This file stands alone: it includes
  * no project header.
  *
  * @par How to use it
  * @code
- * 702build week6_types
- * 702run week6_types        # every slide of the section, in order
- * 702run week6_types 8     # only [Slide 8]
+ * 702build week6_structs
+ * 702run week6_structs        # every slide of the section, in order
+ * 702run week6_structs 8     # only [Slide 8]
  * @endcode
  * The number is the frame number in the slide's top-left corner. Each slide's
  * code sits in its own namespace, so two slides can both declare a
  * @c RobotStatus without a clash. The comment above a namespace names its
  * slide, and @c main() at the bottom runs them.
  *
- * Code that does NOT compile, or that warns, is in @c ../diagnostics/, one
- * file per slide.
+ * Code that does NOT compile, or that warns, is not in this file: the slide
+ * shows the message.
  */
 #include <cstddef>
 #include <cstdlib>
@@ -65,7 +65,7 @@ void run() {
 }
 } // namespace three_values
 
-// [Slide 8] Declaring a Struct
+// [Slide 8] Declaring a struct
 namespace declaring {
 struct Position {
     double x; // metres, warehouse frame
@@ -85,32 +85,8 @@ void run() {
 }
 } // namespace declaring
 
-// [Slide 9] Member Access
-namespace member_access {
-struct Position {
-    double x;
-    double y;
-};
-
-struct RobotStatus {
-    int id;
-    double battery_pct;
-    Position position;
-    bool busy;
-};
-
-void run() {
-    RobotStatus r{3, 64.0, {2.0, 3.0}, false};
-    std::cout << r.id << ' ' << r.position.x << '\n'; // 3 2
-
-    RobotStatus *rp{&r};
-    rp->battery_pct -= 10.0;            // the same as (*rp).battery_pct -= 10.0;
-    std::cout << r.battery_pct << '\n'; // 54
-}
-} // namespace member_access
-
-// [Slide 11] Initializing a Struct
-// RobotStatus b{3}; warns under -Wextra: see ../diagnostics/missing_initializer.cpp.
+// [Slide 10] Initializing a struct
+// RobotStatus b{3}; is left out: it warns under -Wextra, as the slide shows.
 // RobotStatus d; is not run here: reading d is undefined behavior.
 namespace aggregate_init {
 struct Position {
@@ -138,7 +114,7 @@ void run() {
 }
 } // namespace aggregate_init
 
-// [Slide 12] Default Member Initializers
+// [Slide 11] Default Member Initializers
 namespace default_members {
 struct Position {
     double x{0.0};
@@ -169,8 +145,8 @@ void run() {
 }
 } // namespace default_members
 
-// [Slide 13] Designated Initializers (C++20)
-// The line in the wrong order is in ../diagnostics/designated_order.cpp.
+// [Slide 12] Designated Initializers (C++20)
+// The line in the wrong order is left out: it does not compile (see the slide).
 namespace designated {
 struct Position {
     double x{0.0};
@@ -197,7 +173,31 @@ void run() {
 }
 } // namespace designated
 
-// [Slide 14] Structs in Memory
+// [Slide 13] Member Access
+namespace member_access {
+struct Position {
+    double x;
+    double y;
+};
+
+struct RobotStatus {
+    int id;
+    double battery_pct;
+    Position position;
+    bool busy;
+};
+
+void run() {
+    RobotStatus r{3, 64.0, {2.0, 3.0}, false};
+    std::cout << r.id << ' ' << r.position.x << '\n'; // 3 2
+
+    RobotStatus *rp{&r};
+    rp->battery_pct -= 10.0;            // the same as (*rp).battery_pct -= 10.0;
+    std::cout << r.battery_pct << '\n'; // 54
+}
+} // namespace member_access
+
+// [Slide 14] A struct in Memory
 namespace padding {
 struct Position {
     double x;
@@ -242,7 +242,7 @@ void run() {
 }
 } // namespace member_order
 
-// [Slide 16] Structs and Functions
+// [Slide 16] Passing a struct
 namespace struct_functions {
 struct Position {
     double x{0.0};
@@ -270,7 +270,7 @@ void run() {
 }
 } // namespace struct_functions
 
-// [Slide 17] A Vector of Structs
+// [Slide 17] A Vector of RobotStatus
 namespace vector_of_structs {
 struct Position {
     double x{0.0};
@@ -296,6 +296,61 @@ void run() {
 }
 } // namespace vector_of_structs
 
+// [Slide 18] push_back and emplace_back
+namespace push_emplace {
+struct Position {
+    double x{0.0};
+    double y{0.0};
+};
+
+struct RobotStatus {
+    int id{0};
+    double battery_pct{100.0};
+    Position position{};
+    bool busy{false};
+};
+
+void run() {
+    std::vector<RobotStatus> fleet{};
+    // push_back takes a whole RobotStatus: build one, then it goes in
+    fleet.push_back(RobotStatus{1, 82.5, {0.0, 0.0}, false});
+    fleet.push_back({2, 35.0, {4.0, 1.0}, true}); // braces build it too
+    // emplace_back builds it inside the vector, from the arguments (C++20)
+    fleet.emplace_back(3, 64.0, Position{2.0, 3.0}, false);
+    fleet.emplace_back(4, 18.0); // position and busy: defaults
+    for (const auto &r : fleet) {
+        std::cout << "robot " << r.id << ": " << r.battery_pct << " % at (" << r.position.x
+                  << ", " << r.position.y << ")" << (r.busy ? ", busy\n" : ", idle\n");
+    }
+}
+} // namespace push_emplace
+
+// [Slide 19] Braces and emplace_back
+// The three lines that do not compile are left out (see the slide):
+//   fleet.emplace_back({5, 90.0, {1.0, 1.0}, false});
+//   fleet.emplace_back(5, 90.0, {1.0, 1.0}, false);
+//   fleet.push_back({4.9, 50.0});
+namespace emplace_braces {
+struct Position {
+    double x{0.0};
+    double y{0.0};
+};
+
+struct RobotStatus {
+    int id{0};
+    double battery_pct{100.0};
+    Position position{};
+    bool busy{false};
+};
+
+void run() {
+    std::vector<RobotStatus> fleet{};
+    fleet.emplace_back(5, 90.0, Position{1.0, 1.0}, false); // OK
+    fleet.emplace_back(4.9, 50.0);                          // OK, and the id is 4
+    std::cout << fleet[0].id << ' ' << fleet[1].id << '\n'; // 5 4
+}
+} // namespace emplace_braces
+
 // Runs one slide's code: always when only is 0, otherwise only on a match.
 // run is a pointer to a function: Section 5, Function Pointers.
 void show(int only, int slide, const char *title, void (*run)()) {
@@ -309,13 +364,15 @@ void show(int only, int slide, const char *title, void (*run)()) {
 int main(int argc, char *argv[]) {
     const int only{argc > 1 ? std::atoi(argv[1]) : 0};
     show(only, 7, "Three Values, One Status", three_values::run);
-    show(only, 8, "Declaring a Struct", declaring::run);
-    show(only, 9, "Member Access", member_access::run);
-    show(only, 11, "Initializing a Struct", aggregate_init::run);
-    show(only, 12, "Default Member Initializers", default_members::run);
-    show(only, 13, "Designated Initializers (C++20)", designated::run);
-    show(only, 14, "Structs in Memory", padding::run);
+    show(only, 8, "Declaring a struct", declaring::run);
+    show(only, 10, "Initializing a struct", aggregate_init::run);
+    show(only, 11, "Default Member Initializers", default_members::run);
+    show(only, 12, "Designated Initializers (C++20)", designated::run);
+    show(only, 13, "Member Access", member_access::run);
+    show(only, 14, "A struct in Memory", padding::run);
     show(only, 15, "Member Order", member_order::run);
-    show(only, 16, "Structs and Functions", struct_functions::run);
-    show(only, 17, "A Vector of Structs", vector_of_structs::run);
+    show(only, 16, "Passing a struct", struct_functions::run);
+    show(only, 17, "A Vector of RobotStatus", vector_of_structs::run);
+    show(only, 18, "push_back and emplace_back", push_emplace::run);
+    show(only, 19, "Braces and emplace_back", emplace_braces::run);
 }

@@ -9,7 +9,7 @@ int main() {
   std::cout << is_low(30.0) << '\n';  // should be 1
 }
 
-// [Slide 58] A Dangling Capture
+// [Slide 60] A Dangling Capture
 // UNDEFINED BEHAVIOR. limit_pct is a parameter: it dies when make_filter
 // returns, and the lambda keeps a reference to it. This target is always
 // built with AddressSanitizer, so the run stops with a report that names the

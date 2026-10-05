@@ -47,15 +47,29 @@ is `docs/html/`. Commit the `Doxyfile`, never the pages it generates.
 
 ## Setup
 
+The same steps are at the top of `enpm702-cpp.sh`.
+
+### 0. Install the tools (Ubuntu)
+
+```bash
+sudo apt update
+sudo apt install build-essential cmake gdb valgrind
+```
+
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/zeidk/enpm702-fall-2026-cpp.git ~/enpm702_cpp/enpm702-fall-2026-cpp
 ```
 
-The path matters: the shell script expects the repository at
-`~/enpm702_cpp/enpm702-fall-2026-cpp`. If you clone it somewhere else, edit
-`ENPM702_WS` at the top of `enpm702-cpp.sh`.
+Any folder works: `enpm702-cpp.sh` finds the repository from its own location.
+If you clone it somewhere else, use that path in the `source` line below. To
+point the shortcuts at a different clone, set `ENPM702_WS` before the `source`
+line:
+
+```bash
+export ENPM702_WS="$HOME/somewhere/enpm702-fall-2026-cpp"
+```
 
 ### 2. Source the shell script
 
@@ -73,7 +87,11 @@ echo "source ~/enpm702_cpp/enpm702-fall-2026-cpp/enpm702-cpp.sh" >> ~/.bashrc
 echo "source ~/enpm702_cpp/enpm702-fall-2026-cpp/enpm702-cpp.sh" >> ~/.zshrc
 ```
 
-Then restart your terminal or run `source ~/.bashrc` (or `source ~/.zshrc`).
+Run that line once only: each run adds another copy to the file. Then restart
+your terminal or run `source ~/.bashrc` (or `source ~/.zshrc`).
+
+Source the script; do not run it. `bash enpm702-cpp.sh` loads nothing into your
+terminal, so the script stops with a message if you try.
 
 ### 3. Activate the environment
 
@@ -113,7 +131,7 @@ any time to print the list of commands again.
 |---|---|
 | `702exe` | List the executables currently present under `build/` |
 | `702run <exe> [args]` | Run an executable by name, wherever CMake placed it |
-| `702g++ <file.cpp>` | Compile a single file (`g++ -std=c++20 -Wall -Wextra -pedantic-errors -g`) |
+| `702g++ <file.cpp>` | Compile a single file (`g++ -std=c++20 -Wall -Wextra -pedantic-errors -Wshadow -g`) |
 | `702memcheck <exe>` | Run Valgrind with full leak checking |
 | `702help` | Print the command list |
 

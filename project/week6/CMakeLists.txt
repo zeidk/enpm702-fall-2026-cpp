@@ -3,13 +3,12 @@
 #
 #   702configure                  once, after pulling
 #   702build                      build every week-6 program
-#   702run week6_types            run every snippet of Section 1
-#   702run week6_types 8         run only the snippet of [Slide 8]
+#   702run week6_structs          run every snippet of Section 1
+#   702run week6_structs 8        run only the snippet of [Slide 8]
 #
 # Folders:
 #   fleet/        the finished program (week6_fleet), headers and sources
 #   snippets/     one program per lecture section, every slide's code runs
-#   diagnostics/  one file per slide whose code does NOT compile, or warns
 #   throws/       the two slides whose code throws an exception
 #   undefined/    the two slides whose code has undefined behavior
 #   exercises/    one program per exercise
@@ -26,20 +25,19 @@ target_include_directories(week6_fleet PRIVATE fleet/include)
 # -----------------------------------------------------------------------------
 # 2. The snippets: one program per section of the slides.
 # -----------------------------------------------------------------------------
-add_executable(week6_types snippets/types.cpp)
+add_executable(week6_structs snippets/structs.cpp)
 add_executable(week6_results snippets/results.cpp)
 add_executable(week6_templates snippets/templates.cpp)
 add_executable(week6_lambdas snippets/lambdas.cpp)
 add_executable(week6_callables snippets/callables.cpp)
 
 # -----------------------------------------------------------------------------
-# 3. The exercises: compile and run each one after you have written your answer.
-#    Exercise 3 is not a target: some of its calls do not compile, which is the
-#    exercise. Compile it by hand: 702g++ exercises/exercise3.cpp
-#    The files in diagnostics/ are not targets either, for the same reason.
+# 3. The exercises: about 5 minutes each. Each file starts with its steps and
+#    compiles as given; you add the code, then build and run it.
 # -----------------------------------------------------------------------------
 add_executable(week6_ex1 exercises/exercise1.cpp)
 add_executable(week6_ex2 exercises/exercise2.cpp)
+add_executable(week6_ex3 exercises/exercise3.cpp)
 add_executable(week6_ex4 exercises/exercise4.cpp)
 
 # -----------------------------------------------------------------------------

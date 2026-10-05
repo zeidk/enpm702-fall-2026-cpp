@@ -13,16 +13,15 @@
  *
  * The template clamp_value is declared once, at namespace scope, because most
  * slides of the section call it, and because the Instantiation slide lists its
- * instantiations with nm. Code that does not compile is in @c ../diagnostics/.
- * The template split across a header and a source file is in
- * @c ../diagnostics/split/.
+ * instantiations with nm. Code that does not compile is left out; its slide
+ * shows the error.
  */
 #include <concepts>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 
-// [Slide 33] One Body, Several Overloads
+// [Slide 35] One Body, Several Overloads
 namespace overloads {
 int clamp_value(int value, int low, int high) {  // a speed command, in percent
   if (value < low) { return low; }
@@ -42,7 +41,7 @@ void run() {
 }
 }  // namespace overloads
 
-// [Slide 34] Declaring a Template
+// [Slide 36] Declaring a Template
 template <typename T>
 T clamp_value(T value, T low, T high) {
   if (value < low) { return low; }
@@ -57,7 +56,7 @@ void run() {
 }
 }  // namespace declaring_template
 
-// [Slide 35] Instantiation
+// [Slide 37] Instantiation
 namespace instantiation {
 void run() {
   int speed_pct{clamp_value(130, 0, 100)};              // 100
@@ -67,7 +66,7 @@ void run() {
 }
 }  // namespace instantiation
 
-// [Slide 39] Explicit Template Arguments
+// [Slide 41] Explicit Template Arguments
 namespace explicit_args {
 void run() {
   double pct{clamp_value<double>(104, 0.0, 100.0)};  // 100
@@ -75,7 +74,7 @@ void run() {
 }
 }  // namespace explicit_args
 
-// [Slide 41] Two Template Parameters
+// [Slide 43] Two Template Parameters
 namespace two_parameters {
 template <typename T, typename U>
 auto add_offset(T value, U offset) {
@@ -93,7 +92,7 @@ void run() {
 }
 }  // namespace two_parameters
 
-// [Slide 42] Abbreviated Templates
+// [Slide 44] Abbreviated Templates
 namespace abbreviated {
 void print_all(const auto& values) {
   for (const auto& v : values) {
@@ -108,7 +107,7 @@ void run() {
 }
 }  // namespace abbreviated
 
-// [Slide 43] Concepts
+// [Slide 45] Concepts
 namespace constrained {
 template <std::floating_point T>
 T average_of(const std::vector<T>& values) {
@@ -122,8 +121,8 @@ void run() {
 }
 }  // namespace constrained
 
-// [Slide 44] A Call That Compiles and Is Wrong
-// The constrained version rejects the int call: ../diagnostics/average_int.cpp.
+// [Slide 46] A Call That Compiles and Is Wrong
+// The constrained version rejects the int call, as the slide shows.
 namespace unconstrained {
 template <typename T>
 T average_of(const std::vector<T>& values) {
@@ -138,7 +137,7 @@ void run() {
 }
 }  // namespace unconstrained
 
-// [Slide 45] Three Ways to Write a Constraint
+// [Slide 47] Three Ways to Write a Constraint
 // The three forms accept the same calls, so each sits in its own namespace.
 namespace form1 {
 template <std::integral T>  // 1. in place of typename
@@ -173,13 +172,13 @@ void show(int only, int slide, const char* title, void (*run)()) {
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 33, "One Body, Several Overloads", overloads::run);
-  show(only, 34, "Declaring a Template", declaring_template::run);
-  show(only, 35, "Instantiation", instantiation::run);
-  show(only, 39, "Explicit Template Arguments", explicit_args::run);
-  show(only, 41, "Two Template Parameters", two_parameters::run);
-  show(only, 42, "Abbreviated Templates", abbreviated::run);
-  show(only, 43, "Concepts", constrained::run);
-  show(only, 44, "A Call That Compiles and Is Wrong", unconstrained::run);
-  show(only, 45, "Three Ways to Write a Constraint", constraint_forms::run);
+  show(only, 35, "One Body, Several Overloads", overloads::run);
+  show(only, 36, "Declaring a Template", declaring_template::run);
+  show(only, 37, "Instantiation", instantiation::run);
+  show(only, 41, "Explicit Template Arguments", explicit_args::run);
+  show(only, 43, "Two Template Parameters", two_parameters::run);
+  show(only, 44, "Abbreviated Templates", abbreviated::run);
+  show(only, 45, "Concepts", constrained::run);
+  show(only, 46, "A Call That Compiles and Is Wrong", unconstrained::run);
+  show(only, 47, "Three Ways to Write a Constraint", constraint_forms::run);
 }

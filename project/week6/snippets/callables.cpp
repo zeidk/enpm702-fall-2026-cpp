@@ -10,8 +10,8 @@
  * 702run week6_callables 67     # only [Slide 67]
  * @endcode
  *
- * Code that does not compile is in @c ../diagnostics/. Calling an empty
- * std::function is in @c ../throws/function_empty.cpp.
+ * Code that does not compile is left out; its slide shows the error. Calling an
+ * empty std::function is in @c ../throws/function_empty.cpp.
  */
 #include <cstdlib>
 #include <functional>
@@ -21,7 +21,7 @@
 #include <string>
 #include <string_view>
 
-// [Slide 64] Function Pointers
+// [Slide 66] Function Pointers
 namespace function_pointers {
 double to_fraction(double pct) {
   return pct / 100.0;
@@ -36,8 +36,8 @@ void run() {
 }
 }  // namespace function_pointers
 
-// [Slide 65] Passing a Function
-// The call with a capturing lambda is in ../diagnostics/fnptr_capture.cpp.
+// [Slide 67] Passing a Function
+// The call with a capturing lambda is left out: it does not compile (see the slide).
 namespace passing_function {
 void convert_all(double* values, int n, double (*convert)(double)) {
   for (int i{0}; i < n; ++i) { values[i] = convert(values[i]); }
@@ -52,7 +52,7 @@ void run() {
 }
 }  // namespace passing_function
 
-// [Slide 66] std::function
+// [Slide 68] std::function
 namespace std_function {
 void run() {
   std::function<double(double)> f{function_pointers::to_fraction};
@@ -64,7 +64,7 @@ void run() {
 }
 }  // namespace std_function
 
-// [Slide 67] A Table of Commands
+// [Slide 69] A Table of Commands
 namespace command_table {
 void run() {
   std::map<std::string, std::function<void(int)>> on_command;
@@ -81,7 +81,7 @@ void run() {
 }
 }  // namespace command_table
 
-// [Slide 69] Choosing a Parameter Type
+// [Slide 71] Choosing a Parameter Type
 namespace choosing {
 void run() {
   double (*p)(double){function_pointers::to_fraction};
@@ -90,7 +90,7 @@ void run() {
 }
 }  // namespace choosing
 
-// [Slide 70] std::bind
+// [Slide 72] std::bind
 namespace bind {
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
@@ -108,7 +108,7 @@ void run() {
 }
 }  // namespace bind
 
-// [Slide 71] bind_front and Lambdas
+// [Slide 73] bind_front and Lambdas
 namespace bind_front {
 void run() {
   auto to_half = std::bind_front(bind::charge_time_h, 50.0);  // C++20
@@ -124,7 +124,7 @@ void run() {
 }
 }  // namespace bind_front
 
-// [Slide 73] std::source_location
+// [Slide 75] std::source_location
 // At namespace scope, not in a namespace of its own, so function_name() prints
 // the plain names the slide shows.
 void log_message(
@@ -161,12 +161,12 @@ void show(int only, int slide, const char* title, void (*run)()) {
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 64, "Function Pointers", function_pointers::run);
-  show(only, 65, "Passing a Function", passing_function::run);
-  show(only, 66, "std::function", std_function::run);
-  show(only, 67, "A Table of Commands", command_table::run);
-  show(only, 69, "Choosing a Parameter Type", choosing::run);
-  show(only, 70, "std::bind", bind::run);
-  show(only, 71, "bind_front and Lambdas", bind_front::run);
-  show(only, 73, "std::source_location", source_location_slide::run);
+  show(only, 66, "Function Pointers", function_pointers::run);
+  show(only, 67, "Passing a Function", passing_function::run);
+  show(only, 68, "std::function", std_function::run);
+  show(only, 69, "A Table of Commands", command_table::run);
+  show(only, 71, "Choosing a Parameter Type", choosing::run);
+  show(only, 72, "std::bind", bind::run);
+  show(only, 73, "bind_front and Lambdas", bind_front::run);
+  show(only, 75, "std::source_location", source_location_slide::run);
 }

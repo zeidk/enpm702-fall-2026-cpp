@@ -1,6 +1,19 @@
+// [Slide 33] Exercise 2: Find a Robot
+//
+// About 5 minutes. Build and run:  702build week6_ex2 && 702run week6_ex2
+//
+// 1. Write std::optional<RobotStatus> find_robot(
+//        const std::vector<RobotStatus>& fleet, int id)
+//    It returns the robot with that id, or an empty optional.
+// 2. In main, look up robot 3. If it is found, unpack it with a structured
+//    binding and print its four members on one line.
+// 3. Look up robot 9, and print that it was not found.
+//
+// Expected output:
+//   robot 3: 64 % at (2, 3), idle
+//   robot 9: not found
 #include <iostream>
 #include <optional>
-#include <utility>
 #include <vector>
 
 struct Position {
@@ -15,28 +28,20 @@ struct RobotStatus {
   bool busy{false};
 };
 
-std::optional<double> find_lowest_battery(const std::vector<RobotStatus>& fleet) {
-  if (fleet.empty()) { return std::nullopt; }
-  double lowest{fleet.front().battery_pct};
-  for (const auto& r : fleet) {
-    if (r.battery_pct < lowest) { lowest = r.battery_pct; }
-  }
-  return lowest;
+// The demo fleet from the slides.
+std::vector<RobotStatus> make_fleet() {
+  return {{1, 82.5, {0.0, 0.0}, false},
+          {2, 35.0, {4.0, 1.0}, true},
+          {3, 64.0, {2.0, 3.0}, false},
+          {4, 18.0, {6.0, 2.0}, false}};
 }
+
+// Step 1: find_robot goes here.
 
 int main() {
-  std::vector<RobotStatus> fleet{{1, 82.5}, {2, 35.0}, {3, 64.0}, {4, 18.0}};
+  const std::vector<RobotStatus> fleet{make_fleet()};
 
-  std::pair<int, double> charge{3, 64.0};
-  auto [id, pct] = charge;
-  pct = 100.0;
-  auto& [id_ref, pct_ref] = charge;
-  pct_ref = 70.0;
-  std::cout << charge.first << ' ' << charge.second << '\n';
+  // Step 2: robot 3.
 
-  std::cout << find_lowest_battery(fleet).value_or(-1.0) << ' '
-            << find_lowest_battery({}).value_or(-1.0) << '\n';
+  // Step 3: robot 9.
 }
-
-// [Slide 31] Exercise 2: Bindings and Optionals
-// Write your answer first, then: 702build week6_ex2 && 702run week6_ex2

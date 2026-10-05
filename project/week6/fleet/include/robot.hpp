@@ -3,8 +3,8 @@
  * @file robot.hpp
  * @brief The types every part of the fleet manager shares.
  *
- * @details The L6 slides build these two structs step by step in Section 1,
- * Custom Types. This header holds the finished version, with a default for
+ * @details The L6 slides build these two structs step by step in Section 1
+ * (struct). This header holds the finished version, with a default for
  * every member.
  */
 
