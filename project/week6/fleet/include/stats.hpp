@@ -2,6 +2,7 @@
 /**
  * @file stats.hpp
  * @brief Small numeric helpers, written once for every type.
+ * @author Zeid Kootbally
  *
  * @details Both functions are templates, so the whole definition is here in
  * the header. A template's body must be visible wherever it is called, or the
@@ -40,8 +41,8 @@ T average_of(const std::vector<T>& values) {
         return T{0};
     }
     T sum{0};
-    for (const T& v : values) {
-        sum += v;
+    for (const T& value : values) {
+        sum += value;
     }
     return sum / static_cast<T>(values.size());
 }

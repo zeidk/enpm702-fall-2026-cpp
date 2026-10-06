@@ -2,6 +2,7 @@
 /**
  * @file fleet_queries.hpp
  * @brief Questions the dispatcher asks about the fleet.
+ * @author Zeid Kootbally
  *
  * @details Each function takes the fleet and returns a value.
  */

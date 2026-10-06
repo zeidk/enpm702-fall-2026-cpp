@@ -12,11 +12,11 @@
 #include <iostream>
 #include <numbers>
 
-/// Length of the first link, from the base to the elbow, in metres.
+/// Length of the first link, from the base to the elbow, in meters.
 constexpr double link1_m{0.50};
-/// Length of the second link, from the elbow to the wrist, in metres.
+/// Length of the second link, from the elbow to the wrist, in meters.
 constexpr double link2_m{0.40};
-/// Length of the third link, from the wrist to the tool, in metres.
+/// Length of the third link, from the wrist to the tool, in meters.
 constexpr double link3_m{0.30};
 
 double convert_deg_to_rad(double deg) { return deg * std::numbers::pi / 180.0; }

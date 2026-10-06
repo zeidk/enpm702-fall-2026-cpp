@@ -1,13 +1,14 @@
 /**
  * @file callables.cpp
  * @brief L6 Section 5, Other Callables: the code of every slide, runnable.
+ * @author Zeid Kootbally
  *
  * @details Build target: @c week6_callables. This file stands alone.
  *
  * @code
  * 702build week6_callables
  * 702run week6_callables        # every slide of the section, in order
- * 702run week6_callables 67     # only [Slide 67]
+ * 702run week6_callables 65    # only [Slide 65]
  * @endcode
  *
  * Code that does not compile is commented out where its slide shows it:
@@ -22,7 +23,7 @@
 #include <string>
 #include <string_view>
 
-// [Slide 66] Function Pointers
+// [Slide 65] Function Pointers
 namespace function_pointers {
 double to_fraction(double pct) {
   return pct / 100.0;
@@ -31,43 +32,45 @@ double to_pct(double fraction) { return fraction * 100.0; }  // the inverse
 
 void run() {
   double (*convert)(double){to_fraction};
-  std::cout << convert(82.5) << '\n';  // 0.825
+  std::cout << "convert(82.5) with to_fraction: " << convert(82.5) << '\n';  // 0.825
   convert = to_pct;
-  std::cout << convert(0.35) << '\n';  // 35
+  std::cout << "convert(0.35) with to_pct: " << convert(0.35) << '\n';  // 35
 }
 }  // namespace function_pointers
 
-// [Slide 67] Passing a Function
+// [Slide 66] Passing a Function
 namespace passing_function {
-void convert_all(double* values, int n, double (*convert)(double)) {
-  for (int i{0}; i < n; ++i) { values[i] = convert(values[i]); }
+void convert_all(double* values, int count, double (*convert)(double)) {
+  for (int i{0}; i < count; ++i) { values[i] = convert(values[i]); }
 }
 
 void run() {
   double battery[]{82.5, 35.0};
-  convert_all(battery, 2, [](double x) { return x / 100.0; });  // OK: no capture
+  convert_all(battery, 2, [](double pct) { return pct / 100.0; });  // OK: no capture
   // Does not compile: a lambda that captures is not a function pointer.
   // double scale{2.0};
-  // convert_all(battery, 2, [scale](double x) { return scale * x; });
-  std::cout << battery[0] << ' ' << battery[1] << '\n';          // 0.825 0.35
+  // convert_all(battery, 2, [scale](double pct) { return scale * pct; });
+  std::cout << "battery[0]: " << battery[0] << ", battery[1]: " << battery[1]
+            << '\n';  // 0.825 0.35
   convert_all(battery, 2, function_pointers::to_pct);            // a function name
-  std::cout << battery[0] << ' ' << battery[1] << '\n';          // 82.5 35
+  std::cout << "battery[0]: " << battery[0] << ", battery[1]: " << battery[1]
+            << '\n';  // 82.5 35
 }
 }  // namespace passing_function
 
-// [Slide 68] std::function
+// [Slide 67] std::function
 namespace std_function {
 void run() {
-  std::function<double(double)> f{function_pointers::to_fraction};
-  std::cout << f(64.0) << '\n';  // 0.64
+  std::function<double(double)> convert{function_pointers::to_fraction};
+  std::cout << "convert(64.0) with to_fraction: " << convert(64.0) << '\n';  // 0.64
 
   double scale{2.0};
-  f = [scale](double x) { return scale * x; };
-  std::cout << f(64.0) << '\n';  // 128
+  convert = [scale](double pct) { return scale * pct; };
+  std::cout << "convert(64.0) with the lambda: " << convert(64.0) << '\n';  // 128
 }
 }  // namespace std_function
 
-// [Slide 69] A Table of Commands
+// [Slide 68] A Table of Commands
 namespace command_table {
 void run() {
   std::map<std::string, std::function<void(int)>> on_command;
@@ -84,16 +87,16 @@ void run() {
 }
 }  // namespace command_table
 
-// [Slide 71] Choosing a Parameter Type
+// [Slide 70] Choosing a Parameter Type
 namespace choosing {
 void run() {
-  double (*p)(double){function_pointers::to_fraction};
-  std::function<double(double)> f{function_pointers::to_fraction};
-  std::cout << sizeof(p) << ' ' << sizeof(f) << '\n';  // 8 32
+  double (*convert_ptr)(double){function_pointers::to_fraction};
+  std::function<double(double)> convert_function{function_pointers::to_fraction};
+  std::cout << "sizeof(convert_ptr): " << sizeof(convert_ptr) << ", sizeof(convert_function): " << sizeof(convert_function) << '\n';  // 8 32
 }
 }  // namespace choosing
 
-// [Slide 72] std::bind
+// [Slide 71] std::bind
 namespace bind {
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
@@ -105,29 +108,33 @@ void run() {
   auto to_half = std::bind(charge_time_h, 50.0, _1);       // (50.0, x)
   auto swapped = std::bind(charge_time_h, _2, _1);         // (y, x)
 
-  std::cout << at_fast_dock(60.0) << '\n';    // 1.5
-  std::cout << to_half(25.0) << '\n';         // 2
-  std::cout << swapped(20.0, 60.0) << '\n';   // 3
+  std::cout << "at_fast_dock(60.0): " << at_fast_dock(60.0) << '\n';    // 1.5
+  std::cout << "to_half(25.0): " << to_half(25.0) << '\n';               // 2
+  std::cout << "swapped(20.0, 60.0): " << swapped(20.0, 60.0) << '\n';   // 3
 }
 }  // namespace bind
 
-// [Slide 73] bind_front and Lambdas
+// [Slide 72] bind_front and Lambdas
 namespace bind_front {
 void run() {
   auto to_half = std::bind_front(bind::charge_time_h, 50.0);  // C++20
-  std::cout << to_half(25.0) << '\n';                          // 2
+  std::cout << "to_half(25.0): " << to_half(25.0) << '\n';  // 2
 
-  auto fast_l = [](double x) { return bind::charge_time_h(x, 40.0); };
-  auto swap_l = [](double x, double y) { return bind::charge_time_h(y, x); };
-  std::cout << fast_l(60.0) << ' ' << swap_l(20.0, 60.0) << '\n';  // 1.5 3
+  auto fast_l = [](double missing_pct) { return bind::charge_time_h(missing_pct, 40.0); };
+  auto swap_l = [](double rate_pct_per_h, double missing_pct) {
+    return bind::charge_time_h(missing_pct, rate_pct_per_h);
+  };
+  std::cout << "fast_l(60.0): " << fast_l(60.0) << ", swap_l(20.0, 60.0): " << swap_l(20.0, 60.0)
+            << '\n';  // 1.5 3
 
   using namespace std::placeholders;
   auto at_fast_dock = std::bind(bind::charge_time_h, _1, 40.0);
-  std::cout << at_fast_dock(60.0, 99.0) << '\n';  // compiles, prints 1.5: 99.0 is dropped
+  // compiles, prints 1.5: 99.0 is dropped
+  std::cout << "at_fast_dock(60.0, 99.0): " << at_fast_dock(60.0, 99.0) << '\n';
 }
 }  // namespace bind_front
 
-// [Slide 75] std::source_location
+// [Slide 74] std::source_location
 // At namespace scope, not in a namespace of its own, so function_name() prints
 // the plain names the slide shows.
 void log_message(
@@ -158,18 +165,20 @@ void run() {
 // run is a pointer to a function, as on the Function Pointers slide.
 void show(int only, int slide, const char* title, void (*run)()) {
   if (only != 0 && only != slide) { return; }
-  std::cout << "[Slide " << slide << "] " << title << '\n';
+  const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
+  const std::string rule(header.size(), '-');  // ( ), not { }: { } means a list of two chars
+  std::cout << rule << '\n' << header << '\n' << rule << '\n';
   run();
 }
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 66, "Function Pointers", function_pointers::run);
-  show(only, 67, "Passing a Function", passing_function::run);
-  show(only, 68, "std::function", std_function::run);
-  show(only, 69, "A Table of Commands", command_table::run);
-  show(only, 71, "Choosing a Parameter Type", choosing::run);
-  show(only, 72, "std::bind", bind::run);
-  show(only, 73, "bind_front and Lambdas", bind_front::run);
-  show(only, 75, "std::source_location", source_location_slide::run);
+  show(only, 65, "Function Pointers", function_pointers::run);
+  show(only, 66, "Passing a Function", passing_function::run);
+  show(only, 67, "std::function", std_function::run);
+  show(only, 68, "A Table of Commands", command_table::run);
+  show(only, 70, "Choosing a Parameter Type", choosing::run);
+  show(only, 71, "std::bind", bind::run);
+  show(only, 72, "bind_front and Lambdas", bind_front::run);
+  show(only, 74, "std::source_location", source_location_slide::run);
 }

@@ -12,7 +12,7 @@
 //   Uncomment one block, build, run, then comment it back and move on.
 //   In VS Code: select the block and press Ctrl+/ (Cmd+/ on macOS).
 //
-//   Blocks are labelled [Module > Section] to match the headings on the
+//   Blocks are labeled [Module > Section] to match the headings on the
 //   ReadTheDocs page, so you can read and run side by side. Section names are
 //   used rather than page numbers because the headings are stable.
 //

@@ -1,6 +1,7 @@
 /**
  * @file dispatcher.cpp
  * @brief Definitions for dispatcher.hpp.
+ * @author Zeid Kootbally
  */
 #include "dispatcher.hpp"
 
@@ -15,11 +16,11 @@ CommandTable make_command_table() {
 }
 
 bool dispatch(const CommandTable& table, const std::string& command, int robot_id) {
-    auto it{table.find(command)};
-    if (it == table.end() || !it->second) {
+    auto handler{table.find(command)};
+    if (handler == table.end() || !handler->second) {
         return false;
     }
-    it->second(robot_id);
+    handler->second(robot_id);
     return true;
 }
 

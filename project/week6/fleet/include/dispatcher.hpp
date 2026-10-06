@@ -2,6 +2,7 @@
 /**
  * @file dispatcher.hpp
  * @brief Sends named commands to robots, and logs what happened.
+ * @author Zeid Kootbally
  */
 #include <functional>
 #include <map>

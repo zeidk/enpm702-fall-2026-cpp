@@ -6,7 +6,7 @@ auto make_filter(double limit_pct) {
 
 int main() {
   auto is_low = make_filter(40.0);
-  std::cout << is_low(30.0) << '\n';  // should be 1
+  std::cout << "is_low(30.0): " << is_low(30.0) << '\n';  // should be 1
 }
 
 // [Slide 60] A Dangling Capture
@@ -14,3 +14,4 @@ int main() {
 // returns, and the lambda keeps a reference to it. This target is always
 // built with AddressSanitizer, so the run stops with a report that names the
 // bug and the line. Run: 702run week6_dangling
+// Author: Zeid Kootbally

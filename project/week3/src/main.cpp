@@ -245,7 +245,7 @@ int main() {
     //               << sizeof(status) << '\n';       // 4 8 1
     // }
     //
-    // The suffixes are UNITS: _m is metres, _v volts, _pct percent.
+    // The suffixes are UNITS: _m is meters, _v volts, _pct percent.
     // sizeof(p) is the pointer; sizeof(*p) is the object it points at.
 
     // --- [Slide 35] The type is checked --- DOES NOT COMPILE ------------------

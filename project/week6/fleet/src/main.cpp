@@ -1,6 +1,7 @@
 /**
  * @file main.cpp
  * @brief The fleet manager: the program the L6 slides build, in one piece.
+ * @author Zeid Kootbally
  *
  * @details Build target: @c week6_fleet. It prints the fleet, a summary, the
  * robot chosen for one task, and the commands sent to two robots.
@@ -27,16 +28,16 @@ int main() {
     const std::vector<RobotStatus> fleet{make_demo_fleet()};
 
     std::cout << "== Fleet ==\n";
-    for (const auto& r : fleet) {
-        std::cout << "robot " << r.id << ": " << r.battery_pct << " % at (" << r.position.x
-                  << ", " << r.position.y << ")" << (r.busy ? ", busy\n" : ", idle\n");
+    for (const auto& robot : fleet) {
+        std::cout << "robot " << robot.id << ": " << robot.battery_pct << " % at (" << robot.position.x
+                  << ", " << robot.position.y << ")" << (robot.busy ? ", busy\n" : ", idle\n");
     }
 
     std::cout << "== Summary ==\n";
     auto [min_pct, max_pct, busy_count] = summarize_fleet(fleet);
     std::vector<double> levels{};
-    for (const auto& r : fleet) {
-        levels.push_back(r.battery_pct);
+    for (const auto& robot : fleet) {
+        levels.push_back(robot.battery_pct);
     }
     std::cout << "battery from " << min_pct << " % to " << max_pct << " %, average "
               << average_of(levels) << " %\n";
