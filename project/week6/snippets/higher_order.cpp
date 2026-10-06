@@ -74,7 +74,7 @@ void run() {
 }
 }  // namespace passing_function
 
-// [Slide 69] std::function
+// [Slide 67] std::function
 namespace std_function {
 void run() {
   std::function<double(double)> convert{function_pointers::to_fraction};
@@ -86,7 +86,7 @@ void run() {
 }
 }  // namespace std_function
 
-// [Slide 70] A Table of Commands
+// [Slide 68] A Table of Commands
 namespace command_table {
 void run() {
   std::map<std::string, std::function<void(int)>> on_command;
@@ -103,7 +103,7 @@ void run() {
 }
 }  // namespace command_table
 
-// [Slide 72] Choosing a Parameter Type
+// [Slide 70] Choosing a Parameter Type
 namespace choosing {
 void run() {
   double (*convert_ptr)(double){function_pointers::to_fraction};
@@ -112,7 +112,7 @@ void run() {
 }
 }  // namespace choosing
 
-// [Slide 73] std::bind
+// [Slide 71] std::bind
 namespace bind {
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
@@ -204,10 +204,10 @@ void show_appendix(int only, const char* title, void (*run)()) {
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
   show(only, 54, "A Condition instead of a Value", condition::run);
-  show(only, 69, "std::function", std_function::run);
-  show(only, 70, "A Table of Commands", command_table::run);
-  show(only, 72, "Choosing a Parameter Type", choosing::run);
-  show(only, 73, "std::bind", bind::run);
+  show(only, 67, "std::function", std_function::run);
+  show(only, 68, "A Table of Commands", command_table::run);
+  show(only, 70, "Choosing a Parameter Type", choosing::run);
+  show(only, 71, "std::bind", bind::run);
   show_appendix(only, "Function Pointers", function_pointers::run);
   show_appendix(only, "Passing a Function", passing_function::run);
   show_appendix(only, "bind_front and Lambdas", bind_front::run);

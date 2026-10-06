@@ -112,7 +112,7 @@ void run() {
 }
 }  // namespace transform_appendix
 
-// [Slide 60] Projections (C++20)
+// [Appendix] Projections (C++20): runs only with the whole program
 namespace projections {
 void run() {
   std::vector<std::string> zones{"charging bay", "dock", "aisle 4"};
@@ -124,7 +124,7 @@ void run() {
 }
 }  // namespace projections
 
-// [Slide 61] Projections with RobotStatus
+// [Appendix] Projections with RobotStatus: runs only with the whole program
 namespace projections_robot {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};  // the four robots of the slide
@@ -138,7 +138,7 @@ void run() {
 }
 }  // namespace projections_robot
 
-// [Slide 62] Captures
+// [Slide 60] Captures
 namespace no_capture {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -149,7 +149,7 @@ void run() {
 }
 }  // namespace no_capture
 
-// [Slide 63] By Value and by Reference
+// [Slide 61] By Value and by Reference
 namespace by_value_reference {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -186,7 +186,7 @@ void run() {
 }
 }  // namespace mutable_init
 
-// [Slide 65] What the Compiler Writes
+// [Slide 63] What the Compiler Writes
 namespace compiler_writes {
 struct IsLow {
   double limit_pct;  // the capture
@@ -210,7 +210,7 @@ void run() {
 }
 }  // namespace compiler_writes
 
-// [Slide 67] Generic Lambdas
+// [Slide 65] Generic Lambdas
 namespace generic {
 void run() {
   auto larger = [](const auto& left, const auto& right) { return left > right ? left : right; };
@@ -283,14 +283,14 @@ int main(int argc, char* argv[]) {
   show(only, 57, "Passing a Lambda", passing_lambda::run);
   show(only, 58, "std::find_if with a Lambda", find_if_lambda::run);
   show(only, 59, "std::sort with a Lambda", sort_lambda::run);
-  show(only, 60, "Projections (C++20)", projections::run);
-  show(only, 61, "Projections with RobotStatus", projections_robot::run);
-  show(only, 62, "Captures", no_capture::run);
-  show(only, 63, "By Value and by Reference", by_value_reference::run);
-  show(only, 65, "What the Compiler Writes", compiler_writes::run);
-  show(only, 67, "Generic Lambdas", generic::run);
+  show(only, 60, "Captures", no_capture::run);
+  show(only, 61, "By Value and by Reference", by_value_reference::run);
+  show(only, 63, "What the Compiler Writes", compiler_writes::run);
+  show(only, 65, "Generic Lambdas", generic::run);
+  show_appendix(only, "std::transform", transform_appendix::run);
+  show_appendix(only, "Projections (C++20)", projections::run);
+  show_appendix(only, "Projections with RobotStatus", projections_robot::run);
   show_appendix(only, "mutable and Init-capture", mutable_init::run);
   show_appendix(only, "The Return Type", return_type::run);
   show_appendix(only, "Template Lambdas (C++20)", template_lambda::run);
-  show_appendix(only, "std::transform", transform_appendix::run);
 }
