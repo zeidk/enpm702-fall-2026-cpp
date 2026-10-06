@@ -1,6 +1,6 @@
 /**
  * @file lambdas.cpp
- * @brief L6 Section 4, Lambdas: the code of every slide, runnable.
+ * @brief L6 Section 5, Lambdas: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
  * @details Build target: @c week6_lambdas. This file stands alone.
@@ -8,7 +8,7 @@
  * @code
  * 702build week6_lambdas
  * 702run week6_lambdas        # every slide of the section, in order
- * 702run week6_lambdas 51     # only [Slide 51]
+ * 702run week6_lambdas 56     # only [Slide 56]
  * @endcode
  *
  * The structs and the demo fleet are declared once, at the top. Code that does
@@ -49,79 +49,107 @@ void print_ids(const std::vector<RobotStatus>& fleet) {
   std::cout << '\n';
 }
 
-// [Slide 51] A Condition instead of a Value
-namespace condition {
-bool is_low(double pct) { return pct < 40.0; }  // outside main
-
-void run() {
-  std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
-  std::cout << "count of 35.0: "
-            << std::count(battery_pct.begin(), battery_pct.end(), 35.0) << '\n';  // 1
-  std::cout << "count_if is_low: "
-            << std::count_if(battery_pct.begin(), battery_pct.end(), is_low) << '\n';  // 2
-}
-}  // namespace condition
-
-// [Slide 52] Lambda Expressions
+// [Slide 56] Lambda Expressions
 namespace lambda_expression {
 void run() {
+  // create it, call it at once
+  std::cout << std::boolalpha << "called at once with 35.0: "
+            << [](double pct) { return pct < 40.0; }(35.0) << std::noboolalpha << '\n';  // true
+
+  auto is_low = [](double pct) { return pct < 40.0; };  // create it, store it
+  std::cout << std::boolalpha << "is_low(35.0): " << is_low(35.0)
+            << ", is_low(64.0): " << is_low(64.0) << std::noboolalpha << '\n';  // true false
+}
+}  // namespace lambda_expression
+
+// [Slide 57] Passing a Lambda
+namespace passing_lambda {
+void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
-  std::cout << "count_if below 40: "
+  auto is_low = [](double pct) { return pct < 40.0; };
+  std::cout << "count_if with is_low: "
+            << std::count_if(battery_pct.begin(), battery_pct.end(), is_low) << '\n';  // 2
+  std::cout << "count_if with the lambda in the call: "
             << std::count_if(battery_pct.begin(), battery_pct.end(),
                              [](double pct) { return pct < 40.0; })
             << '\n';  // 2
 }
-}  // namespace lambda_expression
+}  // namespace passing_lambda
 
-// [Slide 53] Lambdas with Algorithms
-namespace algorithms {
+// [Slide 58] std::find_if with a Lambda
+namespace find_if_lambda {
+void run() {
+  std::vector<RobotStatus> fleet{make_fleet()};  // robots 1, 2, 3 and 4; only robot 2 is busy
+  auto is_busy = [](const RobotStatus& robot) { return robot.busy; };
+  auto first_busy = std::find_if(fleet.begin(), fleet.end(), is_busy);
+  std::cout << "first_busy->id: " << first_busy->id << '\n';  // 2
+}
+}  // namespace find_if_lambda
+
+// [Slide 59] std::sort with a Lambda
+namespace sort_lambda {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
-  // highest battery first: true when left must come before right
-  std::sort(fleet.begin(), fleet.end(), [](const RobotStatus& left, const RobotStatus& right) {
+  // true when left must come before right: more battery first
+  auto higher_battery = [](const RobotStatus& left, const RobotStatus& right) {
     return left.battery_pct > right.battery_pct;
-  });
+  };
+  std::sort(fleet.begin(), fleet.end(), higher_battery);
   print_ids(fleet);  // 1 3 2 4
+}
+}  // namespace sort_lambda
 
-  auto first_busy = std::find_if(fleet.begin(), fleet.end(),
-                         [](const RobotStatus& robot) { return robot.busy; });
-  std::cout << "first busy robot: " << first_busy->id << '\n';  // 2
-
+// [Appendix] std::transform: runs only with the whole program
+namespace transform_appendix {
+void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
-  std::vector<double> fraction(battery_pct.size());
+  std::vector<double> fraction(battery_pct.size());  // 4 elements, all 0
   std::transform(battery_pct.begin(), battery_pct.end(), fraction.begin(),
                  [](double pct) { return pct / 100.0; });
   std::cout << "fraction: ";
   for (double value : fraction) { std::cout << value << ' '; }
   std::cout << '\n';  // 0.825 0.35 0.64 0.18
 }
-}  // namespace algorithms
+}  // namespace transform_appendix
 
-// [Slide 54] Projections (C++20)
+// [Slide 60] Projections (C++20)
 namespace projections {
 void run() {
-  std::vector<RobotStatus> fleet{make_fleet()};
+  std::vector<std::string> zones{"charging bay", "dock", "aisle 4"};
+  // the projection turns each zone into its length
+  std::ranges::sort(zones, {}, [](const std::string& zone) { return zone.size(); });
+  std::cout << "zones by length: ";
+  for (const auto& zone : zones) { std::cout << '"' << zone << "\" "; }
+  std::cout << '\n';  // "dock" "aisle 4" "charging bay"
+}
+}  // namespace projections
+
+// [Slide 61] Projections with RobotStatus
+namespace projections_robot {
+void run() {
+  std::vector<RobotStatus> fleet{make_fleet()};  // the four robots of the slide
   std::ranges::sort(fleet, {}, [](const RobotStatus& robot) { return robot.battery_pct; });
   print_ids(fleet);  // 4 2 3 1
 
   auto closest = std::ranges::min_element(fleet, {}, [](const RobotStatus& robot) {
     return std::hypot(robot.position.x - 5.0, robot.position.y - 5.0);
   });
-  std::cout << "closest to the pickup at (5, 5): " << closest->id << '\n';  // 4
+  std::cout << "closest to the task at (5, 5): " << closest->id << '\n';  // 4
 }
-}  // namespace projections
+}  // namespace projections_robot
 
-// [Slide 55] Captures
+// [Slide 62] Captures
 namespace no_capture {
 void run() {
-  // Does not compile: limit_pct is not captured.
-  // double limit_pct{40.0};
-  // auto is_low = [](double pct) { return pct < limit_pct; };
-  std::cout << "does not compile: uncomment the lines in no_capture::run()\n";
+  std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
+  double limit_pct{40.0};  // a local variable of run
+  auto is_low = [limit_pct](double pct) { return pct < limit_pct; };
+  std::cout << "count_if with [limit_pct]: "
+            << std::count_if(battery_pct.begin(), battery_pct.end(), is_low) << '\n';  // 2
 }
 }  // namespace no_capture
 
-// [Slide 56] By Value and by Reference
+// [Slide 63] By Value and by Reference
 namespace by_value_reference {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -140,7 +168,7 @@ void run() {
 }
 }  // namespace by_value_reference
 
-// [Slide 58] mutable and Init-capture
+// [Appendix] mutable and Init-capture: runs only with the whole program
 namespace mutable_init {
 void run() {
   // Does not compile: a copy capture is read-only without mutable.
@@ -158,7 +186,7 @@ void run() {
 }
 }  // namespace mutable_init
 
-// [Slide 59] What the Compiler Writes
+// [Slide 65] What the Compiler Writes
 namespace compiler_writes {
 struct IsLow {
   double limit_pct;  // the capture
@@ -182,7 +210,7 @@ void run() {
 }
 }  // namespace compiler_writes
 
-// [Slide 61] Generic Lambdas
+// [Slide 67] Generic Lambdas
 namespace generic {
 void run() {
   auto larger = [](const auto& left, const auto& right) { return left > right ? left : right; };
@@ -193,7 +221,7 @@ void run() {
 }
 }  // namespace generic
 
-// [Slide 62] The Return Type
+// [Appendix] The Return Type: runs only with the whole program
 namespace return_type {
 void run() {
   // Does not compile: one return gives int, the other double.
@@ -213,19 +241,24 @@ void run() {
 }
 }  // namespace return_type
 
-// [Slide 63] Template Lambdas (C++20)
+// [Appendix] Template Lambdas (C++20): runs only with the whole program
 namespace template_lambda {
 void run() {
-  auto larger_same = []<typename T>(const T& left, const T& right) { return left > right ? left : right; };
-  std::cout << "larger_same(3, 7): " << larger_same(3, 7)
-            << ", larger_same(82.5, 64.0): " << larger_same(82.5, 64.0) << '\n';  // 7 82.5
+  auto larger = [](const auto& left, const auto& right) {
+    return left > right ? left : right;
+  };
+  auto larger_same = []<typename T>(const T& left, const T& right) {
+    return left > right ? left : right;
+  };
+  std::cout << "larger(3, 7.5): " << larger(3, 7.5)
+            << ", larger_same(3, 7): " << larger_same(3, 7) << '\n';  // 7.5 7
   // Does not compile: 3 says T is int, 7.5 says double.
-  // std::cout << larger_same(3, 7.5) << '\n';
+  // larger_same(3, 7.5);
 }
 }  // namespace template_lambda
 
 // Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: Section 5, Function Pointers.
+// run is a pointer to a function: see the appendix, Function Pointers.
 void show(int only, int slide, const char* title, void (*run)()) {
   if (only != 0 && only != slide) { return; }
   const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
@@ -234,17 +267,30 @@ void show(int only, int slide, const char* title, void (*run)()) {
   run();
 }
 
+// Runs one appendix frame's code, only when the whole program runs: appendix
+// frames have no slide number to ask for.
+void show_appendix(int only, const char* title, void (*run)()) {
+  if (only != 0) { return; }
+  const std::string header{std::string{"[Appendix] "} + title};
+  const std::string rule(header.size(), '-');
+  std::cout << rule << '\n' << header << '\n' << rule << '\n';
+  run();
+}
+
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 51, "A Condition instead of a Value", condition::run);
-  show(only, 52, "Lambda Expressions", lambda_expression::run);
-  show(only, 53, "Lambdas with Algorithms", algorithms::run);
-  show(only, 54, "Projections (C++20)", projections::run);
-  show(only, 55, "Captures", no_capture::run);
-  show(only, 56, "By Value and by Reference", by_value_reference::run);
-  show(only, 58, "mutable and Init-capture", mutable_init::run);
-  show(only, 59, "What the Compiler Writes", compiler_writes::run);
-  show(only, 61, "Generic Lambdas", generic::run);
-  show(only, 62, "The Return Type", return_type::run);
-  show(only, 63, "Template Lambdas (C++20)", template_lambda::run);
+  show(only, 56, "Lambda Expressions", lambda_expression::run);
+  show(only, 57, "Passing a Lambda", passing_lambda::run);
+  show(only, 58, "std::find_if with a Lambda", find_if_lambda::run);
+  show(only, 59, "std::sort with a Lambda", sort_lambda::run);
+  show(only, 60, "Projections (C++20)", projections::run);
+  show(only, 61, "Projections with RobotStatus", projections_robot::run);
+  show(only, 62, "Captures", no_capture::run);
+  show(only, 63, "By Value and by Reference", by_value_reference::run);
+  show(only, 65, "What the Compiler Writes", compiler_writes::run);
+  show(only, 67, "Generic Lambdas", generic::run);
+  show_appendix(only, "mutable and Init-capture", mutable_init::run);
+  show_appendix(only, "The Return Type", return_type::run);
+  show_appendix(only, "Template Lambdas (C++20)", template_lambda::run);
+  show_appendix(only, "std::transform", transform_appendix::run);
 }

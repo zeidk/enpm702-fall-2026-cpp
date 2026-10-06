@@ -1,20 +1,22 @@
 /**
- * @file callables.cpp
- * @brief L6 Section 5, Other Callables: the code of every slide, runnable.
+ * @file higher_order.cpp
+ * @brief L6 Sections 4 and 6, Higher-Order Functions and Storing and Adapting
+ *        Callables: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Build target: @c week6_callables. This file stands alone.
+ * @details Build target: @c week6_higher_order. This file stands alone.
  *
  * @code
- * 702build week6_callables
- * 702run week6_callables        # every slide of the section, in order
- * 702run week6_callables 65    # only [Slide 65]
+ * 702build week6_higher_order
+ * 702run week6_higher_order     # every slide of both sections, in order
+ * 702run week6_higher_order 54  # only [Slide 54]
  * @endcode
  *
  * Code that does not compile is commented out where its slide shows it:
  * uncomment it, build, and you get the slide's error. Calling an empty
  * std::function is in @c ../throws/function_empty.cpp.
  */
+#include <algorithm>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
@@ -22,8 +24,22 @@
 #include <source_location>
 #include <string>
 #include <string_view>
+#include <vector>
 
-// [Slide 65] Function Pointers
+// [Slide 54] A Condition instead of a Value
+namespace condition {
+bool is_low(double pct) { return pct < 40.0; }  // outside main
+
+void run() {
+  std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
+  std::cout << "count of 35.0: "
+            << std::count(battery_pct.begin(), battery_pct.end(), 35.0) << '\n';  // 1
+  std::cout << "count_if is_low: "
+            << std::count_if(battery_pct.begin(), battery_pct.end(), is_low) << '\n';  // 2
+}
+}  // namespace condition
+
+// [Appendix] Function Pointers: runs only with the whole program
 namespace function_pointers {
 double to_fraction(double pct) {
   return pct / 100.0;
@@ -38,7 +54,7 @@ void run() {
 }
 }  // namespace function_pointers
 
-// [Slide 66] Passing a Function
+// [Appendix] Passing a Function: runs only with the whole program
 namespace passing_function {
 void convert_all(double* values, int count, double (*convert)(double)) {
   for (int i{0}; i < count; ++i) { values[i] = convert(values[i]); }
@@ -58,7 +74,7 @@ void run() {
 }
 }  // namespace passing_function
 
-// [Slide 67] std::function
+// [Slide 69] std::function
 namespace std_function {
 void run() {
   std::function<double(double)> convert{function_pointers::to_fraction};
@@ -70,7 +86,7 @@ void run() {
 }
 }  // namespace std_function
 
-// [Slide 68] A Table of Commands
+// [Slide 70] A Table of Commands
 namespace command_table {
 void run() {
   std::map<std::string, std::function<void(int)>> on_command;
@@ -87,7 +103,7 @@ void run() {
 }
 }  // namespace command_table
 
-// [Slide 70] Choosing a Parameter Type
+// [Slide 72] Choosing a Parameter Type
 namespace choosing {
 void run() {
   double (*convert_ptr)(double){function_pointers::to_fraction};
@@ -96,7 +112,7 @@ void run() {
 }
 }  // namespace choosing
 
-// [Slide 71] std::bind
+// [Slide 73] std::bind
 namespace bind {
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
@@ -114,27 +130,31 @@ void run() {
 }
 }  // namespace bind
 
-// [Slide 72] bind_front and Lambdas
+// [Appendix] bind_front and Lambdas: runs only with the whole program
 namespace bind_front {
+using bind::charge_time_h;
+
 void run() {
-  auto to_half = std::bind_front(bind::charge_time_h, 50.0);  // C++20
+  auto to_half = std::bind_front(charge_time_h, 50.0);  // C++20
   std::cout << "to_half(25.0): " << to_half(25.0) << '\n';  // 2
 
-  auto fast_l = [](double missing_pct) { return bind::charge_time_h(missing_pct, 40.0); };
+  auto fast_l = [](double missing_pct) {
+    return charge_time_h(missing_pct, 40.0);
+  };
   auto swap_l = [](double rate_pct_per_h, double missing_pct) {
-    return bind::charge_time_h(missing_pct, rate_pct_per_h);
+    return charge_time_h(missing_pct, rate_pct_per_h);
   };
   std::cout << "fast_l(60.0): " << fast_l(60.0) << ", swap_l(20.0, 60.0): " << swap_l(20.0, 60.0)
             << '\n';  // 1.5 3
 
   using namespace std::placeholders;
-  auto at_fast_dock = std::bind(bind::charge_time_h, _1, 40.0);
+  auto at_fast_dock = std::bind(charge_time_h, _1, 40.0);
   // compiles, prints 1.5: 99.0 is dropped
   std::cout << "at_fast_dock(60.0, 99.0): " << at_fast_dock(60.0, 99.0) << '\n';
 }
 }  // namespace bind_front
 
-// [Slide 74] std::source_location
+// [Appendix] std::source_location: runs only with the whole program
 // At namespace scope, not in a namespace of its own, so function_name() prints
 // the plain names the slide shows.
 void log_message(
@@ -162,7 +182,7 @@ void run() {
 }  // namespace source_location_slide
 
 // Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function, as on the Function Pointers slide.
+// run is a pointer to a function, as on the appendix frame Function Pointers.
 void show(int only, int slide, const char* title, void (*run)()) {
   if (only != 0 && only != slide) { return; }
   const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
@@ -171,14 +191,25 @@ void show(int only, int slide, const char* title, void (*run)()) {
   run();
 }
 
+// Runs one appendix frame's code, only when the whole program runs: appendix
+// frames have no slide number to ask for.
+void show_appendix(int only, const char* title, void (*run)()) {
+  if (only != 0) { return; }
+  const std::string header{std::string{"[Appendix] "} + title};
+  const std::string rule(header.size(), '-');
+  std::cout << rule << '\n' << header << '\n' << rule << '\n';
+  run();
+}
+
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 65, "Function Pointers", function_pointers::run);
-  show(only, 66, "Passing a Function", passing_function::run);
-  show(only, 67, "std::function", std_function::run);
-  show(only, 68, "A Table of Commands", command_table::run);
-  show(only, 70, "Choosing a Parameter Type", choosing::run);
-  show(only, 71, "std::bind", bind::run);
-  show(only, 72, "bind_front and Lambdas", bind_front::run);
-  show(only, 74, "std::source_location", source_location_slide::run);
+  show(only, 54, "A Condition instead of a Value", condition::run);
+  show(only, 69, "std::function", std_function::run);
+  show(only, 70, "A Table of Commands", command_table::run);
+  show(only, 72, "Choosing a Parameter Type", choosing::run);
+  show(only, 73, "std::bind", bind::run);
+  show_appendix(only, "Function Pointers", function_pointers::run);
+  show_appendix(only, "Passing a Function", passing_function::run);
+  show_appendix(only, "bind_front and Lambdas", bind_front::run);
+  show_appendix(only, "std::source_location", source_location_slide::run);
 }

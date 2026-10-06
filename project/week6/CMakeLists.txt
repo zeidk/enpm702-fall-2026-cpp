@@ -29,7 +29,7 @@ add_executable(week6_grouping snippets/grouping.cpp)
 add_executable(week6_results snippets/results.cpp)
 add_executable(week6_templates snippets/templates.cpp)
 add_executable(week6_lambdas snippets/lambdas.cpp)
-add_executable(week6_callables snippets/callables.cpp)
+add_executable(week6_higher_order snippets/higher_order.cpp)
 
 # -----------------------------------------------------------------------------
 # 3. Code that throws. It compiles and runs, then stops with exit status 134.

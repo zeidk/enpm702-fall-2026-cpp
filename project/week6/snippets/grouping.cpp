@@ -234,6 +234,9 @@ struct RobotStatus {
 };
 
 void run() {
+    std::cout << "sizeof int: " << sizeof(int) << ", double: " << sizeof(double)
+              << ", Position: " << sizeof(Position) << ", bool: " << sizeof(bool)
+              << '\n'; // 4 8 16 1
     std::cout << "sizeof(RobotStatus): " << sizeof(RobotStatus) << '\n'; // 40
     std::cout << "alignof(double): " << alignof(double) << '\n';         // 8
     std::cout << "offsetof id: " << offsetof(RobotStatus, id)
@@ -279,6 +282,10 @@ struct RobotStatus {
     Position position{};
     bool busy{false};
 };
+
+// The slide's other choice, by value. Both cannot exist at once: a call
+// would be ambiguous.
+// double get_battery(RobotStatus robot_status);  // copies 40 bytes
 
 double get_battery(const RobotStatus &robot_status) { // copies nothing
     return robot_status.battery_pct;
@@ -404,7 +411,7 @@ void run() {
 } // namespace tuple_basics
 
 // Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: Section 5, Function Pointers.
+// run is a pointer to a function: see the appendix, Function Pointers.
 void show(int only, int slide, const char *title, void (*run)()) {
     if (only != 0 && only != slide) {
         return;

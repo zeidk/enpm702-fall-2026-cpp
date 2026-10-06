@@ -8,7 +8,7 @@
  * @code
  * 702build week6_templates
  * 702run week6_templates        # every slide of the section, in order
- * 702run week6_templates 36     # only [Slide 36]
+ * 702run week6_templates 37     # only [Slide 37]
  * nm -C build/project/week6/week6_templates | grep 'clamp_value<'
  * @endcode
  *
@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-// [Slide 36] One Body, Several Overloads
+// [Slide 37] One Body, Several Overloads
 namespace overloads {
 int clamp_value(int value, int low, int high) {  // a speed command, in percent
   if (value < low) { return low; }
@@ -45,7 +45,7 @@ void run() {
 }
 }  // namespace overloads
 
-// [Slide 37] Declaring a Template
+// [Slide 38] Declaring a Template
 template <typename T>
 T clamp_value(T value, T low, T high) {
   if (value < low) { return low; }
@@ -61,7 +61,7 @@ void run() {
 }
 }  // namespace declaring_template
 
-// [Slide 38] Instantiation
+// [Slide 39] Instantiation
 namespace instantiation {
 void run() {
   int speed_pct{clamp_value(130, 0, 100)};              // 100
@@ -72,7 +72,7 @@ void run() {
 }
 }  // namespace instantiation
 
-// [Slide 39] Templates Go in Headers
+// [Slide 40] Templates Go in Headers
 // The slide uses three files. One file shows the same linker error: a template
 // that is declared and never defined.
 namespace in_headers {
@@ -85,7 +85,7 @@ void run() {
 }
 }  // namespace in_headers
 
-// [Slide 41] One T for Every Argument
+// [Slide 43] One T for Every Argument
 namespace one_t {
 void run() {
   // Does not compile: 104 says T is int, 0.0 says double.
@@ -94,15 +94,24 @@ void run() {
 }
 }  // namespace one_t
 
-// [Slide 42] Explicit Template Arguments
+// [Slide 44] Explicit Template Arguments
 namespace explicit_args {
+template <typename T>
+T make_zero() { return T{}; }
+
 void run() {
-  double pct{clamp_value<double>(104, 0.0, 100.0)};  // 100
-  std::cout << "pct: " << pct << '\n';
+  int speed_reading{104};  // from a sensor, an int
+  double pct{clamp_value<double>(speed_reading, 0.0, 100.0)};  // 100
+  double zero{make_zero<double>()};                            // 0
+  std::cout << "pct: " << pct << ", zero: " << zero << '\n';
+  // Does not compile: deduced conflicting types for parameter 'T'.
+  // double without_explicit{clamp_value(speed_reading, 0.0, 100.0)};
+  // Does not compile: couldn't deduce template parameter 'T'.
+  // double no_argument{make_zero()};
 }
 }  // namespace explicit_args
 
-// [Slide 44] Two Template Parameters
+// [Slide 45] Two Template Parameters
 namespace two_parameters {
 template <typename T, typename U>
 auto add_offset(T value, U offset) {
@@ -121,7 +130,7 @@ void run() {
 }
 }  // namespace two_parameters
 
-// [Slide 45] Abbreviated Templates
+// [Slide 46] Abbreviated Templates
 namespace abbreviated {
 void print_all(const auto& values) {
   for (const auto& value : values) {
@@ -138,7 +147,7 @@ void run() {
 }
 }  // namespace abbreviated
 
-// [Slide 46] Concepts
+// [Slide 47] Concepts
 namespace constrained {
 template <std::floating_point T>
 T average_of(const std::vector<T>& values) {
@@ -153,7 +162,7 @@ void run() {
 }
 }  // namespace constrained
 
-// [Slide 47] A Call That Compiles and Is Wrong
+// [Slide 48] A Call That Compiles and Is Wrong
 namespace unconstrained {
 template <typename T>
 T average_of(const std::vector<T>& values) {
@@ -172,34 +181,97 @@ void run() {
 }
 }  // namespace unconstrained
 
-// [Slide 48] Three Ways to Write a Constraint
-// The three forms accept the same calls, so each sits in its own namespace.
+// [Slide 49] Form 1: In Place of typename
 namespace form1 {
-template <std::integral T>  // 1. in place of typename
+template <std::integral T>  // T must be an integral type
 bool is_valid_id(T id) { return id > 0; }
+
+void run() {
+  std::cout << "is_valid_id(3): " << is_valid_id(3)
+            << ", is_valid_id(-2L): " << is_valid_id(-2L)
+            << ", is_valid_id(true): " << is_valid_id(true) << '\n';  // 1 0 1
+  // Does not compile: constraints not satisfied (double is not integral).
+  // is_valid_id(2.5);
+}
 }  // namespace form1
 
+// [Slide 50] Form 2: A requires Clause
 namespace form2 {
 template <typename T>
-  requires std::integral<T>  // 2. a requires clause
+  requires std::integral<T> && (!std::same_as<T, bool>)
 bool is_valid_id(T id) { return id > 0; }
+
+void run() {
+  std::cout << "is_valid_id(3): " << is_valid_id(3)
+            << ", is_valid_id(-2L): " << is_valid_id(-2L) << '\n';  // 1 0
+  // Does not compile: constraints not satisfied (T is bool).
+  // is_valid_id(true);
+}
 }  // namespace form2
 
+// [Slide 51] Form 3: Before auto
 namespace form3 {
-// 3. before auto
-bool is_valid_id(std::integral auto id) { return id > 0; }
+// The slide shows the same function twice, so each version gets a namespace.
+namespace with_form1 {
+// Form 1 names the type T, so both parameters must be one type.
+template <std::integral T>
+bool same_id(T first, T second) {
+  return first == second;
+}
+}  // namespace with_form1
+
+namespace with_form3 {
+// Form 3 has no name: each auto parameter is its own type.
+bool same_id(
+    std::integral auto first,
+    std::integral auto second) {
+  return first == second;
+}
+}  // namespace with_form3
+
+void run() {
+  std::cout << "form 1, same_id(3, 3): " << with_form1::same_id(3, 3)
+            << ", form 3, same_id(3, 3): " << with_form3::same_id(3, 3)
+            << ", form 3, same_id(3, 3L): " << with_form3::same_id(3, 3L) << '\n';  // 1 1 1
+  // Does not compile: deduced conflicting types for parameter 'T' ('int' and 'long int').
+  // with_form1::same_id(3, 3L);
+}
 }  // namespace form3
 
-namespace constraint_forms {
-void run() {
-  std::cout << "form1::is_valid_id(3): " << form1::is_valid_id(3)
-            << ", form2::is_valid_id(0): " << form2::is_valid_id(0)
-            << ", form3::is_valid_id(-2L): " << form3::is_valid_id(-2L) << '\n';  // 1 0 0
+// [Slide 52] Which Form to Use
+namespace which_form {
+// 1. Form 3 by default: each parameter has its own simple requirement
+namespace with_form3 {
+bool same_id(std::integral auto first, std::integral auto second) {
+  return first == second;
 }
-}  // namespace constraint_forms
+}  // namespace with_form3
+
+// 2. Form 1 when two parameters must be one type
+namespace with_form1 {
+template <std::integral T>
+bool same_id(T first, T second) {
+  return first == second;
+}
+}  // namespace with_form1
+
+// 3. Form 2 when the condition joins tests
+template <typename T>
+  requires std::integral<T> && (!std::same_as<T, bool>)
+bool is_valid_id(T id) {
+  return id > 0;
+}
+
+void run() {
+  std::cout << std::boolalpha << "form 3, same_id(3, 3L): " << with_form3::same_id(3, 3L)
+            << ", form 1, same_id(3, 3): " << with_form1::same_id(3, 3)
+            << ", is_valid_id(3): " << is_valid_id(3) << std::noboolalpha
+            << '\n';  // true true true
+}
+}  // namespace which_form
 
 // Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: Section 5, Function Pointers.
+// run is a pointer to a function: see the appendix, Function Pointers.
 void show(int only, int slide, const char* title, void (*run)()) {
   if (only != 0 && only != slide) { return; }
   const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
@@ -210,15 +282,18 @@ void show(int only, int slide, const char* title, void (*run)()) {
 
 int main(int argc, char* argv[]) {
   const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 36, "One Body, Several Overloads", overloads::run);
-  show(only, 37, "Declaring a Template", declaring_template::run);
-  show(only, 38, "Instantiation", instantiation::run);
-  show(only, 39, "Templates Go in Headers", in_headers::run);
-  show(only, 41, "One T for Every Argument", one_t::run);
-  show(only, 42, "Explicit Template Arguments", explicit_args::run);
-  show(only, 44, "Two Template Parameters", two_parameters::run);
-  show(only, 45, "Abbreviated Templates", abbreviated::run);
-  show(only, 46, "Concepts", constrained::run);
-  show(only, 47, "A Call That Compiles and Is Wrong", unconstrained::run);
-  show(only, 48, "Three Ways to Write a Constraint", constraint_forms::run);
+  show(only, 37, "One Body, Several Overloads", overloads::run);
+  show(only, 38, "Declaring a Template", declaring_template::run);
+  show(only, 39, "Instantiation", instantiation::run);
+  show(only, 40, "Templates Go in Headers", in_headers::run);
+  show(only, 43, "One T for Every Argument", one_t::run);
+  show(only, 44, "Explicit Template Arguments", explicit_args::run);
+  show(only, 45, "Two Template Parameters", two_parameters::run);
+  show(only, 46, "Abbreviated Templates", abbreviated::run);
+  show(only, 47, "Concepts", constrained::run);
+  show(only, 48, "A Call That Compiles and Is Wrong", unconstrained::run);
+  show(only, 49, "Form 1: In Place of typename", form1::run);
+  show(only, 50, "Form 2: A requires Clause", form2::run);
+  show(only, 51, "Form 3: Before auto", form3::run);
+  show(only, 52, "Which Form to Use", which_form::run);
 }

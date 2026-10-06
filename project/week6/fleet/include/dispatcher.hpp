@@ -33,7 +33,7 @@ CommandTable make_command_table();
 bool dispatch(const CommandTable& table, const std::string& command, int robot_id);
 
 /**
- * @brief Prints a message with the file, line and function it came from.
+ * @brief Prints a message with the file and line it came from.
  * @param text The message.
  * @param at Where the call was written. The default argument is evaluated at
  *           the call, so it records the caller's line.

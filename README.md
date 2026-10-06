@@ -4,7 +4,8 @@ C++ code snippets from lecture slides.
 
 ## Requirements
 
-- A C++20 compiler (`g++` 10 or newer, `g++` 13 recommended)
+- A C++20 compiler (`g++` 11 or newer, `g++` 13 recommended). The week 6 code uses
+  `std::source_location`, which GCC supports from version 11.
 - `cmake` 3.16 or newer
 - `valgrind` (optional, only for `702memcheck`)
 

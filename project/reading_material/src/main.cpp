@@ -23,16 +23,18 @@
 //   1. Blocks marked "DOES NOT COMPILE" are in the reading to show you an
 //      error. Uncomment them on purpose, read the message, comment them back.
 //   2. Blocks marked "WARNS ON PURPOSE" are meant to make the compiler
-//      complain. The warning IS the point; do not try to silence it. Five
-//      blocks are marked: three in the Compiler Warning Flags module, plus
+//      complain. The warning IS the point; do not try to silence it. Four
+//      blocks are marked: two in the Compiler Warning Flags module, plus
 //      the "if Statements" and "Dangling else" traps, which -Wall catches.
 //   3. Blocks marked "READS STDIN" wait for you to type something.
 //
 // These exercises are not graded and are not submitted on Canvas.
 // =============================================================================
 
+#include <functional>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -44,41 +46,42 @@
 // Uncomment the piece you need here, then uncomment its block inside main().
 // =============================================================================
 
+// --- [Exception Handling > Re-throwing Exceptions] ----------------------------
+// void process_data() {
+//     throw std::runtime_error{"sensor data is corrupt"};
+// }
+
 // --- [Exception Handling > Throwing Exceptions] ------------------------------
 // double divide(double a, double b) {
 //     if (b == 0.0) {
-//         throw std::invalid_argument("division by zero");
+//         throw std::invalid_argument{"division by zero"};
 //     }
 //     return a / b;
 // }
 
-// --- [Exception Handling > Custom Exception Classes] -------------------------
-// class SensorError : public std::runtime_error {
-// public:
-//     SensorError(const std::string& sensor_name, const std::string& message)
-//         : std::runtime_error("Sensor '" + sensor_name + "': " + message),
-//           sensor_name_{sensor_name} {}
-//
-//     const std::string& sensor_name() const { return sensor_name_; }
-//
-// private:
-//     std::string sensor_name_;
+// --- [Exception Handling > Custom Exception Types] ---------------------------
+// struct SensorError : std::runtime_error {
+//     using std::runtime_error::runtime_error;
 // };
 //
 // void read_sensor(const std::string& name, double value) {
 //     if (value < 0.0) {
-//         throw SensorError(name, "negative reading");
+//         throw SensorError{name + ": negative reading"};
 //     }
 //     std::cout << name << ": " << value << '\n';
 // }
 
+// --- [Exception Handling > noexcept and Exception Safety] --------------------
+// int safe_add(int a, int b) noexcept {
+//     return a + b;
+// }
+
 // --- [Exception Handling > RAII and Exception Safety] ------------------------
 // void process() {
-//     auto ptr{std::make_unique<int>(42)};
+//     std::vector<double> readings(1000);  // ( ): 1000 doubles on the heap
 //     // ... code that might throw ...
-//     throw std::runtime_error("something failed");
-//     // ptr is automatically deleted when the stack unwinds
-// }
+//     throw std::runtime_error{"something failed"};
+// }  // readings is destroyed during unwinding, so its memory is freed
 
 int main() {
     std::cout << "Reading material - uncomment a snippet in src/main.cpp.\n";
@@ -158,7 +161,7 @@ int main() {
 
     // --- [Flow Control > Dangling else] --------------------------------------
     // WARNS ON PURPOSE. An else binds to the NEAREST unmatched if, not to the
-    // one the indentation suggests. Predict the output before running --
+    // one the indentation suggests. Predict the output before running it.
     // -Wall catches this trap too, as -Wdangling-else.
     // {
     //     int x{5};
@@ -357,15 +360,84 @@ int main() {
     // #########################################################################
 
     // --- [Exception Handling > try, catch, and throw] ------------------------
-    // .at() checks the index; operator[] does not. This is the cheapest way
-    // to see an exception in action.
+    // Basic Syntax.
     // {
-    //     std::vector<int> readings{1, 2, 3, 4, 5};
-    //
     //     try {
-    //         std::cout << readings.at(10) << '\n';   // throws
+    //         // code that might throw
+    //         throw std::runtime_error{"something went wrong"};
+    //     } catch (const std::runtime_error& e) {
+    //         std::cout << "Error: " << e.what() << '\n';
+    //     }
+    // }
+
+    // --- [Exception Handling > try, catch, and throw] ------------------------
+    // Multiple catch blocks. .at() with a bad index throws std::out_of_range,
+    // so the first handler runs.
+    // {
+    //     try {
+    //         std::vector<int> readings{1, 2, 3, 4, 5};
+    //         std::cout << readings.at(10) << '\n';  // throws
     //     } catch (const std::out_of_range& e) {
-    //         std::cout << "Caught out_of_range: " << e.what() << '\n';
+    //         std::cout << "Out of range: " << e.what() << '\n';
+    //     } catch (const std::runtime_error& e) {
+    //         std::cout << "Runtime error: " << e.what() << '\n';
+    //     } catch (...) {
+    //         std::cout << "Unknown exception caught\n";
+    //     }
+    // }
+
+    // --- [Exception Handling > Exceptions You Have Already Seen] -------------
+    // The two Lecture 6 programs that stopped with "terminate called after
+    // throwing an instance of ...", now caught.
+    // {
+    //     std::optional<int> idle{};  // empty: no robot found
+    //     try {
+    //         std::cout << idle.value() << '\n';
+    //     } catch (const std::bad_optional_access& e) {
+    //         std::cout << "bad_optional_access: " << e.what() << '\n';
+    //     }
+    //
+    //     std::function<void(int)> handler{};  // empty: nothing stored
+    //     try {
+    //         handler(2);
+    //     } catch (const std::bad_function_call& e) {
+    //         std::cout << "bad_function_call: " << e.what() << '\n';
+    //     }
+    //
+    //     std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
+    //     try {
+    //         std::cout << battery_pct.at(4) << '\n';
+    //     } catch (const std::out_of_range& e) {
+    //         std::cout << "out_of_range: " << e.what() << '\n';
+    //     }
+    // }
+
+    // --- [Exception Handling > Best Practices for Catching] ------------------
+    // Catch order: the more-derived type first.
+    // {
+    //     try {
+    //         std::vector<int> vec{1, 2, 3};
+    //         std::cout << vec.at(10) << '\n';  // throws std::out_of_range
+    //     } catch (const std::out_of_range& e) {
+    //         std::cout << "Out of range: " << e.what() << '\n';
+    //     } catch (const std::exception& e) {
+    //         std::cout << "Exception: " << e.what() << '\n';
+    //     }
+    // }
+
+    // --- [Exception Handling > Re-throwing Exceptions] -----------------------
+    // Uncomment process_data() at the top of this file first. The outer try
+    // catches the exception that the inner handler re-throws.
+    // {
+    //     try {
+    //         try {
+    //             process_data();
+    //         } catch (const std::exception& e) {
+    //             std::cout << "Logging error: " << e.what() << '\n';
+    //             throw;  // re-throw the same exception
+    //         }
+    //     } catch (const std::exception& e) {
+    //         std::cout << "Handled higher up: " << e.what() << '\n';
     //     }
     // }
 
@@ -380,45 +452,42 @@ int main() {
     //     }
     // }
 
-    // --- [Exception Handling > Custom Exception Classes] ---------------------
+    // --- [Exception Handling > Custom Exception Types] -----------------------
     // Uncomment SensorError and read_sensor() at the top of this file first.
     // {
     //     try {
-    //         read_sensor("lidar_front", -1.5);
+    //         read_sensor("lidar_front", 2.5);
+    //         read_sensor("lidar_rear", -1.5);
     //     } catch (const SensorError& e) {
-    //         std::cout << "Sensor failure on " << e.sensor_name()
-    //                   << ": " << e.what() << '\n';
+    //         std::cout << "Sensor failure: " << e.what() << '\n';
     //     }
     // }
 
-    // --- [Exception Handling > Best Practices for Catching] ------------------
-    // Catch by CONST REFERENCE. Catching by value slices a derived exception
-    // down to its base and loses the information you wanted.
+    // --- [Exception Handling > noexcept and Exception Safety] ----------------
+    // Uncomment safe_add() at the top of this file first.
     // {
-    //     try {
-    //         throw std::runtime_error("something failed");
-    //     } catch (const std::exception& e) {   // good: by const reference
-    //         std::cout << "Caught: " << e.what() << '\n';
-    //     }
+    //     std::cout << "safe_add(2, 3): " << safe_add(2, 3) << '\n';
     // }
 
     // --- [Exception Handling > RAII and Exception Safety] --------------------
-    // Uncomment process() at the top of this file first. The unique_ptr is
-    // released during stack unwinding, with no delete written anywhere.
+    // Uncomment process() at the top of this file first. The vector is
+    // destroyed during stack unwinding, with no delete written anywhere.
+    // Build with -fsanitize=address to see that nothing leaks.
     // {
     //     try {
     //         process();
     //     } catch (const std::runtime_error& e) {
-    //         std::cout << "Caught: " << e.what()
-    //                   << " (the unique_ptr was already freed)\n";
+    //         std::cout << "Caught: " << e.what() << '\n';
     //     }
     // }
 
     // #########################################################################
     // MODULE: COMPILER WARNING FLAGS
     //
-    // These build, but each one is meant to make the compiler complain. Build
-    // with -Wall -Wextra (this project already does) and read the output.
+    // Each block is meant to make the compiler complain. The first two build
+    // with a warning; the -Wpedantic block does not compile in this project.
+    // The project already builds with -Wall -Wextra -pedantic-errors: read
+    // the output.
     // #########################################################################
 
     // --- [Compiler Warnings > -Wall] -----------------------------------------
@@ -443,11 +512,13 @@ int main() {
     // }
 
     // --- [Compiler Warnings > -Wpedantic] ------------------------------------
-    // WARNS ON PURPOSE with -Wpedantic: a variable-length array is a GNU
-    // extension, not standard C++. Use std::vector instead.
+    // DOES NOT COMPILE in this project. A variable-length array is a GNU
+    // extension, not standard C++. With -Wpedantic alone it is a warning and
+    // the program builds; this project passes -pedantic-errors, so the same
+    // diagnostic is an error and the build stops. Use std::vector instead.
     // {
     //     int n{5};
-    //     int arr[n];                     // warning: ISO C++ forbids VLA
+    //     int arr[n];                     // error: ISO C++ forbids VLA
     //     arr[0] = 1;
     //     std::cout << arr[0] << '\n';
     // }

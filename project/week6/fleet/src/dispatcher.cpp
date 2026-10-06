@@ -9,9 +9,9 @@
 
 CommandTable make_command_table() {
     CommandTable table{};
-    table["dock"] = [](int id) { std::cout << "robot " << id << ": go to dock\n"; };
-    table["pause"] = [](int id) { std::cout << "robot " << id << ": paused\n"; };
-    table["resume"] = [](int id) { std::cout << "robot " << id << ": resumed\n"; };
+    table["dock"] = [](int id) { std::cout << "  robot " << id << ": go to dock\n"; };
+    table["pause"] = [](int id) { std::cout << "  robot " << id << ": paused\n"; };
+    table["resume"] = [](int id) { std::cout << "  robot " << id << ": resumed\n"; };
     return table;
 }
 
@@ -29,5 +29,5 @@ void log_message(std::string_view text, std::source_location at) {
     // absolute. Keep the part after the last '/'.
     std::string_view file{at.file_name()};
     file.remove_prefix(file.rfind('/') + 1);
-    std::cout << file << ':' << at.line() << ' ' << at.function_name() << ": " << text << '\n';
+    std::cout << "  [" << file << ':' << at.line() << "] " << text << '\n';
 }
