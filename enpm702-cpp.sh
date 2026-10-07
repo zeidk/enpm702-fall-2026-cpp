@@ -32,7 +32,7 @@
 #      702configure     # once, and again after a CMakeLists.txt changes
 #      702build         # compile everything
 #      702exe           # list the programs that were built
-#      702run week5_snippets
+#      702run week5_playground 12
 #
 #    Type 702help for the full list of shortcuts.
 #

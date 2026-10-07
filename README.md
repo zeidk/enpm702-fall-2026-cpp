@@ -19,10 +19,15 @@ enpm702-fall-2026-cpp/
 │   │   ├── CMakeLists.txt
 │   │   └── src/
 │   ├── week2/
-│   ├── week5/            # two halves, so it is bigger than the others
+│   ├── week5/            # several programs, so it is bigger than the others
 │   │   ├── CMakeLists.txt
-│   │   ├── playground/   # the slide snippets, one file, target week5_snippets
+│   │   ├── playground/   # the code of every slide, target week5_playground
 │   │   │   └── src/
+│   │   ├── appendix/     # the code of every appendix frame, target week5_appendix
+│   │   │   └── src/
+│   │   ├── common/       # run_slides(): picks a slide by its number
+│   │   ├── undefined/    # the slides with undefined behavior, built with sanitizers
+│   │   ├── arguments/    # [Slide 77] Command-line Arguments, target week5_arguments
 │   │   └── arm_demo/     # the same program, complete and documented
 │   │       ├── include/  # headers: the declarations and their comments
 │   │       ├── src/      # source files: the definitions, and main.cpp
@@ -33,11 +38,23 @@ enpm702-fall-2026-cpp/
 └── README.md
 ```
 
-A week is a single `src/main.cpp` until the lecture needs more. Week 5 has two
-halves. `playground/src/snippets.cpp` holds every snippet from the slides
-(target `week5_snippets`). `arm_demo/` is the same program split into headers
-and source files and documented with Doxygen (target `week5_arm_demo`). The
-Header Files slides, Exercise 1 and the Documenting Functions section use it.
+A week is a single `src/main.cpp` until the lecture needs more. From week 5
+on, the code of the slides is in one program per part of the deck. Pass a
+slide number to run only that slide:
+
+```bash
+702run week5_playground        # every slide, in order
+702run week5_playground 12     # only slide 12
+702run week5_appendix iv       # only appendix frame iv (4 works too)
+```
+
+A slide whose code has undefined behavior, or throws, runs only when you ask
+for it by number: a full run skips it. That code is in `undefined/`, always
+built with the sanitizers.
+
+`arm_demo/` is the arm program split into headers and source files and
+documented with Doxygen (target `week5_arm_demo`). The Header Files slides,
+Exercise 1 and the Documenting Functions section use it.
 
 The demo is **not built by default**. When you reach the Header Files section
 you uncomment the last four lines of `project/week5/CMakeLists.txt`, which is

@@ -3,30 +3,33 @@
  * @brief L6 Section 1, Grouping Values: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Build target: @c week6_grouping. This file stands alone: it includes
- * no project header.
+ * @details Part of week6_playground: main.cpp collects slides() from every
+ * section file and runs them.
  *
- * @par How to use it
  * @code
- * 702build week6_grouping
- * 702run week6_grouping       # every slide of the section, in order
- * 702run week6_grouping 7    # only [Slide 7]
+ * 702build week6_playground
+ * 702run week6_playground       # every slide of every section, in order
+ * 702run week6_playground 7    # only [Slide 7]
  * @endcode
- * The number is the frame number in the slide's top-left corner. Each slide's
- * code sits in its own namespace, so two slides can both declare a
- * @c RobotStatus without a clash. The comment above a namespace names its
- * slide, and @c main() at the bottom runs them.
+ *
+ * Each slide's code is in its own namespace, inside the namespace @c grouping, so
+ * two slides, or two section files, can both declare a @c RobotStatus without
+ * a clash. The comment above a namespace names its slide, and slides() at the
+ * bottom lists them.
  *
  * Code that does not compile, or that warns, is commented out where its slide
  * shows it. Uncomment one line, build, and you get the slide's message.
  */
 #include <cstddef>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
+
+#include "sections.hpp"
+
+namespace grouping {
 
 // [Slide 7] Three Values, One Status
 namespace three_values {
@@ -410,33 +413,26 @@ void run() {
 }
 } // namespace tuple_basics
 
-// Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: see the appendix, Function Pointers.
-void show(int only, int slide, const char *title, void (*run)()) {
-    if (only != 0 && only != slide) {
-        return;
-    }
-    const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
-    const std::string rule(header.size(), '-'); // ( ), not { }: { } means a list of two chars
-    std::cout << rule << '\n' << header << '\n' << rule << '\n';
-    run();
+// The slides of this section: number, title, the function that runs it, and
+// true when a full run must skip it.
+std::vector<Slide> slides() {
+    return {
+        {7, "Three Values, One Status", three_values::run},
+        {8, "Declaring a struct", declaring::run},
+        {9, "Where a struct Goes", where_struct_goes::run},
+        {10, "Initializing a struct", aggregate_init::run},
+        {11, "Default Member Initializers", default_members::run},
+        {12, "Designated Initializers (C++20)", designated::run},
+        {13, "Member Access", member_access::run},
+        {14, "A struct in Memory", padding::run},
+        {16, "Member Order", member_order::run},
+        {17, "Passing a struct", struct_functions::run},
+        {18, "A Vector of RobotStatus", vector_of_structs::run},
+        {19, "push_back and emplace_back", push_emplace::run},
+        {20, "Braces and emplace_back", emplace_braces::run},
+        {21, "std::pair", pair_basics::run},
+        {22, "std::tuple", tuple_basics::run},
+    };
 }
 
-int main(int argc, char *argv[]) {
-    const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-    show(only, 7, "Three Values, One Status", three_values::run);
-    show(only, 8, "Declaring a struct", declaring::run);
-    show(only, 9, "Where a struct Goes", where_struct_goes::run);
-    show(only, 10, "Initializing a struct", aggregate_init::run);
-    show(only, 11, "Default Member Initializers", default_members::run);
-    show(only, 12, "Designated Initializers (C++20)", designated::run);
-    show(only, 13, "Member Access", member_access::run);
-    show(only, 14, "A struct in Memory", padding::run);
-    show(only, 16, "Member Order", member_order::run);
-    show(only, 17, "Passing a struct", struct_functions::run);
-    show(only, 18, "A Vector of RobotStatus", vector_of_structs::run);
-    show(only, 19, "push_back and emplace_back", push_emplace::run);
-    show(only, 20, "Braces and emplace_back", emplace_braces::run);
-    show(only, 21, "std::pair", pair_basics::run);
-    show(only, 22, "std::tuple", tuple_basics::run);
-}
+} // namespace grouping

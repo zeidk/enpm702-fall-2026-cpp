@@ -3,26 +3,37 @@
  * @brief L6 Section 3, Function Templates: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Build target: @c week6_templates. This file stands alone.
+ * @details Part of week6_playground: main.cpp collects slides() from every
+ * section file and runs them.
  *
  * @code
- * 702build week6_templates
- * 702run week6_templates        # every slide of the section, in order
- * 702run week6_templates 37     # only [Slide 37]
- * nm -C build/project/week6/week6_templates | grep 'clamp_value<'
+ * 702build week6_playground
+ * 702run week6_playground       # every slide of every section, in order
+ * 702run week6_playground 37    # only [Slide 37]
  * @endcode
  *
- * The template clamp_value is declared once, at namespace scope, because most
- * slides of the section call it, and because the Instantiation slide lists its
- * instantiations with nm. Code that does not compile, or does not link, is
- * commented out where its slide shows it: uncomment it, build, and you get the
- * slide's error.
+ * Each slide's code is in its own namespace, inside the namespace @c templates, so
+ * two slides, or two section files, can both declare a @c RobotStatus without
+ * a clash. The comment above a namespace names its slide, and slides() at the
+ * bottom lists them.
+ *
+ * The template clamp_value is declared once, at the top of the namespace
+ * @c templates, because most slides of the section call it, and because the
+ * Instantiation slide lists its instantiations with nm:
+ * @code
+ * nm -C build/project/week6/week6_playground | grep 'clamp_value<'
+ * @endcode
+ * Code that does not compile, or does not link, is commented out where its
+ * slide shows it: uncomment it, build, and you get the slide's error.
  */
 #include <concepts>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "sections.hpp"
+
+namespace templates {
 
 // [Slide 37] One Body, Several Overloads
 namespace overloads {
@@ -270,30 +281,25 @@ void run() {
 }
 }  // namespace which_form
 
-// Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: see the appendix, Function Pointers.
-void show(int only, int slide, const char* title, void (*run)()) {
-  if (only != 0 && only != slide) { return; }
-  const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
-  const std::string rule(header.size(), '-');  // ( ), not { }: { } means a list of two chars
-  std::cout << rule << '\n' << header << '\n' << rule << '\n';
-  run();
+// The slides of this section: number, title, the function that runs it, and
+// true when a full run must skip it.
+std::vector<Slide> slides() {
+  return {
+    {37, "One Body, Several Overloads", overloads::run},
+    {38, "Declaring a Template", declaring_template::run},
+    {39, "Instantiation", instantiation::run},
+    {40, "Templates Go in Headers", in_headers::run},
+    {43, "One T for Every Argument", one_t::run},
+    {44, "Explicit Template Arguments", explicit_args::run},
+    {45, "Two Template Parameters", two_parameters::run},
+    {46, "Abbreviated Templates", abbreviated::run},
+    {47, "Concepts", constrained::run},
+    {48, "A Call That Compiles and Is Wrong", unconstrained::run},
+    {49, "Form 1: In Place of typename", form1::run},
+    {50, "Form 2: A requires Clause", form2::run},
+    {51, "Form 3: Before auto", form3::run},
+    {52, "Which Form to Use", which_form::run},
+  };
 }
 
-int main(int argc, char* argv[]) {
-  const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 37, "One Body, Several Overloads", overloads::run);
-  show(only, 38, "Declaring a Template", declaring_template::run);
-  show(only, 39, "Instantiation", instantiation::run);
-  show(only, 40, "Templates Go in Headers", in_headers::run);
-  show(only, 43, "One T for Every Argument", one_t::run);
-  show(only, 44, "Explicit Template Arguments", explicit_args::run);
-  show(only, 45, "Two Template Parameters", two_parameters::run);
-  show(only, 46, "Abbreviated Templates", abbreviated::run);
-  show(only, 47, "Concepts", constrained::run);
-  show(only, 48, "A Call That Compiles and Is Wrong", unconstrained::run);
-  show(only, 49, "Form 1: In Place of typename", form1::run);
-  show(only, 50, "Form 2: A requires Clause", form2::run);
-  show(only, 51, "Form 3: Before auto", form3::run);
-  show(only, 52, "Which Form to Use", which_form::run);
-}
+}  // namespace templates

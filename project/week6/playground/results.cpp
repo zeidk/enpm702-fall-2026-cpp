@@ -4,28 +4,37 @@
  *        runnable.
  * @author Zeid Kootbally
  *
- * @details Build target: @c week6_results. This file stands alone.
+ * @details Part of week6_playground: main.cpp collects slides() from every
+ * section file and runs them.
  *
  * @code
- * 702build week6_results
- * 702run week6_results        # every slide of the section, in order
- * 702run week6_results 24     # only [Slide 24]
+ * 702build week6_playground
+ * 702run week6_playground       # every slide of every section, in order
+ * 702run week6_playground 24    # only [Slide 24]
  * @endcode
+ *
+ * Each slide's code is in its own namespace, inside the namespace @c results, so
+ * two slides, or two section files, can both declare a @c RobotStatus without
+ * a clash. The comment above a namespace names its slide, and slides() at the
+ * bottom lists them.
  *
  * The two structs and the demo fleet are declared once, at the top, because
  * every slide of this section uses them. Code that does not compile is
  * commented out where its slide shows it: uncomment it, build, and you get the
- * slide's error. Code that throws is in @c ../throws/, and code with undefined
- * behavior in @c ../undefined/.
+ * slide's error. [Slide 35] throws, and calls the code with undefined behavior
+ * in @c ../undefined/undefined.cpp, so a full run skips it.
  */
-#include <cstdlib>
 #include <iostream>
-#include <map>
 #include <optional>
 #include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
+
+#include "sections.hpp"
+#include "undefined.hpp"
+
+namespace results {
 
 struct Position {
   double x{0.0};
@@ -135,16 +144,6 @@ void run() {
 }
 }  // namespace by_value_reference
 
-// [Appendix] The Lecture 4 Map Loop: runs only with the whole program
-namespace map_loop {
-void run() {
-  std::map<int, std::string> zone_of{{1, "dock"}, {2, "aisle 4"}, {3, "aisle 7"}};
-  for (const auto& [id, zone] : zone_of) {
-    std::cout << "robot " << id << ": " << zone << '\n';
-  }
-}
-}  // namespace map_loop
-
 // [Slide 30] One Name per Member
 namespace binding_count {
 void run() {
@@ -228,46 +227,37 @@ void run() {
 }
 }  // namespace fallback_value
 
-// [Slide 37] std::optional, Pointer, or Special Value
-namespace optional_pointer {
+// [Slide 35] Three Ways to Read
+// The three reads of the table, on an empty optional. *idle is undefined
+// behavior, so that line is in ../undefined/undefined.cpp, built with
+// AddressSanitizer. value() throws std::bad_optional_access and nothing catches
+// it, so the program stops with exit status 134. It comes last for that
+// reason. How to catch it is in the exceptions reading.
+namespace three_ways {
 void run() {
-  std::cout << "sizeof(std::optional<int>): " << sizeof(std::optional<int>)
-            << ", sizeof(int): " << sizeof(int) << '\n';  // 8 4
+  std::optional<int> idle;  // empty
+  std::cout << "idle.value_or(-1): " << idle.value_or(-1) << '\n';  // -1
+  undefined::optional_star::run();                                  // *idle: undefined behavior
+  std::cout << "idle.value(): " << idle.value() << '\n';           // throws
 }
-}  // namespace optional_pointer
+}  // namespace three_ways
 
-// Runs one slide's code: always when only is 0, otherwise only on a match.
-// run is a pointer to a function: see the appendix, Function Pointers.
-void show(int only, int slide, const char* title, void (*run)()) {
-  if (only != 0 && only != slide) { return; }
-  const std::string header{"[Slide " + std::to_string(slide) + "] " + title};
-  const std::string rule(header.size(), '-');  // ( ), not { }: { } means a list of two chars
-  std::cout << rule << '\n' << header << '\n' << rule << '\n';
-  run();
+// The slides of this section: number, title, the function that runs it, and
+// true when a full run must skip it.
+std::vector<Slide> slides() {
+  return {
+    {24, "Returning a std::pair", returning_several::run},
+    {25, "Returning a std::tuple", returning_tuple::run},
+    {26, "Returning a struct", returning_struct::run},
+    {28, "Structured Bindings", structured_bindings::run},
+    {29, "By Value and by Reference", by_value_reference::run},
+    {30, "One Name per Member", binding_count::run},
+    {31, "std::optional", optional_age::run},
+    {32, "Finding an Idle Robot", optional_def::run},
+    {33, "Reading an Optional", reading_optional::run},
+    {34, "A Fallback Value", fallback_value::run},
+    {35, "Three Ways to Read", three_ways::run, true},
+  };
 }
 
-// Runs one appendix frame's code, only when the whole program runs: appendix
-// frames have no slide number to ask for.
-void show_appendix(int only, const char* title, void (*run)()) {
-  if (only != 0) { return; }
-  const std::string header{std::string{"[Appendix] "} + title};
-  const std::string rule(header.size(), '-');
-  std::cout << rule << '\n' << header << '\n' << rule << '\n';
-  run();
-}
-
-int main(int argc, char* argv[]) {
-  const int only{argc > 1 ? std::atoi(argv[1]) : 0};
-  show(only, 24, "Returning a std::pair", returning_several::run);
-  show(only, 25, "Returning a std::tuple", returning_tuple::run);
-  show(only, 26, "Returning a struct", returning_struct::run);
-  show(only, 28, "Structured Bindings", structured_bindings::run);
-  show(only, 29, "By Value and by Reference", by_value_reference::run);
-  show(only, 30, "One Name per Member", binding_count::run);
-  show(only, 31, "std::optional", optional_age::run);
-  show(only, 32, "Finding an Idle Robot", optional_def::run);
-  show(only, 33, "Reading an Optional", reading_optional::run);
-  show(only, 34, "A Fallback Value", fallback_value::run);
-  show(only, 37, "std::optional, Pointer, or Special Value", optional_pointer::run);
-  show_appendix(only, "The Lecture 4 Map Loop", map_loop::run);
-}
+}  // namespace results
