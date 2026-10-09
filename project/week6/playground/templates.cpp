@@ -1,6 +1,6 @@
 /**
  * @file templates.cpp
- * @brief L6 Section 3, Function Templates: the code of every slide, runnable.
+ * @brief L6 Section 4, Function Templates: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
  * @details Part of week6_playground: main.cpp collects slides() from every
@@ -9,7 +9,7 @@
  * @code
  * 702build week6_playground
  * 702run week6_playground       # every slide of every section, in order
- * 702run week6_playground 37    # only [Slide 37]
+ * 702run week6_playground 40    # only [Slide 40]
  * @endcode
  *
  * Each slide's code is in its own namespace, inside the namespace @c templates, so
@@ -35,7 +35,7 @@
 
 namespace templates {
 
-// [Slide 37] One Body, Several Overloads
+// [Slide 40] One Body, Several Overloads
 namespace overloads {
 int clamp_value(int value, int low, int high) {  // a speed command, in percent
   if (value < low) { return low; }
@@ -56,7 +56,7 @@ void run() {
 }
 }  // namespace overloads
 
-// [Slide 38] Declaring a Template
+// [Slide 41] Declaring a Template
 template <typename T>
 T clamp_value(T value, T low, T high) {
   if (value < low) { return low; }
@@ -72,7 +72,7 @@ void run() {
 }
 }  // namespace declaring_template
 
-// [Slide 39] Instantiation
+// [Slide 42] Instantiation
 namespace instantiation {
 void run() {
   int speed_pct{clamp_value(130, 0, 100)};              // T = int: 100
@@ -83,7 +83,7 @@ void run() {
 }
 }  // namespace instantiation
 
-// [Slide 40] Template Argument Deduction
+// [Slide 43] Template Argument Deduction
 namespace deduction {
 void run() {
   std::cout << "clamp_value(130, 0, 100): " << clamp_value(130, 0, 100)
@@ -94,7 +94,7 @@ void run() {
 }
 }  // namespace deduction
 
-// [Slide 41] Explicit Template Arguments
+// [Slide 44] Explicit Template Arguments
 namespace explicit_args {
 template <typename T>
 T make_zero() { return T{}; }
@@ -111,7 +111,7 @@ void run() {
 }
 }  // namespace explicit_args
 
-// [Slide 42] Two Template Parameters
+// [Slide 45] Two Template Parameters
 namespace two_parameters {
 template <typename T, typename U>
 auto add_offset(T value, U offset) {
@@ -130,12 +130,12 @@ void run() {
 }
 }  // namespace two_parameters
 
-// [Slide 43] Templates Go in Headers
+// [Slide 46] Templates Go in Headers
 // On the slide, stats.hpp holds the whole template, body included, and
 // main.cpp includes it; fleet/include/stats.hpp does the same. In this one
 // file, clamp_value at the top of the namespace templates plays the part of
 // that header: its body is above every call. The split that does not link is
-// in week6_appendix, [Appendix x] Where the Body Ends Up.
+// in week6_appendix, [Appendix xi] Where the Body Ends Up.
 namespace in_headers {
 void run() {
   double pct{clamp_value(104.2, 0.0, 100.0)};  // 100
@@ -143,7 +143,7 @@ void run() {
 }
 }  // namespace in_headers
 
-// [Slide 44] Abbreviated Templates
+// [Slide 47] Abbreviated Templates
 namespace abbreviated {
 void print_all(const auto& values) {
   for (const auto& value : values) {
@@ -160,7 +160,7 @@ void run() {
 }
 }  // namespace abbreviated
 
-// [Slide 45] Concepts
+// [Slide 48] Concepts
 namespace constrained {
 template <std::floating_point T>
 T half(T value) {
@@ -172,7 +172,7 @@ void run() {
 }
 }  // namespace constrained
 
-// [Slide 46] A Call That Compiles and Is Wrong
+// [Slide 49] A Call That Compiles and Is Wrong
 namespace unconstrained {
 template <typename T>
 T half(T value) {
@@ -187,7 +187,7 @@ void run() {
 }
 }  // namespace unconstrained
 
-// [Slide 47] Form 1: In Place of typename
+// [Slide 50] Form 1: In Place of typename
 namespace form1 {
 template <std::integral T>  // T must be an integral type
 bool is_valid_id(T id) { return id > 0; }
@@ -200,7 +200,7 @@ void run() {
 }
 }  // namespace form1
 
-// [Slide 48] Form 2: A requires Clause
+// [Slide 51] Form 2: A requires Clause
 namespace form2 {
 template <typename T>
   requires std::integral<T> && (!std::same_as<T, bool>)
@@ -214,7 +214,7 @@ void run() {
 }
 }  // namespace form2
 
-// [Slide 49] Form 3: Before auto
+// [Slide 52] Form 3: Before auto
 namespace form3 {
 // The slide shows the same function twice, so each version gets a namespace.
 namespace with_form1 {
@@ -243,7 +243,7 @@ void run() {
 }
 }  // namespace form3
 
-// [Slide 50] Which Form to Use
+// [Slide 53] Which Form to Use
 namespace which_form {
 // 1. Form 3 by default: each parameter has its own simple requirement
 namespace with_form3 {
@@ -279,20 +279,20 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-    {37, "One Body, Several Overloads", overloads::run},
-    {38, "Declaring a Template", declaring_template::run},
-    {39, "Instantiation", instantiation::run},
-    {40, "Template Argument Deduction", deduction::run},
-    {41, "Explicit Template Arguments", explicit_args::run},
-    {42, "Two Template Parameters", two_parameters::run},
-    {43, "Templates Go in Headers", in_headers::run},
-    {44, "Abbreviated Templates", abbreviated::run},
-    {45, "Concepts", constrained::run},
-    {46, "A Call That Compiles and Is Wrong", unconstrained::run},
-    {47, "Form 1: In Place of typename", form1::run},
-    {48, "Form 2: A requires Clause", form2::run},
-    {49, "Form 3: Before auto", form3::run},
-    {50, "Which Form to Use", which_form::run},
+    {40, "One Body, Several Overloads", overloads::run},
+    {41, "Declaring a Template", declaring_template::run},
+    {42, "Instantiation", instantiation::run},
+    {43, "Template Argument Deduction", deduction::run},
+    {44, "Explicit Template Arguments", explicit_args::run},
+    {45, "Two Template Parameters", two_parameters::run},
+    {46, "Templates Go in Headers", in_headers::run},
+    {47, "Abbreviated Templates", abbreviated::run},
+    {48, "Concepts", constrained::run},
+    {49, "A Call That Compiles and Is Wrong", unconstrained::run},
+    {50, "Form 1: In Place of typename", form1::run},
+    {51, "Form 2: A requires Clause", form2::run},
+    {52, "Form 3: Before auto", form3::run},
+    {53, "Which Form to Use", which_form::run},
   };
 }
 

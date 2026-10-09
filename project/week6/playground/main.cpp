@@ -8,7 +8,7 @@
  * @code
  * 702build week6_playground
  * 702run week6_playground        # every slide, in order
- * 702run week6_playground 37     # only [Slide 37]
+ * 702run week6_playground 40     # only [Slide 40]
  * @endcode
  *
  * @c "[Slide N]" is the number in the top-left corner of the slide. The code
@@ -31,7 +31,7 @@
 
 int main(int argc, char* argv[]) {
   std::vector<Slide> slides;
-  for (const std::vector<Slide>& section : {grouping::slides(), results::slides(),
+  for (const std::vector<Slide>& section : {grouping::slides(), results::slides(), deduced::slides(),
                                             templates::slides(), higher_order::slides(),
                                             lambdas::slides()}) {
     slides.insert(slides.end(), section.begin(), section.end());

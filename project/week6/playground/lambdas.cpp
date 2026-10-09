@@ -1,6 +1,6 @@
 /**
  * @file lambdas.cpp
- * @brief L6 Section 5, Lambdas: the code of every slide, runnable.
+ * @brief L6 Section 6, Lambdas: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
  * @details Part of week6_playground: main.cpp collects slides() from every
@@ -9,7 +9,7 @@
  * @code
  * 702build week6_playground
  * 702run week6_playground       # every slide of every section, in order
- * 702run week6_playground 54    # only [Slide 54]
+ * 702run week6_playground 57    # only [Slide 57]
  * @endcode
  *
  * Each slide's code is in its own namespace, inside the namespace @c lambdas, so
@@ -19,7 +19,7 @@
  *
  * The structs and the demo fleet are declared once, at the top. Code that does
  * not compile is commented out where its slide shows it: uncomment it, build,
- * and you get the slide's error. The dangling capture, [Slide 61], is in
+ * and you get the slide's error. The dangling capture, [Slide 64], is in
  * @c ../undefined/undefined.cpp, built with AddressSanitizer; a full run
  * skips it.
  */
@@ -60,7 +60,7 @@ void print_ids(const std::vector<RobotStatus>& fleet) {
   std::cout << '\n';
 }
 
-// [Slide 54] Lambda Expressions
+// [Slide 57] Lambda Expressions
 namespace lambda_expression {
 void run() {
   // create it, call it at once
@@ -73,7 +73,7 @@ void run() {
 }
 }  // namespace lambda_expression
 
-// [Slide 55] Passing a Lambda
+// [Slide 58] Passing a Lambda
 namespace passing_lambda {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -87,7 +87,7 @@ void run() {
 }
 }  // namespace passing_lambda
 
-// [Slide 56] std::find_if with a Lambda
+// [Slide 59] std::find_if with a Lambda
 namespace find_if_lambda {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};  // robots 1, 2, 3 and 4; only robot 2 is busy
@@ -97,7 +97,7 @@ void run() {
 }
 }  // namespace find_if_lambda
 
-// [Slide 57] std::sort with a Lambda
+// [Slide 60] std::sort with a Lambda
 namespace sort_lambda {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};
@@ -110,7 +110,7 @@ void run() {
 }
 }  // namespace sort_lambda
 
-// [Slide 58] Captures
+// [Slide 61] Captures
 namespace no_capture {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -121,7 +121,7 @@ void run() {
 }
 }  // namespace no_capture
 
-// [Slide 59] By Value and by Reference
+// [Slide 62] By Value and by Reference
 namespace by_value_reference {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -168,7 +168,7 @@ void run() {
 }
 }  // namespace compiler_writes
 
-// [Slide 62] Generic Lambdas
+// [Slide 65] Generic Lambdas
 namespace generic {
 void run() {
   auto larger = [](const auto& left, const auto& right) { return left > right ? left : right; };
@@ -183,14 +183,14 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-    {54, "Lambda Expressions", lambda_expression::run},
-    {55, "Passing a Lambda", passing_lambda::run},
-    {56, "std::find_if with a Lambda", find_if_lambda::run},
-    {57, "std::sort with a Lambda", sort_lambda::run},
-    {58, "Captures", no_capture::run},
-    {59, "By Value and by Reference", by_value_reference::run},
-    {61, "A Dangling Capture", undefined::dangling_capture::run, true},
-    {62, "Generic Lambdas", generic::run},
+    {57, "Lambda Expressions", lambda_expression::run},
+    {58, "Passing a Lambda", passing_lambda::run},
+    {59, "std::find_if with a Lambda", find_if_lambda::run},
+    {60, "std::sort with a Lambda", sort_lambda::run},
+    {61, "Captures", no_capture::run},
+    {62, "By Value and by Reference", by_value_reference::run},
+    {64, "A Dangling Capture", undefined::dangling_capture::run, true},
+    {65, "Generic Lambdas", generic::run},
   };
 }
 

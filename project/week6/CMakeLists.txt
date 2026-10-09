@@ -8,7 +8,7 @@
 #   702run week6_playground       run the code of every slide
 #   702run week6_playground 8     run only the code of [Slide 8]
 #   702run week6_appendix         run the code of every appendix frame
-#   702run week6_appendix xvi     run only the code of [Appendix xvi]
+#   702run week6_appendix xvii    run only the code of [Appendix xvii]
 #
 # Folders:
 #   fleet/        the finished program (week6_fleet), headers and sources
@@ -43,6 +43,7 @@ set_source_files_properties(undefined/undefined.cpp PROPERTIES
 add_executable(week6_playground playground/main.cpp
     playground/grouping.cpp
     playground/results.cpp
+    playground/deduced.cpp
     playground/templates.cpp
     playground/lambdas.cpp
     playground/higher_order.cpp

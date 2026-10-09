@@ -1,6 +1,6 @@
 /**
  * @file higher_order.cpp
- * @brief L6 Sections 4 and 6, Higher-Order Functions and Storing and Adapting
+ * @brief L6 Sections 5 and 7, Higher-Order Functions and Storing and Adapting
  *        Callables: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
@@ -10,7 +10,7 @@
  * @code
  * 702build week6_playground
  * 702run week6_playground       # every slide of every section, in order
- * 702run week6_playground 52    # only [Slide 52]
+ * 702run week6_playground 55    # only [Slide 55]
  * @endcode
  *
  * Each slide's code is in its own namespace, inside the namespace @c higher_order, so
@@ -19,7 +19,7 @@
  * bottom lists them.
  *
  * Code that does not compile is commented out where its slide shows it:
- * uncomment it, build, and you get the slide's error. [Slide 66] throws, so a
+ * uncomment it, build, and you get the slide's error. [Slide 69] throws, so a
  * full run skips it.
  */
 #include <algorithm>
@@ -33,7 +33,7 @@
 
 namespace higher_order {
 
-// [Slide 52] A Condition instead of a Value
+// [Slide 55] A Condition instead of a Value
 namespace condition {
 bool is_low(double pct) { return pct < 40.0; }  // outside main
 
@@ -46,7 +46,7 @@ void run() {
 }
 }  // namespace condition
 
-// [Slide 64] std::function
+// [Slide 67] std::function
 namespace std_function {
 // to_fraction from the appendix frame Function Pointers.
 double to_fraction(double pct) { return pct / 100.0; }
@@ -61,7 +61,7 @@ void run() {
 }
 }  // namespace std_function
 
-// [Slide 65] A Table of Commands
+// [Slide 68] A Table of Commands
 namespace command_table {
 void run() {
   std::map<std::string, std::function<void(int)>> on_command;
@@ -78,7 +78,7 @@ void run() {
 }
 }  // namespace command_table
 
-// [Slide 66] An Empty std::function
+// [Slide 69] An Empty std::function
 // operator[] inserts an empty std::function for the missing key, and calling
 // an empty std::function throws std::bad_function_call. Nothing catches it, so
 // the program stops with exit status 134.
@@ -95,7 +95,7 @@ void run() {
 }
 }  // namespace empty_function
 
-// [Slide 67] Choosing a Parameter Type
+// [Slide 70] Choosing a Parameter Type
 namespace choosing {
 void run() {
   double (*convert_ptr)(double){std_function::to_fraction};
@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace choosing
 
-// [Slide 68] std::bind
+// [Slide 71] std::bind
 namespace bind {
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
@@ -126,12 +126,12 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-    {52, "A Condition instead of a Value", condition::run},
-    {64, "std::function", std_function::run},
-    {65, "A Table of Commands", command_table::run},
-    {66, "An Empty std::function", empty_function::run, true},
-    {67, "Choosing a Parameter Type", choosing::run},
-    {68, "std::bind", bind::run},
+    {55, "A Condition instead of a Value", condition::run},
+    {67, "std::function", std_function::run},
+    {68, "A Table of Commands", command_table::run},
+    {69, "An Empty std::function", empty_function::run, true},
+    {70, "Choosing a Parameter Type", choosing::run},
+    {71, "std::bind", bind::run},
   };
 }
 

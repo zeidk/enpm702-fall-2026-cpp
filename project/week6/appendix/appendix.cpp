@@ -9,11 +9,11 @@
  * @code
  * 702build week6_appendix
  * 702run week6_appendix         # every appendix frame, in order
- * 702run week6_appendix xvi     # only [Appendix xvi]; 702run week6_appendix 16 works too
+ * 702run week6_appendix xvii    # only [Appendix xvii]; 702run week6_appendix 17 works too
  * @endcode
  *
  * The appendix frames are numbered i, ii, iii, ... in their top-left corner,
- * and @c "[Appendix xvi]" is that number. Each frame's code is in its own
+ * and @c "[Appendix xvii]" is that number. Each frame's code is in its own
  * namespace, with a @c run() that does what the frame does in @c main(). The
  * table in main() lists them, and run_slides() in @c ../common/slides.cpp runs
  * them. Code that does not compile is commented out where its frame shows it:
@@ -21,6 +21,7 @@
  */
 #include <algorithm>
 #include <cmath>
+#include <concepts>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -67,7 +68,33 @@ void run() {
 }
 }  // namespace map_loop
 
-// [Appendix viii] typename or class
+// [Appendix vii] auto Returns a Copy
+namespace auto_copy {
+auto first_copy(const std::vector<std::string>& names) {
+  return names[0];  // std::string: a copy
+}
+const auto& first_ref(const std::vector<std::string>& names) {
+  return names[0];  // const std::string&: the element itself
+}
+decltype(auto) first_exact(const std::vector<std::string>& names) {
+  return names[0];  // const std::string&: the exact type, & included
+}
+
+// The three return types, checked while compiling.
+static_assert(std::same_as<decltype(first_copy(std::vector<std::string>{})), std::string>);
+static_assert(std::same_as<decltype(first_ref(std::vector<std::string>{})), const std::string&>);
+static_assert(std::same_as<decltype(first_exact(std::vector<std::string>{})), const std::string&>);
+
+void run() {
+  std::vector<std::string> sensors{"imu", "gps"};
+  std::string copy{first_copy(sensors)};
+  const std::string& ref{first_ref(sensors)};
+  sensors[0] = "lidar";
+  std::cout << "copy: " << copy << ", ref: " << ref << '\n';  // copy: imu, ref: lidar
+}
+}  // namespace auto_copy
+
+// [Appendix ix] typename or class
 namespace typename_or_class {
 // Two declarations of the same template: class and typename mean the same here.
 template <class T>    T clamp_value(T value, T low, T high);
@@ -82,7 +109,7 @@ void run() {
 }
 }  // namespace typename_or_class
 
-// [Appendix ix] Dependent Name
+// [Appendix x] Dependent Name
 namespace dependent_name {
 template <typename Container>
 void print_first(const Container& values) {
@@ -100,7 +127,7 @@ void run() {
 }
 }  // namespace dependent_name
 
-// [Appendix x] Where the Body Ends Up
+// [Appendix xi] Where the Body Ends Up
 // The frame splits a template like a regular function: the declaration in
 // stats.hpp, the body in stats.cpp. One file shows the same linker error: a
 // template that is declared and never defined.
@@ -115,7 +142,7 @@ void run() {
 }
 }  // namespace template_link
 
-// [Appendix xv] std::transform
+// [Appendix xvi] std::transform
 namespace transform_appendix {
 void run() {
   std::vector<double> battery_pct{82.5, 35.0, 64.0, 18.0};
@@ -128,7 +155,7 @@ void run() {
 }
 }  // namespace transform_appendix
 
-// [Appendix xvi] Projections (C++20)
+// [Appendix xvii] Projections (C++20)
 namespace projections {
 void run() {
   std::vector<std::string> zones{"charging bay", "dock", "aisle 4"};
@@ -140,7 +167,7 @@ void run() {
 }
 }  // namespace projections
 
-// [Appendix xvii] Projections with RobotStatus
+// [Appendix xviii] Projections with RobotStatus
 namespace projections_robot {
 void run() {
   std::vector<RobotStatus> fleet{make_fleet()};  // the four robots of the slide
@@ -154,7 +181,7 @@ void run() {
 }
 }  // namespace projections_robot
 
-// [Appendix xviii] mutable and Init-capture
+// [Appendix xix] mutable and Init-capture
 namespace mutable_init {
 void run() {
   // Does not compile: a copy capture is read-only without mutable.
@@ -172,7 +199,7 @@ void run() {
 }
 }  // namespace mutable_init
 
-// [Appendix xix] The Return Type
+// [Appendix xx] The Return Type
 namespace return_type {
 void run() {
   // Does not compile: one return gives int, the other double.
@@ -192,7 +219,7 @@ void run() {
 }
 }  // namespace return_type
 
-// [Appendix xx] Template Lambdas (C++20)
+// [Appendix xxi] Template Lambdas (C++20)
 namespace template_lambda {
 void run() {
   auto larger = [](const auto& left, const auto& right) {
@@ -208,7 +235,7 @@ void run() {
 }
 }  // namespace template_lambda
 
-// [Appendix xxi] Function Pointers
+// [Appendix xxii] Function Pointers
 namespace function_pointers {
 double to_fraction(double pct) {
   return pct / 100.0;
@@ -223,7 +250,7 @@ void run() {
 }
 }  // namespace function_pointers
 
-// [Appendix xxii] Passing a Function
+// [Appendix xxiii] Passing a Function
 namespace passing_function {
 void convert_all(double* values, int count, double (*convert)(double)) {
   for (int i{0}; i < count; ++i) { values[i] = convert(values[i]); }
@@ -243,7 +270,7 @@ void run() {
 }
 }  // namespace passing_function
 
-// [Appendix xxiv] std::source_location
+// [Appendix xxv] std::source_location
 // At namespace scope, not in a namespace of its own, so function_name() prints
 // the plain names the slide shows.
 void log_message(
@@ -270,9 +297,9 @@ void run() {
 }
 }  // namespace source_location_slide
 
-// [Appendix xxv] bind_front and Lambdas
+// [Appendix xxvi] bind_front and Lambdas
 namespace bind_front {
-// charge_time_h from [Slide 68] std::bind, in week6_playground.
+// charge_time_h from [Slide 71] std::bind, in week6_playground.
 double charge_time_h(double missing_pct, double rate_pct_per_h) {
   return missing_pct / rate_pct_per_h;
 }
@@ -298,23 +325,24 @@ void run() {
 }  // namespace bind_front
 
 int main(int argc, char* argv[]) {
-  // One entry per appendix frame that has code: its number (16 is xvi), its
+  // One entry per appendix frame that has code: its number (17 is xvii), its
   // title, and the function that runs it.
   const std::vector<Slide> slides{
       {6, "The Lecture 4 Map Loop", map_loop::run},
-      {8, "typename or class", typename_or_class::run},
-      {9, "Dependent Name", dependent_name::run},
-      {10, "Where the Body Ends Up", template_link::run},
-      {15, "std::transform", transform_appendix::run},
-      {16, "Projections (C++20)", projections::run},
-      {17, "Projections with RobotStatus", projections_robot::run},
-      {18, "mutable and Init-capture", mutable_init::run},
-      {19, "The Return Type", return_type::run},
-      {20, "Template Lambdas (C++20)", template_lambda::run},
-      {21, "Function Pointers", function_pointers::run},
-      {22, "Passing a Function", passing_function::run},
-      {24, "std::source_location", source_location_slide::run},
-      {25, "bind_front and Lambdas", bind_front::run},
+      {7, "auto Returns a Copy", auto_copy::run},
+      {9, "typename or class", typename_or_class::run},
+      {10, "Dependent Name", dependent_name::run},
+      {11, "Where the Body Ends Up", template_link::run},
+      {16, "std::transform", transform_appendix::run},
+      {17, "Projections (C++20)", projections::run},
+      {18, "Projections with RobotStatus", projections_robot::run},
+      {19, "mutable and Init-capture", mutable_init::run},
+      {20, "The Return Type", return_type::run},
+      {21, "Template Lambdas (C++20)", template_lambda::run},
+      {22, "Function Pointers", function_pointers::run},
+      {23, "Passing a Function", passing_function::run},
+      {25, "std::source_location", source_location_slide::run},
+      {26, "bind_front and Lambdas", bind_front::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }

@@ -21,14 +21,18 @@ namespace results {
 std::vector<Slide> slides();  ///< Section 2, Multiple and Optional Results: results.cpp
 }
 
+namespace deduced {
+std::vector<Slide> slides();  ///< Section 3, Deduced Return Types: deduced.cpp
+}
+
 namespace templates {
-std::vector<Slide> slides();  ///< Section 3, Function Templates: templates.cpp
+std::vector<Slide> slides();  ///< Section 4, Function Templates: templates.cpp
 }
 
 namespace higher_order {
-std::vector<Slide> slides();  ///< Sections 4 and 6, Higher-Order Functions and Storing and Adapting Callables: higher_order.cpp
+std::vector<Slide> slides();  ///< Sections 5 and 7, Higher-Order Functions and Storing and Adapting Callables: higher_order.cpp
 }
 
 namespace lambdas {
-std::vector<Slide> slides();  ///< Section 5, Lambdas: lambdas.cpp
+std::vector<Slide> slides();  ///< Section 6, Lambdas: lambdas.cpp
 }
