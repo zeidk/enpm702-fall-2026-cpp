@@ -11,7 +11,7 @@
  * run skips it:
  * @code
  * 702run week6_playground 35    # [Slide 35] Three Ways to Read
- * 702run week6_playground 64    # [Slide 64] A Dangling Capture
+ * 702run week6_playground 61    # [Slide 61] A Dangling Capture
  * @endcode
  */
 #pragma once
@@ -23,7 +23,7 @@ namespace optional_star {
 void run();
 }
 
-/// [Slide 64] A Dangling Capture: a lambda that captures a dead parameter by
+/// [Slide 61] A Dangling Capture: a lambda that captures a dead parameter by
 /// reference.
 namespace dangling_capture {
 void run();

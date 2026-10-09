@@ -30,12 +30,12 @@ void run() {
 }
 }  // namespace optional_star
 
-// [Slide 64] A Dangling Capture
+// [Slide 61] A Dangling Capture
 // limit_pct is a parameter: it dies when make_filter returns, and the lambda
 // keeps a reference to it. AddressSanitizer stops the run with a report that
 // names the bug and the line.
 //
-// Measured on 2026-10-06, g++ 13.3, -std=c++20 -g, 702run week6_playground 64:
+// Measured on 2026-10-06, g++ 13.3, -std=c++20 -g, 702run week6_playground 61:
 //   is_low(30.0): ERROR: AddressSanitizer: stack-use-after-return on address 0x...
 //   READ of size 8 at 0x... thread T0
 //     #0 in operator() undefined.cpp:49

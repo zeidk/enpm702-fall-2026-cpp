@@ -75,37 +75,26 @@ void run() {
 // [Slide 39] Instantiation
 namespace instantiation {
 void run() {
-  int speed_pct{clamp_value(130, 0, 100)};              // 100
-  double battery_pct{clamp_value(104.2, 0.0, 100.0)};   // 100
-  int other_pct{clamp_value(50, 0, 100)};               // 50
+  int speed_pct{clamp_value(130, 0, 100)};              // T = int: 100
+  double battery_pct{clamp_value(104.2, 0.0, 100.0)};   // T = double: 100
+  int other_pct{clamp_value(50, 0, 100)};               // T = int: 50
   std::cout << "speed_pct: " << speed_pct << ", battery_pct: " << battery_pct
             << ", other_pct: " << other_pct << '\n';
 }
 }  // namespace instantiation
 
-// [Slide 40] Templates Go in Headers
-// The slide uses three files. One file shows the same linker error: a template
-// that is declared and never defined.
-namespace in_headers {
-template <typename T> T clamp_value(T value, T low, T high);  // the declaration only
-
+// [Slide 40] Template Argument Deduction
+namespace deduction {
 void run() {
-  // Does not link: undefined reference to clamp_value<double>.
-  // double pct{clamp_value(104.2, 0.0, 100.0)};
-  std::cout << "does not link: uncomment the line in in_headers::run()\n";
-}
-}  // namespace in_headers
-
-// [Slide 43] One T for Every Argument
-namespace one_t {
-void run() {
+  std::cout << "clamp_value(130, 0, 100): " << clamp_value(130, 0, 100)
+            << '\n';  // three ints: T is int, 100
   // Does not compile: 104 says T is int, 0.0 says double.
-  // double pct{clamp_value(104, 0.0, 100.0)};
-  std::cout << "does not compile: uncomment the line in one_t::run()\n";
+  // note: deduced conflicting types for parameter 'T' ('int' and 'double')
+  // clamp_value(104, 0.0, 100.0);
 }
-}  // namespace one_t
+}  // namespace deduction
 
-// [Slide 44] Explicit Template Arguments
+// [Slide 41] Explicit Template Arguments
 namespace explicit_args {
 template <typename T>
 T make_zero() { return T{}; }
@@ -122,7 +111,7 @@ void run() {
 }
 }  // namespace explicit_args
 
-// [Slide 45] Two Template Parameters
+// [Slide 42] Two Template Parameters
 namespace two_parameters {
 template <typename T, typename U>
 auto add_offset(T value, U offset) {
@@ -141,7 +130,20 @@ void run() {
 }
 }  // namespace two_parameters
 
-// [Slide 46] Abbreviated Templates
+// [Slide 43] Templates Go in Headers
+// On the slide, stats.hpp holds the whole template, body included, and
+// main.cpp includes it; fleet/include/stats.hpp does the same. In this one
+// file, clamp_value at the top of the namespace templates plays the part of
+// that header: its body is above every call. The split that does not link is
+// in week6_appendix, [Appendix x] Where the Body Ends Up.
+namespace in_headers {
+void run() {
+  double pct{clamp_value(104.2, 0.0, 100.0)};  // 100
+  std::cout << "pct: " << pct << '\n';
+}
+}  // namespace in_headers
+
+// [Slide 44] Abbreviated Templates
 namespace abbreviated {
 void print_all(const auto& values) {
   for (const auto& value : values) {
@@ -158,55 +160,47 @@ void run() {
 }
 }  // namespace abbreviated
 
-// [Slide 47] Concepts
+// [Slide 45] Concepts
 namespace constrained {
 template <std::floating_point T>
-T average_of(const std::vector<T>& values) {
-  T sum{0};
-  for (const T& value : values) { sum += value; }
-  return sum / static_cast<T>(values.size());
+T half(T value) {
+  return value / 2;
 }
 
 void run() {
-  std::cout << "average_of(doubles): "
-            << average_of(std::vector<double>{82.5, 35.0, 64.0, 18.0}) << '\n';  // 49.875
+  std::cout << "half(35.0): " << half(35.0) << '\n';  // 17.5
 }
 }  // namespace constrained
 
-// [Slide 48] A Call That Compiles and Is Wrong
+// [Slide 46] A Call That Compiles and Is Wrong
 namespace unconstrained {
 template <typename T>
-T average_of(const std::vector<T>& values) {
-  T sum{0};
-  for (const T& value : values) { sum += value; }
-  return sum / static_cast<T>(values.size());
+T half(T value) {
+  return value / 2;
 }
 
 void run() {
-  std::cout << "average_of(doubles): "
-            << average_of(std::vector<double>{82.5, 35.0, 64.0, 18.0}) << '\n';  // 49.875
-  std::cout << "average_of(ints): "
-            << average_of(std::vector<int>{80, 35, 64, 18}) << '\n';  // 49, not 49.25
-  // Does not compile: the constrained version (Slide 46) rejects int.
-  // std::cout << constrained::average_of(std::vector<int>{80, 35, 64, 18}) << '\n';
+  std::cout << "half(35.0): " << half(35.0) << '\n';  // 17.5
+  std::cout << "half(35): " << half(35) << '\n';      // 17, not 17.5
+  // Does not compile: the constrained version (Slide 45) rejects int.
+  // std::cout << constrained::half(35) << '\n';
 }
 }  // namespace unconstrained
 
-// [Slide 49] Form 1: In Place of typename
+// [Slide 47] Form 1: In Place of typename
 namespace form1 {
 template <std::integral T>  // T must be an integral type
 bool is_valid_id(T id) { return id > 0; }
 
 void run() {
   std::cout << "is_valid_id(3): " << is_valid_id(3)
-            << ", is_valid_id(-2L): " << is_valid_id(-2L)
-            << ", is_valid_id(true): " << is_valid_id(true) << '\n';  // 1 0 1
+            << ", is_valid_id(true): " << is_valid_id(true) << '\n';  // 1 1
   // Does not compile: constraints not satisfied (double is not integral).
   // is_valid_id(2.5);
 }
 }  // namespace form1
 
-// [Slide 50] Form 2: A requires Clause
+// [Slide 48] Form 2: A requires Clause
 namespace form2 {
 template <typename T>
   requires std::integral<T> && (!std::same_as<T, bool>)
@@ -220,7 +214,7 @@ void run() {
 }
 }  // namespace form2
 
-// [Slide 51] Form 3: Before auto
+// [Slide 49] Form 3: Before auto
 namespace form3 {
 // The slide shows the same function twice, so each version gets a namespace.
 namespace with_form1 {
@@ -249,7 +243,7 @@ void run() {
 }
 }  // namespace form3
 
-// [Slide 52] Which Form to Use
+// [Slide 50] Which Form to Use
 namespace which_form {
 // 1. Form 3 by default: each parameter has its own simple requirement
 namespace with_form3 {
@@ -288,17 +282,17 @@ std::vector<Slide> slides() {
     {37, "One Body, Several Overloads", overloads::run},
     {38, "Declaring a Template", declaring_template::run},
     {39, "Instantiation", instantiation::run},
-    {40, "Templates Go in Headers", in_headers::run},
-    {43, "One T for Every Argument", one_t::run},
-    {44, "Explicit Template Arguments", explicit_args::run},
-    {45, "Two Template Parameters", two_parameters::run},
-    {46, "Abbreviated Templates", abbreviated::run},
-    {47, "Concepts", constrained::run},
-    {48, "A Call That Compiles and Is Wrong", unconstrained::run},
-    {49, "Form 1: In Place of typename", form1::run},
-    {50, "Form 2: A requires Clause", form2::run},
-    {51, "Form 3: Before auto", form3::run},
-    {52, "Which Form to Use", which_form::run},
+    {40, "Template Argument Deduction", deduction::run},
+    {41, "Explicit Template Arguments", explicit_args::run},
+    {42, "Two Template Parameters", two_parameters::run},
+    {43, "Templates Go in Headers", in_headers::run},
+    {44, "Abbreviated Templates", abbreviated::run},
+    {45, "Concepts", constrained::run},
+    {46, "A Call That Compiles and Is Wrong", unconstrained::run},
+    {47, "Form 1: In Place of typename", form1::run},
+    {48, "Form 2: A requires Clause", form2::run},
+    {49, "Form 3: Before auto", form3::run},
+    {50, "Which Form to Use", which_form::run},
   };
 }
 

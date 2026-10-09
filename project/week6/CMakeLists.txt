@@ -8,7 +8,7 @@
 #   702run week6_playground       run the code of every slide
 #   702run week6_playground 8     run only the code of [Slide 8]
 #   702run week6_appendix         run the code of every appendix frame
-#   702run week6_appendix xiii    run only the code of [Appendix xiii]
+#   702run week6_appendix xvi     run only the code of [Appendix xvi]
 #
 # Folders:
 #   fleet/        the finished program (week6_fleet), headers and sources
