@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 65    # only [Slide 65]
+ * 702run week7_playground 68    # only [Slide 68]
  * @endcode
  *
  * Robot 3 is in the fleet and waits in the charging queue at the same time,
@@ -27,10 +27,10 @@ namespace shared {
 
 using Fleet = std::vector<std::shared_ptr<RobotStatus>>;
 
-// [Slide 62] A Robot in Two Lists
+// [Slide 65] A Robot in Two Lists
 // The slide states the problem; its code is in the comments of the slide.
 
-// [Slide 63] Creating One
+// [Slide 66] Creating One
 namespace creating {
 void run() {
   Fleet fleet;
@@ -44,7 +44,7 @@ void run() {
 }
 }  // namespace creating
 
-// [Slide 64] The Control Block
+// [Slide 67] The Control Block
 namespace control_block {
 void run() {
   auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
@@ -55,7 +55,7 @@ void run() {
 }
 }  // namespace control_block
 
-// [Slide 65] use_count, Step by Step
+// [Slide 68] use_count
 namespace use_count_steps {
 void run() {
   auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
@@ -71,7 +71,7 @@ void run() {
 }
 }  // namespace use_count_steps
 
-// [Slide 66] Three Ways to Let Go
+// [Slide 69] Three Ways to Let Go
 // Three separate runs, each from step 2; start() makes steps 1 and 2 and prints
 // their counts once, in the first run.
 namespace let_go {
@@ -108,10 +108,10 @@ void run() {
 }
 }  // namespace let_go
 
-// [Slide 67] Three Ways to Let Go, in Memory
-// The slide shows the figure of slide 66's code.
+// [Slide 70] Letting Go in Memory
+// The slide shows the figure of slide 69's code.
 
-// [Slide 68] Deletion by the Last Owner
+// [Slide 71] Deletion by the Last Owner
 namespace last_owner {
 void run() {
   Fleet fleet;
@@ -127,7 +127,7 @@ void run() {
 }  // LeakSanitizer reports nothing at exit: the robot was freed
 }  // namespace last_owner
 
-// [Slide 69] Passing: Borrow
+// [Slide 72] Passing: Borrow
 namespace borrow {
 void print_status(const RobotStatus& robot) {  // only reads the robot
   std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
@@ -140,7 +140,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 70] Passing: Share
+// [Slide 73] Passing: Share
 namespace share {
 void add_to_queue(Fleet& queue, std::shared_ptr<RobotStatus> robot) {  // keeps a copy
   queue.push_back(std::move(robot));
@@ -154,7 +154,7 @@ void run() {
 }
 }  // namespace share
 
-// [Slide 71] Passing: const shared_ptr&
+// [Slide 74] Passing: const shared_ptr&
 namespace maybe_share {
 void queue_if_low(Fleet& queue, const std::shared_ptr<RobotStatus>& robot) {
   if (robot->battery_pct < 20.0) {
@@ -174,7 +174,7 @@ void run() {
 }
 }  // namespace maybe_share
 
-// [Slide 72] Returning
+// [Slide 75] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
   return std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false);
@@ -194,15 +194,15 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {63, "Creating One", creating::run},
-      {64, "The Control Block", control_block::run},
-      {65, "use_count, Step by Step", use_count_steps::run},
-      {66, "Three Ways to Let Go", let_go::run},
-      {68, "Deletion by the Last Owner", last_owner::run},
-      {69, "Passing: Borrow", borrow::run},
-      {70, "Passing: Share", share::run},
-      {71, "Passing: const shared_ptr&", maybe_share::run},
-      {72, "Returning", returning::run},
+      {66, "Creating One", creating::run},
+      {67, "The Control Block", control_block::run},
+      {68, "use_count", use_count_steps::run},
+      {69, "Three Ways to Let Go", let_go::run},
+      {71, "Deletion by the Last Owner", last_owner::run},
+      {72, "Passing: Borrow", borrow::run},
+      {73, "Passing: Share", share::run},
+      {74, "Passing: const shared_ptr&", maybe_share::run},
+      {75, "Returning", returning::run},
   };
 }
 
