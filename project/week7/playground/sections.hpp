@@ -14,7 +14,7 @@
 #include "slides.hpp"
 
 namespace ownership {
-std::vector<Slide> slides();  ///< Section 1, Who Owns This Robot: ownership.cpp
+std::vector<Slide> slides();  ///< Section 1, Ownership: ownership.cpp
 }
 
 namespace moves {
@@ -22,13 +22,13 @@ std::vector<Slide> slides();  ///< Section 2, Move Semantics: moves.cpp
 }
 
 namespace unique {
-std::vector<Slide> slides();  ///< Section 3, unique_ptr: unique.cpp
+std::vector<Slide> slides();  ///< Section 3, Smart Pointers, std::unique_ptr: unique.cpp
 }
 
 namespace shared {
-std::vector<Slide> slides();  ///< Section 4, shared_ptr: shared.cpp
+std::vector<Slide> slides();  ///< Section 3, Smart Pointers, std::shared_ptr: shared.cpp
 }
 
 namespace weak {
-std::vector<Slide> slides();  ///< Section 5, weak_ptr: weak.cpp
+std::vector<Slide> slides();  ///< Section 3, Smart Pointers, std::weak_ptr: weak.cpp
 }

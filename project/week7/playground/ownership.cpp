@@ -1,6 +1,6 @@
 /**
  * @file ownership.cpp
- * @brief L7 Section 1, Who Owns This Robot: the code of every slide, runnable.
+ * @brief L7 Section 1, Ownership: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
  * @details Part of week7_playground: main.cpp collects slides() from every
@@ -48,7 +48,7 @@ void run() {
 
 // [Slide 10] RAII for One Object
 // The slide has no code: it states the idea. The leak fixed with a
-// std::unique_ptr is [Slide 37], once unique_ptr has been taught.
+// std::unique_ptr is [Slide 41], once unique_ptr has been taught.
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
