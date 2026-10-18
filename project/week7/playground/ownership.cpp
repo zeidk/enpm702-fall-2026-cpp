@@ -48,7 +48,7 @@ void run() {
 
 // [Slide 10] RAII for One Object
 // The slide has no code: it states the idea. The leak fixed with a
-// std::unique_ptr is [Slide 45], once unique_ptr has been taught.
+// std::unique_ptr is [Slide 50], once unique_ptr has been taught.
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.

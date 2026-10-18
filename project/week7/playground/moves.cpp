@@ -12,7 +12,7 @@
  *
  * The value category slides print the category of each expression with
  * CATEGORY(e), which reads decltype((e)): T& for an lvalue, T&& for an xvalue,
- * T for a prvalue ([Slide 31]). Code that does not compile, or that warns, is
+ * T for a prvalue ([Slide 35]). Code that does not compile, or that warns, is
  * commented out where its slide shows it: uncomment it, build, and you get the
  * slide's message.
  */
@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace moved_from
 
-// [Slide 19] lvalues, Step 1: A Name for an Object
+// [Slide 20] lvalues, Step 1: A Name for an Object
 namespace lvalue_name {
 void run() {
   int count{3};        // makes an int object that holds 3
@@ -115,7 +115,7 @@ void run() {
 }
 }  // namespace lvalue_name
 
-// [Slide 20] lvalues, Step 2: The & Test
+// [Slide 21] lvalues, Step 2: The & Test
 namespace lvalue_test {
 void run() {
   int count{3};
@@ -127,7 +127,7 @@ void run() {
 }
 }  // namespace lvalue_test
 
-// [Slide 21] lvalues, Step 3: Three More, with Why
+// [Slide 22] lvalues, Step 3: Three More, with Why
 namespace lvalue_more {
 void run() {
   int count{3};
@@ -143,7 +143,7 @@ void run() {
 }
 }  // namespace lvalue_more
 
-// [Slide 22] lvalues, Step 4: In the Fleet Manager
+// [Slide 23] lvalues, Step 4: In the Fleet Manager
 namespace lvalues {
 RobotStatus& first_robot(std::vector<RobotStatus>& fleet) { return fleet[0]; }
 
@@ -160,7 +160,7 @@ void run() {
 }
 }  // namespace lvalues
 
-// [Slide 23] prvalues, Step 1: A Value, Not an Object
+// [Slide 25] prvalues, Step 1: A Value, Not an Object
 namespace prvalue_value {
 void run() {
   int count{3};
@@ -170,7 +170,7 @@ void run() {
 }
 }  // namespace prvalue_value
 
-// [Slide 24] prvalues, Step 2: Three More, with Why
+// [Slide 26] prvalues, Step 2: Three More, with Why
 namespace prvalue_more {
 int twice(int n) { return 2 * n; }  // returns an int by value
 
@@ -184,7 +184,7 @@ void run() {
 }
 }  // namespace prvalue_more
 
-// [Slide 25] prvalues, Step 3: In the Fleet Manager
+// [Slide 27] prvalues, Step 3: In the Fleet Manager
 namespace prvalues {
 void run() {
   int a{2};
@@ -199,7 +199,7 @@ void run() {
 }
 }  // namespace prvalues
 
-// [Slide 26] xvalues, Step 1: Marked for Taking
+// [Slide 29] xvalues, Step 1: Marked for Taking
 namespace xvalue_marked {
 void run() {
   std::string name{"charging dock, aisle 4"};  // 22 chars: on the heap
@@ -211,7 +211,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 27] xvalues, Step 2: Three Ways to Mark
+// [Slide 30] xvalues, Step 2: Three Ways to Mark
 namespace xvalue_ways {
 struct Point {
   int x;
@@ -229,7 +229,7 @@ void run() {
 }
 }  // namespace xvalue_ways
 
-// [Slide 28] xvalues, Step 3: In the Fleet Manager
+// [Slide 31] xvalues, Step 3: In the Fleet Manager
 namespace xvalues {
 struct Robot {
   RobotStatus status;
@@ -248,7 +248,7 @@ void run() {
 }
 }  // namespace xvalues
 
-// [Slide 29] Temporary Materialization
+// [Slide 33] Temporary Materialization
 namespace materialization {
 void run() {
   std::cout << "make_robot(3): " << CATEGORY(make_robot(3)) << '\n';        // prvalue
@@ -258,7 +258,7 @@ void run() {
 }
 }  // namespace materialization
 
-// [Slide 31] The decltype Test
+// [Slide 35] The decltype Test
 namespace testing_category {
 std::vector<Position> route{make_route(3)};
 static_assert(std::is_same_v<decltype((route)), std::vector<Position>&>);              // lvalue
@@ -270,7 +270,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 32] Exercise 1: Name the Category
+// [Slide 36] Exercise 1: Name the Category
 namespace exercise_1 {
 struct Robot {
   RobotStatus status;
@@ -299,7 +299,7 @@ void run() {
 }
 }  // namespace exercise_1
 
-// [Slide 33] rvalue References
+// [Slide 38] rvalue References
 namespace rvalue_references {
 void run() {
   std::vector<Position> route{make_route(1000)};
@@ -313,7 +313,7 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 34] Named rvalue References
+// [Slide 39] Named rvalue References
 namespace named_rvalue_ref {
 void run() {
   std::vector<Position>&& r{make_route(10)};
@@ -324,7 +324,7 @@ void run() {
 }
 }  // namespace named_rvalue_ref
 
-// [Slide 35] Overloads for Copy and Move
+// [Slide 40] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Position> robot_route;
 
@@ -351,7 +351,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 36] std::move, a Cast
+// [Slide 41] std::move, a Cast
 namespace move_moves_nothing {
 void run() {
   std::vector<Position> route{make_route(1000)};
@@ -365,7 +365,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 37] std::move on a const Object
+// [Slide 42] std::move on a const Object
 namespace move_const {
 void run() {
   const std::vector<Position> route{make_route(1000)};
@@ -376,7 +376,7 @@ void run() {
 }
 }  // namespace move_const
 
-// [Slide 38] A Parameter the Function Moves From
+// [Slide 43] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -405,7 +405,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 39] Return by Value, Again
+// [Slide 44] Return by Value, Again
 namespace return_by_value {
 std::vector<Position> plan_route(int n) {
   std::vector<Position> route{make_route(n)};
@@ -431,26 +431,26 @@ std::vector<Slide> slides() {
       {12, "Handing a Route to a Robot", handing_route::run},
       {13, "An Implicit Move", implicit_move::run},
       {16, "The Moved-from Object", moved_from::run},
-      {19, "lvalues, Step 1: A Name for an Object", lvalue_name::run},
-      {20, "lvalues, Step 2: The & Test", lvalue_test::run},
-      {21, "lvalues, Step 3: Three More, with Why", lvalue_more::run},
-      {22, "lvalues, Step 4: In the Fleet Manager", lvalues::run},
-      {23, "prvalues, Step 1: A Value, Not an Object", prvalue_value::run},
-      {24, "prvalues, Step 2: Three More, with Why", prvalue_more::run},
-      {25, "prvalues, Step 3: In the Fleet Manager", prvalues::run},
-      {26, "xvalues, Step 1: Marked for Taking", xvalue_marked::run},
-      {27, "xvalues, Step 2: Three Ways to Mark", xvalue_ways::run},
-      {28, "xvalues, Step 3: In the Fleet Manager", xvalues::run},
-      {29, "Temporary Materialization", materialization::run},
-      {31, "The decltype Test", testing_category::run},
-      {32, "Exercise 1: Value Categories", exercise_1::run},
-      {33, "rvalue References", rvalue_references::run},
-      {34, "Named rvalue References", named_rvalue_ref::run},
-      {35, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {36, "std::move, a Cast", move_moves_nothing::run},
-      {37, "std::move on a const Object", move_const::run},
-      {38, "A Parameter the Function Moves From", will_move_from::run},
-      {39, "Return by Value, Again", return_by_value::run},
+      {20, "lvalues, Step 1: A Name for an Object", lvalue_name::run},
+      {21, "lvalues, Step 2: The & Test", lvalue_test::run},
+      {22, "lvalues, Step 3: Three More, with Why", lvalue_more::run},
+      {23, "lvalues, Step 4: In the Fleet Manager", lvalues::run},
+      {25, "prvalues, Step 1: A Value, Not an Object", prvalue_value::run},
+      {26, "prvalues, Step 2: Three More, with Why", prvalue_more::run},
+      {27, "prvalues, Step 3: In the Fleet Manager", prvalues::run},
+      {29, "xvalues, Step 1: Marked for Taking", xvalue_marked::run},
+      {30, "xvalues, Step 2: Three Ways to Mark", xvalue_ways::run},
+      {31, "xvalues, Step 3: In the Fleet Manager", xvalues::run},
+      {33, "Temporary Materialization", materialization::run},
+      {35, "The decltype Test", testing_category::run},
+      {36, "Exercise 1: Value Categories", exercise_1::run},
+      {38, "rvalue References", rvalue_references::run},
+      {39, "Named rvalue References", named_rvalue_ref::run},
+      {40, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {41, "std::move, a Cast", move_moves_nothing::run},
+      {42, "std::move on a const Object", move_const::run},
+      {43, "A Parameter the Function Moves From", will_move_from::run},
+      {44, "Return by Value, Again", return_by_value::run},
   };
 }
 

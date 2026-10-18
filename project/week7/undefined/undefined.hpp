@@ -33,7 +33,7 @@ namespace dangling_read {
 void run();
 }
 
-/// [Slide 70] The Cycle, Measured: two partner robots that own each other.
+/// [Slide 75] The Cycle, Measured: two partner robots that own each other.
 namespace shared_cycle {
 void run();
 }
