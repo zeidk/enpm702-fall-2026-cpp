@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 67    # only [Slide 67]
+ * 702run week7_playground 71    # only [Slide 71]
  * @endcode
  *
  * Two robots that work as a pair point at each other; the dashboard shows a
@@ -25,11 +25,11 @@
 
 namespace weak {
 
-// [Slide 65] A Cycle
+// [Slide 69] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 66] runs it.
+// ../undefined/undefined.cpp. [Slide 70] runs it.
 
-// [Slide 67] Breaking It
+// [Slide 71] Breaking It
 namespace breaking_cycle {
 struct Robot {
   RobotStatus status;
@@ -46,7 +46,7 @@ void run() {
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 68] Reading a weak_ptr
+// [Slide 72] Reading a weak_ptr
 namespace reading_weak {
 struct Dashboard {
   std::weak_ptr<RobotStatus> shown;  // the robot on screen
@@ -70,7 +70,7 @@ void run() {
 }
 }  // namespace reading_weak
 
-// [Slide 69] expired and use_count
+// [Slide 73] expired and use_count
 namespace expired_use_count {
 void run() {
   auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
@@ -83,7 +83,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 70] Exercise 3: Use Counts
+// [Slide 74] Exercise 3: Use Counts
 namespace exercise_3 {
 void run() {
   // Write the two values for each line before you run it.
@@ -109,11 +109,11 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {66, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {67, "Breaking It", breaking_cycle::run},
-      {68, "Reading a weak_ptr", reading_weak::run},
-      {69, "expired and use_count", expired_use_count::run},
-      {70, "Exercise 3: Use Counts", exercise_3::run},
+      {70, "The Cycle, Measured", undefined::shared_cycle::run, true},
+      {71, "Breaking It", breaking_cycle::run},
+      {72, "Reading a weak_ptr", reading_weak::run},
+      {73, "expired and use_count", expired_use_count::run},
+      {74, "Exercise 3: Use Counts", exercise_3::run},
   };
 }
 

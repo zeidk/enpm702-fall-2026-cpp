@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 39    # only [Slide 39]
+ * 702run week7_playground 43    # only [Slide 43]
  * @endcode
  *
  * Code that does not compile is commented out where its slide shows it:
@@ -24,8 +24,8 @@
 
 namespace unique {
 
-// [Slide 38] The Syntax
-// 1 and 2 declare the same type; 3 compiles too, but writes new (R.23, slide 39).
+// [Slide 42] The Syntax
+// 1 and 2 declare the same type; 3 compiles too, but writes new (R.23, slide 43).
 namespace syntax {
 void run() {
   std::unique_ptr<int> one{std::make_unique<int>(10)};  // 1
@@ -40,7 +40,7 @@ void run() {
 }
 }  // namespace syntax
 
-// [Slide 39] Creating One
+// [Slide 43] Creating One
 namespace creating {
 void run() {
   std::unique_ptr<RobotStatus> robot{
@@ -52,7 +52,7 @@ void run() {
 }
 }  // namespace creating
 
-// [Slide 40] In Memory
+// [Slide 44] In Memory
 namespace in_memory {
 void run() {
   auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
@@ -64,7 +64,7 @@ void run() {
 }
 }  // namespace in_memory
 
-// [Slide 41] The Leak, Fixed
+// [Slide 45] The Leak, Fixed
 namespace leak_fixed {
 bool needs_charge(int id) {
   auto robot{std::make_unique<RobotStatus>(id, 64.0, Position{0.0, 0.0}, false)};
@@ -80,7 +80,7 @@ void run() {
 }
 }  // namespace leak_fixed
 
-// [Slide 42] One Owner Only
+// [Slide 46] One Owner Only
 namespace one_owner {
 void run() {
   auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
@@ -92,7 +92,7 @@ void run() {
 }
 }  // namespace one_owner
 
-// [Slide 43] Moving Ownership
+// [Slide 47] Moving Ownership
 namespace moving_ownership {
 void run() {
   auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace moving_ownership
 
-// [Slide 44] A Fleet of unique_ptr
+// [Slide 48] A Fleet of unique_ptr
 namespace fleet_of_unique {
 void run() {
   std::vector<std::unique_ptr<RobotStatus>> fleet;
@@ -123,7 +123,7 @@ void run() {
 }
 }  // namespace fleet_of_unique
 
-// [Slide 45] get and reset
+// [Slide 49] get and reset
 namespace get_and_reset {
 void print_status(const RobotStatus* robot) {  // only looks
   std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
@@ -140,7 +140,7 @@ void run() {
 }
 }  // namespace get_and_reset
 
-// [Slide 46] release
+// [Slide 50] release
 namespace release {
 void run() {
   auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
@@ -151,7 +151,7 @@ void run() {
 }
 }  // namespace release
 
-// [Slide 47] Passing: Borrow
+// [Slide 51] Passing: Borrow
 namespace borrow {
 void print_status(const RobotStatus& robot) {  // only reads the robot
   std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
@@ -168,7 +168,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 48] Passing: Sink
+// [Slide 52] Passing: Sink
 namespace sink {
 std::vector<std::unique_ptr<RobotStatus>> retired;
 
@@ -186,7 +186,7 @@ void run() {
 }
 }  // namespace sink
 
-// [Slide 49] Passing: Reseat
+// [Slide 53] Passing: Reseat
 namespace reseat {
 void replace_robot(std::unique_ptr<RobotStatus>& robot, int new_id) {
   robot = std::make_unique<RobotStatus>(new_id, 100.0, Position{0.0, 0.0}, false);
@@ -200,7 +200,7 @@ void run() {
 }
 }  // namespace reseat
 
-// [Slide 50] Returning
+// [Slide 54] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
   auto robot{std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false)};
@@ -214,7 +214,7 @@ void run() {
 }
 }  // namespace returning
 
-// [Slide 51] Exercise 2: Lines That Compile
+// [Slide 55] Exercise 2: Lines That Compile
 namespace exercise_2 {
 void inspect(const RobotStatus& robot) { std::cout << "  inspect: robot " << robot.id << '\n'; }
 void adopt(std::unique_ptr<RobotStatus> robot) { std::cout << "  adopt: robot " << robot->id << '\n'; }
@@ -243,20 +243,20 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {38, "The Syntax", syntax::run},
-      {39, "Creating One", creating::run},
-      {40, "In Memory", in_memory::run},
-      {41, "The Leak, Fixed", leak_fixed::run},
-      {42, "One Owner Only", one_owner::run},
-      {43, "Moving Ownership", moving_ownership::run},
-      {44, "A Fleet of unique_ptr", fleet_of_unique::run},
-      {45, "get and reset", get_and_reset::run},
-      {46, "release", release::run},
-      {47, "Passing: Borrow", borrow::run},
-      {48, "Passing: Sink", sink::run},
-      {49, "Passing: Reseat", reseat::run},
-      {50, "Returning", returning::run},
-      {51, "Exercise 2: Lines That Compile", exercise_2::run},
+      {42, "The Syntax", syntax::run},
+      {43, "Creating One", creating::run},
+      {44, "In Memory", in_memory::run},
+      {45, "The Leak, Fixed", leak_fixed::run},
+      {46, "One Owner Only", one_owner::run},
+      {47, "Moving Ownership", moving_ownership::run},
+      {48, "A Fleet of unique_ptr", fleet_of_unique::run},
+      {49, "get and reset", get_and_reset::run},
+      {50, "release", release::run},
+      {51, "Passing: Borrow", borrow::run},
+      {52, "Passing: Sink", sink::run},
+      {53, "Passing: Reseat", reseat::run},
+      {54, "Returning", returning::run},
+      {55, "Exercise 2: Lines That Compile", exercise_2::run},
   };
 }
 
