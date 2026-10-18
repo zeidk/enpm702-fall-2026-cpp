@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace moved_from
 
-// [Slide 20] lvalues, Step 1: A Name for an Object
+// [Slide 20] Step 1: A Named Object
 namespace lvalue_name {
 void run() {
   int count{3};        // makes an int object that holds 3
@@ -115,7 +115,7 @@ void run() {
 }
 }  // namespace lvalue_name
 
-// [Slide 21] lvalues, Step 2: The & Test
+// [Slide 21] Step 2: The & Test
 namespace lvalue_test {
 void run() {
   int count{3};
@@ -127,7 +127,7 @@ void run() {
 }
 }  // namespace lvalue_test
 
-// [Slide 22] lvalues, Step 3: Three More, with Why
+// [Slide 22] Step 3: Three More
 namespace lvalue_more {
 void run() {
   int count{3};
@@ -143,7 +143,7 @@ void run() {
 }
 }  // namespace lvalue_more
 
-// [Slide 23] lvalues, Step 4: In the Fleet Manager
+// [Slide 23] Step 4: The Fleet
 namespace lvalues {
 RobotStatus& first_robot(std::vector<RobotStatus>& fleet) { return fleet[0]; }
 
@@ -160,7 +160,7 @@ void run() {
 }
 }  // namespace lvalues
 
-// [Slide 25] prvalues, Step 1: A Value, Not an Object
+// [Slide 25] Step 1: A Computed Value
 namespace prvalue_value {
 void run() {
   int count{3};
@@ -170,7 +170,7 @@ void run() {
 }
 }  // namespace prvalue_value
 
-// [Slide 26] prvalues, Step 2: Three More, with Why
+// [Slide 26] Step 2: Three More
 namespace prvalue_more {
 int twice(int n) { return 2 * n; }  // returns an int by value
 
@@ -184,7 +184,7 @@ void run() {
 }
 }  // namespace prvalue_more
 
-// [Slide 27] prvalues, Step 3: In the Fleet Manager
+// [Slide 27] Step 3: The Fleet
 namespace prvalues {
 void run() {
   int a{2};
@@ -199,7 +199,7 @@ void run() {
 }
 }  // namespace prvalues
 
-// [Slide 29] xvalues, Step 1: Marked for Taking
+// [Slide 29] Step 1: std::move
 namespace xvalue_marked {
 void run() {
   std::string name{"charging dock, aisle 4"};  // 22 chars: on the heap
@@ -211,7 +211,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 30] xvalues, Step 2: Three Ways to Mark
+// [Slide 30] Step 2: Ways to Mark
 namespace xvalue_ways {
 struct Point {
   int x;
@@ -229,7 +229,7 @@ void run() {
 }
 }  // namespace xvalue_ways
 
-// [Slide 31] xvalues, Step 3: In the Fleet Manager
+// [Slide 31] Step 3: The Fleet
 namespace xvalues {
 struct Robot {
   RobotStatus status;
@@ -431,16 +431,16 @@ std::vector<Slide> slides() {
       {12, "Handing a Route to a Robot", handing_route::run},
       {13, "An Implicit Move", implicit_move::run},
       {16, "The Moved-from Object", moved_from::run},
-      {20, "lvalues, Step 1: A Name for an Object", lvalue_name::run},
-      {21, "lvalues, Step 2: The & Test", lvalue_test::run},
-      {22, "lvalues, Step 3: Three More, with Why", lvalue_more::run},
-      {23, "lvalues, Step 4: In the Fleet Manager", lvalues::run},
-      {25, "prvalues, Step 1: A Value, Not an Object", prvalue_value::run},
-      {26, "prvalues, Step 2: Three More, with Why", prvalue_more::run},
-      {27, "prvalues, Step 3: In the Fleet Manager", prvalues::run},
-      {29, "xvalues, Step 1: Marked for Taking", xvalue_marked::run},
-      {30, "xvalues, Step 2: Three Ways to Mark", xvalue_ways::run},
-      {31, "xvalues, Step 3: In the Fleet Manager", xvalues::run},
+      {20, "Step 1: A Named Object", lvalue_name::run},
+      {21, "Step 2: The & Test", lvalue_test::run},
+      {22, "Step 3: Three More", lvalue_more::run},
+      {23, "Step 4: The Fleet", lvalues::run},
+      {25, "Step 1: A Computed Value", prvalue_value::run},
+      {26, "Step 2: Three More", prvalue_more::run},
+      {27, "Step 3: The Fleet", prvalues::run},
+      {29, "Step 1: std::move", xvalue_marked::run},
+      {30, "Step 2: Ways to Mark", xvalue_ways::run},
+      {31, "Step 3: The Fleet", xvalues::run},
       {33, "Temporary Materialization", materialization::run},
       {35, "The decltype Test", testing_category::run},
       {36, "Exercise 1: Value Categories", exercise_1::run},
