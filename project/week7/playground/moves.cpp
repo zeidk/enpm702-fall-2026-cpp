@@ -211,9 +211,13 @@ int twice(int n) { return 2 * n; }  // returns an int by value
 
 void run() {
   int count{3};
+  int doubled{count * 2};
+  int again{twice(count)};
+  std::cout << "count: " << count << ", doubled: " << doubled << ", again: " << again
+            << '\n';  // 3 6 6
   // Does not compile, for each of the three: lvalue required as unary '&' operand
-  // int* a{&42};  int* b{&(count * 2)};  int* c{&twice(count)};
-  std::cout << "42: " << CATEGORY(42) << '\n';                      // prvalue
+  // int* a{&3};  int* b{&(count * 2)};  int* c{&twice(count)};
+  std::cout << "3: " << CATEGORY(3) << '\n';                        // prvalue
   std::cout << "count * 2: " << CATEGORY(count * 2) << '\n';        // prvalue
   std::cout << "twice(count): " << CATEGORY(twice(count)) << '\n';  // prvalue
 }
