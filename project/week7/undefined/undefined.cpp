@@ -65,7 +65,7 @@ void run() {
 }
 }  // namespace dangling_read
 
-// [Slide 61] The Cycle, Measured
+// [Slide 62] The Cycle, Measured
 namespace shared_cycle {
 struct Robot {
   RobotStatus status;
