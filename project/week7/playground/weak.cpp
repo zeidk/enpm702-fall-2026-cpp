@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 58    # only [Slide 58]
+ * 702run week7_playground 62    # only [Slide 62]
  * @endcode
  *
  * Two robots that work as a pair point at each other; the dashboard shows a
@@ -25,11 +25,11 @@
 
 namespace weak {
 
-// [Slide 56] A Cycle
+// [Slide 60] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 57] runs it.
+// ../undefined/undefined.cpp. [Slide 61] runs it.
 
-// [Slide 58] Breaking It
+// [Slide 62] Breaking It
 namespace breaking_cycle {
 struct Robot {
   RobotStatus status;
@@ -46,7 +46,7 @@ void run() {
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 59] Reading a weak_ptr
+// [Slide 63] Reading a weak_ptr
 namespace reading_weak {
 struct Dashboard {
   std::weak_ptr<RobotStatus> shown;  // the robot on screen
@@ -70,7 +70,7 @@ void run() {
 }
 }  // namespace reading_weak
 
-// [Slide 60] expired and use_count
+// [Slide 64] expired and use_count
 namespace expired_use_count {
 void run() {
   auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
@@ -83,7 +83,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 61] Exercise 3: Predict the Counts
+// [Slide 65] Exercise 3: Use Counts
 namespace exercise_3 {
 void run() {
   // Write the two values for each line before you run it.
@@ -109,11 +109,11 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {57, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {58, "Breaking It", breaking_cycle::run},
-      {59, "Reading a weak_ptr", reading_weak::run},
-      {60, "expired and use_count", expired_use_count::run},
-      {61, "Exercise 3: Predict the Counts", exercise_3::run},
+      {61, "The Cycle, Measured", undefined::shared_cycle::run, true},
+      {62, "Breaking It", breaking_cycle::run},
+      {63, "Reading a weak_ptr", reading_weak::run},
+      {64, "expired and use_count", expired_use_count::run},
+      {65, "Exercise 3: Use Counts", exercise_3::run},
   };
 }
 
