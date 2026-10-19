@@ -35,7 +35,7 @@ namespace creating {
 void run() {
   Fleet fleet;
   Fleet charging_queue;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   fleet.push_back(robot);           // a copy: one more owner
   charging_queue.push_back(robot);  // a copy: one more owner
   std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 3
@@ -47,7 +47,7 @@ void run() {
 // [Slide 69] The Control Block
 namespace control_block {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   std::shared_ptr<RobotStatus> in_queue{robot};
   std::cout << "sizeof(robot): " << sizeof(robot) << ", sizeof(RobotStatus): "
             << sizeof(RobotStatus) << '\n';                              // 16 40
@@ -58,7 +58,7 @@ void run() {
 // [Slide 70] use_count
 namespace use_count_steps {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   std::cout << "created: " << robot.use_count() << '\n';                // 1
   std::shared_ptr<RobotStatus> in_queue{robot};
   std::cout << "copied: " << robot.use_count() << '\n';                 // 2
@@ -76,7 +76,7 @@ void run() {
 // their counts once, in the first run.
 namespace let_go {
 std::shared_ptr<RobotStatus> start(bool show) {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   {
     std::shared_ptr<RobotStatus> in_queue{robot};
     if (show) {
@@ -116,7 +116,7 @@ namespace last_owner {
 void run() {
   Fleet fleet;
   Fleet charging_queue;
-  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false));
+  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0));
   charging_queue.push_back(fleet[0]);
   std::cout << "both lists: " << charging_queue[0].use_count() << '\n';  // 2
   fleet.clear();  // the fleet lets go; the queue still owns it
@@ -134,7 +134,7 @@ void print_status(const RobotStatus& robot) {  // only reads the robot
 }
 
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   print_status(*robot);
   std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 1: no owner added
 }
@@ -148,7 +148,7 @@ void add_to_queue(Fleet& queue, std::shared_ptr<RobotStatus> robot) {  // keeps 
 
 void run() {
   Fleet charging_queue;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   add_to_queue(charging_queue, robot);
   std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 2: the queue owns it too
 }
@@ -164,8 +164,8 @@ void queue_if_low(Fleet& queue, const std::shared_ptr<RobotStatus>& robot) {
 
 void run() {
   Fleet charging_queue;
-  auto low{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
-  auto full{std::make_shared<RobotStatus>(4, 90.0, Position{6.0, 2.0}, false)};
+  auto low{std::make_shared<RobotStatus>(3, 14.0)};
+  auto full{std::make_shared<RobotStatus>(4, 90.0)};
   queue_if_low(charging_queue, low);
   queue_if_low(charging_queue, full);
   std::cout << "low.use_count(): " << low.use_count() << ", full.use_count(): "
@@ -177,7 +177,7 @@ void run() {
 // [Slide 81] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
-  return std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false);
+  return std::make_unique<RobotStatus>(id);
 }
 
 void run() {

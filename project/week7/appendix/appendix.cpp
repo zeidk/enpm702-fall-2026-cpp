@@ -125,7 +125,7 @@ void run() {
   }};
   {
     std::unique_ptr<RobotStatus, decltype(say_and_delete)> robot{
-        new RobotStatus{3, 64.0, {2.0, 3.0}, false}, say_and_delete};
+        new RobotStatus{3, 64.0}, say_and_delete};
     std::cout << "sizeof(robot): " << sizeof(robot) << '\n';  // 8
   }  // robot is destroyed here: "deleting robot 3"
   std::cout << "after the block\n";
@@ -144,7 +144,7 @@ namespace testing_empty {
 void run() {
   std::unique_ptr<RobotStatus> robot;  // empty
   std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr) << '\n';  // true
-  robot = std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false);
+  robot = std::make_unique<RobotStatus>(3, 64.0);
   if (robot) {
     std::cout << "robot " << robot->id << '\n';  // robot 3
   }
@@ -174,8 +174,8 @@ void run() {
 // [Appendix xiii] swap
 namespace swapping {
 void run() {
-  auto first{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
-  auto second{std::make_unique<RobotStatus>(4, 90.0, Position{6.0, 2.0}, false)};
+  auto first{std::make_unique<RobotStatus>(3, 64.0)};
+  auto second{std::make_unique<RobotStatus>(4, 90.0)};
   const RobotStatus* robot_3{first.get()};
   first.swap(second);  // the same as std::swap(first, second)
   std::cout << std::boolalpha << "first->id: " << first->id << ", second->id: " << second->id
@@ -193,9 +193,9 @@ void run() {
 namespace dashboard {
 void run() {
   std::vector<std::shared_ptr<RobotStatus>> fleet;
-  fleet.push_back(std::make_shared<RobotStatus>(1, 82.5, Position{0.0, 0.0}, false));
-  fleet.push_back(std::make_shared<RobotStatus>(2, 35.0, Position{4.0, 1.0}, false));
-  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false));
+  fleet.push_back(std::make_shared<RobotStatus>(1, 82.5));
+  fleet.push_back(std::make_shared<RobotStatus>(2, 35.0));
+  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0));
   std::vector<std::weak_ptr<RobotStatus>> shown;
   for (const auto& robot : fleet) {
     shown.push_back(robot);  // watches, does not own

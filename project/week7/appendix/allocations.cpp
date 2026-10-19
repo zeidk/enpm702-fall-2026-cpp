@@ -53,12 +53,12 @@ void operator delete(void* p, std::size_t) noexcept { std::free(p); }
 
 int main() {
   counting = true;
-  auto made{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto made{std::make_shared<RobotStatus>(3, 14.0)};
   counting = false;
   report("std::make_shared<RobotStatus>");  // 1 allocation: 56 bytes
 
   counting = true;
-  std::shared_ptr<RobotStatus> from_new{new RobotStatus{3, 14.0, {2.0, 3.0}, false}};
+  std::shared_ptr<RobotStatus> from_new{new RobotStatus{3, 14.0}};
   counting = false;
   report("std::shared_ptr<RobotStatus>{new ...}");  // 2 allocations: 40 24 bytes
 

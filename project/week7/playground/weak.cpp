@@ -62,7 +62,7 @@ void show(const Dashboard& dashboard) {
 
 void run() {
   std::vector<std::shared_ptr<RobotStatus>> fleet;
-  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false));
+  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0));
   Dashboard dashboard{fleet[0]};
   show(dashboard);  // robot 3: 14 %
   fleet.clear();    // the only owner lets go: robot 3 is deleted
@@ -73,7 +73,7 @@ void run() {
 // [Slide 89] expired and use_count
 namespace expired_use_count {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   std::weak_ptr<RobotStatus> watch{robot};
   std::cout << std::boolalpha << "watch.use_count(): " << watch.use_count()
             << ", watch.expired(): " << watch.expired() << '\n';  // 1 false
@@ -88,7 +88,7 @@ namespace exercise_3 {
 void run() {
   // Write the two values for each line before you run it.
   std::cout << std::boolalpha;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
   std::weak_ptr<RobotStatus> watch{robot};
   std::cout << "1. use_count " << robot.use_count() << ", expired " << watch.expired() << '\n';
   auto a{robot};

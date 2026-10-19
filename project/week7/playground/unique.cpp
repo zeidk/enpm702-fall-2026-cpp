@@ -45,7 +45,7 @@ void run() {
 namespace creating {
 void run() {
   std::unique_ptr<RobotStatus> robot{
-      std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+      std::make_unique<RobotStatus>(3, 64.0)};
   std::cout << "robot->id: " << robot->id << ", (*robot).battery_pct: " << (*robot).battery_pct
             << '\n';  // 3 64
   auto other{std::make_unique<RobotStatus>()};  // every member takes its default
@@ -56,7 +56,7 @@ void run() {
 // [Slide 51] In Memory
 namespace in_memory {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
   std::cout << "sizeof(robot): " << sizeof(robot)
             << ", sizeof(RobotStatus*): " << sizeof(RobotStatus*)
             << ", sizeof(RobotStatus): " << sizeof(RobotStatus) << '\n';  // 8 8 40
@@ -68,7 +68,7 @@ void run() {
 // [Slide 52] The Leak, Fixed
 namespace leak_fixed {
 bool needs_charge(int id) {
-  auto robot{std::make_unique<RobotStatus>(id, 64.0, Position{0.0, 0.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(id, 64.0)};
   if (robot->battery_pct > 20.0) {
     return false;  // robot is destroyed here, and the RobotStatus with it
   }
@@ -84,7 +84,7 @@ void run() {
 // [Slide 53] One Owner Only
 namespace one_owner {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
   // Does not compile: use of deleted function 'std::unique_ptr<_Tp, _Dp>::unique_ptr(const
   //                   std::unique_ptr<_Tp, _Dp>&) [with _Tp = RobotStatus; _Dp =
   //                   std::default_delete<RobotStatus>]'
@@ -93,10 +93,27 @@ void run() {
 }
 }  // namespace one_owner
 
-// [Slide 54] Moving Ownership
+// [Slide 54] get and reset
+namespace get_and_reset {
+void print_status(const RobotStatus* robot) {  // only looks
+  std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
+}
+
+void run() {
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
+  print_status(robot.get());                   // robot still owns it
+  robot.reset();                               // deletes the RobotStatus now
+  std::cout << std::boolalpha << "after reset(), robot == nullptr: " << (robot == nullptr)
+            << std::noboolalpha << '\n';       // true
+  robot = std::make_unique<RobotStatus>(4, 18.0);  // a new robot
+  print_status(robot.get());
+}
+}  // namespace get_and_reset
+
+// [Slide 55] Moving Ownership
 namespace moving_ownership {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
   RobotStatus* where{robot.get()};
   std::unique_ptr<RobotStatus> other{std::move(robot)};
   std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr)
@@ -105,7 +122,7 @@ void run() {
 }
 }  // namespace moving_ownership
 
-// [Slide 57] Exercise 3: Handing Over a Robot
+// [Slide 58] Exercise 3: Handing Over a Robot
 // Robot 1 is deleted on line 4: q = std::move(p) calls q.reset(p.release()), and
 // reset deletes the old pointer when it is not null (C++20 [unique.ptr.single.asgn]
 // paragraph 3, [unique.ptr.single.modifiers] paragraph 4).
@@ -126,12 +143,12 @@ void run() {
 }
 }  // namespace whiteboard_handover
 
-// [Slide 58] A Fleet of Owners
+// [Slide 59] A Fleet of Owners
 namespace fleet_of_unique {
 void run() {
   std::vector<std::unique_ptr<RobotStatus>> fleet;
-  fleet.push_back(std::make_unique<RobotStatus>(1, 82.5, Position{0.0, 0.0}, false));
-  auto robot{std::make_unique<RobotStatus>(2, 35.0, Position{4.0, 1.0}, true)};
+  fleet.push_back(std::make_unique<RobotStatus>(1, 82.5));
+  auto robot{std::make_unique<RobotStatus>(2, 35.0)};
   fleet.push_back(std::move(robot));  // robot is now empty
   // Does not compile: no matching function for call to 'construct_at(...)', then
   //                   use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
@@ -145,27 +162,10 @@ void run() {
 }
 }  // namespace fleet_of_unique
 
-// [Slide 59] get and reset
-namespace get_and_reset {
-void print_status(const RobotStatus* robot) {  // only looks
-  std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
-}
-
-void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
-  print_status(robot.get());                   // robot still owns it
-  robot.reset();                               // deletes the RobotStatus now
-  std::cout << std::boolalpha << "after reset(), robot == nullptr: " << (robot == nullptr)
-            << std::noboolalpha << '\n';       // true
-  robot = std::make_unique<RobotStatus>(4, 18.0, Position{6.0, 2.0}, false);  // a new robot
-  print_status(robot.get());
-}
-}  // namespace get_and_reset
-
 // [Slide 60] release
 namespace release {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
   RobotStatus* raw{robot.release()};  // robot gives up ownership, deletes nothing
   std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr) << std::noboolalpha
             << ", raw->id: " << raw->id << '\n';  // true 3
@@ -183,7 +183,7 @@ void charge(RobotStatus* robot) {  // changes the robot, may receive nullptr
 }
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
   print_status(*robot);
   charge(robot.get());
   print_status(*robot);  // 100: the caller still owns it
@@ -199,7 +199,7 @@ void retire(std::unique_ptr<RobotStatus> robot) {  // takes ownership
 }
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 4.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 4.0)};
   // Does not compile: use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
   // retire(robot);
   retire(std::move(robot));
@@ -211,11 +211,11 @@ void run() {
 // [Slide 63] Passing: Reseat
 namespace reseat {
 void replace_robot(std::unique_ptr<RobotStatus>& robot, int new_id) {
-  robot = std::make_unique<RobotStatus>(new_id, 100.0, Position{0.0, 0.0}, false);
+  robot = std::make_unique<RobotStatus>(new_id);
 }  // the old robot was deleted by the assignment
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 4.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 4.0)};
   replace_robot(robot, 7);
   std::cout << "robot->id: " << robot->id << ", robot->battery_pct: " << robot->battery_pct
             << '\n';  // 7 100
@@ -225,7 +225,7 @@ void run() {
 // [Slide 64] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
-  auto robot{std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(id)};
   robot->busy = false;
   return robot;  // no std::move: the implicit move of Lecture 5
 }
@@ -242,8 +242,8 @@ void inspect(const RobotStatus& robot) { std::cout << "  inspect: robot " << rob
 void adopt(std::unique_ptr<RobotStatus> robot) { std::cout << "  adopt: robot " << robot->id << '\n'; }
 
 void run() {
-  auto a{std::make_unique<RobotStatus>(1, 50.0, Position{0.0, 0.0}, false)};
-  auto b{std::make_unique<RobotStatus>(2, 60.0, Position{0.0, 0.0}, false)};
+  auto a{std::make_unique<RobotStatus>(1, 50.0)};
+  auto b{std::make_unique<RobotStatus>(2, 60.0)};
   // For each line, say whether it compiles. The lines that do not compile are
   // commented out: uncomment one to check your answer.
   // auto c{a};                                    // line 1
@@ -270,10 +270,10 @@ std::vector<Slide> slides() {
       {51, "In Memory", in_memory::run},
       {52, "The Leak, Fixed", leak_fixed::run},
       {53, "One Owner Only", one_owner::run},
-      {54, "Moving Ownership", moving_ownership::run},
-      {57, "Exercise 3: Handing Over a Robot", whiteboard_handover::run},
-      {58, "A Fleet of Owners", fleet_of_unique::run},
-      {59, "get and reset", get_and_reset::run},
+      {54, "get and reset", get_and_reset::run},
+      {55, "Moving Ownership", moving_ownership::run},
+      {58, "Exercise 3: Handing Over a Robot", whiteboard_handover::run},
+      {59, "A Fleet of Owners", fleet_of_unique::run},
       {60, "release", release::run},
       {61, "Passing: Borrow", borrow::run},
       {62, "Passing: Sink", sink::run},
