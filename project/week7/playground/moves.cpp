@@ -354,7 +354,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 43] Giving It a Name
+// [Slide 43] What Each Reference Refers To
+// The slide is the figure of [Slide 42]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 42].
+
+// [Slide 44] Giving It a Name
 namespace named_rvalue_ref {
 void run() {
   std::vector<Pose>&& r{make_path(10)};
@@ -365,7 +369,7 @@ void run() {
 }
 }  // namespace named_rvalue_ref
 
-// [Slide 44] Overloads for Copy and Move
+// [Slide 45] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -392,7 +396,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 45] What std::move Does
+// [Slide 46] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -406,7 +410,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 46] std::move on a const Object
+// [Slide 47] std::move on a const Object
 namespace move_const {
 void run() {
   const std::vector<Pose> path{make_path(1000)};
@@ -417,7 +421,7 @@ void run() {
 }
 }  // namespace move_const
 
-// [Slide 47] A Parameter the Function Moves From
+// [Slide 48] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -446,7 +450,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 48] Returning a Local
+// [Slide 49] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -488,12 +492,12 @@ std::vector<Slide> slides() {
       {39, "The decltype Test", testing_category::run},
       {40, "Exercise 2: Value Categories", exercise_categories::run},
       {42, "Binding to rvalues", rvalue_references::run},
-      {43, "Giving It a Name", named_rvalue_ref::run},
-      {44, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {45, "What std::move Does", move_moves_nothing::run},
-      {46, "std::move on a const Object", move_const::run},
-      {47, "A Parameter the Function Moves From", will_move_from::run},
-      {48, "Returning a Local", return_by_value::run},
+      {44, "Giving It a Name", named_rvalue_ref::run},
+      {45, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {46, "What std::move Does", move_moves_nothing::run},
+      {47, "std::move on a const Object", move_const::run},
+      {48, "A Parameter the Function Moves From", will_move_from::run},
+      {49, "Returning a Local", return_by_value::run},
   };
 }
 

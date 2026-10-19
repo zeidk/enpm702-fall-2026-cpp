@@ -40,13 +40,13 @@ void run() {
 // [Slide 11] Reminder: Three Ways to Get It Wrong
 // The slide shows three bugs. Each is a program of its own in
 // ../undefined/undefined.cpp, built with the sanitizers:
-//   leak:          no program; [Slide 54] shows the leak and its fix
+//   leak:          no program; [Slide 55] shows the leak and its fix
 //   double delete: undefined::double_delete, week7_appendix ii
 //   dangling read: undefined::dangling_read, week7_appendix iii
 
 // [Slide 12] RAII
 // The slide has no code: it states the idea. The leak fixed with a
-// std::unique_ptr is [Slide 54], once unique_ptr has been taught.
+// std::unique_ptr is [Slide 55], once unique_ptr has been taught.
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
