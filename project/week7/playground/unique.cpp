@@ -105,7 +105,7 @@ void run() {
 }
 }  // namespace moving_ownership
 
-// [Slide 56] Whiteboard 2: Handing Over a Robot
+// [Slide 57] Exercise 3: Handing Over a Robot
 // Robot 1 is deleted on line 4: q = std::move(p) calls q.reset(p.release()), and
 // reset deletes the old pointer when it is not null (C++20 [unique.ptr.single.asgn]
 // paragraph 3, [unique.ptr.single.modifiers] paragraph 4).
@@ -126,7 +126,7 @@ void run() {
 }
 }  // namespace whiteboard_handover
 
-// [Slide 57] A Fleet of Owners
+// [Slide 58] A Fleet of Owners
 namespace fleet_of_unique {
 void run() {
   std::vector<std::unique_ptr<RobotStatus>> fleet;
@@ -145,7 +145,7 @@ void run() {
 }
 }  // namespace fleet_of_unique
 
-// [Slide 58] get and reset
+// [Slide 59] get and reset
 namespace get_and_reset {
 void print_status(const RobotStatus* robot) {  // only looks
   std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
@@ -162,7 +162,7 @@ void run() {
 }
 }  // namespace get_and_reset
 
-// [Slide 59] release
+// [Slide 60] release
 namespace release {
 void run() {
   auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
@@ -173,7 +173,7 @@ void run() {
 }
 }  // namespace release
 
-// [Slide 60] Passing: Borrow
+// [Slide 61] Passing: Borrow
 namespace borrow {
 void print_status(const RobotStatus& robot) {  // only reads the robot
   std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
@@ -190,7 +190,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 61] Passing: Sink
+// [Slide 62] Passing: Sink
 namespace sink {
 std::vector<std::unique_ptr<RobotStatus>> retired;
 
@@ -208,7 +208,7 @@ void run() {
 }
 }  // namespace sink
 
-// [Slide 62] Passing: Reseat
+// [Slide 63] Passing: Reseat
 namespace reseat {
 void replace_robot(std::unique_ptr<RobotStatus>& robot, int new_id) {
   robot = std::make_unique<RobotStatus>(new_id, 100.0, Position{0.0, 0.0}, false);
@@ -222,7 +222,7 @@ void run() {
 }
 }  // namespace reseat
 
-// [Slide 63] Returning
+// [Slide 64] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
   auto robot{std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false)};
@@ -236,7 +236,7 @@ void run() {
 }
 }  // namespace returning
 
-// [Slide 64] Exercise 2: Lines That Compile
+// [Slide 65] Exercise 4: Lines That Compile
 namespace exercise_2 {
 void inspect(const RobotStatus& robot) { std::cout << "  inspect: robot " << robot.id << '\n'; }
 void adopt(std::unique_ptr<RobotStatus> robot) { std::cout << "  adopt: robot " << robot->id << '\n'; }
@@ -271,15 +271,15 @@ std::vector<Slide> slides() {
       {52, "The Leak, Fixed", leak_fixed::run},
       {53, "One Owner Only", one_owner::run},
       {54, "Moving Ownership", moving_ownership::run},
-      {56, "Whiteboard 2: Handing Over a Robot", whiteboard_handover::run},
-      {57, "A Fleet of Owners", fleet_of_unique::run},
-      {58, "get and reset", get_and_reset::run},
-      {59, "release", release::run},
-      {60, "Passing: Borrow", borrow::run},
-      {61, "Passing: Sink", sink::run},
-      {62, "Passing: Reseat", reseat::run},
-      {63, "Returning", returning::run},
-      {64, "Exercise 2: Lines That Compile", exercise_2::run},
+      {57, "Exercise 3: Handing Over a Robot", whiteboard_handover::run},
+      {58, "A Fleet of Owners", fleet_of_unique::run},
+      {59, "get and reset", get_and_reset::run},
+      {60, "release", release::run},
+      {61, "Passing: Borrow", borrow::run},
+      {62, "Passing: Sink", sink::run},
+      {63, "Passing: Reseat", reseat::run},
+      {64, "Returning", returning::run},
+      {65, "Exercise 4: Lines That Compile", exercise_2::run},
   };
 }
 

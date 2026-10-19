@@ -104,7 +104,7 @@ void run() {
 }
 }  // namespace moved_from
 
-// [Slide 17] Whiteboard 1: Copy and Move
+// [Slide 17] Exercise 1: Copy and Move
 // After line 4: two blocks on the heap, c holds the first and a holds b's copy;
 // b is empty, and nothing was freed (libstdc++, measured).
 namespace whiteboard_copy_move {
@@ -308,7 +308,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 38] Exercise 1: Name the Category
+// [Slide 38] Exercise 2: Value Categories
 namespace exercise_1 {
 struct Robot {
   RobotStatus status;
@@ -469,7 +469,7 @@ std::vector<Slide> slides() {
       {12, "Handing a Route to a Robot", handing_route::run},
       {13, "An Implicit Move", implicit_move::run},
       {16, "The Moved-from Object", moved_from::run},
-      {17, "Whiteboard 1: Copy and Move", whiteboard_copy_move::run},
+      {17, "Exercise 1: Copy and Move", whiteboard_copy_move::run},
       {21, "A Named Object", lvalue_name::run},
       {22, "Copied, Not Taken", lvalue_copied::run},
       {23, "Checking with &", lvalue_test::run},
@@ -483,7 +483,7 @@ std::vector<Slide> slides() {
       {33, "In the Fleet Manager", xvalues::run},
       {35, "Temporary Materialization", materialization::run},
       {37, "The decltype Test", testing_category::run},
-      {38, "Exercise 1: Value Categories", exercise_1::run},
+      {38, "Exercise 2: Value Categories", exercise_1::run},
       {40, "Binding to rvalues", rvalue_references::run},
       {41, "Giving It a Name", named_rvalue_ref::run},
       {42, "Overloads for Copy and Move", pick_copy_or_move::run},
