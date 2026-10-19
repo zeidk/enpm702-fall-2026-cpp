@@ -200,7 +200,7 @@ void run() {
   for (const auto& robot : fleet) {
     shown.push_back(robot);  // watches, does not own
   }
-  fleet.erase(fleet.begin() + 1);  // robot 2 is deleted
+  fleet.erase(fleet.begin() + 1);  // deletes the RobotStatus with id 2
   for (const auto& watched : shown) {
     if (auto robot{watched.lock()}) {
       std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";

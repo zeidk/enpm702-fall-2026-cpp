@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 81    # only [Slide 81]
+ * 702run week7_playground 87    # only [Slide 87]
  * @endcode
  *
  * Two robots that work as a pair point at each other; the dashboard shows a
@@ -25,11 +25,11 @@
 
 namespace weak {
 
-// [Slide 79] A Cycle
+// [Slide 83] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 80] runs it.
+// ../undefined/undefined.cpp. [Slide 86] runs it.
 
-// [Slide 81] Breaking It
+// [Slide 87] Breaking It
 namespace breaking_cycle {
 struct Robot {
   RobotStatus status;
@@ -46,7 +46,7 @@ void run() {
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 82] lock
+// [Slide 88] lock
 namespace reading_weak {
 struct Dashboard {
   std::weak_ptr<RobotStatus> shown;  // the robot on screen
@@ -70,7 +70,7 @@ void run() {
 }
 }  // namespace reading_weak
 
-// [Slide 83] expired and use_count
+// [Slide 89] expired and use_count
 namespace expired_use_count {
 void run() {
   auto robot{std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false)};
@@ -83,7 +83,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 84] Exercise 5: Use Counts
+// [Slide 90] Exercise 5: Use Counts
 namespace exercise_3 {
 void run() {
   // Write the two values for each line before you run it.
@@ -109,11 +109,11 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {80, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {81, "Breaking It", breaking_cycle::run},
-      {82, "lock", reading_weak::run},
-      {83, "expired and use_count", expired_use_count::run},
-      {84, "Exercise 5: Use Counts", exercise_3::run},
+      {86, "The Cycle, Measured", undefined::shared_cycle::run, true},
+      {87, "Breaking It", breaking_cycle::run},
+      {88, "lock", reading_weak::run},
+      {89, "expired and use_count", expired_use_count::run},
+      {90, "Exercise 5: Use Counts", exercise_3::run},
   };
 }
 

@@ -111,7 +111,7 @@ void run() {
 // [Slide 72] Letting Go in Memory
 // The slide shows the figure of slide 71's code.
 
-// [Slide 73] Deletion by the Last Owner
+// [Slide 77] Deletion by the Last Owner
 namespace last_owner {
 void run() {
   Fleet fleet;
@@ -119,7 +119,7 @@ void run() {
   fleet.push_back(std::make_shared<RobotStatus>(3, 14.0, Position{2.0, 3.0}, false));
   charging_queue.push_back(fleet[0]);
   std::cout << "both lists: " << charging_queue[0].use_count() << '\n';  // 2
-  fleet.clear();  // robot 3 leaves the fleet while it still waits in the queue
+  fleet.clear();  // the fleet lets go; the queue still owns it
   std::cout << "after fleet.clear(): " << charging_queue[0].use_count()
             << ", robot " << charging_queue[0]->id << " still there\n";  // 1, robot 3
   charging_queue.clear();  // the last owner: the robot is deleted here
@@ -127,7 +127,7 @@ void run() {
 }  // LeakSanitizer reports nothing at exit: the robot was freed
 }  // namespace last_owner
 
-// [Slide 74] Passing: Borrow
+// [Slide 78] Passing: Borrow
 namespace borrow {
 void print_status(const RobotStatus& robot) {  // only reads the robot
   std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
@@ -140,7 +140,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 75] Passing: Share
+// [Slide 79] Passing: Share
 namespace share {
 void add_to_queue(Fleet& queue, std::shared_ptr<RobotStatus> robot) {  // keeps a copy
   queue.push_back(std::move(robot));
@@ -154,7 +154,7 @@ void run() {
 }
 }  // namespace share
 
-// [Slide 76] Passing: const shared_ptr&
+// [Slide 80] Passing: const shared_ptr&
 namespace maybe_share {
 void queue_if_low(Fleet& queue, const std::shared_ptr<RobotStatus>& robot) {
   if (robot->battery_pct < 20.0) {
@@ -174,7 +174,7 @@ void run() {
 }
 }  // namespace maybe_share
 
-// [Slide 77] Returning
+// [Slide 81] Returning
 namespace returning {
 std::unique_ptr<RobotStatus> make_robot(int id) {
   return std::make_unique<RobotStatus>(id, 100.0, Position{0.0, 0.0}, false);
@@ -198,11 +198,11 @@ std::vector<Slide> slides() {
       {69, "The Control Block", control_block::run},
       {70, "use_count", use_count_steps::run},
       {71, "Three Ways to Let Go", let_go::run},
-      {73, "Deletion by the Last Owner", last_owner::run},
-      {74, "Passing: Borrow", borrow::run},
-      {75, "Passing: Share", share::run},
-      {76, "Passing: const shared_ptr&", maybe_share::run},
-      {77, "Returning", returning::run},
+      {77, "Deletion by the Last Owner", last_owner::run},
+      {78, "Passing: Borrow", borrow::run},
+      {79, "Passing: Share", share::run},
+      {80, "Passing: const shared_ptr&", maybe_share::run},
+      {81, "Returning", returning::run},
   };
 }
 
