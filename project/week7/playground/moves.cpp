@@ -62,7 +62,7 @@ Obstacle& first_obstacle(std::vector<Obstacle>& seen) { return seen[0]; }
 // [Slide 14] Handing a Path to the Controller
 namespace handing_path {
 void run() {
-  std::vector<Pose> path{make_path(1000)};   // 1000 poses
+  std::vector<Pose> path{make_path(1000)};   // pose i at x = i m
   const Pose* where{path.data()};
 
   std::vector<Pose> copied{path};            // a copy
