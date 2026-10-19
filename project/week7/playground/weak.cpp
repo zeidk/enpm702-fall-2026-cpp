@@ -7,113 +7,117 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 87    # only [Slide 87]
+ * 702run week7_playground 90    # only [Slide 90]
  * @endcode
  *
- * Two robots that work as a pair point at each other; the dashboard shows a
- * robot without owning it. The cycle that leaks is in
- * ../undefined/undefined.cpp, built with the sanitizers, so that
- * LeakSanitizer can report it. A full run skips it.
+ * The dashboard shows one obstacle and owns none: it watches the Obstacle
+ * through a std::weak_ptr and must notice when the tracker and the planner
+ * have let it go. The cycle of [Slide 88] leaks on purpose, so it is in
+ * ../undefined/undefined.cpp and runs only when asked for by its number.
  */
 #include <iostream>
 #include <memory>
+#include <utility>
 #include <vector>
 
-#include "fleet.hpp"
+#include "obstacle.hpp"
 #include "sections.hpp"
 #include "undefined.hpp"
 
 namespace weak {
 
-// [Slide 83] A Cycle
+// [Slide 85] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 86] runs it.
+// ../undefined/undefined.cpp. [Slide 88] runs it.
 
-// [Slide 87] Breaking It
+// [Slide 89] Breaking It
 namespace breaking_cycle {
-struct Robot {
-  RobotStatus status;
-  std::weak_ptr<Robot> partner;  // watches its partner, does not own it
+struct Towing {
+  Obstacle obstacle;
+  std::weak_ptr<Towing> other;  // watches, does not own
 };
 
 void run() {
-  auto a{std::make_shared<Robot>(RobotStatus{1, 82.5, {0.0, 0.0}, false})};
-  auto b{std::make_shared<Robot>(RobotStatus{2, 35.0, {4.0, 1.0}, false})};
-  a->partner = b;
-  b->partner = a;
+  auto a{std::make_shared<Towing>(Obstacle{5, {60.0, 0.0}, 8.0})};  // the tractor
+  auto b{std::make_shared<Towing>(Obstacle{6, {54.0, 0.0}, 8.0})};  // the trailer
+  a->other = b;  // b's count stays 1
+  b->other = a;  // a's count stays 1
   std::cout << "a.use_count(): " << a.use_count() << ", b.use_count(): " << b.use_count()
             << '\n';  // 1 1
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 88] lock
+// [Slide 90] lock
 namespace reading_weak {
 struct Dashboard {
-  std::weak_ptr<RobotStatus> shown;  // the robot on screen
+  std::weak_ptr<Obstacle> shown;  // the obstacle on screen
 };
 
 void show(const Dashboard& dashboard) {
-  if (std::shared_ptr<RobotStatus> robot{dashboard.shown.lock()}) {
-    std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
+  if (std::shared_ptr<Obstacle> target{dashboard.shown.lock()}) {
+    std::cout << "  obstacle " << target->id << ": " << target->speed << " m/s\n";
   } else {
-    std::cout << "  the robot is gone\n";
+    std::cout << "  the obstacle is gone\n";
   }
 }
 
 void run() {
-  std::vector<std::shared_ptr<RobotStatus>> fleet;
-  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0));
-  Dashboard dashboard{fleet[0]};
-  show(dashboard);  // robot 3: 14 %
-  fleet.clear();    // the only owner lets go: robot 3 is deleted
-  show(dashboard);  // the robot is gone
+  std::vector<std::shared_ptr<Obstacle>> tracker;
+  std::vector<std::shared_ptr<Obstacle>> hazards;
+  tracker.push_back(std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0));
+  hazards.push_back(tracker[0]);
+  Dashboard dashboard{tracker[0]};
+  show(dashboard);   // obstacle 2: 4 m/s
+  tracker.clear();   // the track is lost
+  hazards.clear();   // the planner lets go: the Obstacle is deleted
+  show(dashboard);   // the obstacle is gone
 }
 }  // namespace reading_weak
 
-// [Slide 89] expired and use_count
+// [Slide 91] expired and use_count
 namespace expired_use_count {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  std::weak_ptr<RobotStatus> watch{robot};
-  std::cout << std::boolalpha << "watch.use_count(): " << watch.use_count()
-            << ", watch.expired(): " << watch.expired() << '\n';  // 1 false
-  robot.reset();
-  std::cout << "watch.use_count(): " << watch.use_count() << ", watch.expired(): "
-            << watch.expired() << std::noboolalpha << '\n';  // 0 true
+  auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  std::weak_ptr<Obstacle> shown{track};
+  std::cout << std::boolalpha << "shown.use_count(): " << shown.use_count()
+            << ", shown.expired(): " << shown.expired() << '\n';  // 1 false
+  track.reset();  // the only owner lets go
+  std::cout << "shown.use_count(): " << shown.use_count() << ", shown.expired(): "
+            << shown.expired() << std::noboolalpha << '\n';  // 0 true
 }
 }  // namespace expired_use_count
 
-// [Slide 90] Exercise 5: Use Counts
-namespace exercise_3 {
+// [Slide 92] Exercise 5: Use Counts
+namespace exercise_use_counts {
 void run() {
   // Write the two values for each line before you run it.
   std::cout << std::boolalpha;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  std::weak_ptr<RobotStatus> watch{robot};
-  std::cout << "1. use_count " << robot.use_count() << ", expired " << watch.expired() << '\n';
-  auto a{robot};
-  std::cout << "2. use_count " << robot.use_count() << ", expired " << watch.expired() << '\n';
+  auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  std::weak_ptr<Obstacle> shown{track};
+  std::cout << "1. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
+  auto a{track};
+  std::cout << "2. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
   auto b{std::move(a)};
-  std::cout << "3. use_count " << robot.use_count() << ", expired " << watch.expired() << '\n';
-  std::weak_ptr<RobotStatus> watch_2{b};
-  std::cout << "4. use_count " << robot.use_count() << ", expired " << watch.expired() << '\n';
-  robot.reset();
-  std::cout << "5. use_count " << watch.use_count() << ", expired " << watch.expired() << '\n';
+  std::cout << "3. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
+  std::weak_ptr<Obstacle> shown_2{b};
+  std::cout << "4. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
+  track.reset();
+  std::cout << "5. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
   b.reset();
-  std::cout << "6. use_count " << watch.use_count() << ", expired " << watch.expired() << '\n';
+  std::cout << "6. use_count " << shown.use_count() << ", expired " << shown.expired() << '\n';
   std::cout << std::noboolalpha;
 }
-}  // namespace exercise_3
+}  // namespace exercise_use_counts
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {86, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {87, "Breaking It", breaking_cycle::run},
-      {88, "lock", reading_weak::run},
-      {89, "expired and use_count", expired_use_count::run},
-      {90, "Exercise 5: Use Counts", exercise_3::run},
+      {88, "The Cycle, Measured", undefined::shared_cycle::run, true},
+      {89, "Breaking It", breaking_cycle::run},
+      {90, "lock", reading_weak::run},
+      {91, "expired and use_count", expired_use_count::run},
+      {92, "Exercise 5: Use Counts", exercise_use_counts::run},
   };
 }
 

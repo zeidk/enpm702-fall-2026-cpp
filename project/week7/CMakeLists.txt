@@ -1,11 +1,11 @@
 # =============================================================================
-# Week 7: Smart Pointers and Move Semantics. The fleet manager, on the heap.
+# Week 7: Smart Pointers and Move Semantics. The software of an autonomous car.
 # Author: Zeid Kootbally
 #
 #   702configure                  once, after pulling
 #   702build                      build every week-7 program
 #   702run week7_playground       run the code of every slide
-#   702run week7_playground 12    run only the code of [Slide 12]
+#   702run week7_playground 14    run only the code of [Slide 14]
 #   702run week7_appendix         run the code of every appendix frame
 #   702run week7_appendix ii      run only the code of [Appendix ii]
 #   702run week7_allocations      [Appendix xiv]: count make_shared's allocations
@@ -13,7 +13,7 @@
 # Folders:
 #   playground/   the code of every slide, one file per section (week7_playground)
 #   appendix/     the code of every appendix frame (week7_appendix)
-#   common/       run_slides(), and the fleet types every file shares
+#   common/       run_slides(), and the Pose and Obstacle types every file shares
 #   undefined/    the slides that leak or have undefined behavior, built with sanitizers
 # =============================================================================
 

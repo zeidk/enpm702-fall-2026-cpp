@@ -5,6 +5,8 @@
  *
  * @details Always compiled with AddressSanitizer and
  * UndefinedBehaviorSanitizer (set_source_files_properties in CMakeLists.txt).
+ * The sanitizer reports name lines of this file, and the slides quote them: a
+ * change above a slide's code moves its line numbers.
  *
  * @warning Every slide here is a bug on purpose. Without the sanitizers a
  *          leak is silent, and a double delete or a dangling read may crash,
@@ -16,53 +18,51 @@
 #include <memory>
 #include <vector>
 
-#include "fleet.hpp"
+#include "obstacle.hpp"
 
 namespace undefined {
 
 namespace {
-RobotStatus* make_robot(int id, double battery_pct) {
-  return new RobotStatus{id, battery_pct, {0.0, 0.0}, false};
-}
+Obstacle* make_track(int id, Pose pose, double speed) { return new Obstacle{id, pose, speed}; }
 }  // namespace
+
+// [Slide 88] The Cycle, Measured: the code of [Slide 85]
+namespace shared_cycle {
+struct Towing {
+  Obstacle obstacle;
+  std::shared_ptr<Towing> other;
+};
+
+void run() {
+  auto a{std::make_shared<Towing>(Obstacle{5, {60.0, 0.0}, 8.0})};  // the tractor
+  auto b{std::make_shared<Towing>(Obstacle{6, {54.0, 0.0}, 8.0})};  // the trailer
+  a->other = b;  // a's Towing owns b's
+  b->other = a;  // b's Towing owns a's
+  std::cout << "a.use_count(): " << a.use_count() << ", b.use_count(): " << b.use_count()
+            << '\n';  // 2 2
+}  // a and b go out of scope: each count drops to 1, never 0, so neither is deleted
+}  // namespace shared_cycle
 
 // [Appendix ii] Double Delete, Measured
 namespace double_delete {
 void run() {
-  RobotStatus* robot{make_robot(3, 64.0)};
-  std::vector<RobotStatus*> fleet{robot};
-  std::vector<RobotStatus*> idle{robot};  // the same robot, in a second list
-  for (RobotStatus* r : fleet) { delete r; }
-  for (RobotStatus* r : idle) { delete r; }  // the second delete of one robot
+  Obstacle* track{make_track(2, Pose{12.0, -1.0}, 4.0)};
+  std::vector<Obstacle*> tracker{track};
+  std::vector<Obstacle*> hazards{track};  // the same Obstacle
+  for (Obstacle* t : tracker) { delete t; }
+  for (Obstacle* t : hazards) { delete t; }  // a second delete
 }
 }  // namespace double_delete
 
 // [Appendix iii] Dangling Read, Measured
 namespace dangling_read {
 void run() {
-  RobotStatus* robot{make_robot(3, 64.0)};
-  std::vector<RobotStatus*> fleet{robot};
-  std::vector<RobotStatus*> idle{robot};
-  for (RobotStatus* r : fleet) { delete r; }
-  std::cout << "idle[0]->battery_pct: " << idle[0]->battery_pct << '\n';  // freed memory
+  Obstacle* track{make_track(2, Pose{12.0, -1.0}, 4.0)};
+  std::vector<Obstacle*> tracker{track};
+  std::vector<Obstacle*> hazards{track};
+  for (Obstacle* t : tracker) { delete t; }
+  std::cout << hazards[0]->speed << '\n';  // freed memory
 }
 }  // namespace dangling_read
-
-// [Slide 86] The Cycle, Measured
-namespace shared_cycle {
-struct Robot {
-  RobotStatus status;
-  std::shared_ptr<Robot> partner;  // the robot it works with
-};
-
-void run() {
-  auto a{std::make_shared<Robot>(RobotStatus{1, 82.5, {0.0, 0.0}, false})};
-  auto b{std::make_shared<Robot>(RobotStatus{2, 35.0, {4.0, 1.0}, false})};
-  a->partner = b;  // a owns b
-  b->partner = a;  // b owns a
-  std::cout << "a.use_count(): " << a.use_count() << ", b.use_count(): " << b.use_count()
-            << '\n';  // 2 2
-}  // a and b go out of scope: each count drops to 1, never 0, so neither is deleted
-}  // namespace shared_cycle
 
 }  // namespace undefined

@@ -7,186 +7,186 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 70    # only [Slide 70]
+ * 702run week7_playground 72    # only [Slide 72]
  * @endcode
  *
- * Robot 3 is in the fleet and waits in the charging queue at the same time,
- * so both lists own it through std::shared_ptr. Code that does not compile is
- * commented out where its slide shows it: uncomment it, build, and you get
- * the slide's error.
+ * The cyclist, id 2, is near the planner's path: the tracker and the planner's
+ * hazard list both own its Obstacle through std::shared_ptr. Code that does
+ * not compile is commented out where its slide shows it: uncomment it, build,
+ * and you get the slide's error.
  */
 #include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
 
-#include "fleet.hpp"
+#include "obstacle.hpp"
 #include "sections.hpp"
 
 namespace shared {
 
-using Fleet = std::vector<std::shared_ptr<RobotStatus>>;
+using Hazards = std::vector<std::shared_ptr<Obstacle>>;
 
-// [Slide 67] A Robot in Two Lists
-// The slide states the problem; its code is in the comments of the slide.
+// [Slide 69] A Hazard in Two Lists
+// The slide states the problem: hazards holds tracker[1].get(), and erasing
+// tracker[1] deletes the Obstacle, so hazards[0] dangles. A read through it is
+// undefined behavior; [Appendix iii] runs one with the sanitizers.
 
-// [Slide 68] Creating One
+// [Slide 70] Creating One
 namespace creating {
 void run() {
-  Fleet fleet;
-  Fleet charging_queue;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  fleet.push_back(robot);           // a copy: one more owner
-  charging_queue.push_back(robot);  // a copy: one more owner
-  std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 3
-  std::cout << std::boolalpha << "fleet[0] == charging_queue[0]: "
-            << (fleet[0] == charging_queue[0]) << std::noboolalpha << '\n';  // true: one robot
+  std::vector<std::shared_ptr<Obstacle>> tracker;
+  std::vector<std::shared_ptr<Obstacle>> hazards;
+  auto hazard{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  tracker.push_back(hazard);  // a copy: one more owner
+  hazards.push_back(hazard);  // a copy: one more owner
+  std::cout << "hazard.use_count(): " << hazard.use_count() << '\n';  // 3
+  std::cout << std::boolalpha << "tracker[0] == hazards[0]: " << (tracker[0] == hazards[0])
+            << std::noboolalpha << '\n';  // true: one Obstacle object
 }
 }  // namespace creating
 
-// [Slide 69] The Control Block
+// [Slide 71] The Control Block
 namespace control_block {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  std::shared_ptr<RobotStatus> in_queue{robot};
-  std::cout << "sizeof(robot): " << sizeof(robot) << ", sizeof(RobotStatus): "
-            << sizeof(RobotStatus) << '\n';                              // 16 40
-  std::cout << "robot.use_count(): " << robot.use_count() << '\n';     // 2
+  auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  std::shared_ptr<Obstacle> hazard{track};
+  std::cout << "sizeof(track): " << sizeof(track) << ", sizeof(Obstacle): " << sizeof(Obstacle)
+            << '\n';                                                   // 16 48
+  std::cout << "track.use_count(): " << track.use_count() << '\n';     // 2
 }
 }  // namespace control_block
 
-// [Slide 70] use_count
+// [Slide 72] use_count
 namespace use_count_steps {
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  std::cout << "created: " << robot.use_count() << '\n';                // 1
-  std::shared_ptr<RobotStatus> in_queue{robot};
-  std::cout << "copied: " << robot.use_count() << '\n';                 // 2
-  std::shared_ptr<RobotStatus> moved{std::move(in_queue)};
-  std::cout << std::boolalpha << "moved: " << robot.use_count()
-            << ", in_queue == nullptr: " << (in_queue == nullptr) << std::noboolalpha
+  auto track{std::make_shared<Obstacle>(2)};
+  std::cout << "created: " << track.use_count() << '\n';                // 1
+  std::shared_ptr<Obstacle> hazard{track};
+  std::cout << "copied: " << track.use_count() << '\n';                 // 2
+  std::shared_ptr<Obstacle> moved{std::move(hazard)};
+  std::cout << std::boolalpha << "moved: " << track.use_count()
+            << ", hazard == nullptr: " << (hazard == nullptr) << std::noboolalpha
             << '\n';                                                     // 2 true
   moved.reset();
-  std::cout << "reset: " << robot.use_count() << '\n';                  // 1
+  std::cout << "reset: " << track.use_count() << '\n';                  // 1
 }
 }  // namespace use_count_steps
 
-// [Slide 71] Three Ways to Let Go
+// [Slide 73] Three Ways to Let Go
 // Three separate runs, each from step 2; start() makes steps 1 and 2 and prints
-// their counts once, in the first run.
+// their counts once, in the first run. [Slides 74 to 78] show each step.
 namespace let_go {
-std::shared_ptr<RobotStatus> start(bool show) {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
+std::shared_ptr<Obstacle> start(bool show) {
+  auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
   {
-    std::shared_ptr<RobotStatus> in_queue{robot};
+    std::shared_ptr<Obstacle> hazard{track};  // 1
     if (show) {
-      std::cout << "1: " << robot.use_count() << '\n';  // 2
+      std::cout << "1: " << track.use_count() << '\n';  // 2
     }
-  }  // in_queue's scope ends
+  }  // 2: hazard's scope ends
   if (show) {
-    std::cout << "2: " << robot.use_count() << '\n';  // 1
+    std::cout << "2: " << track.use_count() << '\n';  // 1
   }
-  return robot;
+  return track;
 }
 
 void run() {
   {
-    auto robot{start(true)};
-    robot = std::make_shared<RobotStatus>(4);  // robot 3 deleted; robot 4's other members take defaults
-    std::cout << "3a: robot->id: " << robot->id << ", use_count: " << robot.use_count()
-              << '\n';                                                           // 4 1
+    auto track{start(true)};
+    track = std::make_shared<Obstacle>(4);  // 3a: the cyclist's Obstacle is deleted
+    std::cout << "3a: track->id: " << track->id << ", use_count: " << track.use_count()
+              << '\n';                                                     // 4 1
   }
   {
-    auto robot{start(false)};
-    robot.reset();  // robot 3 deleted
-    std::cout << std::boolalpha << "3b: robot == nullptr: " << (robot == nullptr)
+    auto track{start(false)};
+    track.reset();  // 3b: the cyclist's Obstacle is deleted
+    std::cout << std::boolalpha << "3b: track == nullptr: " << (track == nullptr)
               << std::noboolalpha << '\n';  // true
   }
   {
-    auto robot{start(false)};
-  }  // 3c: robot's scope ends, robot 3 deleted
+    auto track{start(false)};
+  }  // 3c: track's scope ends, and the cyclist's Obstacle is deleted
 }
 }  // namespace let_go
 
-// [Slide 72] Letting Go in Memory
-// The slide shows the figure of slide 71's code.
-
-// [Slide 77] Deletion by the Last Owner
+// [Slide 79] Deletion by the Last Owner
 namespace last_owner {
 void run() {
-  Fleet fleet;
-  Fleet charging_queue;
-  fleet.push_back(std::make_shared<RobotStatus>(3, 14.0));
-  charging_queue.push_back(fleet[0]);
-  std::cout << "both lists: " << charging_queue[0].use_count() << '\n';  // 2
-  fleet.clear();  // the fleet lets go; the queue still owns it
-  std::cout << "after fleet.clear(): " << charging_queue[0].use_count()
-            << ", robot " << charging_queue[0]->id << " still there\n";  // 1, robot 3
-  charging_queue.clear();  // the last owner: the robot is deleted here
-  std::cout << "after charging_queue.clear(): no owner left\n";
-}  // LeakSanitizer reports nothing at exit: the robot was freed
+  std::vector<std::shared_ptr<Obstacle>> tracker;
+  Hazards hazards;
+  tracker.push_back(std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0));
+  hazards.push_back(tracker[0]);
+  std::cout << "both lists: " << hazards[0].use_count() << '\n';  // 2
+  tracker.clear();  // the track is lost; the planner still owns it
+  std::cout << "after tracker.clear(): " << hazards[0].use_count()
+            << ", hazards[0]->id: " << hazards[0]->id << '\n';  // 1, 2
+  hazards.clear();  // the last owner deletes the Obstacle
+  std::cout << "after hazards.clear(): no owner left\n";
+}  // LeakSanitizer reports nothing at exit: the Obstacle was freed
 }  // namespace last_owner
 
-// [Slide 78] Passing: Borrow
+// [Slide 80] Passing: Borrow
 namespace borrow {
-void print_status(const RobotStatus& robot) {  // only reads the robot
-  std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
+void print_obstacle(const Obstacle& target) {  // only reads it
+  std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
 }
 
 void run() {
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  print_status(*robot);
-  std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 1: no owner added
+  auto hazard{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  print_obstacle(*hazard);
+  std::cout << hazard.use_count() << '\n';  // 1: no owner added
 }
 }  // namespace borrow
 
-// [Slide 79] Passing: Share
+// [Slide 81] Passing: Share
 namespace share {
-void add_to_queue(Fleet& queue, std::shared_ptr<RobotStatus> robot) {  // keeps a copy
-  queue.push_back(std::move(robot));
+void add_hazard(Hazards& hazards, std::shared_ptr<Obstacle> hazard) {
+  hazards.push_back(std::move(hazard));  // the list keeps this owner
 }
 
 void run() {
-  Fleet charging_queue;
-  auto robot{std::make_shared<RobotStatus>(3, 14.0)};
-  add_to_queue(charging_queue, robot);
-  std::cout << "robot.use_count(): " << robot.use_count() << '\n';  // 2: the queue owns it too
+  Hazards hazards;
+  auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  add_hazard(hazards, track);
+  std::cout << track.use_count() << '\n';  // 2: the hazard list owns it too
 }
 }  // namespace share
 
-// [Slide 80] Passing: const shared_ptr&
+// [Slide 82] Passing: const shared_ptr&
+// The 25 m limit is chosen for this example.
 namespace maybe_share {
-void queue_if_low(Fleet& queue, const std::shared_ptr<RobotStatus>& robot) {
-  if (robot->battery_pct < 20.0) {
-    queue.push_back(robot);  // copies only when it keeps it
+void add_if_close(Hazards& hazards, const std::shared_ptr<Obstacle>& track) {
+  if (track->pose.x < 25.0) {
+    hazards.push_back(track);  // copies only when it keeps it
   }
 }
 
 void run() {
-  Fleet charging_queue;
-  auto low{std::make_shared<RobotStatus>(3, 14.0)};
-  auto full{std::make_shared<RobotStatus>(4, 90.0)};
-  queue_if_low(charging_queue, low);
-  queue_if_low(charging_queue, full);
-  std::cout << "low.use_count(): " << low.use_count() << ", full.use_count(): "
-            << full.use_count() << ", charging_queue.size(): " << charging_queue.size()
-            << '\n';  // 2 1 1
+  Hazards hazards;
+  auto near{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};             // the cyclist
+  auto far{std::make_shared<Obstacle>(4, Pose{38.0, 3.5, 3.14}, 13.4)};        // the oncoming car
+  add_if_close(hazards, near);  // x = 12 m: a hazard
+  add_if_close(hazards, far);   // x = 38 m: not a hazard
+  std::cout << "near.use_count(): " << near.use_count() << ", far.use_count(): "
+            << far.use_count() << ", hazards.size(): " << hazards.size() << '\n';  // 2 1 1
 }
 }  // namespace maybe_share
 
-// [Slide 81] Returning
+// [Slide 83] Returning
 namespace returning {
-std::unique_ptr<RobotStatus> make_robot(int id) {
-  return std::make_unique<RobotStatus>(id);
+std::unique_ptr<Obstacle> make_track(int id) {  // [Slide 66]
+  auto track{std::make_unique<Obstacle>(id)};
+  return track;
 }
 
 void run() {
-  std::shared_ptr<RobotStatus> robot{make_robot(5)};  // unique_ptr to shared_ptr: OK
-  std::cout << "robot->id: " << robot->id << ", robot.use_count(): " << robot.use_count()
+  std::shared_ptr<Obstacle> hazard{make_track(5)};  // unique_ptr to shared_ptr: compiles
+  std::cout << "hazard->id: " << hazard->id << ", hazard.use_count(): " << hazard.use_count()
             << '\n';  // 5 1
   // Does not compile: no matching function for call to
-  //                   'std::unique_ptr<RobotStatus>::unique_ptr(<brace-enclosed initializer list>)'
-  // std::unique_ptr<RobotStatus> back{robot};
+  //                   'std::unique_ptr<Obstacle>::unique_ptr(<brace-enclosed initializer list>)'
+  // std::unique_ptr<Obstacle> back{hazard};
 }
 }  // namespace returning
 
@@ -194,15 +194,15 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {68, "Creating One", creating::run},
-      {69, "The Control Block", control_block::run},
-      {70, "use_count", use_count_steps::run},
-      {71, "Three Ways to Let Go", let_go::run},
-      {77, "Deletion by the Last Owner", last_owner::run},
-      {78, "Passing: Borrow", borrow::run},
-      {79, "Passing: Share", share::run},
-      {80, "Passing: const shared_ptr&", maybe_share::run},
-      {81, "Returning", returning::run},
+      {70, "Creating One", creating::run},
+      {71, "The Control Block", control_block::run},
+      {72, "use_count", use_count_steps::run},
+      {73, "Three Ways to Let Go", let_go::run},
+      {79, "Deletion by the Last Owner", last_owner::run},
+      {80, "Passing: Borrow", borrow::run},
+      {81, "Passing: Share", share::run},
+      {82, "Passing: const shared_ptr&", maybe_share::run},
+      {83, "Returning", returning::run},
   };
 }
 

@@ -9,7 +9,7 @@
  * @code
  * 702build week7_playground
  * 702run week7_playground       # every slide of every section, in order
- * 702run week7_playground 8     # only [Slide 8]
+ * 702run week7_playground 10    # only [Slide 10]
  * @endcode
  *
  * The double delete and the dangling read are undefined behavior, so their
@@ -18,42 +18,41 @@
  */
 #include <iostream>
 
-#include "fleet.hpp"
+#include "obstacle.hpp"
 #include "sections.hpp"
 
 namespace ownership {
 
-// [Slide 8] A Robot on the Heap
-namespace robot_on_heap {
-RobotStatus* make_robot(int id) {
-  return new RobotStatus{id, 100.0, {0.0, 0.0}, false};  // Lecture 3: new
+// [Slide 10] An Obstacle on the Heap
+namespace obstacle_on_heap {
+Obstacle* make_track(int id, Pose pose, double speed) {
+  return new Obstacle{id, pose, speed};  // Lecture 3: new
 }
 
 void run() {
-  RobotStatus* robot{make_robot(3)};
-  std::cout << "robot->id: " << robot->id << ", robot->battery_pct: " << robot->battery_pct
-            << '\n';  // 3 100
-  delete robot;       // the caller must remember this
-  robot = nullptr;
+  Obstacle* track{make_track(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  std::cout << track->id << ' ' << track->speed << '\n';  // 2 4
+  delete track;  // the caller must remember this
+  track = nullptr;
 }
-}  // namespace robot_on_heap
+}  // namespace obstacle_on_heap
 
-// [Slide 9] Three Ways to Get It Wrong
+// [Slide 11] Reminder: Three Ways to Get It Wrong
 // The slide shows three bugs. Each is a program of its own in
 // ../undefined/undefined.cpp, built with the sanitizers:
-//   leak:          no program; [Slide 52] shows the leak and its fix
-//   double delete: undefined::double_delete, week7_appendix
-//   dangling read: undefined::dangling_read, week7_appendix
+//   leak:          no program; [Slide 54] shows the leak and its fix
+//   double delete: undefined::double_delete, week7_appendix ii
+//   dangling read: undefined::dangling_read, week7_appendix iii
 
-// [Slide 10] RAII for One Object
+// [Slide 12] RAII
 // The slide has no code: it states the idea. The leak fixed with a
-// std::unique_ptr is [Slide 52], once unique_ptr has been taught.
+// std::unique_ptr is [Slide 54], once unique_ptr has been taught.
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {8, "A Robot on the Heap", robot_on_heap::run},
+      {10, "An Obstacle on the Heap", obstacle_on_heap::run},
   };
 }
 

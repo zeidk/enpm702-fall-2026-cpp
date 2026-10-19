@@ -7,11 +7,12 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 50    # only [Slide 50]
+ * 702run week7_playground 52    # only [Slide 52]
  * @endcode
  *
- * Code that does not compile is commented out where its slide shows it:
- * uncomment it, build, and you get the slide's error.
+ * The tracker owns each Obstacle it tracks through a std::unique_ptr. Code
+ * that does not compile is commented out where its slide shows it: uncomment
+ * it, build, and you get the slide's error.
  */
 #include <iostream>
 #include <memory>
@@ -20,13 +21,13 @@
 #include <utility>
 #include <vector>
 
-#include "fleet.hpp"
+#include "obstacle.hpp"
 #include "sections.hpp"
 
 namespace unique {
 
-// [Slide 49] The Syntax
-// 1 and 2 declare the same type; 3 compiles too, but writes new (R.23, slide 50).
+// [Slide 51] The Syntax
+// 1 and 2 declare the same type; 3 compiles too, but writes new (R.23, slide 52).
 namespace syntax {
 void run() {
   std::unique_ptr<int> one{std::make_unique<int>(10)};  // 1
@@ -41,209 +42,209 @@ void run() {
 }
 }  // namespace syntax
 
-// [Slide 50] Creating One
+// [Slide 52] Creating One
 namespace creating {
 void run() {
-  std::unique_ptr<RobotStatus> robot{
-      std::make_unique<RobotStatus>(3, 64.0)};
-  std::cout << "robot->id: " << robot->id << ", (*robot).battery_pct: " << (*robot).battery_pct
-            << '\n';  // 3 64
-  auto other{std::make_unique<RobotStatus>()};  // every member takes its default
-  std::cout << "other->battery_pct: " << other->battery_pct << '\n';  // 100
+  Pose at{12.0, -1.0, 0.0};  // the cyclist's pose, from the table
+  std::unique_ptr<Obstacle> track{std::make_unique<Obstacle>(2, at, 4.0)};
+  std::cout << track->id << ' ' << (*track).speed << '\n';  // 2 4
+  auto empty{std::make_unique<Obstacle>()};  // members take defaults
+  std::cout << empty->id << ' ' << empty->speed << '\n';    // 0 0
 }
 }  // namespace creating
 
-// [Slide 51] In Memory
+// [Slide 53] In Memory
 namespace in_memory {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
-  std::cout << "sizeof(robot): " << sizeof(robot)
-            << ", sizeof(RobotStatus*): " << sizeof(RobotStatus*)
-            << ", sizeof(RobotStatus): " << sizeof(RobotStatus) << '\n';  // 8 8 40
-  std::cout << "&robot: " << &robot << " (stack), robot.get(): " << robot.get()
-            << " (heap)\n";
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  std::cout << "sizeof(track): " << sizeof(track) << ", sizeof(Obstacle*): " << sizeof(Obstacle*)
+            << ", sizeof(Obstacle): " << sizeof(Obstacle) << '\n';  // 8 8 48
+  std::cout << "&track: " << &track << " (stack), track.get(): " << track.get() << " (heap)\n";
 }
 }  // namespace in_memory
 
-// [Slide 52] The Leak, Fixed
+// [Slide 54] The Leak, Fixed
+// The slide's left version, with Obstacle* and delete, leaks 48 bytes: the
+// cyclist is 12 m ahead, so the early return skips the delete. This is the
+// right version.
 namespace leak_fixed {
-bool needs_charge(int id) {
-  auto robot{std::make_unique<RobotStatus>(id, 64.0)};
-  if (robot->battery_pct > 20.0) {
-    return false;  // robot is destroyed here, and the RobotStatus with it
+bool needs_braking(int id) {
+  auto track{std::make_unique<Obstacle>(id, Pose{12.0, -1.0}, 4.0)};
+  if (track->pose.x > 10.0) {
+    return false;  // deleted here
   }
-  return true;
+  return true;     // and here
 }
 
 void run() {
-  std::cout << std::boolalpha << "needs_charge(3): " << needs_charge(3) << std::noboolalpha
+  std::cout << std::boolalpha << "needs_braking(2): " << needs_braking(2) << std::noboolalpha
             << '\n';  // false, and LeakSanitizer reports nothing at exit
 }
 }  // namespace leak_fixed
 
-// [Slide 53] One Owner Only
+// [Slide 55] One Owner Only
 namespace one_owner {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
+  auto track{std::make_unique<Obstacle>()};
   // Does not compile: use of deleted function 'std::unique_ptr<_Tp, _Dp>::unique_ptr(const
-  //                   std::unique_ptr<_Tp, _Dp>&) [with _Tp = RobotStatus; _Dp =
-  //                   std::default_delete<RobotStatus>]'
-  // std::unique_ptr<RobotStatus> copy{robot};
-  std::cout << "robot->id: " << robot->id << '\n';  // 3
+  //                   std::unique_ptr<_Tp, _Dp>&) [with _Tp = Obstacle; _Dp =
+  //                   std::default_delete<Obstacle>]'
+  // std::unique_ptr<Obstacle> copy{track};
+  std::cout << "track->id: " << track->id << '\n';  // 0
 }
 }  // namespace one_owner
 
-// [Slide 54] get and reset
+// [Slide 56] get and reset
 namespace get_and_reset {
-void print_status(const RobotStatus* robot) {  // only looks
-  std::cout << "  robot " << robot->id << ": " << robot->battery_pct << " %\n";
+void print_obstacle(const Obstacle* target) {  // only looks
+  std::cout << "  obstacle " << target->id << ": " << target->speed << " m/s\n";
 }
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
-  print_status(robot.get());                   // robot still owns it
-  robot.reset();                               // deletes the RobotStatus now
-  std::cout << std::boolalpha << "after reset(), robot == nullptr: " << (robot == nullptr)
-            << std::noboolalpha << '\n';       // true
-  robot = std::make_unique<RobotStatus>(4, 18.0);  // a new robot
-  print_status(robot.get());
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  print_obstacle(track.get());  // track still owns it
+  track.reset();                // deletes it now: track == nullptr
+  std::cout << std::boolalpha << "after reset(), track == nullptr: " << (track == nullptr)
+            << std::noboolalpha << '\n';  // true
+  track = std::make_unique<Obstacle>(3, Pose{30.0, 2.5, 1.57}, 1.4);
+  print_obstacle(track.get());  // obstacle 3: 1.4 m/s
 }
 }  // namespace get_and_reset
 
-// [Slide 55] Moving Ownership
+// [Slide 57] Moving Ownership
 namespace moving_ownership {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
-  RobotStatus* where{robot.get()};
-  std::unique_ptr<RobotStatus> other{std::move(robot)};
-  std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr)
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  Obstacle* where{track.get()};
+  std::unique_ptr<Obstacle> other{std::move(track)};
+  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr)
             << ", other.get() == where: " << (other.get() == where) << std::noboolalpha
-            << ", other->id: " << other->id << '\n';  // true true 3
+            << ", other->id: " << other->id << '\n';  // true true 2
 }
 }  // namespace moving_ownership
 
-// [Slide 58] Exercise 3: Handing Over a Robot
-// Robot 1 is deleted on line 4: q = std::move(p) calls q.reset(p.release()), and
-// reset deletes the old pointer when it is not null (C++20 [unique.ptr.single.asgn]
-// paragraph 3, [unique.ptr.single.modifiers] paragraph 4).
-namespace whiteboard_handover {
-std::string owns(const std::unique_ptr<RobotStatus>& ptr) {
-  return ptr ? "robot " + std::to_string(ptr->id) : std::string{"empty"};
+// [Slide 60] Exercise 3: Handing Over a Track
+// The Obstacle with id 1 is deleted on line 4: q = std::move(p) calls
+// q.reset(p.release()), and reset deletes the old pointer when it is not null
+// (C++20 [unique.ptr.single.asgn] paragraph 3, [unique.ptr.single.modifiers]
+// paragraph 4).
+namespace exercise_handover {
+std::string owns(const std::unique_ptr<Obstacle>& ptr) {
+  return ptr ? "obstacle " + std::to_string(ptr->id) : std::string{"empty"};
 }
 
 void run() {
-  auto p{std::make_unique<RobotStatus>(1)};
+  auto p{std::make_unique<Obstacle>(1)};
   std::cout << "1: p: " << owns(p) << '\n';
   auto q{std::move(p)};
   std::cout << "2: p: " << owns(p) << ", q: " << owns(q) << '\n';
-  p = std::make_unique<RobotStatus>(2);
+  p = std::make_unique<Obstacle>(2);
   std::cout << "3: p: " << owns(p) << ", q: " << owns(q) << '\n';
-  q = std::move(p);  // q gives up robot 1: reset deletes it
-  std::cout << "4: p: " << owns(p) << ", q: " << owns(q) << ", robot 1 deleted here\n";
+  q = std::move(p);  // q gives up the Obstacle with id 1: reset deletes it
+  std::cout << "4: p: " << owns(p) << ", q: " << owns(q) << ", obstacle 1 deleted here\n";
 }
-}  // namespace whiteboard_handover
+}  // namespace exercise_handover
 
-// [Slide 59] A Fleet of Owners
-namespace fleet_of_unique {
+// [Slide 61] The Tracker's List
+namespace trackers_list {
 void run() {
-  std::vector<std::unique_ptr<RobotStatus>> fleet;
-  fleet.push_back(std::make_unique<RobotStatus>(1, 82.5));
-  auto robot{std::make_unique<RobotStatus>(2, 35.0)};
-  fleet.push_back(std::move(robot));  // robot is now empty
+  std::vector<std::unique_ptr<Obstacle>> tracker;
+  tracker.push_back(std::make_unique<Obstacle>(2, Pose{12.0, -1.0}, 4.0));
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
+  tracker.push_back(std::move(track));  // track is now empty
   // Does not compile: no matching function for call to 'construct_at(...)', then
   //                   use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
-  // fleet.push_back(robot);
-  for (const auto& r : fleet) {  // by reference: a copy would not compile
-    std::cout << "robot " << r->id << ": " << r->battery_pct << " %\n";
+  // tracker.push_back(track);
+  for (const auto& t : tracker) {  // by reference: a copy would not compile
+    std::cout << "obstacle " << t->id << ": " << t->speed << " m/s\n";
   }
   // Does not compile either: copying the vector copies every unique_ptr.
   //   error: static assertion failed: result type must be constructible from input type
-  // std::vector<std::unique_ptr<RobotStatus>> backup{fleet};
+  // std::vector<std::unique_ptr<Obstacle>> backup{tracker};
 }
-}  // namespace fleet_of_unique
+}  // namespace trackers_list
 
-// [Slide 60] release
+// [Slide 62] release
 namespace release {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
-  RobotStatus* raw{robot.release()};  // robot gives up ownership, deletes nothing
-  std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr) << std::noboolalpha
-            << ", raw->id: " << raw->id << '\n';  // true 3
-  delete raw;  // now you are the owner: leave this out and it leaks
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  Obstacle* raw{track.release()};  // gives up ownership, deletes nothing
+  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << std::noboolalpha
+            << ", raw->id: " << raw->id << '\n';  // true 2
+  delete raw;  // you are the owner now: leave this out and it leaks
 }
 }  // namespace release
 
-// [Slide 61] Passing: Borrow
+// [Slide 63] Passing: Borrow
 namespace borrow {
-void print_status(const RobotStatus& robot) {  // only reads the robot
-  std::cout << "  robot " << robot.id << ": " << robot.battery_pct << " %\n";
+void print_obstacle(const Obstacle& target) {  // only reads it
+  std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
 }
-void charge(RobotStatus* robot) {  // changes the robot, may receive nullptr
-  if (robot != nullptr) { robot->battery_pct = 100.0; }
+void set_speed(Obstacle* target, double speed) {  // may get nullptr
+  if (target != nullptr) { target->speed = speed; }
 }
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0)};
-  print_status(*robot);
-  charge(robot.get());
-  print_status(*robot);  // 100: the caller still owns it
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  print_obstacle(*track);       // 4 m/s
+  set_speed(track.get(), 2.0);
+  print_obstacle(*track);       // 2 m/s: the caller still owns it
 }
 }  // namespace borrow
 
-// [Slide 62] Passing: Sink
+// [Slide 64] Passing: Sink
 namespace sink {
-std::vector<std::unique_ptr<RobotStatus>> retired;
+std::vector<std::unique_ptr<Obstacle>> lost;  // lost tracks, kept
 
-void retire(std::unique_ptr<RobotStatus> robot) {  // takes ownership
-  retired.push_back(std::move(robot));
+void keep_lost(std::unique_ptr<Obstacle> track) {  // takes ownership
+  lost.push_back(std::move(track));
 }
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 4.0)};
+  auto track{std::make_unique<Obstacle>(2)};
   // Does not compile: use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
-  // retire(robot);
-  retire(std::move(robot));
-  std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr) << std::noboolalpha
-            << ", retired.size(): " << retired.size() << '\n';  // true 1
+  // keep_lost(track);
+  keep_lost(std::move(track));
+  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << std::noboolalpha
+            << ", lost.size(): " << lost.size() << '\n';  // true 1
 }
 }  // namespace sink
 
-// [Slide 63] Passing: Reseat
+// [Slide 65] Passing: Reseat
 namespace reseat {
-void replace_robot(std::unique_ptr<RobotStatus>& robot, int new_id) {
-  robot = std::make_unique<RobotStatus>(new_id);
-}  // the old robot was deleted by the assignment
+void replace_track(std::unique_ptr<Obstacle>& track, int new_id) {
+  track = std::make_unique<Obstacle>(new_id);
+}  // the assignment deleted the old Obstacle object
 
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 4.0)};
-  replace_robot(robot, 7);
-  std::cout << "robot->id: " << robot->id << ", robot->battery_pct: " << robot->battery_pct
-            << '\n';  // 7 100
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  replace_track(track, 7);
+  std::cout << "track->id: " << track->id << ", track->speed: " << track->speed
+            << '\n';  // 7 0
 }
 }  // namespace reseat
 
-// [Slide 64] Returning
+// [Slide 66] Returning
 namespace returning {
-std::unique_ptr<RobotStatus> make_robot(int id) {
-  auto robot{std::make_unique<RobotStatus>(id)};
-  robot->busy = false;
-  return robot;  // no std::move: the implicit move of Lecture 5
+std::unique_ptr<Obstacle> make_track(int id) {
+  auto track{std::make_unique<Obstacle>(id)};
+  return track;  // no std::move: the implicit move of Lecture 5
 }
 
 void run() {
-  std::unique_ptr<RobotStatus> robot{make_robot(5)};
-  std::cout << "robot->id: " << robot->id << '\n';  // 5
+  std::unique_ptr<Obstacle> track{make_track(5)};
+  std::cout << "track->id: " << track->id << '\n';  // 5
 }
 }  // namespace returning
 
-// [Slide 65] Exercise 4: Lines That Compile
-namespace exercise_2 {
-void inspect(const RobotStatus& robot) { std::cout << "  inspect: robot " << robot.id << '\n'; }
-void adopt(std::unique_ptr<RobotStatus> robot) { std::cout << "  adopt: robot " << robot->id << '\n'; }
+// [Slide 67] Exercise 4: Lines That Compile
+namespace exercise_compile {
+void inspect(const Obstacle& target) { std::cout << "  inspect: obstacle " << target.id << '\n'; }
+void adopt(std::unique_ptr<Obstacle> track) { std::cout << "  adopt: obstacle " << track->id << '\n'; }
 
 void run() {
-  auto a{std::make_unique<RobotStatus>(1, 50.0)};
-  auto b{std::make_unique<RobotStatus>(2, 60.0)};
+  auto a{std::make_unique<Obstacle>(1)};
+  auto b{std::make_unique<Obstacle>(2)};
   // For each line, say whether it compiles. The lines that do not compile are
   // commented out: uncomment one to check your answer.
   // auto c{a};                                    // line 1
@@ -251,35 +252,35 @@ void run() {
   inspect(*d);                                     // line 3
   // adopt(b);                                     // line 4
   adopt(std::move(b));                             // line 5
-  std::unique_ptr<RobotStatus> e{new RobotStatus{}};    // line 6, see the note below
-  RobotStatus* f{d.get()};                         // line 7
-  // std::unique_ptr<RobotStatus> g{f};            // line 8, see the note below
+  std::unique_ptr<Obstacle> e{new Obstacle{}};     // line 6, see the note below
+  Obstacle* f{d.get()};                            // line 7
+  // std::unique_ptr<Obstacle> g{f};               // line 8, see the note below
   std::cout << "  f->id: " << f->id << ", e->id: " << e->id << '\n';
   // Line 6 compiles and is correct, but skips make_unique (R.23). Line 8
-  // compiles too, and is a bug: d and g would both delete the same robot, so
-  // it stays commented out.
+  // compiles too, and is a bug: d and g would both delete the same Obstacle,
+  // so it stays commented out.
 }
-}  // namespace exercise_2
+}  // namespace exercise_compile
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {49, "The Syntax", syntax::run},
-      {50, "Creating One", creating::run},
-      {51, "In Memory", in_memory::run},
-      {52, "The Leak, Fixed", leak_fixed::run},
-      {53, "One Owner Only", one_owner::run},
-      {54, "get and reset", get_and_reset::run},
-      {55, "Moving Ownership", moving_ownership::run},
-      {58, "Exercise 3: Handing Over a Robot", whiteboard_handover::run},
-      {59, "A Fleet of Owners", fleet_of_unique::run},
-      {60, "release", release::run},
-      {61, "Passing: Borrow", borrow::run},
-      {62, "Passing: Sink", sink::run},
-      {63, "Passing: Reseat", reseat::run},
-      {64, "Returning", returning::run},
-      {65, "Exercise 4: Lines That Compile", exercise_2::run},
+      {51, "The Syntax", syntax::run},
+      {52, "Creating One", creating::run},
+      {53, "In Memory", in_memory::run},
+      {54, "The Leak, Fixed", leak_fixed::run},
+      {55, "One Owner Only", one_owner::run},
+      {56, "get and reset", get_and_reset::run},
+      {57, "Moving Ownership", moving_ownership::run},
+      {60, "Exercise 3: Handing Over a Track", exercise_handover::run},
+      {61, "The Tracker's List", trackers_list::run},
+      {62, "release", release::run},
+      {63, "Passing: Borrow", borrow::run},
+      {64, "Passing: Sink", sink::run},
+      {65, "Passing: Reseat", reseat::run},
+      {66, "Returning", returning::run},
+      {67, "Exercise 4: Lines That Compile", exercise_compile::run},
   };
 }
 

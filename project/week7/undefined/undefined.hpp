@@ -11,14 +11,14 @@
  *
  * Each run() is listed with run_alone set, so a full run skips it:
  * @code
- * 702run week7_playground 86    # [Slide 86] The Cycle, Measured
+ * 702run week7_playground 88    # [Slide 88] The Cycle, Measured
  * @endcode
  */
 #pragma once
 
 namespace undefined {
 
-/// [Appendix ii] Double Delete, Measured: two lists delete the same robot.
+/// [Appendix ii] Double Delete, Measured: two lists delete the same Obstacle.
 namespace double_delete {
 void run();
 }
@@ -28,7 +28,7 @@ namespace dangling_read {
 void run();
 }
 
-/// [Slide 86] The Cycle, Measured: two partner robots that own each other.
+/// [Slide 88] The Cycle, Measured: a tractor and its trailer that own each other.
 namespace shared_cycle {
 void run();
 }
