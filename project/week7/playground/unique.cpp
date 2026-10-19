@@ -96,7 +96,7 @@ void run() {
 // [Slide 54] Moving Ownership
 namespace moving_ownership {
 void run() {
-  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{2.0, 3.0}, false)};
+  auto robot{std::make_unique<RobotStatus>(3, 64.0, Position{}, false)};
   RobotStatus* where{robot.get()};
   std::unique_ptr<RobotStatus> other{std::move(robot)};
   std::cout << std::boolalpha << "robot == nullptr: " << (robot == nullptr)
