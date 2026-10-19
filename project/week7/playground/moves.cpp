@@ -141,12 +141,13 @@ void run() {
 // [Slide 22] Copied, Not Taken
 namespace lvalue_copied {
 void run() {
-  std::string name{"charging dock, aisle 4"};
-  std::string copied{name};            // name is an lvalue: copied from
-  std::cout << "after line 2: name: " << name << ", copied: " << copied << '\n';
-  std::string taken{std::move(name)};  // std::move(name) marks name: taken from
-  std::cout << "after line 3: name.size(): " << name.size() << ", taken: " << taken
-            << '\n';  // 0 (libstdc++)
+  std::vector<int> scores{90, 75, 82};
+  std::vector<int> copied{scores};           // scores is an lvalue: copied from
+  std::cout << "after line 2: scores.size(): " << scores.size()
+            << ", copied.size(): " << copied.size() << '\n';  // 3, 3
+  std::vector<int> best{std::move(scores)};  // std::move(scores) marks scores: taken from
+  std::cout << "after line 3: scores.size(): " << scores.size()
+            << ", best.size(): " << best.size() << '\n';  // 0, 3 (libstdc++)
 }
 }  // namespace lvalue_copied
 
@@ -241,12 +242,10 @@ void run() {
 // [Slide 31] Marked by std::move
 namespace xvalue_marked {
 void run() {
-  std::string name{"charging dock, aisle 4"};  // 22 chars: on the heap
-  const char* chars{name.data()};              // their address
-  std::string other{std::move(name)};
-  std::cout << std::boolalpha << "other: " << other << ", name.size(): " << name.size()
-            << ", other.data() == chars: " << (other.data() == chars) << std::noboolalpha
-            << '\n';  // charging dock, aisle 4, 0, true (libstdc++)
+  std::vector<int> scores{90, 75, 82};
+  std::vector<int> best{std::move(scores)};
+  std::cout << "best.size(): " << best.size() << ", scores.size(): " << scores.size()
+            << '\n';  // 3, 0 (libstdc++)
 }
 }  // namespace xvalue_marked
 

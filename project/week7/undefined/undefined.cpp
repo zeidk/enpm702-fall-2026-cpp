@@ -26,23 +26,6 @@ RobotStatus* make_robot(int id, double battery_pct) {
 }
 }  // namespace
 
-// [Slide 9] The Leak, Measured
-namespace early_return_leak {
-bool needs_charge(int id) {
-  RobotStatus* robot{make_robot(id, 64.0)};
-  if (robot->battery_pct > 20.0) {
-    return false;  // leaves without delete: the robot leaks
-  }
-  delete robot;
-  return true;
-}
-
-void run() {
-  std::cout << std::boolalpha << "needs_charge(3): " << needs_charge(3) << std::noboolalpha
-            << '\n';  // false, and LeakSanitizer reports at exit
-}
-}  // namespace early_return_leak
-
 // [Appendix ii] Double Delete, Measured
 namespace double_delete {
 void run() {
@@ -65,7 +48,7 @@ void run() {
 }
 }  // namespace dangling_read
 
-// [Slide 78] The Cycle, Measured
+// [Slide 79] The Cycle, Measured
 namespace shared_cycle {
 struct Robot {
   RobotStatus status;

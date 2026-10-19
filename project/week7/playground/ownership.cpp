@@ -9,22 +9,21 @@
  * @code
  * 702build week7_playground
  * 702run week7_playground       # every slide of every section, in order
- * 702run week7_playground 7     # only [Slide 7]
+ * 702run week7_playground 8     # only [Slide 8]
  * @endcode
  *
- * The leak, the double delete and the dangling read are undefined behavior or
- * a leak, so their code is in ../undefined/undefined.cpp, built with the
- * sanitizers. A full run skips those slides; ask for one by its number.
+ * The double delete and the dangling read are undefined behavior, so their
+ * code is in ../undefined/undefined.cpp, built with the sanitizers, and runs
+ * from week7_appendix.
  */
 #include <iostream>
 
 #include "fleet.hpp"
 #include "sections.hpp"
-#include "undefined.hpp"
 
 namespace ownership {
 
-// [Slide 7] A Robot on the Heap
+// [Slide 8] A Robot on the Heap
 namespace robot_on_heap {
 RobotStatus* make_robot(int id) {
   return new RobotStatus{id, 100.0, {0.0, 0.0}, false};  // Lecture 3: new
@@ -39,10 +38,10 @@ void run() {
 }
 }  // namespace robot_on_heap
 
-// [Slide 8] Three Ways to Get It Wrong
+// [Slide 9] Three Ways to Get It Wrong
 // The slide shows three bugs. Each is a program of its own in
 // ../undefined/undefined.cpp, built with the sanitizers:
-//   leak:          undefined::early_return_leak, [Slide 9]
+//   leak:          no program; [Slide 52] shows the leak and its fix
 //   double delete: undefined::double_delete, week7_appendix
 //   dangling read: undefined::dangling_read, week7_appendix
 
@@ -54,8 +53,7 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {7, "A Robot on the Heap", robot_on_heap::run},
-      {9, "The Leak, Measured", undefined::early_return_leak::run, true},
+      {8, "A Robot on the Heap", robot_on_heap::run},
   };
 }
 
