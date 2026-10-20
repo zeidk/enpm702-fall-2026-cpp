@@ -26,7 +26,7 @@ namespace {
 Obstacle* make_track(int id, Pose pose, double speed) { return new Obstacle{id, pose, speed}; }
 }  // namespace
 
-// [Slide 79] The Cycle, Measured: the code of [Slide 76]
+// [Slide 80] The Cycle, Measured: the code of [Slide 77]
 namespace shared_cycle {
 struct Towing {
   Obstacle obstacle;
@@ -46,9 +46,9 @@ void run() {
 // [Appendix ii] Double Delete, Measured
 namespace double_delete {
 void run() {
-  Obstacle* track{make_track(2, Pose{12.0, -1.0}, 4.0)};
-  std::vector<Obstacle*> tracker{track};
-  std::vector<Obstacle*> hazards{track};  // the same Obstacle
+  Obstacle* cyclist{make_track(2, Pose{12.0, -1.0}, 4.0)};
+  std::vector<Obstacle*> tracker{cyclist};
+  std::vector<Obstacle*> hazards{cyclist};  // the same Obstacle
   for (Obstacle* t : tracker) { delete t; }
   for (Obstacle* t : hazards) { delete t; }  // a second delete
 }
@@ -57,9 +57,9 @@ void run() {
 // [Appendix iii] Dangling Read, Measured
 namespace dangling_read {
 void run() {
-  Obstacle* track{make_track(2, Pose{12.0, -1.0}, 4.0)};
-  std::vector<Obstacle*> tracker{track};
-  std::vector<Obstacle*> hazards{track};
+  Obstacle* cyclist{make_track(2, Pose{12.0, -1.0}, 4.0)};
+  std::vector<Obstacle*> tracker{cyclist};
+  std::vector<Obstacle*> hazards{cyclist};
   for (Obstacle* t : tracker) { delete t; }
   std::cout << hazards[0]->speed << '\n';  // freed memory
 }

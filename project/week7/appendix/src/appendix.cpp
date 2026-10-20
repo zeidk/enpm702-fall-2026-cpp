@@ -129,10 +129,10 @@ void run() {
     delete target;
   }};
   {
-    std::unique_ptr<Obstacle, decltype(say_and_delete)> track{
+    std::unique_ptr<Obstacle, decltype(say_and_delete)> parked_car{
         new Obstacle{1}, say_and_delete};
-    std::cout << "sizeof(track): " << sizeof(track) << '\n';  // 8
-  }  // track is destroyed here: "deleting obstacle 1"
+    std::cout << "sizeof(parked_car): " << sizeof(parked_car) << '\n';  // 8
+  }  // parked_car is destroyed here: "deleting obstacle 1"
   std::cout << "after the block\n";
   std::cout << "with a function pointer: "
             << sizeof(std::unique_ptr<Obstacle, void (*)(Obstacle*)>) << '\n';  // 16
@@ -147,14 +147,14 @@ void run() {
 // [Appendix xi] Testing for Empty
 namespace testing_empty {
 void run() {
-  std::unique_ptr<Obstacle> track;  // empty
-  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << '\n';  // true
-  track = std::make_unique<Obstacle>(1);
-  if (track) {
-    std::cout << "obstacle " << track->id << '\n';  // obstacle 1
+  std::unique_ptr<Obstacle> parked_car;  // empty
+  std::cout << std::boolalpha << "parked_car == nullptr: " << (parked_car == nullptr) << '\n';  // true
+  parked_car = std::make_unique<Obstacle>(1);
+  if (parked_car) {
+    std::cout << "obstacle " << parked_car->id << '\n';  // obstacle 1
   }
-  auto other{std::move(track)};
-  std::cout << "after the move, !track: " << !track << std::noboolalpha << '\n';  // true
+  auto other{std::move(parked_car)};
+  std::cout << "after the move, !parked_car: " << !parked_car << std::noboolalpha << '\n';  // true
   // Does not compile: cannot convert 'std::unique_ptr<Obstacle,
   //                   std::default_delete<Obstacle> >' to 'bool' in initialization
   // bool has_track = other;
@@ -308,32 +308,7 @@ void run() {
 }
 }  // namespace move_const
 
-// [Appendix xxvi] release
-namespace release {
-void run() {
-  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
-  Obstacle* raw{track.release()};  // gives up ownership, deletes nothing
-  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << std::noboolalpha
-            << ", raw->id: " << raw->id << '\n';  // true 1
-  delete raw;  // you are the owner now: leave this out and it leaks
-}
-}  // namespace release
-
-// [Appendix xxvii] Passing: Reseat
-namespace reseat {
-void replace_track(std::unique_ptr<Obstacle>& track, int new_id) {
-  track = std::make_unique<Obstacle>(new_id);
-}  // the assignment deleted the old Obstacle object
-
-void run() {
-  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
-  replace_track(track, 7);
-  std::cout << "track->id: " << track->id << ", track->speed: " << track->speed
-            << '\n';  // 7 0
-}
-}  // namespace reseat
-
-// [Appendix xxix] A Parameter the Function Moves From
+// [Appendix xxvii] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -362,7 +337,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Appendix xxx] Returning a Local
+// [Appendix xxviii] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -378,6 +353,134 @@ void run() {
   std::cout << "  in the caller, path.data(): " << path.data() << '\n';  // the same address
 }
 }  // namespace return_by_value
+
+// [Appendix xxix] Passing: Borrow (std::unique_ptr)
+namespace unique_borrow {
+void print_obstacle(const Obstacle& target) {  // only reads it
+  std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
+}
+void set_speed(Obstacle* target, double speed) {  // may get nullptr
+  if (target != nullptr) { target->speed = speed; }
+}
+
+void run() {
+  auto parked_car{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
+  print_obstacle(*parked_car);  // 0 m/s
+  set_speed(parked_car.get(), 2.0);
+  print_obstacle(*parked_car);  // 2 m/s: the caller still owns it
+}
+}  // namespace unique_borrow
+
+// [Appendix xxx] Passing: Sink (std::unique_ptr)
+namespace unique_sink {
+std::vector<std::unique_ptr<Obstacle>> lost;  // lost tracks, kept
+
+void keep_lost(std::unique_ptr<Obstacle> track) {  // takes ownership
+  lost.push_back(std::move(track));
+}
+
+void run() {
+  auto parked_car{std::make_unique<Obstacle>(1)};
+  // Does not compile: use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
+  // keep_lost(parked_car);
+  keep_lost(std::move(parked_car));
+  std::cout << std::boolalpha << "parked_car == nullptr: " << (parked_car == nullptr) << std::noboolalpha
+            << ", lost.size(): " << lost.size() << '\n';  // true 1
+}
+}  // namespace unique_sink
+
+// [Appendix xxxi] Passing: Reseat (std::unique_ptr)
+namespace unique_reseat {
+void replace_track(std::unique_ptr<Obstacle>& track, int new_id) {
+  track = std::make_unique<Obstacle>(new_id);
+}  // the assignment deleted the old Obstacle object
+
+void run() {
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
+  replace_track(track, 7);
+  std::cout << "track->id: " << track->id << ", track->speed: " << track->speed
+            << '\n';  // 7 0
+}
+}  // namespace unique_reseat
+
+// [Appendix xxxii] Returning (std::unique_ptr)
+namespace unique_returning {
+std::unique_ptr<Obstacle> make_track(int id) {
+  auto track{std::make_unique<Obstacle>(id)};
+  return track;  // no std::move: the implicit move of Lecture 5
+}
+
+void run() {
+  auto oncoming_car{make_track(4)};
+  std::cout << "oncoming_car->id: " << oncoming_car->id << '\n';  // 4
+}
+}  // namespace unique_returning
+
+// [Appendix xxxiii] Passing: Borrow (std::shared_ptr)
+namespace shared_borrow {
+void print_obstacle(const Obstacle& target) {  // only reads it
+  std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
+}
+
+void run() {
+  auto hazard{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  print_obstacle(*hazard);
+  std::cout << hazard.use_count() << '\n';  // 1: no owner added
+}
+}  // namespace shared_borrow
+
+// [Appendix xxxiv] Passing: Share (std::shared_ptr)
+namespace shared_share {
+using Hazards = std::vector<std::shared_ptr<Obstacle>>;
+void add_hazard(Hazards& hazards, std::shared_ptr<Obstacle> hazard) {
+  hazards.push_back(std::move(hazard));  // the list keeps this owner
+}
+
+void run() {
+  Hazards hazards;
+  auto cyclist{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  add_hazard(hazards, cyclist);
+  std::cout << cyclist.use_count() << '\n';  // 2: the hazard list owns it too
+}
+}  // namespace shared_share
+
+// [Appendix xxxv] Passing: const shared_ptr& (std::shared_ptr)
+// The 25 m limit is chosen for this example.
+namespace shared_maybe {
+using Hazards = std::vector<std::shared_ptr<Obstacle>>;
+void add_if_close(Hazards& hazards, const std::shared_ptr<Obstacle>& track) {
+  if (track->pose.x < 25.0) {
+    hazards.push_back(track);  // copies only when it keeps it
+  }
+}
+
+void run() {
+  Hazards hazards;
+  auto near{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};             // the cyclist
+  auto far{std::make_shared<Obstacle>(4, Pose{38.0, 3.5, 3.14}, 13.4)};        // the oncoming car
+  add_if_close(hazards, near);  // x = 12 m: a hazard
+  add_if_close(hazards, far);   // x = 38 m: not a hazard
+  std::cout << "near.use_count(): " << near.use_count() << ", far.use_count(): "
+            << far.use_count() << ", hazards.size(): " << hazards.size() << '\n';  // 2 1 1
+}
+}  // namespace shared_maybe
+
+// [Appendix xxxvi] Returning (std::shared_ptr)
+namespace shared_returning {
+std::unique_ptr<Obstacle> make_track(int id) {  // [Appendix xxxii]
+  auto track{std::make_unique<Obstacle>(id)};
+  return track;
+}
+
+void run() {
+  std::shared_ptr<Obstacle> hazard{make_track(5)};  // unique_ptr to shared_ptr: compiles
+  std::cout << "hazard->id: " << hazard->id << ", hazard.use_count(): " << hazard.use_count()
+            << '\n';  // 5 1
+  // Does not compile: no matching function for call to
+  //                   'std::unique_ptr<Obstacle>::unique_ptr(<brace-enclosed initializer list>)'
+  // std::unique_ptr<Obstacle> back{hazard};
+}
+}  // namespace shared_returning
 
 #undef CATEGORY
 
@@ -402,10 +505,16 @@ int main(int argc, char* argv[]) {
       {23, "Ways to Mark", xvalue_ways::run},
       {24, "Giving It a Name", named_rvalue_ref::run},
       {25, "std::move on a const Object", move_const::run},
-      {26, "release", release::run},
-      {27, "Passing: Reseat", reseat::run},
-      {29, "A Parameter the Function Moves From", will_move_from::run},
-      {30, "Returning a Local", return_by_value::run},
+      {27, "A Parameter the Function Moves From", will_move_from::run},
+      {28, "Returning a Local", return_by_value::run},
+      {29, "Passing: Borrow", unique_borrow::run},
+      {30, "Passing: Sink", unique_sink::run},
+      {31, "Passing: Reseat", unique_reseat::run},
+      {32, "Returning", unique_returning::run},
+      {33, "Passing: Borrow", shared_borrow::run},
+      {34, "Passing: Share", shared_share::run},
+      {35, "Passing: const shared_ptr&", shared_maybe::run},
+      {36, "Returning", shared_returning::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }

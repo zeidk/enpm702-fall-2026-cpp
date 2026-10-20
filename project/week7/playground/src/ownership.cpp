@@ -30,16 +30,16 @@ Obstacle* make_track(int id, Pose pose, double speed) {
 }
 
 void run() {
-  Obstacle* track{make_track(2, Pose{12.0, -1.0, 0.0}, 4.0)};
-  std::cout << track->id << ' ' << track->speed << '\n';  // 2 4
-  delete track;  // the caller must remember this
-  track = nullptr;
+  Obstacle* cyclist{make_track(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  std::cout << cyclist->id << ' ' << cyclist->speed << '\n';  // 2 4
+  delete cyclist;  // the caller must remember this
+  cyclist = nullptr;
 }
 }  // namespace obstacle_on_heap
 
 // [Slide 10] RAII
 // The slide has no code: it states the idea. The leak fixed with a
-// std::unique_ptr is [Slide 45], once unique_ptr has been taught.
+// std::unique_ptr is [Slide 46], once unique_ptr has been taught.
 
 // The slides of this section: number, title, the function that runs it, and
 // true when a full run must skip it.
