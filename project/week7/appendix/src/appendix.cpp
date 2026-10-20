@@ -482,6 +482,31 @@ void run() {
 }
 }  // namespace shared_returning
 
+// [Appendix xxxvii] Passing: weak_ptr
+namespace weak_passing {
+struct Dashboard {
+  std::weak_ptr<Obstacle> shown;
+};
+
+void watch(Dashboard& dashboard, const std::weak_ptr<Obstacle>& target) {
+  dashboard.shown = target;  // stores a watcher, not an owner
+}
+
+void print_obstacle(const Obstacle& target) {  // only reads it
+  std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
+}
+
+void run() {
+  auto cyclist{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
+  Dashboard dashboard{};
+  watch(dashboard, cyclist);  // a shared_ptr converts to a weak_ptr
+  std::cout << "cyclist.use_count(): " << cyclist.use_count() << '\n';  // 1: no owner added
+  if (auto target{dashboard.shown.lock()}) {
+    print_obstacle(*target);  // lock first, then pass the object
+  }
+}
+}  // namespace weak_passing
+
 #undef CATEGORY
 
 int main(int argc, char* argv[]) {
@@ -515,6 +540,7 @@ int main(int argc, char* argv[]) {
       {34, "Passing: Share", shared_share::run},
       {35, "Passing: const shared_ptr&", shared_maybe::run},
       {36, "Returning", shared_returning::run},
+      {37, "Passing: weak_ptr", weak_passing::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }

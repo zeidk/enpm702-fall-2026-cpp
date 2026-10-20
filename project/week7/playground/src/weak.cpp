@@ -87,7 +87,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 84] Exercise 5: Use Counts
+// [Slide 85] Exercise 5: Use Counts
 namespace exercise_use_counts {
 void run() {
   // Write the two values for each line before you run it.
@@ -117,7 +117,7 @@ std::vector<Slide> slides() {
       {81, "Breaking It", breaking_cycle::run},
       {82, "lock", reading_weak::run},
       {83, "expired and use_count", expired_use_count::run},
-      {84, "Exercise 5: Use Counts", exercise_use_counts::run},
+      {85, "Exercise 5: Use Counts", exercise_use_counts::run},
   };
 }
 
