@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 62    # only [Slide 62]
+ * 702run week7_playground 63    # only [Slide 63]
  * @endcode
  *
  * The cyclist, id 2, is near the planner's path: the tracker and the planner's
@@ -27,12 +27,12 @@ namespace shared {
 
 using Hazards = std::vector<std::shared_ptr<Obstacle>>;
 
-// [Slide 59] A Hazard in Two Lists
+// [Slide 60] A Hazard in Two Lists
 // The slide states the problem: hazards holds tracker[1].get(), and erasing
 // tracker[1] deletes the Obstacle, so hazards[0] dangles. A read through it is
 // undefined behavior; [Appendix iii] runs one with the sanitizers.
 
-// [Slide 60] Creating One
+// [Slide 61] Creating One
 namespace creating {
 void run() {
   std::vector<std::shared_ptr<Obstacle>> tracker;
@@ -46,7 +46,7 @@ void run() {
 }
 }  // namespace creating
 
-// [Slide 61] The Control Block
+// [Slide 62] The Control Block
 namespace control_block {
 void run() {
   auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
@@ -57,7 +57,7 @@ void run() {
 }
 }  // namespace control_block
 
-// [Slide 62] use_count
+// [Slide 63] use_count
 namespace use_count_steps {
 void run() {
   auto track{std::make_shared<Obstacle>(2)};
@@ -73,7 +73,7 @@ void run() {
 }
 }  // namespace use_count_steps
 
-// [Slide 63] Three Ways to Let Go
+// [Slide 64] Three Ways to Let Go
 // Three separate runs, each from step 2; start() makes steps 1 and 2 and prints
 // their counts once, in the first run. [Slides 65 to 69] show each step.
 namespace let_go {
@@ -110,7 +110,7 @@ void run() {
 }
 }  // namespace let_go
 
-// [Slide 69] Deletion by the Last Owner
+// [Slide 70] Deletion by the Last Owner
 namespace last_owner {
 void run() {
   std::vector<std::shared_ptr<Obstacle>> tracker;
@@ -126,7 +126,7 @@ void run() {
 }  // LeakSanitizer reports nothing at exit: the Obstacle was freed
 }  // namespace last_owner
 
-// [Slide 70] Passing: Borrow
+// [Slide 71] Passing: Borrow
 namespace borrow {
 void print_obstacle(const Obstacle& target) {  // only reads it
   std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
@@ -139,7 +139,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 71] Passing: Share
+// [Slide 72] Passing: Share
 namespace share {
 void add_hazard(Hazards& hazards, std::shared_ptr<Obstacle> hazard) {
   hazards.push_back(std::move(hazard));  // the list keeps this owner
@@ -153,7 +153,7 @@ void run() {
 }
 }  // namespace share
 
-// [Slide 72] Passing: const shared_ptr&
+// [Slide 73] Passing: const shared_ptr&
 // The 25 m limit is chosen for this example.
 namespace maybe_share {
 void add_if_close(Hazards& hazards, const std::shared_ptr<Obstacle>& track) {
@@ -173,9 +173,9 @@ void run() {
 }
 }  // namespace maybe_share
 
-// [Slide 73] Returning
+// [Slide 74] Returning
 namespace returning {
-std::unique_ptr<Obstacle> make_track(int id) {  // [Slide 56]
+std::unique_ptr<Obstacle> make_track(int id) {  // [Slide 57]
   auto track{std::make_unique<Obstacle>(id)};
   return track;
 }
@@ -194,15 +194,15 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {60, "Creating One", creating::run},
-      {61, "The Control Block", control_block::run},
-      {62, "use_count", use_count_steps::run},
-      {63, "Three Ways to Let Go", let_go::run},
-      {69, "Deletion by the Last Owner", last_owner::run},
-      {70, "Passing: Borrow", borrow::run},
-      {71, "Passing: Share", share::run},
-      {72, "Passing: const shared_ptr&", maybe_share::run},
-      {73, "Returning", returning::run},
+      {61, "Creating One", creating::run},
+      {62, "The Control Block", control_block::run},
+      {63, "use_count", use_count_steps::run},
+      {64, "Three Ways to Let Go", let_go::run},
+      {70, "Deletion by the Last Owner", last_owner::run},
+      {71, "Passing: Borrow", borrow::run},
+      {72, "Passing: Share", share::run},
+      {73, "Passing: const shared_ptr&", maybe_share::run},
+      {74, "Returning", returning::run},
   };
 }
 

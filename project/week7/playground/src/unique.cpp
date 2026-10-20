@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 44    # only [Slide 44]
+ * 702run week7_playground 45    # only [Slide 45]
  * @endcode
  *
  * The tracker owns each Obstacle it tracks through a std::unique_ptr. Code
@@ -26,7 +26,7 @@
 
 namespace unique {
 
-// [Slide 43] The Syntax
+// [Slide 44] The Syntax
 // 1 and 2 declare the same type; 3 compiles too, but writes new (R.23, slide 45).
 namespace syntax {
 void run() {
@@ -42,7 +42,7 @@ void run() {
 }
 }  // namespace syntax
 
-// [Slide 44] Creating One
+// [Slide 45] Creating One
 namespace creating {
 void run() {
   Pose cyclist_pose{12.0, -1.0, 0.0};  // from the table
@@ -54,7 +54,7 @@ void run() {
 }
 }  // namespace creating
 
-// [Slide 45] In Memory
+// [Slide 46] In Memory
 namespace in_memory {
 void run() {
   auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
@@ -64,7 +64,7 @@ void run() {
 }
 }  // namespace in_memory
 
-// [Slide 46] The Leak, Fixed
+// [Slide 47] The Leak, Fixed
 // The slide's left version, with Obstacle* and delete, leaks 48 bytes: the
 // cyclist is 12 m ahead, so the early return skips the delete. This is the
 // right version.
@@ -83,7 +83,7 @@ void run() {
 }
 }  // namespace leak_fixed
 
-// [Slide 47] One Owner Only
+// [Slide 48] One Owner Only
 namespace one_owner {
 void run() {
   auto track{std::make_unique<Obstacle>()};
@@ -95,7 +95,7 @@ void run() {
 }
 }  // namespace one_owner
 
-// [Slide 48] get and reset
+// [Slide 49] get and reset
 namespace get_and_reset {
 void print_obstacle(const Obstacle* target) {  // only looks
   std::cout << "  obstacle " << target->id << ": " << target->speed << " m/s\n";
@@ -112,7 +112,7 @@ void run() {
 }
 }  // namespace get_and_reset
 
-// [Slide 49] Moving Ownership
+// [Slide 50] Moving Ownership
 namespace moving_ownership {
 void run() {
   auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
@@ -124,7 +124,7 @@ void run() {
 }
 }  // namespace moving_ownership
 
-// [Slide 52] Exercise 3: Handing Over a Track
+// [Slide 53] Exercise 3: Handing Over a Track
 // The Obstacle with id 1 is deleted on line 4: q = std::move(p) calls
 // q.reset(p.release()), and reset deletes the old pointer when it is not null
 // (C++20 [unique.ptr.single.asgn] paragraph 3, [unique.ptr.single.modifiers]
@@ -146,7 +146,7 @@ void run() {
 }
 }  // namespace exercise_handover
 
-// [Slide 53] The Tracker's List
+// [Slide 54] The Tracker's List
 namespace trackers_list {
 void run() {
   std::vector<std::unique_ptr<Obstacle>> tracker;
@@ -165,7 +165,7 @@ void run() {
 }
 }  // namespace trackers_list
 
-// [Slide 54] Passing: Borrow
+// [Slide 55] Passing: Borrow
 namespace borrow {
 void print_obstacle(const Obstacle& target) {  // only reads it
   std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
@@ -182,7 +182,7 @@ void run() {
 }
 }  // namespace borrow
 
-// [Slide 55] Passing: Sink
+// [Slide 56] Passing: Sink
 namespace sink {
 std::vector<std::unique_ptr<Obstacle>> lost;  // lost tracks, kept
 
@@ -200,7 +200,7 @@ void run() {
 }
 }  // namespace sink
 
-// [Slide 56] Returning
+// [Slide 57] Returning
 namespace returning {
 std::unique_ptr<Obstacle> make_track(int id) {
   auto track{std::make_unique<Obstacle>(id)};
@@ -213,7 +213,7 @@ void run() {
 }
 }  // namespace returning
 
-// [Slide 57] Exercise 4: Lines That Compile
+// [Slide 58] Exercise 4: Lines That Compile
 namespace exercise_compile {
 void inspect(const Obstacle& target) { std::cout << "  inspect: obstacle " << target.id << '\n'; }
 void adopt(std::unique_ptr<Obstacle> track) { std::cout << "  adopt: obstacle " << track->id << '\n'; }
@@ -242,19 +242,19 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {43, "The Syntax", syntax::run},
-      {44, "Creating One", creating::run},
-      {45, "In Memory", in_memory::run},
-      {46, "The Leak, Fixed", leak_fixed::run},
-      {47, "One Owner Only", one_owner::run},
-      {48, "get and reset", get_and_reset::run},
-      {49, "Moving Ownership", moving_ownership::run},
-      {52, "Exercise 3: Handing Over a Track", exercise_handover::run},
-      {53, "The Tracker's List", trackers_list::run},
-      {54, "Passing: Borrow", borrow::run},
-      {55, "Passing: Sink", sink::run},
-      {56, "Returning", returning::run},
-      {57, "Exercise 4: Lines That Compile", exercise_compile::run},
+      {44, "The Syntax", syntax::run},
+      {45, "Creating One", creating::run},
+      {46, "In Memory", in_memory::run},
+      {47, "The Leak, Fixed", leak_fixed::run},
+      {48, "One Owner Only", one_owner::run},
+      {49, "get and reset", get_and_reset::run},
+      {50, "Moving Ownership", moving_ownership::run},
+      {53, "Exercise 3: Handing Over a Track", exercise_handover::run},
+      {54, "The Tracker's List", trackers_list::run},
+      {55, "Passing: Borrow", borrow::run},
+      {56, "Passing: Sink", sink::run},
+      {57, "Returning", returning::run},
+      {58, "Exercise 4: Lines That Compile", exercise_compile::run},
   };
 }
 

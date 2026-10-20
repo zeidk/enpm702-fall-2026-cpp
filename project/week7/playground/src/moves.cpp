@@ -78,8 +78,11 @@ void run() {
 namespace inside_move {
 void run() {
   std::vector<Pose> path{make_path(1000)};
+  path.reserve(1024);                        // room for 24 more
   const Pose* where{path.data()};            // where path's block is
   std::vector<Pose> moved{std::move(path)};  // std::move marks path
+  std::cout << "moved: size " << moved.size() << ", capacity " << moved.capacity() << ", "
+            << moved.capacity() * sizeof(Pose) << " bytes\n";  // 1000 1024 24576
   std::cout << std::boolalpha << "moved.data() == where: " << (moved.data() == where)
             << ", path.size(): " << path.size() << ", path.data() == nullptr: "
             << (path.data() == nullptr) << std::noboolalpha << '\n';  // true 0 true
@@ -240,7 +243,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 33] Exercise 2: Value Categories
+// [Slide 32] Exercise 2: Value Categories
 namespace exercise_categories {
 // The Obstacle with this id, or the first one when no id matches.
 Obstacle& lookup(std::vector<Obstacle>& seen, int id) {
@@ -270,12 +273,12 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 35] Binding to rvalues
+// [Slide 36] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
   std::vector<Pose>&& temp_ref{make_path(10)};  // OK: binds to an rvalue
-  const std::vector<Pose>& any_ref{path};       // const T& binds to both (Lecture 5)
+  const std::vector<Pose>& any_ref{path};       // const T& binds to lvalues and rvalues
   // Does not compile: cannot bind rvalue reference of type
   // 'std::vector<Pose>&&' to lvalue of type 'std::vector<Pose>'
   // std::vector<Pose>&& lvalue_ref{path};
@@ -284,11 +287,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 36] What Each Reference Refers To
-// The slide is the figure of [Slide 35]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 35].
+// [Slide 37] What Each Reference Refers To
+// The slide is the figure of [Slide 36]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 36].
 
-// [Slide 37] Overloads for Copy and Move
+// [Slide 38] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -315,7 +318,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 38] What std::move Does
+// [Slide 39] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -329,7 +332,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 39] A Parameter the Function Moves From
+// [Slide 40] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -358,7 +361,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 40] Returning a Local
+// [Slide 41] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -394,12 +397,12 @@ std::vector<Slide> slides() {
       {28, "Temporary Materialization", materialization::run},
       {30, "std::is_same_v", same_type::run},
       {31, "The decltype Test", testing_category::run},
-      {33, "Exercise 2: Value Categories", exercise_categories::run},
-      {35, "Binding to rvalues", rvalue_references::run},
-      {37, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {38, "What std::move Does", move_moves_nothing::run},
-      {39, "A Parameter the Function Moves From", will_move_from::run},
-      {40, "Returning a Local", return_by_value::run},
+      {32, "Exercise 2: Value Categories", exercise_categories::run},
+      {36, "Binding to rvalues", rvalue_references::run},
+      {38, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {39, "What std::move Does", move_moves_nothing::run},
+      {40, "A Parameter the Function Moves From", will_move_from::run},
+      {41, "Returning a Local", return_by_value::run},
   };
 }
 
