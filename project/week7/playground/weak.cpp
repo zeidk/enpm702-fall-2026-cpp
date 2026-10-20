@@ -7,12 +7,12 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 83    # only [Slide 83]
+ * 702run week7_playground 82    # only [Slide 82]
  * @endcode
  *
  * The dashboard shows one obstacle and owns none: it watches the Obstacle
  * through a std::weak_ptr and must notice when the tracker and the planner
- * have let it go. The cycle of [Slide 81] leaks on purpose, so it is in
+ * have let it go. The cycle of [Slide 80] leaks on purpose, so it is in
  * ../undefined/undefined.cpp and runs only when asked for by its number.
  */
 #include <iostream>
@@ -26,11 +26,11 @@
 
 namespace weak {
 
-// [Slide 78] A Cycle
+// [Slide 77] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 81] runs it.
+// ../undefined/undefined.cpp. [Slide 80] runs it.
 
-// [Slide 82] Breaking It
+// [Slide 81] Breaking It
 namespace breaking_cycle {
 struct Towing {
   Obstacle obstacle;
@@ -47,7 +47,7 @@ void run() {
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 83] lock
+// [Slide 82] lock
 namespace reading_weak {
 struct Dashboard {
   std::weak_ptr<Obstacle> shown;  // the obstacle on screen
@@ -74,7 +74,7 @@ void run() {
 }
 }  // namespace reading_weak
 
-// [Slide 84] expired and use_count
+// [Slide 83] expired and use_count
 namespace expired_use_count {
 void run() {
   auto track{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
@@ -87,7 +87,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 85] Exercise 5: Use Counts
+// [Slide 84] Exercise 5: Use Counts
 namespace exercise_use_counts {
 void run() {
   // Write the two values for each line before you run it.
@@ -113,11 +113,11 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {81, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {82, "Breaking It", breaking_cycle::run},
-      {83, "lock", reading_weak::run},
-      {84, "expired and use_count", expired_use_count::run},
-      {85, "Exercise 5: Use Counts", exercise_use_counts::run},
+      {80, "The Cycle, Measured", undefined::shared_cycle::run, true},
+      {81, "Breaking It", breaking_cycle::run},
+      {82, "lock", reading_weak::run},
+      {83, "expired and use_count", expired_use_count::run},
+      {84, "Exercise 5: Use Counts", exercise_use_counts::run},
   };
 }
 

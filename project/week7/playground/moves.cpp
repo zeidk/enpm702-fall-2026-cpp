@@ -12,7 +12,7 @@
  *
  * The value category slides print the category of each expression with
  * CATEGORY(e), which reads decltype((e)): T& for an lvalue, T&& for an xvalue,
- * T for a prvalue ([Slide 35]). Code that does not compile, or that warns, is
+ * T for a prvalue ([Slide 34]). Code that does not compile, or that warns, is
  * commented out where its slide shows it: uncomment it, build, and you get the
  * slide's message.
  */
@@ -94,30 +94,25 @@ void run() {
 }  // namespace inside_copy
 
 // [Slide 14] Elision or a Move
-// A prvalue that initializes an object of its own type is built in that object's
-// place (C++20 [dcl.init] 17.6.1): p is plan's local. push_back takes a reference,
-// so it gets a temporary and moves it into the vector: a new object that took the
-// block. With -fno-elide-constructors (no NRVO), p is a moved-into object too.
+// best is initialized by the prvalue make_scores() (C++20 [dcl.init] 17.6.1) and,
+// with NRVO, is the local scores itself: the same two addresses. push_back takes
+// a reference, so it gets a temporary and moves it into all[0]: a new vector, the
+// same block. With -fno-elide-constructors (no NRVO), best gets a new address too.
 namespace elision_or_move {
-const std::vector<Pose>* made_object{nullptr};  // plan's local
-const Pose* made_block{nullptr};                // its block
-
-std::vector<Pose> plan(int n) {
-  std::vector<Pose> path{make_path(n)};
-  made_object = &path;
-  made_block = path.data();
-  return path;  // no std::move
+std::vector<int> make_scores() {
+  std::vector<int> scores{90, 75, 82};
+  std::cout << "  inside: " << &scores << ' ' << scores.data() << '\n';  // local, block
+  return scores;  // no std::move
 }
 
 void run() {
-  std::vector<std::vector<Pose>> plans;           // a list of paths
-  std::vector<Pose> p{plan(500)};
-  std::cout << std::boolalpha << "elision: &p == made_object: " << (&p == made_object)
-            << ", p.data() == made_block: " << (p.data() == made_block) << '\n';  // true true
-  plans.push_back(plan(500));
-  std::cout << "move: &plans[0] == made_object: " << (&plans[0] == made_object)
-            << ", plans[0].data() == made_block: " << (plans[0].data() == made_block)
-            << std::noboolalpha << '\n';  // false true
+  std::cout << "elision:\n";
+  std::vector<int> best{make_scores()};  // elision: same two addresses
+  std::cout << "  best:   " << &best << ' ' << best.data() << '\n';
+  std::cout << "move:\n";
+  std::vector<std::vector<int>> all;
+  all.push_back(make_scores());  // a move: new vector, same block
+  std::cout << "  all[0]: " << &all[0] << ' ' << all[0].data() << '\n';
 }
 }  // namespace elision_or_move
 
@@ -158,7 +153,7 @@ void run() {
 }
 }  // namespace exercise_copy_move
 
-// [Slide 22] A Named Object
+// [Slide 21] A Named Object
 namespace lvalue_name {
 void run() {
   int count{3};        // makes an int object that holds 3
@@ -169,7 +164,7 @@ void run() {
 }
 }  // namespace lvalue_name
 
-// [Slide 23] Copied, Not Taken
+// [Slide 22] Copied, Not Taken
 namespace lvalue_copied {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -182,7 +177,7 @@ void run() {
 }
 }  // namespace lvalue_copied
 
-// [Slide 24] Checking with &
+// [Slide 23] Checking with &
 namespace lvalue_test {
 void run() {
   int count{3};
@@ -194,7 +189,7 @@ void run() {
 }
 }  // namespace lvalue_test
 
-// [Slide 25] In the Tracker: lvalues
+// [Slide 24] In the Tracker: lvalues
 namespace lvalues {
 void run() {
   std::vector<Pose> path{make_path(3)};
@@ -210,7 +205,7 @@ void run() {
 }
 }  // namespace lvalues
 
-// [Slide 27] A Computed Value
+// [Slide 26] A Computed Value
 namespace prvalue_value {
 void run() {
   int count{3};
@@ -220,7 +215,7 @@ void run() {
 }
 }  // namespace prvalue_value
 
-// [Slide 28] In the Tracker: prvalues
+// [Slide 27] In the Tracker: prvalues
 namespace prvalues {
 void run() {
   int a{2};
@@ -237,7 +232,7 @@ void run() {
 }
 }  // namespace prvalues
 
-// [Slide 30] Marked by std::move
+// [Slide 29] Marked by std::move
 namespace xvalue_marked {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -247,7 +242,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 31] In the Tracker: xvalues
+// [Slide 30] In the Tracker: xvalues
 namespace xvalues {
 void run() {
   std::vector<Pose> path{make_path(3)};
@@ -261,7 +256,7 @@ void run() {
 }
 }  // namespace xvalues
 
-// [Slide 33] Temporary Materialization
+// [Slide 32] Temporary Materialization
 namespace materialization {
 void run() {
   std::cout << "make_obstacle(3): " << CATEGORY(make_obstacle(3)) << '\n';        // prvalue
@@ -271,7 +266,7 @@ void run() {
 }
 }  // namespace materialization
 
-// [Slide 35] The decltype Test
+// [Slide 34] The decltype Test
 namespace testing_category {
 std::vector<Pose> path{make_path(3)};
 static_assert(std::is_same_v<decltype((path)), std::vector<Pose>&>);              // lvalue
@@ -283,7 +278,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 36] Exercise 2: Value Categories
+// [Slide 35] Exercise 2: Value Categories
 namespace exercise_categories {
 // The Obstacle with this id, or the first one when no id matches.
 Obstacle& lookup(std::vector<Obstacle>& seen, int id) {
@@ -313,7 +308,7 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 38] Binding to rvalues
+// [Slide 37] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -327,11 +322,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 39] What Each Reference Refers To
-// The slide is the figure of [Slide 38]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 38].
+// [Slide 38] What Each Reference Refers To
+// The slide is the figure of [Slide 37]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 37].
 
-// [Slide 40] Overloads for Copy and Move
+// [Slide 39] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -358,7 +353,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 41] What std::move Does
+// [Slide 40] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -372,7 +367,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 42] A Parameter the Function Moves From
+// [Slide 41] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -401,7 +396,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 43] Returning a Local
+// [Slide 42] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -429,22 +424,22 @@ std::vector<Slide> slides() {
       {14, "Elision or a Move", elision_or_move::run},
       {16, "The Moved-from Object", moved_from::run},
       {17, "Exercise 1: Copy and Move", exercise_copy_move::run},
-      {22, "A Named Object", lvalue_name::run},
-      {23, "Copied, Not Taken", lvalue_copied::run},
-      {24, "Checking with &", lvalue_test::run},
-      {25, "In the Tracker (lvalue)", lvalues::run},
-      {27, "A Computed Value", prvalue_value::run},
-      {28, "In the Tracker (prvalue)", prvalues::run},
-      {30, "Marked by std::move", xvalue_marked::run},
-      {31, "In the Tracker (xvalue)", xvalues::run},
-      {33, "Temporary Materialization", materialization::run},
-      {35, "The decltype Test", testing_category::run},
-      {36, "Exercise 2: Value Categories", exercise_categories::run},
-      {38, "Binding to rvalues", rvalue_references::run},
-      {40, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {41, "What std::move Does", move_moves_nothing::run},
-      {42, "A Parameter the Function Moves From", will_move_from::run},
-      {43, "Returning a Local", return_by_value::run},
+      {21, "A Named Object", lvalue_name::run},
+      {22, "Copied, Not Taken", lvalue_copied::run},
+      {23, "Checking with &", lvalue_test::run},
+      {24, "In the Tracker (lvalue)", lvalues::run},
+      {26, "A Computed Value", prvalue_value::run},
+      {27, "In the Tracker (prvalue)", prvalues::run},
+      {29, "Marked by std::move", xvalue_marked::run},
+      {30, "In the Tracker (xvalue)", xvalues::run},
+      {32, "Temporary Materialization", materialization::run},
+      {34, "The decltype Test", testing_category::run},
+      {35, "Exercise 2: Value Categories", exercise_categories::run},
+      {37, "Binding to rvalues", rvalue_references::run},
+      {39, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {40, "What std::move Does", move_moves_nothing::run},
+      {41, "A Parameter the Function Moves From", will_move_from::run},
+      {42, "Returning a Local", return_by_value::run},
   };
 }
 
