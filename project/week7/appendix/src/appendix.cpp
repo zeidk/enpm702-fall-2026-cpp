@@ -333,6 +333,52 @@ void run() {
 }
 }  // namespace reseat
 
+// [Appendix xxix] A Parameter the Function Moves From
+// Core Guidelines F.18: when a function always moves from a parameter, take it
+// by X&& and std::move it. The caller must then say std::move for an lvalue,
+// so a copy never happens by accident.
+namespace will_move_from {
+struct Controller {
+  std::vector<Pose> path;  // the part that steers
+};
+
+void set_path(Controller& controller, std::vector<Pose>&& path) {
+  controller.path = std::move(path);  // path has a name: it is an lvalue, so move it
+}
+
+void run() {
+  Controller controller{};
+  std::vector<Pose> path{make_path(1000)};
+  const Pose* where{path.data()};  // where path's block is
+  // Does not compile: cannot bind rvalue reference of type 'std::vector<Pose>&&'
+  //                   to lvalue of type 'std::vector<Pose>'
+  // set_path(controller, path);
+  set_path(controller, std::move(path));  // the caller says: take it
+  std::cout << std::boolalpha << "controller.path.data() == where: "
+            << (controller.path.data() == where) << std::noboolalpha
+            << ", path.size(): " << path.size() << '\n';  // true 0
+  set_path(controller, make_path(5));     // a prvalue binds with no std::move
+  std::cout << "controller.path.size(): " << controller.path.size() << '\n';  // 5
+}
+}  // namespace will_move_from
+
+// [Appendix xxx] Returning a Local
+namespace return_by_value {
+std::vector<Pose> plan_path(int n) {
+  std::vector<Pose> path{make_path(n)};
+  std::cout << "  inside plan_path, path.data(): " << path.data() << '\n';
+  return path;  // elided, or moved: never copied (Lecture 5)
+  // Warns: moving a local object in a return statement prevents copy elision
+  //        [-Wpessimizing-move]
+  // return std::move(path);
+}
+
+void run() {
+  std::vector<Pose> path{plan_path(1000)};
+  std::cout << "  in the caller, path.data(): " << path.data() << '\n';  // the same address
+}
+}  // namespace return_by_value
+
 #undef CATEGORY
 
 int main(int argc, char* argv[]) {
@@ -358,6 +404,8 @@ int main(int argc, char* argv[]) {
       {25, "std::move on a const Object", move_const::run},
       {26, "release", release::run},
       {27, "Passing: Reseat", reseat::run},
+      {29, "A Parameter the Function Moves From", will_move_from::run},
+      {30, "Returning a Local", return_by_value::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }
