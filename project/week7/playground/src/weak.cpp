@@ -7,12 +7,12 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 84    # only [Slide 84]
+ * 702run week7_playground 85    # only [Slide 85]
  * @endcode
  *
  * The dashboard shows one obstacle and owns none: it watches the Obstacle
  * through a std::weak_ptr and must notice when the tracker and the planner
- * have let it go. The cycle of [Slide 82] leaks on purpose, so it is in
+ * have let it go. The cycle of [Slide 83] leaks on purpose, so it is in
  * ../../undefined/src/undefined.cpp and runs only when asked for by its number.
  */
 #include <iostream>
@@ -26,11 +26,20 @@
 
 namespace weak {
 
-// [Slide 79] A Cycle
-// The struct and the program are undefined::shared_cycle in
-// ../../undefined/src/undefined.cpp. [Slide 82] runs it.
+// [Slide 79] The Syntax
+namespace syntax {
+void run() {
+  auto cyclist{std::make_shared<Obstacle>(2)};
+  std::weak_ptr<Obstacle> shown{cyclist};    // adds no owner
+  std::cout << cyclist.use_count() << '\n';  // 1
+}
+}  // namespace syntax
 
-// [Slide 83] Breaking It
+// [Slide 80] Cyclic Reference
+// The struct and the program are undefined::shared_cycle in
+// ../../undefined/src/undefined.cpp. [Slide 83] runs it.
+
+// [Slide 84] Breaking It
 namespace breaking_cycle {
 struct Towing {
   Obstacle obstacle;
@@ -47,7 +56,7 @@ void run() {
 }  // a and b go out of scope: each count drops to 0, both are deleted
 }  // namespace breaking_cycle
 
-// [Slide 84] lock
+// [Slide 85] lock
 namespace reading_weak {
 struct Dashboard {
   std::weak_ptr<Obstacle> shown;  // the obstacle on screen
@@ -74,7 +83,7 @@ void run() {
 }
 }  // namespace reading_weak
 
-// [Slide 85] expired and use_count
+// [Slide 86] expired and use_count
 namespace expired_use_count {
 void run() {
   auto cyclist{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
@@ -87,7 +96,7 @@ void run() {
 }
 }  // namespace expired_use_count
 
-// [Slide 87] Exercise 5: Use Counts
+// [Slide 88] Exercise 5: Use Counts
 namespace exercise_use_counts {
 void run() {
   // Write the two values for each line before you run it.
@@ -113,11 +122,12 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {82, "The Cycle, Measured", undefined::shared_cycle::run, true},
-      {83, "Breaking It", breaking_cycle::run},
-      {84, "lock", reading_weak::run},
-      {85, "expired and use_count", expired_use_count::run},
-      {87, "Exercise 5: Use Counts", exercise_use_counts::run},
+      {79, "The Syntax", syntax::run},
+      {83, "Cyclic Reference, Measured", undefined::shared_cycle::run, true},
+      {84, "Breaking It", breaking_cycle::run},
+      {85, "lock", reading_weak::run},
+      {86, "expired and use_count", expired_use_count::run},
+      {88, "Exercise 5: Use Counts", exercise_use_counts::run},
   };
 }
 
