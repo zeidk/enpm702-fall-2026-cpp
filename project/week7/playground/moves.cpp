@@ -12,7 +12,7 @@
  *
  * The value category slides print the category of each expression with
  * CATEGORY(e), which reads decltype((e)): T& for an lvalue, T&& for an xvalue,
- * T for a prvalue ([Slide 31]). Code that does not compile, or that warns, is
+ * T for a prvalue ([Slide 30]). Code that does not compile, or that warns, is
  * commented out where its slide shows it: uncomment it, build, and you get the
  * slide's message.
  */
@@ -207,21 +207,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 27] In the Tracker: xvalues
-namespace xvalues {
-void run() {
-  std::vector<Pose> path{make_path(3)};
-  Obstacle cyclist{make_obstacle(2)};
-  std::cout << "std::move(path): " << CATEGORY(std::move(path)) << '\n';  // xvalue
-  std::cout << "static_cast<std::vector<Pose>&&>(path): "
-            << CATEGORY(static_cast<std::vector<Pose>&&>(path)) << '\n';  // xvalue
-  std::cout << "std::move(cyclist).pose: " << CATEGORY(std::move(cyclist).pose)
-            << '\n';                                                       // xvalue
-  std::cout << "path.size(): " << path.size() << '\n';  // 3: naming an xvalue moves nothing
-}
-}  // namespace xvalues
-
-// [Slide 29] Temporary Materialization
+// [Slide 28] Temporary Materialization
 namespace materialization {
 void run() {
   std::cout << "make_obstacle(3): " << CATEGORY(make_obstacle(3)) << '\n';        // prvalue
@@ -231,7 +217,7 @@ void run() {
 }
 }  // namespace materialization
 
-// [Slide 31] The decltype Test
+// [Slide 30] The decltype Test
 namespace testing_category {
 std::vector<Pose> path{make_path(3)};
 static_assert(std::is_same_v<decltype((path)), std::vector<Pose>&>);              // lvalue
@@ -243,7 +229,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 32] Exercise 2: Value Categories
+// [Slide 31] Exercise 2: Value Categories
 namespace exercise_categories {
 // The Obstacle with this id, or the first one when no id matches.
 Obstacle& lookup(std::vector<Obstacle>& seen, int id) {
@@ -273,7 +259,7 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 34] Binding to rvalues
+// [Slide 33] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -287,11 +273,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 35] What Each Reference Refers To
-// The slide is the figure of [Slide 34]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 34].
+// [Slide 34] What Each Reference Refers To
+// The slide is the figure of [Slide 33]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 33].
 
-// [Slide 36] Overloads for Copy and Move
+// [Slide 35] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -318,7 +304,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 37] What std::move Does
+// [Slide 36] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -332,7 +318,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 38] A Parameter the Function Moves From
+// [Slide 37] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -361,7 +347,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 39] Returning a Local
+// [Slide 38] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -394,15 +380,14 @@ std::vector<Slide> slides() {
       {22, "Checking with &", lvalue_test::run},
       {24, "A Computed Value", prvalue_value::run},
       {26, "Marked by std::move", xvalue_marked::run},
-      {27, "In the Tracker (xvalue)", xvalues::run},
-      {29, "Temporary Materialization", materialization::run},
-      {31, "The decltype Test", testing_category::run},
-      {32, "Exercise 2: Value Categories", exercise_categories::run},
-      {34, "Binding to rvalues", rvalue_references::run},
-      {36, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {37, "What std::move Does", move_moves_nothing::run},
-      {38, "A Parameter the Function Moves From", will_move_from::run},
-      {39, "Returning a Local", return_by_value::run},
+      {28, "Temporary Materialization", materialization::run},
+      {30, "The decltype Test", testing_category::run},
+      {31, "Exercise 2: Value Categories", exercise_categories::run},
+      {33, "Binding to rvalues", rvalue_references::run},
+      {35, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {36, "What std::move Does", move_moves_nothing::run},
+      {37, "A Parameter the Function Moves From", will_move_from::run},
+      {38, "Returning a Local", return_by_value::run},
   };
 }
 
