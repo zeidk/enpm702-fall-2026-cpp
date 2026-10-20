@@ -12,7 +12,7 @@
  *
  * The value category slides print the category of each expression with
  * CATEGORY(e), which reads decltype((e)): T& for an lvalue, T&& for an xvalue,
- * T for a prvalue ([Slide 31]). Code that does not compile, or that warns, is
+ * T for a prvalue ([Slide 36]). Code that does not compile, or that warns, is
  * commented out where its slide shows it: uncomment it, build, and you get the
  * slide's message.
  */
@@ -149,7 +149,7 @@ void run() {
 }
 }  // namespace exercise_copy_move
 
-// [Slide 20] A Named Object
+// [Slide 25] A Named Object
 namespace lvalue_name {
 void run() {
   int count{3};        // makes an int object that holds 3
@@ -160,7 +160,7 @@ void run() {
 }
 }  // namespace lvalue_name
 
-// [Slide 21] Copied, Not Taken
+// [Slide 26] Copied, Not Taken
 namespace lvalue_copied {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -173,7 +173,7 @@ void run() {
 }
 }  // namespace lvalue_copied
 
-// [Slide 22] Checking with &
+// [Slide 27] Checking with &
 namespace lvalue_test {
 void run() {
   int count{3};
@@ -185,7 +185,7 @@ void run() {
 }
 }  // namespace lvalue_test
 
-// [Slide 24] A Computed Value
+// [Slide 29] A Computed Value
 namespace prvalue_value {
 void run() {
   int count{3};
@@ -200,7 +200,7 @@ void run() {
 }
 }  // namespace prvalue_value
 
-// [Slide 26] Marked by std::move
+// [Slide 31] Marked by std::move
 namespace xvalue_marked {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -210,7 +210,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 28] Temporary Materialization
+// [Slide 33] Temporary Materialization
 namespace materialization {
 void run() {
   std::cout << "make_obstacle(3): " << CATEGORY(make_obstacle(3)) << '\n';        // prvalue
@@ -220,7 +220,7 @@ void run() {
 }
 }  // namespace materialization
 
-// [Slide 30] std::is_same_v
+// [Slide 35] std::is_same_v
 namespace same_type {
 static_assert(std::is_same_v<int, int>);         // the same type
 static_assert(!std::is_same_v<int, int&>);       // int& is another type
@@ -231,7 +231,7 @@ void run() {
 }
 }  // namespace same_type
 
-// [Slide 31] The decltype Test
+// [Slide 36] The decltype Test
 namespace testing_category {
 std::vector<Pose> path{make_path(3)};
 static_assert(std::is_same_v<decltype((path)), std::vector<Pose>&>);              // lvalue
@@ -243,7 +243,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 32] Exercise 2: Value Categories
+// [Slide 37] Exercise 2: Value Categories
 namespace exercise_categories {
 // The Obstacle with this id, or the first one when no id matches.
 Obstacle& lookup(std::vector<Obstacle>& seen, int id) {
@@ -273,7 +273,7 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 34] Binding to rvalues
+// [Slide 39] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -287,11 +287,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 35] What Each Reference Refers To
-// The slide is the figure of [Slide 34]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 34].
+// [Slide 40] What Each Reference Refers To
+// The slide is the figure of [Slide 39]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 39].
 
-// [Slide 36] Overloads for Copy and Move
+// [Slide 41] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -318,7 +318,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 37] What std::move Does
+// [Slide 42] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -343,18 +343,18 @@ std::vector<Slide> slides() {
       {14, "Elision or a Move", elision_or_move::run},
       {15, "The Moved-from Object", moved_from::run},
       {16, "Exercise 1: Copy and Move", exercise_copy_move::run},
-      {20, "A Named Object", lvalue_name::run},
-      {21, "Copied, Not Taken", lvalue_copied::run},
-      {22, "Checking with &", lvalue_test::run},
-      {24, "A Computed Value", prvalue_value::run},
-      {26, "Marked by std::move", xvalue_marked::run},
-      {28, "Temporary Materialization", materialization::run},
-      {30, "std::is_same_v", same_type::run},
-      {31, "The decltype Test", testing_category::run},
-      {32, "Exercise 2: Value Categories", exercise_categories::run},
-      {34, "Binding to rvalues", rvalue_references::run},
-      {36, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {37, "What std::move Does", move_moves_nothing::run},
+      {25, "A Named Object", lvalue_name::run},
+      {26, "Copied, Not Taken", lvalue_copied::run},
+      {27, "Checking with &", lvalue_test::run},
+      {29, "A Computed Value", prvalue_value::run},
+      {31, "Marked by std::move", xvalue_marked::run},
+      {33, "Temporary Materialization", materialization::run},
+      {35, "std::is_same_v", same_type::run},
+      {36, "The decltype Test", testing_category::run},
+      {37, "Exercise 2: Value Categories", exercise_categories::run},
+      {39, "Binding to rvalues", rvalue_references::run},
+      {41, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {42, "What std::move Does", move_moves_nothing::run},
   };
 }
 

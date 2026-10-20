@@ -26,7 +26,7 @@ namespace {
 Obstacle* make_track(int id, Pose pose, double speed) { return new Obstacle{id, pose, speed}; }
 }  // namespace
 
-// [Slide 78] Cyclic Reference, Measured: the code of [Slide 75]
+// [Slide 83] Cyclic Reference, Measured: the code of [Slide 80]
 namespace shared_cycle {
 struct Towing {
   Obstacle obstacle;

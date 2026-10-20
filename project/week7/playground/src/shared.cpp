@@ -7,7 +7,7 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 64    # only [Slide 64]
+ * 702run week7_playground 69    # only [Slide 69]
  * @endcode
  *
  * The cyclist, id 2, is near the planner's path: the tracker and the planner's
@@ -28,12 +28,12 @@ namespace shared {
 
 using Hazards = std::vector<std::shared_ptr<Obstacle>>;
 
-// [Slide 60] A Hazard in Two Lists
+// [Slide 65] A Hazard in Two Lists
 // The slide states the problem: hazards holds tracker[1].get(), and erasing
 // tracker[1] deletes the Obstacle, so hazards[0] dangles. A read through it is
 // undefined behavior; [Appendix iii] runs one with the sanitizers.
 
-// [Slide 61] The Syntax
+// [Slide 66] The Syntax
 // 1 and 2 declare the same type; 3 compiles too, but writes new and makes two
 // allocations ([Appendix xiv]); 4 copies: a second owner of the same int.
 namespace syntax {
@@ -53,7 +53,7 @@ void run() {
 }
 }  // namespace syntax
 
-// [Slide 62] Creating One
+// [Slide 67] Creating One
 namespace creating {
 void run() {
   std::vector<std::shared_ptr<Obstacle>> tracker;
@@ -67,7 +67,7 @@ void run() {
 }
 }  // namespace creating
 
-// [Slide 63] The Control Block
+// [Slide 68] The Control Block
 namespace control_block {
 void run() {
   auto cyclist{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
@@ -78,7 +78,7 @@ void run() {
 }
 }  // namespace control_block
 
-// [Slide 64] use_count
+// [Slide 69] use_count
 namespace use_count_steps {
 void run() {
   auto cyclist{std::make_shared<Obstacle>(2)};
@@ -94,9 +94,9 @@ void run() {
 }
 }  // namespace use_count_steps
 
-// [Slide 65] Three Ways to Let Go
+// [Slide 70] Three Ways to Let Go
 // Three separate runs, each from step 2; start() makes steps 1 and 2 and prints
-// their counts once, in the first run. [Slides 60 to 64] show each step.
+// their counts once, in the first run. [Slides 65 to 69] show each step.
 namespace let_go {
 std::shared_ptr<Obstacle> start(bool show) {
   auto cyclist{std::make_shared<Obstacle>(2, Pose{12.0, -1.0}, 4.0)};
@@ -131,7 +131,7 @@ void run() {
 }
 }  // namespace let_go
 
-// [Slide 71] Deletion by the Last Owner
+// [Slide 76] Deletion by the Last Owner
 namespace last_owner {
 void run() {
   std::vector<std::shared_ptr<Obstacle>> tracker;
@@ -151,12 +151,12 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {61, "The Syntax", syntax::run},
-      {62, "Creating One", creating::run},
-      {63, "The Control Block", control_block::run},
-      {64, "use_count", use_count_steps::run},
-      {65, "Three Ways to Let Go", let_go::run},
-      {71, "Deletion by the Last Owner", last_owner::run},
+      {66, "The Syntax", syntax::run},
+      {67, "Creating One", creating::run},
+      {68, "The Control Block", control_block::run},
+      {69, "use_count", use_count_steps::run},
+      {70, "Three Ways to Let Go", let_go::run},
+      {76, "Deletion by the Last Owner", last_owner::run},
   };
 }
 
