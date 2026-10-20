@@ -7,12 +7,12 @@
  * section file and runs them.
  *
  * @code
- * 702run week7_playground 14    # only [Slide 14]
+ * 702run week7_playground 12    # only [Slide 12]
  * @endcode
  *
  * The value category slides print the category of each expression with
  * CATEGORY(e), which reads decltype((e)): T& for an lvalue, T&& for an xvalue,
- * T for a prvalue ([Slide 39]). Code that does not compile, or that warns, is
+ * T for a prvalue ([Slide 35]). Code that does not compile, or that warns, is
  * commented out where its slide shows it: uncomment it, build, and you get the
  * slide's message.
  */
@@ -59,7 +59,7 @@ Obstacle make_obstacle(int id) {
 // The first Obstacle in the list, by reference ([Appendix xx]).
 Obstacle& first_obstacle(std::vector<Obstacle>& seen) { return seen[0]; }
 
-// [Slide 14] Handing a Path to the Controller
+// [Slide 12] Handing a Path to the Controller
 namespace handing_path {
 void run() {
   std::vector<Pose> path{make_path(1000)};   // pose i at x = i m
@@ -78,25 +78,50 @@ void run() {
 }
 }  // namespace handing_path
 
-// [Slide 15] An Implicit Move
-namespace implicit_move {
-const Pose* made{nullptr};             // where plan's block is made
+// [Slide 13] Inside a Copy
+// reserve(1024) gives path 24 spare slots (libstdc++ allocates exactly 1024); the
+// copy allocates for its 1000 elements only.
+namespace inside_copy {
+void run() {
+  std::vector<Pose> path{make_path(1000)};
+  path.reserve(1024);              // room for 24 more
+  std::vector<Pose> copied{path};  // a copy
+  std::cout << "path: size " << path.size() << ", capacity " << path.capacity() << ", "
+            << path.capacity() * sizeof(Pose) << " bytes\n";                // 1000 1024 24576
+  std::cout << "copied: size " << copied.size() << ", capacity " << copied.capacity() << ", "
+            << copied.capacity() * sizeof(Pose) << " bytes\n";              // 1000 1000 24000
+}
+}  // namespace inside_copy
 
-std::vector<Pose> plan(int n) {        // a custom function
+// [Slide 14] Elision or a Move
+// A prvalue that initializes an object of its own type is built in that object's
+// place (C++20 [dcl.init] 17.6.1): p is plan's local. push_back takes a reference,
+// so it gets a temporary and moves it into the vector: a new object that took the
+// block. With -fno-elide-constructors (no NRVO), p is a moved-into object too.
+namespace elision_or_move {
+const std::vector<Pose>* made_object{nullptr};  // plan's local
+const Pose* made_block{nullptr};                // its block
+
+std::vector<Pose> plan(int n) {
   std::vector<Pose> path{make_path(n)};
-  made = path.data();
-  return path;                         // no std::move
+  made_object = &path;
+  made_block = path.data();
+  return path;  // no std::move
 }
 
 void run() {
-  std::vector<std::vector<Pose>> plans;
-  plans.push_back(plan(500));          // no std::move
-  std::cout << "plans[0].data() == made: " << std::boolalpha << (plans[0].data() == made)
-            << std::noboolalpha << ", plans[0].size(): " << plans[0].size() << '\n';  // true 500
+  std::vector<std::vector<Pose>> plans;           // a list of paths
+  std::vector<Pose> p{plan(500)};
+  std::cout << std::boolalpha << "elision: &p == made_object: " << (&p == made_object)
+            << ", p.data() == made_block: " << (p.data() == made_block) << '\n';  // true true
+  plans.push_back(plan(500));
+  std::cout << "move: &plans[0] == made_object: " << (&plans[0] == made_object)
+            << ", plans[0].data() == made_block: " << (plans[0].data() == made_block)
+            << std::noboolalpha << '\n';  // false true
 }
-}  // namespace implicit_move
+}  // namespace elision_or_move
 
-// [Slide 18] The Moved-from Object
+// [Slide 16] The Moved-from Object
 namespace moved_from {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -110,7 +135,7 @@ void run() {
 }
 }  // namespace moved_from
 
-// [Slide 19] Exercise 1: Copy and Move
+// [Slide 17] Exercise 1: Copy and Move
 // After line 4: two blocks on the heap, c holds the first and a holds b's copy;
 // b is empty, and nothing was freed (libstdc++, measured).
 namespace exercise_copy_move {
@@ -133,7 +158,7 @@ void run() {
 }
 }  // namespace exercise_copy_move
 
-// [Slide 23] A Named Object
+// [Slide 22] A Named Object
 namespace lvalue_name {
 void run() {
   int count{3};        // makes an int object that holds 3
@@ -144,7 +169,7 @@ void run() {
 }
 }  // namespace lvalue_name
 
-// [Slide 24] Copied, Not Taken
+// [Slide 23] Copied, Not Taken
 namespace lvalue_copied {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -157,7 +182,7 @@ void run() {
 }
 }  // namespace lvalue_copied
 
-// [Slide 25] Checking with &
+// [Slide 24] Checking with &
 namespace lvalue_test {
 void run() {
   int count{3};
@@ -169,23 +194,7 @@ void run() {
 }
 }  // namespace lvalue_test
 
-// [Slide 26] A Reference, an Element, *p
-namespace lvalue_more {
-void run() {
-  int count{3};
-  int& alias{count};  // another name for count (L3)
-  int numbers[3]{10, 20, 30};
-  int* p{&numbers[1]};  // p holds the address of numbers[1]
-  std::cout << "alias: " << CATEGORY(alias) << '\n';            // lvalue
-  std::cout << "numbers[2]: " << CATEGORY(numbers[2]) << '\n';  // lvalue
-  std::cout << "*p: " << CATEGORY(*p) << '\n';                  // lvalue
-  std::cout << std::boolalpha << "&alias == &count: " << (&alias == &count)
-            << ", &*p == &numbers[1]: " << (&*p == &numbers[1]) << std::noboolalpha
-            << '\n';  // true true
-}
-}  // namespace lvalue_more
-
-// [Slide 27] In the Tracker: lvalues
+// [Slide 25] In the Tracker: lvalues
 namespace lvalues {
 void run() {
   std::vector<Pose> path{make_path(3)};
@@ -201,7 +210,7 @@ void run() {
 }
 }  // namespace lvalues
 
-// [Slide 29] A Computed Value
+// [Slide 27] A Computed Value
 namespace prvalue_value {
 void run() {
   int count{3};
@@ -211,25 +220,7 @@ void run() {
 }
 }  // namespace prvalue_value
 
-// [Slide 30] Literals, Results, Calls
-namespace prvalue_more {
-int twice(int n) { return 2 * n; }  // returns an int by value
-
-void run() {
-  int count{3};
-  int doubled{count * 2};
-  int again{twice(count)};
-  std::cout << "count: " << count << ", doubled: " << doubled << ", again: " << again
-            << '\n';  // 3 6 6
-  // Does not compile, for each of the three: lvalue required as unary '&' operand
-  // int* a{&3};  int* b{&(count * 2)};  int* c{&twice(count)};
-  std::cout << "3: " << CATEGORY(3) << '\n';                        // prvalue
-  std::cout << "count * 2: " << CATEGORY(count * 2) << '\n';        // prvalue
-  std::cout << "twice(count): " << CATEGORY(twice(count)) << '\n';  // prvalue
-}
-}  // namespace prvalue_more
-
-// [Slide 31] In the Tracker: prvalues
+// [Slide 28] In the Tracker: prvalues
 namespace prvalues {
 void run() {
   int a{2};
@@ -246,7 +237,7 @@ void run() {
 }
 }  // namespace prvalues
 
-// [Slide 33] Marked by std::move
+// [Slide 30] Marked by std::move
 namespace xvalue_marked {
 void run() {
   std::vector<int> scores{90, 75, 82};
@@ -256,25 +247,7 @@ void run() {
 }
 }  // namespace xvalue_marked
 
-// [Slide 34] Ways to Mark
-namespace xvalue_ways {
-struct Point {
-  int x;
-  int y;
-};
-
-void run() {
-  int count{3};
-  Point pt{1, 2};
-  // Does not compile, for each: taking address of rvalue
-  // int* a{&std::move(count)};
-  std::cout << "std::move(count): " << CATEGORY(std::move(count)) << '\n';                    // xvalue
-  std::cout << "static_cast<int&&>(count): " << CATEGORY(static_cast<int&&>(count)) << '\n';  // xvalue
-  std::cout << "std::move(pt).x: " << CATEGORY(std::move(pt).x) << '\n';                      // xvalue
-}
-}  // namespace xvalue_ways
-
-// [Slide 35] In the Tracker: xvalues
+// [Slide 31] In the Tracker: xvalues
 namespace xvalues {
 void run() {
   std::vector<Pose> path{make_path(3)};
@@ -288,7 +261,7 @@ void run() {
 }
 }  // namespace xvalues
 
-// [Slide 37] Temporary Materialization
+// [Slide 33] Temporary Materialization
 namespace materialization {
 void run() {
   std::cout << "make_obstacle(3): " << CATEGORY(make_obstacle(3)) << '\n';        // prvalue
@@ -298,7 +271,7 @@ void run() {
 }
 }  // namespace materialization
 
-// [Slide 39] The decltype Test
+// [Slide 35] The decltype Test
 namespace testing_category {
 std::vector<Pose> path{make_path(3)};
 static_assert(std::is_same_v<decltype((path)), std::vector<Pose>&>);              // lvalue
@@ -310,7 +283,7 @@ void run() {
 }
 }  // namespace testing_category
 
-// [Slide 40] Exercise 2: Value Categories
+// [Slide 36] Exercise 2: Value Categories
 namespace exercise_categories {
 // The Obstacle with this id, or the first one when no id matches.
 Obstacle& lookup(std::vector<Obstacle>& seen, int id) {
@@ -340,7 +313,7 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 42] Binding to rvalues
+// [Slide 38] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -354,22 +327,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 43] What Each Reference Refers To
-// The slide is the figure of [Slide 42]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 42].
+// [Slide 39] What Each Reference Refers To
+// The slide is the figure of [Slide 38]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 38].
 
-// [Slide 44] Giving It a Name
-namespace named_rvalue_ref {
-void run() {
-  std::vector<Pose>&& r{make_path(10)};
-  std::cout << "decltype(r) is std::vector<Pose>&&: " << std::boolalpha
-            << std::is_same_v<decltype(r), std::vector<Pose>&&> << std::noboolalpha
-            << '\n';                              // true: its type
-  std::cout << "r: " << CATEGORY(r) << '\n';      // lvalue: it has a name
-}
-}  // namespace named_rvalue_ref
-
-// [Slide 45] Overloads for Copy and Move
+// [Slide 40] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -396,7 +358,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 46] What std::move Does
+// [Slide 41] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -410,18 +372,7 @@ void run() {
 }
 }  // namespace move_moves_nothing
 
-// [Slide 47] std::move on a const Object
-namespace move_const {
-void run() {
-  const std::vector<Pose> path{make_path(1000)};
-  std::vector<Pose> controller_path{std::move(path)};  // compiles: a copy
-  std::cout << std::boolalpha << "controller_path.data() == path.data(): "
-            << (controller_path.data() == path.data()) << std::noboolalpha
-            << ", path.size(): " << path.size() << '\n';  // false 1000
-}
-}  // namespace move_const
-
-// [Slide 48] A Parameter the Function Moves From
+// [Slide 42] A Parameter the Function Moves From
 // Core Guidelines F.18: when a function always moves from a parameter, take it
 // by X&& and std::move it. The caller must then say std::move for an lvalue,
 // so a copy never happens by accident.
@@ -450,7 +401,7 @@ void run() {
 }
 }  // namespace will_move_from
 
-// [Slide 49] Returning a Local
+// [Slide 43] Returning a Local
 namespace return_by_value {
 std::vector<Pose> plan_path(int n) {
   std::vector<Pose> path{make_path(n)};
@@ -473,31 +424,27 @@ void run() {
 // true when a full run must skip it.
 std::vector<Slide> slides() {
   return {
-      {14, "Handing a Path to the Controller", handing_path::run},
-      {15, "An Implicit Move", implicit_move::run},
-      {18, "The Moved-from Object", moved_from::run},
-      {19, "Exercise 1: Copy and Move", exercise_copy_move::run},
-      {23, "A Named Object", lvalue_name::run},
-      {24, "Copied, Not Taken", lvalue_copied::run},
-      {25, "Checking with &", lvalue_test::run},
-      {26, "A Reference, an Element, *p", lvalue_more::run},
-      {27, "In the Tracker (lvalue)", lvalues::run},
-      {29, "A Computed Value", prvalue_value::run},
-      {30, "Literals, Results, Calls", prvalue_more::run},
-      {31, "In the Tracker (prvalue)", prvalues::run},
-      {33, "Marked by std::move", xvalue_marked::run},
-      {34, "Ways to Mark", xvalue_ways::run},
-      {35, "In the Tracker (xvalue)", xvalues::run},
-      {37, "Temporary Materialization", materialization::run},
-      {39, "The decltype Test", testing_category::run},
-      {40, "Exercise 2: Value Categories", exercise_categories::run},
-      {42, "Binding to rvalues", rvalue_references::run},
-      {44, "Giving It a Name", named_rvalue_ref::run},
-      {45, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {46, "What std::move Does", move_moves_nothing::run},
-      {47, "std::move on a const Object", move_const::run},
-      {48, "A Parameter the Function Moves From", will_move_from::run},
-      {49, "Returning a Local", return_by_value::run},
+      {12, "Handing a Path to the Controller", handing_path::run},
+      {13, "Inside a Copy", inside_copy::run},
+      {14, "Elision or a Move", elision_or_move::run},
+      {16, "The Moved-from Object", moved_from::run},
+      {17, "Exercise 1: Copy and Move", exercise_copy_move::run},
+      {22, "A Named Object", lvalue_name::run},
+      {23, "Copied, Not Taken", lvalue_copied::run},
+      {24, "Checking with &", lvalue_test::run},
+      {25, "In the Tracker (lvalue)", lvalues::run},
+      {27, "A Computed Value", prvalue_value::run},
+      {28, "In the Tracker (prvalue)", prvalues::run},
+      {30, "Marked by std::move", xvalue_marked::run},
+      {31, "In the Tracker (xvalue)", xvalues::run},
+      {33, "Temporary Materialization", materialization::run},
+      {35, "The decltype Test", testing_category::run},
+      {36, "Exercise 2: Value Categories", exercise_categories::run},
+      {38, "Binding to rvalues", rvalue_references::run},
+      {40, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {41, "What std::move Does", move_moves_nothing::run},
+      {42, "A Parameter the Function Moves From", will_move_from::run},
+      {43, "Returning a Local", return_by_value::run},
   };
 }
 

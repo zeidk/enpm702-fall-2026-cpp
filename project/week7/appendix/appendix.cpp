@@ -23,6 +23,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -217,6 +218,123 @@ void run() {
 }
 }  // namespace dashboard
 
+// The value category of an expression, for the frames moved from the main deck
+// on 2026-10-19 ([Appendix xxi] to [Appendix xxiv]). decltype((e)) is T& for an
+// lvalue, T&& for an xvalue and T for a prvalue; the same test as moves.cpp.
+template <typename T>
+constexpr std::string_view category() {
+  if constexpr (std::is_lvalue_reference_v<T>) {
+    return "lvalue";
+  } else if constexpr (std::is_rvalue_reference_v<T>) {
+    return "xvalue";
+  } else {
+    return "prvalue";
+  }
+}
+// A macro, because decltype must see the expression itself, not a copy of it.
+#define CATEGORY(e) category<decltype((e))>()
+
+// [Appendix xxi] A Reference, an Element, *p
+namespace lvalue_more {
+void run() {
+  int count{3};
+  int& alias{count};  // another name for count (L3)
+  int numbers[3]{10, 20, 30};
+  int* p{&numbers[1]};  // p holds the address of numbers[1]
+  std::cout << "alias: " << CATEGORY(alias) << '\n';            // lvalue
+  std::cout << "numbers[2]: " << CATEGORY(numbers[2]) << '\n';  // lvalue
+  std::cout << "*p: " << CATEGORY(*p) << '\n';                  // lvalue
+  std::cout << std::boolalpha << "&alias == &count: " << (&alias == &count)
+            << ", &*p == &numbers[1]: " << (&*p == &numbers[1]) << std::noboolalpha
+            << '\n';  // true true
+}
+}  // namespace lvalue_more
+
+// [Appendix xxii] Literals, Results, Calls
+namespace prvalue_more {
+int twice(int n) { return 2 * n; }  // returns an int by value
+
+void run() {
+  int count{3};
+  int doubled{count * 2};
+  int again{twice(count)};
+  std::cout << "count: " << count << ", doubled: " << doubled << ", again: " << again
+            << '\n';  // 3 6 6
+  // Does not compile, for each of the three: lvalue required as unary '&' operand
+  // int* a{&3};  int* b{&(count * 2)};  int* c{&twice(count)};
+  std::cout << "3: " << CATEGORY(3) << '\n';                        // prvalue
+  std::cout << "count * 2: " << CATEGORY(count * 2) << '\n';        // prvalue
+  std::cout << "twice(count): " << CATEGORY(twice(count)) << '\n';  // prvalue
+}
+}  // namespace prvalue_more
+
+// [Appendix xxiii] Ways to Mark
+namespace xvalue_ways {
+struct Point {
+  int x;
+  int y;
+};
+
+void run() {
+  int count{3};
+  Point pt{1, 2};
+  // Does not compile, for each: taking address of rvalue
+  // int* a{&std::move(count)};
+  std::cout << "std::move(count): " << CATEGORY(std::move(count)) << '\n';                    // xvalue
+  std::cout << "static_cast<int&&>(count): " << CATEGORY(static_cast<int&&>(count)) << '\n';  // xvalue
+  std::cout << "std::move(pt).x: " << CATEGORY(std::move(pt).x) << '\n';                      // xvalue
+}
+}  // namespace xvalue_ways
+
+// [Appendix xxiv] Giving It a Name
+namespace named_rvalue_ref {
+void run() {
+  std::vector<Pose>&& r{make_path(10)};
+  std::cout << "decltype(r) is std::vector<Pose>&&: " << std::boolalpha
+            << std::is_same_v<decltype(r), std::vector<Pose>&&> << std::noboolalpha
+            << '\n';                              // true: its type
+  std::cout << "r: " << CATEGORY(r) << '\n';      // lvalue: it has a name
+}
+}  // namespace named_rvalue_ref
+
+// [Appendix xxv] std::move on a const Object
+namespace move_const {
+void run() {
+  const std::vector<Pose> path{make_path(1000)};
+  std::vector<Pose> controller_path{std::move(path)};  // compiles: a copy
+  std::cout << std::boolalpha << "controller_path.data() == path.data(): "
+            << (controller_path.data() == path.data()) << std::noboolalpha
+            << ", path.size(): " << path.size() << '\n';  // false 1000
+}
+}  // namespace move_const
+
+// [Appendix xxvi] release
+namespace release {
+void run() {
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  Obstacle* raw{track.release()};  // gives up ownership, deletes nothing
+  std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << std::noboolalpha
+            << ", raw->id: " << raw->id << '\n';  // true 2
+  delete raw;  // you are the owner now: leave this out and it leaks
+}
+}  // namespace release
+
+// [Appendix xxvii] Passing: Reseat
+namespace reseat {
+void replace_track(std::unique_ptr<Obstacle>& track, int new_id) {
+  track = std::make_unique<Obstacle>(new_id);
+}  // the assignment deleted the old Obstacle object
+
+void run() {
+  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  replace_track(track, 7);
+  std::cout << "track->id: " << track->id << ", track->speed: " << track->speed
+            << '\n';  // 7 0
+}
+}  // namespace reseat
+
+#undef CATEGORY
+
 int main(int argc, char* argv[]) {
   // One entry per appendix frame that has code: its number (2 is ii), its
   // title, and the function that runs it.
@@ -233,6 +351,13 @@ int main(int argc, char* argv[]) {
       {12, "unique_ptr to an Array", unique_array::run},
       {13, "swap", swapping::run},
       {15, "A Dashboard of weak_ptr", dashboard::run},
+      {21, "A Reference, an Element, *p", lvalue_more::run},
+      {22, "Literals, Results, Calls", prvalue_more::run},
+      {23, "Ways to Mark", xvalue_ways::run},
+      {24, "Giving It a Name", named_rvalue_ref::run},
+      {25, "std::move on a const Object", move_const::run},
+      {26, "release", release::run},
+      {27, "Passing: Reseat", reseat::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }

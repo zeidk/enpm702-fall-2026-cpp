@@ -4,7 +4,7 @@
  * @author Zeid Kootbally
  *
  * @details The ego vehicle drives along a two-lane road. Its tracker keeps one
- * Obstacle for each obstacle it sees ([Slide 6]). x runs along the road from
+ * Obstacle for each obstacle it sees ([Slide 5]). x runs along the road from
  * where the ego vehicle starts, y to the left of the center of its lane, and
  * heading is 0 along the road, counterclockwise.
  *

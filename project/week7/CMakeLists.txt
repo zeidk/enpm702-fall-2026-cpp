@@ -5,7 +5,7 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-7 program
 #   702run week7_playground       run the code of every slide
-#   702run week7_playground 14    run only the code of [Slide 14]
+#   702run week7_playground 12    run only the code of [Slide 12]
 #   702run week7_appendix         run the code of every appendix frame
 #   702run week7_appendix ii      run only the code of [Appendix ii]
 #   702run week7_allocations      [Appendix xiv]: count make_shared's allocations
