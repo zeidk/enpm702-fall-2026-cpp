@@ -13,8 +13,8 @@
  * @endcode
  *
  * The double delete and the dangling read are undefined behavior, so their
- * code is in ../undefined/undefined.cpp, built with the sanitizers, and runs
- * from week7_appendix.
+ * code is in ../../undefined/src/undefined.cpp, built with the sanitizers,
+ * and runs from week7_appendix.
  */
 #include <iostream>
 

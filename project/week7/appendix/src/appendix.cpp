@@ -15,8 +15,8 @@
  * The appendix frames are numbered i, ii, iii, ... in their top-left corner,
  * and @c "[Appendix iv]" is that number. Each frame's code is in its own
  * namespace, with a @c run() that does what the frame does in @c main(). The
- * table in main() lists them, and run_slides() in @c ../common/slides.cpp runs
- * them. Code with undefined behavior is in @c ../undefined/undefined.cpp,
+ * table in main() lists them, and run_slides() in @c ../../common/src/slides.cpp runs
+ * them. Code with undefined behavior is in @c ../../undefined/src/undefined.cpp,
  * built with the sanitizers; a full run skips it.
  */
 #include <algorithm>

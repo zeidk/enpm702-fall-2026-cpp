@@ -13,7 +13,7 @@
  * The dashboard shows one obstacle and owns none: it watches the Obstacle
  * through a std::weak_ptr and must notice when the tracker and the planner
  * have let it go. The cycle of [Slide 77] leaks on purpose, so it is in
- * ../undefined/undefined.cpp and runs only when asked for by its number.
+ * ../../undefined/src/undefined.cpp and runs only when asked for by its number.
  */
 #include <iostream>
 #include <memory>
@@ -28,7 +28,7 @@ namespace weak {
 
 // [Slide 74] A Cycle
 // The struct and the program are undefined::shared_cycle in
-// ../undefined/undefined.cpp. [Slide 77] runs it.
+// ../../undefined/src/undefined.cpp. [Slide 77] runs it.
 
 // [Slide 78] Breaking It
 namespace breaking_cycle {

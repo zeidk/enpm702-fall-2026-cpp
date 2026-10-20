@@ -10,7 +10,7 @@
 #   702run week7_appendix ii      run only the code of [Appendix ii]
 #   702run week7_allocations      [Appendix xiv]: count make_shared's allocations
 #
-# Folders:
+# Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week7_playground)
 #   appendix/     the code of every appendix frame (week7_appendix)
 #   common/       run_slides(), and the Pose and Obstacle types every file shares
@@ -19,14 +19,14 @@
 
 # -----------------------------------------------------------------------------
 # 1. Leaks and undefined behavior: the code of those slides is in
-#    undefined/undefined.cpp, and both programs below list it. This one file is
+#    undefined/src/undefined.cpp, and both programs below list it. This one file is
 #    always compiled with AddressSanitizer and UndefinedBehaviorSanitizer, so a
 #    double delete or a read of freed memory stops with a report, and
 #    LeakSanitizer reports a leak when the program ends. The other files are
 #    compiled as usual. Each program is linked with -fsanitize as well, which
 #    adds the sanitizer runtime that prints the reports.
 # -----------------------------------------------------------------------------
-set_source_files_properties(undefined/undefined.cpp PROPERTIES
+set_source_files_properties(undefined/src/undefined.cpp PROPERTIES
     COMPILE_OPTIONS "-fsanitize=address,undefined;-fno-omit-frame-pointer")
 
 # -----------------------------------------------------------------------------
@@ -34,25 +34,26 @@ set_source_files_properties(undefined/undefined.cpp PROPERTIES
 #    number to run only that slide. A slide whose code leaks or has undefined
 #    behavior runs only when asked for by its number.
 # -----------------------------------------------------------------------------
-add_executable(week7_playground playground/main.cpp
-    playground/ownership.cpp
-    playground/moves.cpp
-    playground/unique.cpp
-    playground/shared.cpp
-    playground/weak.cpp
-    undefined/undefined.cpp
-    common/slides.cpp)
-target_include_directories(week7_playground PRIVATE common playground undefined)
+add_executable(week7_playground playground/src/main.cpp
+    playground/src/ownership.cpp
+    playground/src/moves.cpp
+    playground/src/unique.cpp
+    playground/src/shared.cpp
+    playground/src/weak.cpp
+    undefined/src/undefined.cpp
+    common/src/slides.cpp)
+target_include_directories(week7_playground PRIVATE
+    common/include playground/include undefined/include)
 target_link_options(week7_playground PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # 3. The appendix: the code of every appendix frame, in one program. Pass the
 #    frame's number, as a roman numeral (ii) or not (2).
 # -----------------------------------------------------------------------------
-add_executable(week7_appendix appendix/appendix.cpp
-    undefined/undefined.cpp
-    common/slides.cpp)
-target_include_directories(week7_appendix PRIVATE common undefined)
+add_executable(week7_appendix appendix/src/appendix.cpp
+    undefined/src/undefined.cpp
+    common/src/slides.cpp)
+target_include_directories(week7_appendix PRIVATE common/include undefined/include)
 target_link_options(week7_appendix PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
@@ -60,5 +61,5 @@ target_link_options(week7_appendix PRIVATE -fsanitize=address,undefined)
 #    new. The sanitizers replace it as well, so this one frame is a program of
 #    its own, built without them.
 # -----------------------------------------------------------------------------
-add_executable(week7_allocations appendix/allocations.cpp)
-target_include_directories(week7_allocations PRIVATE common)
+add_executable(week7_allocations appendix/src/allocations.cpp)
+target_include_directories(week7_allocations PRIVATE common/include)

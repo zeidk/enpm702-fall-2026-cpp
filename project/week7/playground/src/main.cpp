@@ -15,14 +15,14 @@
  * @c "[Slide N]" is the number in the top-left corner of the slide. The code
  * is in one file per section of the deck: ownership.cpp, moves.cpp,
  * unique.cpp, shared.cpp and weak.cpp. Each lists its slides in slides(), and
- * main() joins the lists. run_slides() in @c ../common/slides.cpp sorts them
- * by number and runs them.
+ * main() joins the lists. run_slides() in @c ../../common/src/slides.cpp
+ * sorts them by number and runs them.
  *
  * Code that leaks, or that has undefined behavior, runs only when you ask for
  * its slide by number: a full run skips it. That code is in
- * @c ../undefined/undefined.cpp, built with the sanitizers.
+ * @c ../../undefined/src/undefined.cpp, built with the sanitizers.
  *
- * The appendix frames are a program of their own: @c ../appendix/, target
+ * The appendix frames are a program of their own: @c ../../appendix/, target
  * @c week7_appendix.
  */
 #include <vector>

@@ -79,7 +79,7 @@ namespace inside_move {
 void run() {
   std::vector<Pose> path{make_path(1000)};
   const Pose* where{path.data()};            // where path's block is
-  std::vector<Pose> moved{std::move(path)};  // a move
+  std::vector<Pose> moved{std::move(path)};  // std::move marks path
   std::cout << std::boolalpha << "moved.data() == where: " << (moved.data() == where)
             << ", path.size(): " << path.size() << ", path.data() == nullptr: "
             << (path.data() == nullptr) << std::noboolalpha << '\n';  // true 0 true
