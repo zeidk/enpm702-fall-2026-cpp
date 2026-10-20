@@ -273,7 +273,7 @@ void run() {
 }
 }  // namespace exercise_categories
 
-// [Slide 36] Binding to rvalues
+// [Slide 34] Binding to rvalues
 namespace rvalue_references {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -287,11 +287,11 @@ void run() {
 }
 }  // namespace rvalue_references
 
-// [Slide 37] What Each Reference Refers To
-// The slide is the figure of [Slide 36]'s code: temp_ref, any_ref and
-// lvalue_ref, and what each one refers to. Its code runs in [Slide 36].
+// [Slide 35] What Each Reference Refers To
+// The slide is the figure of [Slide 34]'s code: temp_ref, any_ref and
+// lvalue_ref, and what each one refers to. Its code runs in [Slide 34].
 
-// [Slide 38] Overloads for Copy and Move
+// [Slide 36] Overloads for Copy and Move
 namespace pick_copy_or_move {
 std::vector<Pose> controller_path;
 
@@ -318,7 +318,7 @@ void run() {
 }
 }  // namespace pick_copy_or_move
 
-// [Slide 39] What std::move Does
+// [Slide 37] What std::move Does
 namespace move_moves_nothing {
 void run() {
   std::vector<Pose> path{make_path(1000)};
@@ -352,9 +352,9 @@ std::vector<Slide> slides() {
       {30, "std::is_same_v", same_type::run},
       {31, "The decltype Test", testing_category::run},
       {32, "Exercise 2: Value Categories", exercise_categories::run},
-      {36, "Binding to rvalues", rvalue_references::run},
-      {38, "Overloads for Copy and Move", pick_copy_or_move::run},
-      {39, "What std::move Does", move_moves_nothing::run},
+      {34, "Binding to rvalues", rvalue_references::run},
+      {36, "Overloads for Copy and Move", pick_copy_or_move::run},
+      {37, "What std::move Does", move_moves_nothing::run},
   };
 }
 

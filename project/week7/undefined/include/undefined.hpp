@@ -11,7 +11,7 @@
  *
  * Each run() is listed with run_alone set, so a full run skips it:
  * @code
- * 702run week7_playground 83    # [Slide 83] Cyclic Reference, Measured
+ * 702run week7_playground 78    # [Slide 78] Cyclic Reference, Measured
  * @endcode
  */
 #pragma once
@@ -28,7 +28,7 @@ namespace dangling_read {
 void run();
 }
 
-/// [Slide 83] Cyclic Reference, Measured: a tractor and its trailer that own each other.
+/// [Slide 78] Cyclic Reference, Measured: a tractor and its trailer that own each other.
 namespace shared_cycle {
 void run();
 }
