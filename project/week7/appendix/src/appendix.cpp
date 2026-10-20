@@ -130,9 +130,9 @@ void run() {
   }};
   {
     std::unique_ptr<Obstacle, decltype(say_and_delete)> track{
-        new Obstacle{2}, say_and_delete};
+        new Obstacle{1}, say_and_delete};
     std::cout << "sizeof(track): " << sizeof(track) << '\n';  // 8
-  }  // track is destroyed here: "deleting obstacle 2"
+  }  // track is destroyed here: "deleting obstacle 1"
   std::cout << "after the block\n";
   std::cout << "with a function pointer: "
             << sizeof(std::unique_ptr<Obstacle, void (*)(Obstacle*)>) << '\n';  // 16
@@ -149,9 +149,9 @@ namespace testing_empty {
 void run() {
   std::unique_ptr<Obstacle> track;  // empty
   std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << '\n';  // true
-  track = std::make_unique<Obstacle>(2);
+  track = std::make_unique<Obstacle>(1);
   if (track) {
-    std::cout << "obstacle " << track->id << '\n';  // obstacle 2
+    std::cout << "obstacle " << track->id << '\n';  // obstacle 1
   }
   auto other{std::move(track)};
   std::cout << "after the move, !track: " << !track << std::noboolalpha << '\n';  // true
@@ -179,13 +179,13 @@ void run() {
 // [Appendix xiii] swap
 namespace swapping {
 void run() {
-  auto first{std::make_unique<Obstacle>(2)};
+  auto first{std::make_unique<Obstacle>(1)};
   auto second{std::make_unique<Obstacle>(4)};
-  const Obstacle* id_2{first.get()};
+  const Obstacle* id_1{first.get()};
   first.swap(second);  // the same as std::swap(first, second)
   std::cout << std::boolalpha << "first->id: " << first->id << ", second->id: " << second->id
-            << ", second.get() == id_2: " << (second.get() == id_2) << std::noboolalpha
-            << '\n';  // 4 2 true
+            << ", second.get() == id_1: " << (second.get() == id_1) << std::noboolalpha
+            << '\n';  // 4 1 true
 }
 }  // namespace swapping
 
@@ -311,10 +311,10 @@ void run() {
 // [Appendix xxvi] release
 namespace release {
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
   Obstacle* raw{track.release()};  // gives up ownership, deletes nothing
   std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr) << std::noboolalpha
-            << ", raw->id: " << raw->id << '\n';  // true 2
+            << ", raw->id: " << raw->id << '\n';  // true 1
   delete raw;  // you are the owner now: leave this out and it leaks
 }
 }  // namespace release
@@ -326,7 +326,7 @@ void replace_track(std::unique_ptr<Obstacle>& track, int new_id) {
 }  // the assignment deleted the old Obstacle object
 
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
   replace_track(track, 7);
   std::cout << "track->id: " << track->id << ", track->speed: " << track->speed
             << '\n';  // 7 0

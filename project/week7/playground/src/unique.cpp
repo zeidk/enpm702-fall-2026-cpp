@@ -45,9 +45,8 @@ void run() {
 // [Slide 43] Creating One
 namespace creating {
 void run() {
-  Pose cyclist_pose{12.0, -1.0, 0.0};  // from the table
-  std::unique_ptr<Obstacle> track{
-      std::make_unique<Obstacle>(2, cyclist_pose, 4.0)};
+  Pose parked_pose{20.0, -3.0, 0.0};  // from the table
+  auto track{std::make_unique<Obstacle>(1, parked_pose, 0.0, true)};
   std::cout << track->id << ' ' << (*track).speed << '\n';  // 2 4
   auto empty{std::make_unique<Obstacle>()};  // members take defaults
   std::cout << empty->id << ' ' << empty->speed << '\n';    // 0 0
@@ -57,7 +56,7 @@ void run() {
 // [Slide 44] In Memory
 namespace in_memory {
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
   std::cout << "sizeof(track): " << sizeof(track) << ", sizeof(Obstacle*): " << sizeof(Obstacle*)
             << ", sizeof(Obstacle): " << sizeof(Obstacle) << '\n';  // 8 8 48
   std::cout << "&track: " << &track << " (stack), track.get(): " << track.get() << " (heap)\n";
@@ -66,11 +65,11 @@ void run() {
 
 // [Slide 45] The Leak, Fixed
 // The slide's left version, with Obstacle* and delete, leaks 48 bytes: the
-// cyclist is 12 m ahead, so the early return skips the delete. This is the
+// parked car is 20 m ahead, so the early return skips the delete. This is the
 // right version.
 namespace leak_fixed {
 bool needs_braking(int id) {
-  auto track{std::make_unique<Obstacle>(id, Pose{12.0, -1.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(id, Pose{20.0, -3.0}, 0.0)};
   if (track->pose.x > 10.0) {
     return false;  // deleted here
   }
@@ -78,7 +77,7 @@ bool needs_braking(int id) {
 }
 
 void run() {
-  std::cout << std::boolalpha << "needs_braking(2): " << needs_braking(2) << std::noboolalpha
+  std::cout << std::boolalpha << "needs_braking(1): " << needs_braking(1) << std::noboolalpha
             << '\n';  // false, and LeakSanitizer reports nothing at exit
 }
 }  // namespace leak_fixed
@@ -95,27 +94,37 @@ void run() {
 }
 }  // namespace one_owner
 
-// [Slide 47] get and reset
-namespace get_and_reset {
+// [Slide 47] get
+namespace get_frame {
 void print_obstacle(const Obstacle* target) {  // only looks
   std::cout << "  obstacle " << target->id << ": " << target->speed << " m/s\n";
 }
 
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
   print_obstacle(track.get());  // track still owns it
-  track.reset();                // deletes it now: track == nullptr
+  std::cout << std::boolalpha << "after get(), track owns it: " << (track != nullptr)
+            << std::noboolalpha << '\n';  // true
+}
+}  // namespace get_frame
+
+// [Slide 48] reset
+namespace reset_frame {
+void run() {
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
+  track.reset();  // deletes it now: track == nullptr
   std::cout << std::boolalpha << "after reset(), track == nullptr: " << (track == nullptr)
             << std::noboolalpha << '\n';  // true
   track = std::make_unique<Obstacle>(3, Pose{30.0, 2.5, 1.57}, 1.4);
-  print_obstacle(track.get());  // obstacle 3: 1.4 m/s
+  std::cout << "after the assignment: obstacle " << track->id << ": " << track->speed
+            << " m/s\n";  // obstacle 3: 1.4 m/s
 }
-}  // namespace get_and_reset
+}  // namespace reset_frame
 
-// [Slide 48] Moving Ownership
+// [Slide 50] Moving Ownership
 namespace moving_ownership {
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
   Obstacle* where{track.get()};
   std::unique_ptr<Obstacle> other{std::move(track)};
   std::cout << std::boolalpha << "track == nullptr: " << (track == nullptr)
@@ -124,7 +133,7 @@ void run() {
 }
 }  // namespace moving_ownership
 
-// [Slide 51] Exercise 3: Handing Over a Track
+// [Slide 53] Exercise 3: Handing Over a Track
 // The Obstacle with id 1 is deleted on line 4: q = std::move(p) calls
 // q.reset(p.release()), and reset deletes the old pointer when it is not null
 // (C++20 [unique.ptr.single.asgn] paragraph 3, [unique.ptr.single.modifiers]
@@ -139,14 +148,14 @@ void run() {
   std::cout << "1: p: " << owns(p) << '\n';
   auto q{std::move(p)};
   std::cout << "2: p: " << owns(p) << ", q: " << owns(q) << '\n';
-  p = std::make_unique<Obstacle>(2);
+  p = std::make_unique<Obstacle>(3);
   std::cout << "3: p: " << owns(p) << ", q: " << owns(q) << '\n';
   q = std::move(p);  // q gives up the Obstacle with id 1: reset deletes it
   std::cout << "4: p: " << owns(p) << ", q: " << owns(q) << ", obstacle 1 deleted here\n";
 }
 }  // namespace exercise_handover
 
-// [Slide 52] The Tracker's List
+// [Slide 54] The Tracker's List
 namespace trackers_list {
 void run() {
   std::vector<std::unique_ptr<Obstacle>> tracker;
@@ -165,7 +174,7 @@ void run() {
 }
 }  // namespace trackers_list
 
-// [Slide 53] Passing: Borrow
+// [Slide 55] Passing: Borrow
 namespace borrow {
 void print_obstacle(const Obstacle& target) {  // only reads it
   std::cout << "  obstacle " << target.id << ": " << target.speed << " m/s\n";
@@ -175,14 +184,14 @@ void set_speed(Obstacle* target, double speed) {  // may get nullptr
 }
 
 void run() {
-  auto track{std::make_unique<Obstacle>(2, Pose{12.0, -1.0, 0.0}, 4.0)};
-  print_obstacle(*track);       // 4 m/s
+  auto track{std::make_unique<Obstacle>(1, Pose{20.0, -3.0}, 0.0, true)};
+  print_obstacle(*track);       // 0 m/s
   set_speed(track.get(), 2.0);
   print_obstacle(*track);       // 2 m/s: the caller still owns it
 }
 }  // namespace borrow
 
-// [Slide 54] Passing: Sink
+// [Slide 56] Passing: Sink
 namespace sink {
 std::vector<std::unique_ptr<Obstacle>> lost;  // lost tracks, kept
 
@@ -191,7 +200,7 @@ void keep_lost(std::unique_ptr<Obstacle> track) {  // takes ownership
 }
 
 void run() {
-  auto track{std::make_unique<Obstacle>(2)};
+  auto track{std::make_unique<Obstacle>(1)};
   // Does not compile: use of deleted function 'std::unique_ptr<...>::unique_ptr(const ...&)'
   // keep_lost(track);
   keep_lost(std::move(track));
@@ -200,7 +209,7 @@ void run() {
 }
 }  // namespace sink
 
-// [Slide 55] Returning
+// [Slide 57] Returning
 namespace returning {
 std::unique_ptr<Obstacle> make_track(int id) {
   auto track{std::make_unique<Obstacle>(id)};
@@ -213,14 +222,14 @@ void run() {
 }
 }  // namespace returning
 
-// [Slide 56] Exercise 4: Lines That Compile
+// [Slide 58] Exercise 4: Lines That Compile
 namespace exercise_compile {
 void inspect(const Obstacle& target) { std::cout << "  inspect: obstacle " << target.id << '\n'; }
 void adopt(std::unique_ptr<Obstacle> track) { std::cout << "  adopt: obstacle " << track->id << '\n'; }
 
 void run() {
   auto a{std::make_unique<Obstacle>(1)};
-  auto b{std::make_unique<Obstacle>(2)};
+  auto b{std::make_unique<Obstacle>(3)};
   // For each line, say whether it compiles. The lines that do not compile are
   // commented out: uncomment one to check your answer.
   // auto c{a};                                    // line 1
@@ -247,14 +256,15 @@ std::vector<Slide> slides() {
       {44, "In Memory", in_memory::run},
       {45, "The Leak, Fixed", leak_fixed::run},
       {46, "One Owner Only", one_owner::run},
-      {47, "get and reset", get_and_reset::run},
-      {48, "Moving Ownership", moving_ownership::run},
-      {51, "Exercise 3: Handing Over a Track", exercise_handover::run},
-      {52, "The Tracker's List", trackers_list::run},
-      {53, "Passing: Borrow", borrow::run},
-      {54, "Passing: Sink", sink::run},
-      {55, "Returning", returning::run},
-      {56, "Exercise 4: Lines That Compile", exercise_compile::run},
+      {47, "get", get_frame::run},
+      {48, "reset", reset_frame::run},
+      {50, "Moving Ownership", moving_ownership::run},
+      {53, "Exercise 3: Handing Over a Track", exercise_handover::run},
+      {54, "The Tracker's List", trackers_list::run},
+      {55, "Passing: Borrow", borrow::run},
+      {56, "Passing: Sink", sink::run},
+      {57, "Returning", returning::run},
+      {58, "Exercise 4: Lines That Compile", exercise_compile::run},
   };
 }
 
