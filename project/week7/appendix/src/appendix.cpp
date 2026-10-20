@@ -507,6 +507,22 @@ void run() {
 }
 }  // namespace weak_passing
 
+// [Appendix xxxviii] const T& with Each Category
+namespace const_ref_binds {
+std::vector<int> make_path(int n) { return std::vector<int>(n, 7); }
+void print_size(const std::vector<int>& path) {
+  std::cout << path.size() << '\n';
+}
+
+void run() {
+  std::vector<int> path{make_path(3)};
+  print_size(path);             // 1. lvalue: prints 3
+  print_size(make_path(5));     // 2. prvalue: prints 5
+  print_size(std::move(path));  // 3. xvalue: prints 3
+  std::cout << path.size() << '\n';  // 3: nothing was moved
+}
+}  // namespace const_ref_binds
+
 #undef CATEGORY
 
 int main(int argc, char* argv[]) {
@@ -541,6 +557,7 @@ int main(int argc, char* argv[]) {
       {35, "Passing: const shared_ptr&", shared_maybe::run},
       {36, "Returning", shared_returning::run},
       {37, "Passing: weak_ptr", weak_passing::run},
+      {38, "const T& with Each Category", const_ref_binds::run},
   };
   return run_slides(slides, argc, argv, Part::appendix);
 }
