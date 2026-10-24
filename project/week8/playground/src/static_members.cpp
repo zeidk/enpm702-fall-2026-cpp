@@ -3,8 +3,8 @@
  * @brief L8 Section 9, static Members: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Part of week8_playground. [Slide 71] uses a Tracker with a counter
- * in each object; [Slides 72 and 73] use the Tracker of
+ * @details Part of week8_playground. [Slide 75] uses a Tracker with a counter
+ * in each object; [Slides 76 and 77] use the Tracker of
  * ../../common/include/tracker.hpp, whose counter is static.
  */
 #include <cstddef>
@@ -18,9 +18,9 @@
 
 namespace static_members {
 
-// [Slide 71] Two Trackers, the Same Id
+// [Slide 75] Two Trackers, the Same Id
 namespace same_ids {
-class Tracker {  // the Tracker of [Slide 69]: one counter in each object
+class Tracker {  // the Tracker of [Slide 73]: one counter in each object
  public:
   int add(Pose pose, double speed, bool is_static = false) {
     const int id{next_id_++};
@@ -42,7 +42,7 @@ void run() {
 }
 }  // namespace same_ids
 
-// [Slide 72] One Counter for the Class
+// [Slide 76] One Counter for the Class
 namespace one_counter {
 void run() {
   ::Tracker front;
@@ -55,7 +55,7 @@ void run() {
 }
 }  // namespace one_counter
 
-// [Slide 73] A static Method Has No this
+// [Slide 77] A static Method Has No this
 // Inside Tracker:
 // static std::size_t count() noexcept {  // in Tracker: an error
 //   return tracks_.size();
@@ -64,8 +64,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {71, "Two Trackers, the Same Id", same_ids::run},
-      {72, "One Counter for the Class", one_counter::run},
+      {75, "Two Trackers, the Same Id", same_ids::run},
+      {76, "One Counter for the Class", one_counter::run},
   };
 }
 

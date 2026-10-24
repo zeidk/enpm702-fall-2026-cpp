@@ -1,10 +1,9 @@
 /**
- * @file exercises.cpp
- * @brief L8: one answer to each exercise, runnable. Try the exercise first.
+ * @file discussions.cpp
+ * @brief L8: the code behind the discussion slides, runnable. Discuss first.
  * @author Zeid Kootbally
  *
- * @details Part of week8_playground. The answers are explained in
- * L8_ENPM702_FALL2026_v1.0_answers.pdf. Exercise 4's bug is in
+ * @details Part of week8_playground. The bug of Who Deletes What? is in
  * ../../undefined/src/undefined.cpp, built with the sanitizers.
  */
 #include <iostream>
@@ -12,10 +11,11 @@
 
 #include "sections.hpp"
 
-namespace exercises {
+namespace discussions {
 
-// [Slide 32] Exercise 1: A New Speed Limit. One answer: a limit that is not
-// greater than 0 throws; a target speed above the new limit is lowered to it.
+// [Slide 36] Discussion: The School Zone. The option the notes pick: a limit
+// that is not greater than 0 throws; a target speed above the new limit is
+// lowered to it.
 namespace speed_limit {
 class CruiseControl {
  public:
@@ -68,7 +68,7 @@ void run() {
 }
 }  // namespace speed_limit
 
-// [Slide 42] Exercise 2: The Following Gap. The class as given:
+// [Slide 46] Discussion: Spot the Bug. The class as given:
 //   explicit FollowingGap(double speed)
 //       : time_{2.0}, distance_{time_ * speed} {}
 //   ...
@@ -101,9 +101,9 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {32, "Exercise 1: A New Speed Limit", speed_limit::run},
-      {42, "Exercise 2: The Following Gap", following_gap::run},
+      {36, "Discussion: The School Zone", speed_limit::run},
+      {46, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 
-}  // namespace exercises
+}  // namespace discussions

@@ -8,7 +8,7 @@
  * behavior, is commented out where its slide shows it, with what the compiler
  * says.
  *
- * From [Slide 36] on, the slides use the full class, CruiseControl in
+ * From [Slide 40] on, the slides use the full class, CruiseControl in
  * ../../common/include/cruise_control.hpp and ../../common/src/cruise_control.cpp.
  */
 #include <iostream>
@@ -19,7 +19,7 @@
 
 namespace constructors {
 
-// [Slide 35] A Member with No Initializer
+// [Slide 39] A Member with No Initializer
 namespace no_initializer {
 class CruiseControl {
  public:
@@ -40,7 +40,7 @@ void run() {
 }
 }  // namespace no_initializer
 
-// [Slide 37] No Default Constructor Now
+// [Slide 41] No Default Constructor Now
 namespace no_default {
 void run() {
   CruiseControl ego_cruise{13.4};  // OK: speed limit 13.4, target speed 0
@@ -51,7 +51,7 @@ void run() {
 }
 }  // namespace no_default
 
-// [Slide 38] A Constructor That Throws
+// [Slide 42] A Constructor That Throws
 namespace ctor_throws {
 void run() {
   try {
@@ -63,7 +63,7 @@ void run() {
 }
 }  // namespace ctor_throws
 
-// [Slide 40] A const Member
+// [Slide 44] A const Member
 // class CruiseControl {
 //  public:
 //   CruiseControl(double speed_limit) {
@@ -76,7 +76,7 @@ void run() {
 // error: uninitialized const member in 'const double' [-fpermissive]
 // error: assignment of read-only member 'CruiseControl::speed_limit_'
 
-// [Slide 41] Declaration Order
+// [Slide 45] Declaration Order
 // class CruiseControl {
 //  public:
 //   CruiseControl(double speed_limit, double target_speed)
@@ -89,7 +89,7 @@ void run() {
 // warning:   'double CruiseControl::speed_limit_' [-Wreorder]
 // warning:   when initialized here [-Wreorder]
 
-// [Slide 44] A Conversion Nobody Asked For
+// [Slide 48] A Conversion Nobody Asked For
 namespace conversion {
 void show(const CruiseControl& cruise) {
   std::cout << cruise.get_speed_limit() << ' '
@@ -106,7 +106,7 @@ void run() {
 }
 }  // namespace conversion
 
-// [Slide 45] Delegating Constructor
+// [Slide 49] Delegating Constructor
 namespace delegating {
 void run() {
   CruiseControl ego_cruise{13.4, 12.0};
@@ -121,11 +121,11 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {35, "A Member with No Initializer", no_initializer::run},
-      {37, "No Default Constructor Now", no_default::run},
-      {38, "A Constructor That Throws", ctor_throws::run},
-      {44, "A Conversion Nobody Asked For", conversion::run},
-      {45, "Delegating Constructor", delegating::run},
+      {39, "A Member with No Initializer", no_initializer::run},
+      {41, "No Default Constructor Now", no_default::run},
+      {42, "A Constructor That Throws", ctor_throws::run},
+      {48, "A Conversion Nobody Asked For", conversion::run},
+      {49, "Delegating Constructor", delegating::run},
   };
 }
 

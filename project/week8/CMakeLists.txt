@@ -36,7 +36,7 @@ add_executable(week8_playground playground/src/main.cpp
     playground/src/const_and_this.cpp
     playground/src/destructors.cpp
     playground/src/static_members.cpp
-    playground/src/exercises.cpp
+    playground/src/discussions.cpp
     undefined/src/undefined.cpp
     common/src/cruise_control.cpp
     common/src/tracker.cpp

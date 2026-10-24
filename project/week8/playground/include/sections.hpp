@@ -45,6 +45,6 @@ namespace static_members {
 std::vector<Slide> slides();  ///< Section 9, static Members: static_members.cpp
 }
 
-namespace exercises {
-std::vector<Slide> slides();  ///< One answer to each exercise: exercises.cpp
+namespace discussions {
+std::vector<Slide> slides();  ///< The code behind the discussion slides: discussions.cpp
 }

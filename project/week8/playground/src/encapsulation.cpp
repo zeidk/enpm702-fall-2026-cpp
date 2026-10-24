@@ -14,8 +14,8 @@
 
 namespace encapsulation {
 
-// [Slide 21] The Source File
-// The class of [Slide 17], and its methods defined outside it with
+// [Slide 25] The Source File
+// The class of [Slide 21], and its methods defined outside it with
 // CruiseControl::, as cruise_control.hpp and cruise_control.cpp would hold them.
 namespace source_file {
 class CruiseControl {
@@ -36,7 +36,7 @@ double CruiseControl::get_target_speed() const {
   return target_speed_;
 }
 
-// [Slide 22] Without CruiseControl::
+// [Slide 26] Without CruiseControl::
 // void set_target_speed(double speed) {
 //   target_speed_ = speed;
 // }
@@ -50,7 +50,7 @@ void run() {
 }
 }  // namespace source_file
 
-// [Slide 23] Changing the Inside
+// [Slide 27] Changing the Inside
 // The data members hold km/h; the methods still take and give m/s. The calls
 // are those of [Slide 10], unchanged.
 namespace changing_inside {
@@ -80,8 +80,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {21, "The Source File", source_file::run},
-      {23, "Changing the Inside", changing_inside::run},
+      {25, "The Source File", source_file::run},
+      {27, "Changing the Inside", changing_inside::run},
   };
 }
 

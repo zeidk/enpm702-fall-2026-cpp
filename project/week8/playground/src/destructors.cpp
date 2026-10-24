@@ -5,10 +5,10 @@
  *
  * @details Part of week8_playground. Each slide's Track is its own class, in
  * its own namespace, because the class changes from slide to slide: a raw
- * pointer and a destructor ([Slide 56]), the rule of five ([Slides 62 to 64]),
- * a std::unique_ptr ([Slides 66 and 67]), deleted copies ([Slide 68]).
+ * pointer and a destructor ([Slide 60]), the rule of five ([Slides 66 to 68]),
+ * a std::unique_ptr ([Slides 70 and 71]), deleted copies ([Slide 72]).
  *
- * The leak of [Slide 58] and the double free of [Slide 60] are in
+ * The leak of [Slide 62] and the double free of [Slide 64] are in
  * ../../undefined/src/undefined.cpp, built with the sanitizers. They run only
  * when asked for by number.
  */
@@ -24,7 +24,7 @@
 
 namespace destructors {
 
-// [Slide 57] When It Runs: the Track of [Slide 56], and ~Track also prints.
+// [Slide 61] When It Runs: the Track of [Slide 60], and ~Track also prints.
 namespace when_it_runs {
 class Track {  // owns one Obstacle on the heap
  public:
@@ -55,7 +55,7 @@ void run() {
 }
 }  // namespace when_it_runs
 
-// [Slides 62 to 64] The Rule of Five. ~Track prints as on [Slide 57], and 0
+// [Slides 66 to 68] The Rule of Five. ~Track prints as on [Slide 61], and 0
 // when the Track owns nothing (after a move).
 namespace five {
 class Track {
@@ -68,7 +68,7 @@ class Track {
     delete obstacle_;
   }
 
-  // [Slide 62] The Copies
+  // [Slide 66] The Copies
   Track(const Track& other)  // a new Obstacle with other's values
       : obstacle_{new Obstacle{*other.obstacle_}} {}
 
@@ -77,7 +77,7 @@ class Track {
     return *this;
   }
 
-  // [Slide 63] The Moves
+  // [Slide 67] The Moves
   Track(Track&& other) noexcept : obstacle_{other.obstacle_} {
     other.obstacle_ = nullptr;  // the source owns nothing now
   }
@@ -99,7 +99,7 @@ class Track {
   Obstacle* obstacle_;
 };
 
-// [Slide 64] All Five, Run
+// [Slide 68] All Five, Run
 void run() {
   Track cyclist{Obstacle{2}};
   Track copy{cyclist};
@@ -115,7 +115,7 @@ void run() {
 }  // ~Track: id 0, id 2, id 1, id 0
 }  // namespace five
 
-// [Slides 66 and 67] The Rule of Zero
+// [Slides 70 and 71] The Rule of Zero
 namespace zero {
 class Track {
  public:
@@ -140,7 +140,7 @@ void run() {
 }
 }  // namespace zero
 
-// [Slide 68] = default and = delete: the raw-pointer Track, move-only.
+// [Slide 72] = default and = delete: the raw-pointer Track, move-only.
 // Remove the two move lines and Track moved{std::move(cyclist)}; picks the
 // deleted copy: error: use of deleted function 'Track::Track(const Track&)'
 namespace move_only {
@@ -177,7 +177,7 @@ void run() {
 }
 }  // namespace move_only
 
-// [Slide 69] The Tracker, with an id counter in each object. Section 9 makes
+// [Slide 73] The Tracker, with an id counter in each object. Section 9 makes
 // the counter static: ../../common/include/tracker.hpp.
 namespace tracker {
 class Tracker {  // owns one Obstacle for each obstacle it sees
@@ -226,14 +226,14 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {57, "When It Runs", when_it_runs::run},
-      {58, "Without the Destructor", undefined::no_destructor::run, true},
-      {60, "Double Free, Measured", undefined::double_free::run, true},
-      {64, "All Five, Run", five::run},
-      {67, "What the Compiler Writes Now", zero::run},
-      {68, "= default and = delete", move_only::run},
-      {69, "The Tracker", tracker::run},
-      {65, "Exercise 4: A Move Assignment with a Bug", undefined::move_bug::run, true},
+      {61, "When It Runs", when_it_runs::run},
+      {62, "Without the Destructor", undefined::no_destructor::run, true},
+      {64, "Double Free, Measured", undefined::double_free::run, true},
+      {68, "All Five, Run", five::run},
+      {71, "What the Compiler Writes Now", zero::run},
+      {72, "= default and = delete", move_only::run},
+      {73, "The Tracker", tracker::run},
+      {69, "Discussion: Who Deletes What?", undefined::move_bug::run, true},
   };
 }
 

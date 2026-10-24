@@ -10,24 +10,24 @@
  *
  * Each run() is listed with run_alone set, so a full run skips it:
  * @code
- * 702run week8_playground 60    # [Slide 60] Double Free, Measured
+ * 702run week8_playground 64    # [Slide 64] Double Free, Measured
  * @endcode
  */
 #pragma once
 
 namespace undefined {
 
-/// [Slide 58] Without the Destructor: three Track objects that never delete.
+/// [Slide 62] Without the Destructor: three Track objects that never delete.
 namespace no_destructor {
 void run();
 }
 
-/// [Slide 60] Double Free, Measured: a copied Track deletes its Obstacle twice.
+/// [Slide 64] Double Free, Measured: a copied Track deletes its Obstacle twice.
 namespace double_free {
 void run();
 }
 
-/// [Slide 65] Exercise 4: a move assignment that leaves the source owning.
+/// [Slide 69] Discussion: Who Deletes What? A move assignment that leaves the source owning.
 namespace move_bug {
 void run();
 }

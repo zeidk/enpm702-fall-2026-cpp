@@ -13,7 +13,7 @@
 
 namespace struct_or_class {
 
-// [Slide 13] Default Access
+// [Slide 16] Default Access
 namespace default_access {
 struct OpenSpeed { double target_speed{0.0}; };
 class HiddenSpeed { double target_speed{0.0}; };
@@ -31,7 +31,7 @@ void run() {
 }
 }  // namespace default_access
 
-// [Slide 14] A Rule Nothing Checks
+// [Slide 17] A Rule Nothing Checks
 namespace nothing_checks {
 struct CruiseData {
   double speed_limit{13.4};  // m/s
@@ -48,8 +48,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {13, "Default Access", default_access::run},
-      {14, "A Rule Nothing Checks", nothing_checks::run},
+      {16, "Default Access", default_access::run},
+      {17, "A Rule Nothing Checks", nothing_checks::run},
   };
 }
 

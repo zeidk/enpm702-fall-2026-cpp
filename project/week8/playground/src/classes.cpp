@@ -50,7 +50,7 @@ void run() {
 }
 }  // namespace two_objects
 
-// [Slide 11] On the Stack and on the Heap
+// [Slide 13] On the Stack and on the Heap
 namespace stack_and_heap {
 void run() {
   CruiseControl ego_cruise;  // on the stack
@@ -66,7 +66,7 @@ void run() {
 std::vector<Slide> slides() {
   return {
       {10, "State and Behavior", two_objects::run},
-      {11, "On the Stack and on the Heap", stack_and_heap::run},
+      {13, "On the Stack and on the Heap", stack_and_heap::run},
   };
 }
 

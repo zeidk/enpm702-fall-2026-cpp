@@ -22,19 +22,19 @@ class CruiseControl {
  public:
   void set_target_speed(double target_speed);
 
-  // [Slide 27] [[nodiscard]] and noexcept
+  // [Slide 31] [[nodiscard]] and noexcept
   [[nodiscard]] double get_target_speed() const noexcept {
     return target_speed_;
   }
 
-  // [Slide 26] The Compiler Checks const
+  // [Slide 30] The Compiler Checks const
   // double get_target_speed_bad() const {
   //   target_speed_ = 0.0;  // does not compile
   //   return target_speed_;
   // }
   // error: assignment of member 'CruiseControl::target_speed_' in read-only object
 
-  // [Slide 30] Not const, Not noexcept: the same setter, marked noexcept.
+  // [Slide 34] Not const, Not noexcept: the same setter, marked noexcept.
   // void set_target_speed_noexcept(double target_speed) noexcept {
   //   if (target_speed < 0.0 || target_speed > speed_limit_) {
   //     throw std::invalid_argument{
@@ -52,7 +52,7 @@ class CruiseControl {
   double target_speed_{0.0};  // m/s
 };
 
-// [Slide 28] Mutators
+// [Slide 32] Mutators
 void CruiseControl::set_target_speed(double target_speed) {
   if (target_speed < 0.0 || target_speed > speed_limit_) {
     throw std::invalid_argument{
@@ -62,13 +62,13 @@ void CruiseControl::set_target_speed(double target_speed) {
 }
 }  // namespace with_check
 
-// [Slide 27] [[nodiscard]] and noexcept
+// [Slide 31] [[nodiscard]] and noexcept
 // ego_cruise.get_target_speed();  // the result is thrown away: a warning
 // warning: ignoring return value of
 //          'double CruiseControl::get_target_speed() const',
 //          declared with attribute 'nodiscard' [-Wunused-result]
 
-// [Slide 29] A Broken Rule Is Caught
+// [Slide 33] A Broken Rule Is Caught
 namespace rule_caught {
 void run() {
   with_check::CruiseControl ego_cruise;
@@ -82,7 +82,7 @@ void run() {
 }
 }  // namespace rule_caught
 
-// [Slide 31] A Getter and Setter That Add Nothing
+// [Slide 35] A Getter and Setter That Add Nothing
 namespace trivial_pair {
 class Position {  // no rule about x
  public:
@@ -102,8 +102,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {29, "A Broken Rule Is Caught", rule_caught::run},
-      {31, "A Getter and Setter That Add Nothing", trivial_pair::run},
+      {33, "A Broken Rule Is Caught", rule_caught::run},
+      {35, "A Getter and Setter That Add Nothing", trivial_pair::run},
   };
 }
 

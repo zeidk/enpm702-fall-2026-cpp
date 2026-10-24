@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
                                             encapsulation::slides(), accessors::slides(),
                                             constructors::slides(), const_and_this::slides(),
                                             destructors::slides(), static_members::slides(),
-                                            exercises::slides()}) {
+                                            discussions::slides()}) {
     slides.insert(slides.end(), section.begin(), section.end());
   }
   return run_slides(slides, argc, argv, Part::lecture);

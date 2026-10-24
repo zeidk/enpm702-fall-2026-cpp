@@ -16,8 +16,8 @@
 
 namespace undefined {
 
-// [Slide 58] Without the Destructor
-// The Track of [Slide 57] with ~Track removed. LeakSanitizer reports, at exit:
+// [Slide 62] Without the Destructor
+// The Track of [Slide 61] with ~Track removed. LeakSanitizer reports, at exit:
 // Direct leak of 48 byte(s) in 1 object(s) allocated from: (three times)
 // SUMMARY: AddressSanitizer: 144 byte(s) leaked in 3 allocation(s).
 namespace no_destructor {
@@ -45,9 +45,9 @@ void run() {
 }
 }  // namespace no_destructor
 
-// [Slide 60] Double Free, Measured
-// The Track of [Slide 56], copied by the compiler's copy constructor
-// ([Slide 59]). AddressSanitizer stops the program:
+// [Slide 64] Double Free, Measured
+// The Track of [Slide 60], copied by the compiler's copy constructor
+// ([Slide 63]). AddressSanitizer stops the program:
 // ERROR: AddressSanitizer: attempting double-free on 0x... in thread T0:
 namespace double_free {
 class Track {  // owns one Obstacle on the heap
@@ -70,7 +70,7 @@ void run() {
 }  // copy's destructor deletes the Obstacle, then cyclist's deletes it again
 }  // namespace double_free
 
-// [Slide 65] Exercise 4: A Move Assignment with a Bug
+// [Slide 69] Discussion: Who Deletes What?
 // The move assignment does not set other.obstacle_ to nullptr, so after line 9
 // parked and cyclist point at the same Obstacle (id 2), and the Obstacle with
 // id 1 was deleted. At the end of the scope both destructors delete id 2:
