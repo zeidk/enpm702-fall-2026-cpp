@@ -10,24 +10,24 @@
  *
  * Each run() is listed with run_alone set, so a full run skips it:
  * @code
- * 702run week8_playground 64    # [Slide 64] Double Free, Measured
+ * 702run week8_playground 67    # [Slide 67] Double Free, Measured
  * @endcode
  */
 #pragma once
 
 namespace undefined {
 
-/// [Slide 62] Without the Destructor: three SensorMount objects that never delete.
+/// [Slide 65] Without the Destructor: three Vehicle objects that never delete.
 namespace no_destructor {
 void run();
 }
 
-/// [Slide 64] Double Free, Measured: a copied SensorMount deletes its Sensor twice.
+/// [Slide 67] Double Free, Measured: a copied Vehicle deletes its Sensor twice.
 namespace double_free {
 void run();
 }
 
-/// [Slide 69] Discussion: Who Deletes What? A move assignment that leaves the source owning.
+/// [Slide 72] Discussion: Who Deletes What? A move assignment that leaves the source owning.
 namespace move_bug {
 void run();
 }

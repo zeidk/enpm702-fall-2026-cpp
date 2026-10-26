@@ -16,7 +16,7 @@
 
 namespace const_and_this {
 
-// [Slide 52] Calling a Mutator
+// [Slide 54] Calling a Mutator
 namespace const_object {
 void run() {
   const Vehicle logged_car{13.4, 12.0};
@@ -26,7 +26,7 @@ void run() {
 }
 }  // namespace const_object
 
-// [Slide 53] Through a const Reference
+// [Slide 55] Through a const Reference
 // class Vehicle {
 //  public:
 //   double get_speed() { return speed_; }  // const left out
@@ -37,7 +37,7 @@ void run() {
 // }
 // error: passing 'const Vehicle' as 'this' argument discards qualifiers
 
-// [Slide 56] One Method, Many Objects
+// [Slide 58] One Method, Many Objects
 // A copy of the class whose setter prints this.
 namespace one_method {
 class Vehicle {
@@ -64,7 +64,7 @@ void run() {
 }
 }  // namespace one_method
 
-// [Slides 57 and 58] The class checks the type of this in both kinds of
+// [Slides 59 and 60] The class checks the type of this in both kinds of
 // method, and has speed_up(), which returns *this.
 namespace this_pointer {
 class Vehicle {
@@ -75,7 +75,7 @@ class Vehicle {
   }
 
   void set_speed(double speed) {
-    // [Slide 57] The Type of this: in a method that is not const
+    // [Slide 59] The Type of this: in a method that is not const
     static_assert(std::is_same_v<decltype(this), Vehicle*>);
     if (speed < 0.0 || speed > max_speed_) {
       throw std::invalid_argument{
@@ -85,18 +85,18 @@ class Vehicle {
   }
 
   [[nodiscard]] double get_speed() const noexcept {
-    // [Slide 57] The Type of this: in a const method
+    // [Slide 59] The Type of this: in a const method
     static_assert(std::is_same_v<decltype(this), const Vehicle*>);
     return speed_;
   }
 
-  // [Slide 58] Returning *this
+  // [Slide 60] Returning *this
   Vehicle& speed_up(double step) {
     set_speed(speed_ + step);  // the check runs here
     return *this;              // the object itself
   }
 
-  // [Slide 57] this cannot be assigned:
+  // [Slide 59] this cannot be assigned:
   // void reseat() { this = nullptr; }
   // error: lvalue required as left operand of assignment
 
@@ -114,9 +114,9 @@ void run_return_this() {
 
 std::vector<Slide> slides() {
   return {
-      {52, "Calling a Mutator", const_object::run},
-      {56, "One Method, Many Objects", one_method::run},
-      {58, "Returning *this", this_pointer::run_return_this},
+      {54, "Calling a Mutator", const_object::run},
+      {58, "One Method, Many Objects", one_method::run},
+      {60, "Returning *this", this_pointer::run_return_this},
   };
 }
 

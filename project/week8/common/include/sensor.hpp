@@ -6,7 +6,7 @@
  * @details A robotaxi carries several sensors: a lidar on the roof, cameras,
  * a radar. Sensor is a class, not a struct: its range must be at least 0. That
  * rule is its invariant, so the constructor checks it and the data members are
- * private (Core Guidelines C.2). RoboTaxi picks each id.
+ * private (Core Guidelines C.2). Vehicle::add_sensor() picks each id.
  *
  * With g++ 13.3 on x86-64: sizeof(SensorType) is 4 and sizeof(Sensor) is 16
  * (an int, a SensorType and a double, no padding).
@@ -25,7 +25,7 @@ class Sensor {
  public:
   /**
    * @brief A sensor; by default a lidar that sees 100 m (chosen for the examples).
-   * @param id Its id, picked by RoboTaxi.
+   * @param id Its id, picked by Vehicle::add_sensor().
    * @param type What kind of sensor.
    * @param range How far it sees, in m. Must be at least 0.
    * @throw std::invalid_argument if @p range is less than 0.
@@ -42,7 +42,7 @@ class Sensor {
   [[nodiscard]] double get_range() const noexcept { return range_; }
 
  private:
-  int id_;           ///< picked by RoboTaxi
+  int id_;           ///< picked by Vehicle::add_sensor()
   SensorType type_;  ///< what kind of sensor
   double range_;     ///< m, at least 0
 };

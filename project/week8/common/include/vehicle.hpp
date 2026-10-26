@@ -1,23 +1,38 @@
 /**
  * @file vehicle.hpp
- * @brief The robotaxi's speed: the first class of L8.
+ * @brief A vehicle of the robotaxi fleet: the class L8 builds.
  * @author Zeid Kootbally
  *
- * @details A Vehicle holds the maximum speed of the robotaxi and the speed it
- * drives at. The speed must stay between 0 and the maximum speed. That rule is
- * the class's invariant: every constructor and every method that changes a
- * member checks it, so no Vehicle object ever breaks it.
+ * @details A Vehicle holds its maximum speed and the speed it drives at. The
+ * speed must stay between 0 and the maximum speed. That rule is the class's
+ * invariant: every constructor and every method that changes a member checks
+ * it, so no Vehicle object ever breaks it.
+ *
+ * It owns its sensors, each through a std::unique_ptr, so it defines none of
+ * the five special members (the rule of zero): a Vehicle can be moved and
+ * cannot be copied. Its id comes from a static counter, shared by every
+ * Vehicle, so no two vehicles get the same id.
  *
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
  * (30 * 0.44704 = 13.41), a value chosen for the examples.
+ *
+ * The slides build this class in steps; each step is its own class in the
+ * playground. In L9, drive() becomes pure virtual.
  */
 #pragma once
 
-/// Holds the speed of a robotaxi, between 0 and its maximum speed.
+#include <cstddef>
+#include <memory>
+#include <vector>
+
+#include "route.hpp"
+#include "sensor.hpp"
+
+/// A vehicle: its speed stays between 0 and its maximum speed.
 class Vehicle {
  public:
   /**
-   * @brief Starts with a speed of 0.
+   * @brief Starts with a speed of 0 and no sensor.
    * @param max_speed The maximum speed, in m/s. Must be greater than 0.
    * @throw std::invalid_argument if @p max_speed is not greater than 0.
    */
@@ -31,10 +46,13 @@ class Vehicle {
    */
   Vehicle(double max_speed, double speed);
 
+  /// Its id, from the counter of the class.
+  [[nodiscard]] int get_id() const noexcept { return id_; }
+
   /// The maximum speed, in m/s.
   [[nodiscard]] double get_max_speed() const noexcept { return max_speed_; }
 
-  /// The speed the robotaxi drives at, in m/s.
+  /// The speed the vehicle drives at, in m/s.
   [[nodiscard]] double get_speed() const noexcept { return speed_; }
 
   /**
@@ -44,7 +62,26 @@ class Vehicle {
    */
   void set_speed(double speed);
 
+  /**
+   * @brief Mounts a new sensor. The Vehicle owns it.
+   * @return The new Sensor's id: 1 for the first sensor, 2 for the second, ...
+   * @throw std::invalid_argument if @p range is less than 0.
+   */
+  int add_sensor(SensorType type, double range);
+
+  /// How many sensors the vehicle carries.
+  [[nodiscard]] std::size_t sensor_count() const noexcept { return sensors_.size(); }
+
+  /// Prints the trip: the route's length, and the time it takes at the speed.
+  void drive(const Route& route) const;
+
+  /// The id the next Vehicle gets.
+  [[nodiscard]] static int next_id() noexcept { return next_id_; }
+
  private:
-  double max_speed_;    ///< m/s, greater than 0
-  double speed_{0.0};   ///< m/s, from 0 to max_speed_
+  inline static int next_id_{1};  ///< one counter for the whole class
+  int id_;                        ///< from next_id_
+  double max_speed_;              ///< m/s, greater than 0
+  double speed_{0.0};             ///< m/s, from 0 to max_speed_
+  std::vector<std::unique_ptr<Sensor>> sensors_;  ///< the only owner of each
 };

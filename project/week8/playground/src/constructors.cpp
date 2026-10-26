@@ -8,18 +8,20 @@
  * behavior, is commented out where its slide shows it, with what the compiler
  * says.
  *
- * From [Slide 40] on, the slides use the full class, Vehicle in
+ * From [Slide 42] on, the slides use the full class, Vehicle in
  * ../../common/include/vehicle.hpp and ../../common/src/vehicle.cpp.
  */
 #include <iostream>
 #include <stdexcept>
 
+#include "position.hpp"
+#include "route.hpp"
 #include "sections.hpp"
 #include "vehicle.hpp"
 
 namespace constructors {
 
-// [Slide 39] A Member with No Initializer
+// [Slide 41] A Member with No Initializer
 namespace no_initializer {
 class Vehicle {
  public:
@@ -40,7 +42,7 @@ void run() {
 }
 }  // namespace no_initializer
 
-// [Slide 41] No Default Constructor Now
+// [Slide 43] No Default Constructor Now
 namespace no_default {
 void run() {
   Vehicle downtown_car{13.4};  // OK: maximum speed 13.4, speed 0
@@ -51,7 +53,7 @@ void run() {
 }
 }  // namespace no_default
 
-// [Slide 42] A Constructor That Throws
+// [Slide 44] A Constructor That Throws
 namespace ctor_throws {
 void run() {
   try {
@@ -63,7 +65,7 @@ void run() {
 }
 }  // namespace ctor_throws
 
-// [Slide 44] A const Member
+// [Slide 46] A const Member
 // class Vehicle {
 //  public:
 //   Vehicle(double max_speed) {
@@ -76,7 +78,7 @@ void run() {
 // error: uninitialized const member in 'const double' [-fpermissive]
 // error: assignment of read-only member 'Vehicle::max_speed_'
 
-// [Slide 45] Declaration Order
+// [Slide 47] Declaration Order
 // class Vehicle {
 //  public:
 //   Vehicle(double max_speed, double speed)
@@ -89,7 +91,7 @@ void run() {
 // warning:   'double Vehicle::max_speed_' [-Wreorder]
 // warning:   when initialized here [-Wreorder]
 
-// [Slide 48] A Conversion Nobody Asked For
+// [Slide 50] A Conversion Nobody Asked For
 namespace conversion {
 void show(const Vehicle& vehicle) {
   std::cout << vehicle.get_max_speed() << ' '
@@ -106,7 +108,7 @@ void run() {
 }
 }  // namespace conversion
 
-// [Slide 49] Delegating Constructor
+// [Slide 51] Delegating Constructor
 namespace delegating {
 void run() {
   Vehicle downtown_car{13.4, 12.0};
@@ -119,13 +121,27 @@ void run() {
 }
 }  // namespace delegating
 
+// [Slide 52] The Class So Far. The full class in vehicle.hpp also has drive(),
+// which takes a Route and prints the trip.
+namespace class_so_far {
+void run() {
+  Vehicle downtown_car{13.4, 12.0};
+  Route route;
+  route.add(Position{0.0, 0.0});
+  route.add(Position{300.0, 0.0});
+  route.add(Position{300.0, 400.0});
+  downtown_car.drive(route);  // 700 m at 12 m/s: 58.3333 s
+}
+}  // namespace class_so_far
+
 std::vector<Slide> slides() {
   return {
-      {39, "A Member with No Initializer", no_initializer::run},
-      {41, "No Default Constructor Now", no_default::run},
-      {42, "A Constructor That Throws", ctor_throws::run},
-      {48, "A Conversion Nobody Asked For", conversion::run},
-      {49, "Delegating Constructor", delegating::run},
+      {41, "A Member with No Initializer", no_initializer::run},
+      {43, "No Default Constructor Now", no_default::run},
+      {44, "A Constructor That Throws", ctor_throws::run},
+      {50, "A Conversion Nobody Asked For", conversion::run},
+      {51, "Delegating Constructor", delegating::run},
+      {52, "The Class So Far", class_so_far::run},
   };
 }
 

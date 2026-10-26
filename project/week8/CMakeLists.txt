@@ -5,14 +5,14 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-8 program
 #   702run week8_playground       run the code of every slide
-#   702run week8_playground 10    run only the code of [Slide 10]
+#   702run week8_playground 11    run only the code of [Slide 11]
 #   702run week8_appendix         run the code of every appendix frame
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week8_playground)
 #   appendix/     the code of the appendix frames (week8_appendix)
-#   common/       run_slides(), and the classes of the lecture (Vehicle, Sensor
-#                 with its SensorType, RoboTaxi)
+#   common/       run_slides(), and the classes of the lecture: Vehicle, Sensor
+#                 with its SensorType, the Position struct, and Route (drive() takes one)
 #   undefined/    the slides that leak or have undefined behavior, built with sanitizers
 # =============================================================================
 
@@ -40,7 +40,7 @@ add_executable(week8_playground playground/src/main.cpp
     undefined/src/undefined.cpp
     common/src/vehicle.cpp
     common/src/sensor.cpp
-    common/src/robotaxi.cpp
+    common/src/route.cpp
     common/src/slides.cpp)
 target_include_directories(week8_playground PRIVATE
     common/include playground/include undefined/include)

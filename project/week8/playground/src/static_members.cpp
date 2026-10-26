@@ -3,70 +3,74 @@
  * @brief L8 Section 9, static Members: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Part of week8_playground. [Slide 75] uses a RoboTaxi with a counter
- * in each object; [Slides 76 and 77] use the RoboTaxi of
- * ../../common/include/robotaxi.hpp, whose counter is static.
+ * @details Part of week8_playground. Each slide's Vehicle is its own class, so
+ * its counter starts at 1 whatever ran before: the Vehicle of
+ * ../../common/include/vehicle.hpp has the same static counter, and in a full
+ * run the earlier slides have already used some of its ids.
  */
-#include <cstddef>
 #include <iostream>
-#include <memory>
-#include <vector>
 
-#include "robotaxi.hpp"
 #include "sections.hpp"
-#include "sensor.hpp"
 
 namespace static_members {
 
-// [Slide 75] Two RoboTaxis, the Same Id
+// [Slide 79] Two Vehicles, the Same Id
 namespace same_ids {
-class RoboTaxi {  // the RoboTaxi of [Slide 73]: one counter in each object
+class Vehicle {
  public:
-  int add_sensor(SensorType type, double range) {
-    const int id{next_id_++};
-    sensors_.push_back(std::make_unique<Sensor>(id, type, range));
-    return id;
-  }
+  explicit Vehicle(double max_speed)
+      : id_{next_id_++}, max_speed_{max_speed} {}
+  [[nodiscard]] int get_id() const noexcept { return id_; }
 
  private:
-  std::vector<std::unique_ptr<Sensor>> sensors_;
-  int next_id_{1};  // the id add_sensor() gives next
+  int next_id_{1};  // one counter in each object
+  int id_;
+  double max_speed_;
 };
 
 void run() {
-  RoboTaxi taxi_a;  // two robotaxis of one fleet
-  RoboTaxi taxi_b;
-  const int id_a{taxi_a.add_sensor(SensorType::lidar, 100.0)};
-  const int id_b{taxi_b.add_sensor(SensorType::lidar, 100.0)};
-  std::cout << id_a << ' ' << id_b << '\n';  // 1 1
-  std::cout << sizeof(RoboTaxi) << '\n';  // 32: the vector (24) and the counter
+  Vehicle downtown_car{13.4};
+  Vehicle airport_car{13.4};
+  std::cout << downtown_car.get_id() << ' '
+            << airport_car.get_id() << '\n';  // 1 1
 }
 }  // namespace same_ids
 
-// [Slide 76] One Counter for the Class
+// [Slide 80] One Counter for the Class
 namespace one_counter {
+class Vehicle {
+ public:
+  explicit Vehicle(double max_speed)
+      : id_{next_id_++}, max_speed_{max_speed} {}
+  [[nodiscard]] int get_id() const noexcept { return id_; }
+  [[nodiscard]] static int next_id() noexcept { return next_id_; }
+
+ private:
+  inline static int next_id_{1};  // one counter for the class
+  int id_;
+  double max_speed_;
+};
+
 void run() {
-  ::RoboTaxi taxi_a;
-  ::RoboTaxi taxi_b;
-  std::cout << taxi_a.add_sensor(SensorType::lidar, 100.0) << ' '
-            << taxi_a.add_sensor(SensorType::camera, 80.0) << ' '
-            << taxi_b.add_sensor(SensorType::lidar, 100.0) << '\n';  // 1 2 3
-  std::cout << ::RoboTaxi::next_id() << '\n';                         // 4
-  std::cout << sizeof(::RoboTaxi) << '\n';                            // 24: the vector only
+  std::cout << Vehicle::next_id() << '\n';  // 1: no Vehicle yet
+  Vehicle downtown_car{13.4};
+  Vehicle airport_car{13.4};
+  std::cout << downtown_car.get_id() << ' ' << airport_car.get_id() << ' '
+            << Vehicle::next_id() << '\n';  // 1 2 3
 }
 }  // namespace one_counter
 
-// [Slide 77] A static Method Has No this
-// Inside RoboTaxi:
-// static std::size_t count() noexcept {  // in RoboTaxi: an error
+// [Slide 81] A static Method Has No this
+// Inside Vehicle (../../common/include/vehicle.hpp):
+// static std::size_t count() noexcept {  // in Vehicle: an error
 //   return sensors_.size();
 // }
-// error: invalid use of member 'RoboTaxi::sensors_' in static member function
+// error: invalid use of member 'Vehicle::sensors_' in static member function
 
 std::vector<Slide> slides() {
   return {
-      {75, "Two RoboTaxis, the Same Id", same_ids::run},
-      {76, "One Counter for the Class", one_counter::run},
+      {79, "Two Vehicles, the Same Id", same_ids::run},
+      {80, "One Counter for the Class", one_counter::run},
   };
 }
 

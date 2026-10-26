@@ -13,7 +13,7 @@
 
 namespace discussions {
 
-// [Slide 36] Discussion: The School Zone. The option the notes pick: a maximum
+// [Slide 38] Discussion: The School Zone. The option the notes pick: a maximum
 // that is not greater than 0 throws; a speed above the new maximum is lowered
 // to it.
 namespace school_zone {
@@ -68,7 +68,7 @@ void run() {
 }
 }  // namespace school_zone
 
-// [Slide 46] Discussion: Spot the Bug. The class as given:
+// [Slide 48] Discussion: Spot the Bug. The class as given:
 //   explicit FollowingGap(double speed)
 //       : time_{2.0}, distance_{time_ * speed} {}
 //   ...
@@ -101,8 +101,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {36, "Discussion: The School Zone", school_zone::run},
-      {46, "Discussion: Spot the Bug", following_gap::run},
+      {38, "Discussion: The School Zone", school_zone::run},
+      {48, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 

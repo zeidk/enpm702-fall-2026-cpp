@@ -17,7 +17,7 @@
 
 namespace classes {
 
-// [Slide 7] Class, and [Slide 8] The Parts of a Class
+// [Slide 8] Class, and [Slide 9] The Parts of a Class
 namespace first_version {
 class Vehicle {
  public:
@@ -37,7 +37,7 @@ double Vehicle::get_speed() const { return speed_; }
 
 using first_version::Vehicle;
 
-// [Slide 10] State and Behavior
+// [Slide 11] State and Behavior
 namespace two_objects {
 void run() {
   Vehicle downtown_car;
@@ -50,7 +50,7 @@ void run() {
 }
 }  // namespace two_objects
 
-// [Slide 13] On the Stack and on the Heap
+// [Slide 14] On the Stack and on the Heap
 namespace stack_and_heap {
 void run() {
   Vehicle downtown_car;  // on the stack
@@ -65,8 +65,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {10, "State and Behavior", two_objects::run},
-      {13, "On the Stack and on the Heap", stack_and_heap::run},
+      {11, "State and Behavior", two_objects::run},
+      {14, "On the Stack and on the Heap", stack_and_heap::run},
   };
 }
 

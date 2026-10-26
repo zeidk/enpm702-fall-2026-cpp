@@ -22,19 +22,19 @@ class Vehicle {
  public:
   void set_speed(double speed);
 
-  // [Slide 31] [[nodiscard]] and noexcept
+  // [Slide 33] [[nodiscard]] and noexcept
   [[nodiscard]] double get_speed() const noexcept {
     return speed_;
   }
 
-  // [Slide 30] The Compiler Checks const
+  // [Slide 32] The Compiler Checks const
   // double get_speed_bad() const {
   //   speed_ = 0.0;  // does not compile
   //   return speed_;
   // }
   // error: assignment of member 'Vehicle::speed_' in read-only object
 
-  // [Slide 34] Not const, Not noexcept: the same setter, marked noexcept.
+  // [Slide 36] Not const, Not noexcept: the same setter, marked noexcept.
   // void set_speed_noexcept(double speed) noexcept {
   //   if (speed < 0.0 || speed > max_speed_) {
   //     throw std::invalid_argument{
@@ -52,7 +52,7 @@ class Vehicle {
   double speed_{0.0};       // m/s
 };
 
-// [Slide 32] Mutators
+// [Slide 34] Mutators
 void Vehicle::set_speed(double speed) {
   if (speed < 0.0 || speed > max_speed_) {
     throw std::invalid_argument{
@@ -62,12 +62,12 @@ void Vehicle::set_speed(double speed) {
 }
 }  // namespace with_check
 
-// [Slide 31] [[nodiscard]] and noexcept
+// [Slide 33] [[nodiscard]] and noexcept
 // downtown_car.get_speed();  // the result is thrown away: a warning
 // warning: ignoring return value of 'double Vehicle::get_speed() const',
 //          declared with attribute 'nodiscard' [-Wunused-result]
 
-// [Slide 33] A Broken Rule Is Caught
+// [Slide 35] A Broken Rule Is Caught
 namespace rule_caught {
 void run() {
   with_check::Vehicle downtown_car;
@@ -81,7 +81,7 @@ void run() {
 }
 }  // namespace rule_caught
 
-// [Slide 35] A Getter and Setter That Add Nothing
+// [Slide 37] A Getter and Setter That Add Nothing
 namespace trivial_pair {
 class Position {  // no rule about x
  public:
@@ -101,8 +101,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {33, "A Broken Rule Is Caught", rule_caught::run},
-      {35, "A Getter and Setter That Add Nothing", trivial_pair::run},
+      {35, "A Broken Rule Is Caught", rule_caught::run},
+      {37, "A Getter and Setter That Add Nothing", trivial_pair::run},
   };
 }
 
