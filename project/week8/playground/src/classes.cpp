@@ -6,9 +6,9 @@
  * @details Part of week8_playground: main.cpp collects slides() from every
  * section file and runs them.
  *
- * The slides of this section use a first version of CruiseControl, with no
+ * The slides of this section use a first version of Vehicle, with no
  * constructor and no check. It is defined here, in namespace first_version.
- * The full class is in ../../common/include/cruise_control.hpp.
+ * The full class is in ../../common/include/vehicle.hpp.
  */
 #include <iostream>
 #include <memory>
@@ -19,47 +19,47 @@ namespace classes {
 
 // [Slide 7] Class, and [Slide 8] The Parts of a Class
 namespace first_version {
-class CruiseControl {
+class Vehicle {
  public:
-  void set_target_speed(double speed);
-  double get_target_speed() const;
+  void set_speed(double speed);
+  double get_speed() const;
 
  private:
-  double speed_limit_{13.4};  // m/s
-  double target_speed_{0.0};  // m/s
+  double max_speed_{13.4};  // m/s
+  double speed_{0.0};       // m/s
 };
 
 // No check yet: the first version takes any speed.
-void CruiseControl::set_target_speed(double speed) { target_speed_ = speed; }
+void Vehicle::set_speed(double speed) { speed_ = speed; }
 
-double CruiseControl::get_target_speed() const { return target_speed_; }
+double Vehicle::get_speed() const { return speed_; }
 }  // namespace first_version
 
-using first_version::CruiseControl;
+using first_version::Vehicle;
 
 // [Slide 10] State and Behavior
 namespace two_objects {
 void run() {
-  CruiseControl ego_cruise;
-  CruiseControl test_cruise;
-  ego_cruise.set_target_speed(12.0);
-  test_cruise.set_target_speed(10.0);
-  std::cout << ego_cruise.get_target_speed() << ' '
-            << test_cruise.get_target_speed() << '\n';  // 12 10
-  std::cout << sizeof(CruiseControl) << '\n';            // 16
+  Vehicle downtown_car;
+  Vehicle airport_car;
+  downtown_car.set_speed(12.0);
+  airport_car.set_speed(10.0);
+  std::cout << downtown_car.get_speed() << ' '
+            << airport_car.get_speed() << '\n';  // 12 10
+  std::cout << sizeof(Vehicle) << '\n';          // 16
 }
 }  // namespace two_objects
 
 // [Slide 13] On the Stack and on the Heap
 namespace stack_and_heap {
 void run() {
-  CruiseControl ego_cruise;  // on the stack
-  ego_cruise.set_target_speed(12.0);
-  std::cout << ego_cruise.get_target_speed() << '\n';  // 12
+  Vehicle downtown_car;  // on the stack
+  downtown_car.set_speed(12.0);
+  std::cout << downtown_car.get_speed() << '\n';  // 12
 
-  auto test_cruise{std::make_unique<CruiseControl>()};  // on the heap
-  test_cruise->set_target_speed(10.0);
-  std::cout << test_cruise->get_target_speed() << '\n';  // 10
+  auto airport_car{std::make_unique<Vehicle>()};  // on the heap
+  airport_car->set_speed(10.0);
+  std::cout << airport_car->get_speed() << '\n';  // 10
 }
 }  // namespace stack_and_heap
 

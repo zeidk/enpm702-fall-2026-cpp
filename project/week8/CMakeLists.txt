@@ -1,5 +1,5 @@
 # =============================================================================
-# Week 8: OOP Basics. Classes for the software of L7's autonomous car.
+# Week 8: OOP Basics. Classes for the software of a robotaxi.
 # Author: Zeid Kootbally
 #
 #   702configure                  once, after pulling
@@ -11,8 +11,8 @@
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week8_playground)
 #   appendix/     the code of the appendix frames (week8_appendix)
-#   common/       run_slides(), the Pose and Obstacle structs of week 7, and the
-#                 classes of the lecture (CruiseControl, Tracker)
+#   common/       run_slides(), and the classes of the lecture (Vehicle, Sensor
+#                 with its SensorType, RoboTaxi)
 #   undefined/    the slides that leak or have undefined behavior, built with sanitizers
 # =============================================================================
 
@@ -38,8 +38,9 @@ add_executable(week8_playground playground/src/main.cpp
     playground/src/static_members.cpp
     playground/src/discussions.cpp
     undefined/src/undefined.cpp
-    common/src/cruise_control.cpp
-    common/src/tracker.cpp
+    common/src/vehicle.cpp
+    common/src/sensor.cpp
+    common/src/robotaxi.cpp
     common/src/slides.cpp)
 target_include_directories(week8_playground PRIVATE
     common/include playground/include undefined/include)
@@ -49,5 +50,6 @@ target_link_options(week8_playground PRIVATE -fsanitize=address,undefined)
 # The appendix: the code of every appendix frame that has code. Pass the
 # frame's number, as a roman numeral (iii) or not (3).
 # -----------------------------------------------------------------------------
-add_executable(week8_appendix appendix/src/appendix.cpp common/src/slides.cpp)
+add_executable(week8_appendix appendix/src/appendix.cpp common/src/sensor.cpp
+    common/src/slides.cpp)
 target_include_directories(week8_appendix PRIVATE common/include)

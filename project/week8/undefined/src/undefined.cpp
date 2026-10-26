@@ -12,98 +12,99 @@
 #include <memory>
 #include <utility>
 
-#include "obstacle.hpp"
+#include "sensor.hpp"
 
 namespace undefined {
 
 // [Slide 62] Without the Destructor
-// The Track of [Slide 61] with ~Track removed. LeakSanitizer reports, at exit:
-// Direct leak of 48 byte(s) in 1 object(s) allocated from: (three times)
-// SUMMARY: AddressSanitizer: 144 byte(s) leaked in 3 allocation(s).
+// The SensorMount of [Slide 61] with ~SensorMount removed. LeakSanitizer
+// reports, at exit:
+// Direct leak of 16 byte(s) in 1 object(s) allocated from: (three times)
+// SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 namespace no_destructor {
-class Track {  // owns one Obstacle on the heap, and never gives it back
+class SensorMount {  // owns one Sensor on the heap, and never gives it back
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 void run() {
   {
-    Track parked{Obstacle{1}};
-    Track cyclist{Obstacle{2}};
+    SensorMount roof{Sensor{1}};
+    SensorMount front{Sensor{2}};
     std::cout << "end of scope\n";
   }
-  auto pedestrian{std::make_unique<Track>(Obstacle{3})};
-  pedestrian.reset();
+  auto rear{std::make_unique<SensorMount>(Sensor{3})};
+  rear.reset();
   std::cout << "after reset\n";
 }
 }  // namespace no_destructor
 
 // [Slide 64] Double Free, Measured
-// The Track of [Slide 60], copied by the compiler's copy constructor
+// The SensorMount of [Slide 60], copied by the compiler's copy constructor
 // ([Slide 63]). AddressSanitizer stops the program:
 // ERROR: AddressSanitizer: attempting double-free on 0x... in thread T0:
 namespace double_free {
-class Track {  // owns one Obstacle on the heap
+class SensorMount {  // owns one Sensor on the heap
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
-  ~Track() { delete obstacle_; }
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  ~SensorMount() { delete sensor_; }
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 void run() {
-  Track cyclist{Obstacle{2, Pose{12.0, -1.0, 0.0}, 4.0}};
-  Track copy{cyclist};  // the compiler's copy constructor
-  std::cout << copy.get().id << '\n';  // 2
-}  // copy's destructor deletes the Obstacle, then cyclist's deletes it again
+  SensorMount front{Sensor{2, SensorType::camera, 80.0}};
+  SensorMount copy{front};  // the compiler's copy constructor
+  std::cout << copy.get().get_id() << '\n';  // 2
+}  // copy's destructor deletes the Sensor, then front's deletes it again
 }  // namespace double_free
 
 // [Slide 69] Discussion: Who Deletes What?
-// The move assignment does not set other.obstacle_ to nullptr, so after line 9
-// parked and cyclist point at the same Obstacle (id 2), and the Obstacle with
-// id 1 was deleted. At the end of the scope both destructors delete id 2:
+// The move assignment does not set other.sensor_ to nullptr, so after line 9
+// roof and front point at the same Sensor (id 2), and the Sensor with id 1
+// was deleted. At the end of the scope both destructors delete id 2:
 // ERROR: AddressSanitizer: attempting double-free on 0x... in thread T0:
 namespace move_bug {
-class Track {
+class SensorMount {
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
-  ~Track() { delete obstacle_; }
-  Track(const Track&) = delete;
-  Track& operator=(const Track&) = delete;
-  Track(Track&& other) noexcept : obstacle_{other.obstacle_} {
-    other.obstacle_ = nullptr;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  ~SensorMount() { delete sensor_; }
+  SensorMount(const SensorMount&) = delete;
+  SensorMount& operator=(const SensorMount&) = delete;
+  SensorMount(SensorMount&& other) noexcept : sensor_{other.sensor_} {
+    other.sensor_ = nullptr;
   }
-  Track& operator=(Track&& other) noexcept {
-    delete obstacle_;
-    obstacle_ = other.obstacle_;
+  SensorMount& operator=(SensorMount&& other) noexcept {
+    delete sensor_;
+    sensor_ = other.sensor_;
     return *this;
   }
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 void run() {
-  Track parked{Obstacle{1}};
-  Track cyclist{Obstacle{2}};
-  parked = std::move(cyclist);
-  std::cout << parked.get().id << '\n';  // 2
+  SensorMount roof{Sensor{1}};
+  SensorMount front{Sensor{2}};
+  roof = std::move(front);
+  std::cout << roof.get().get_id() << '\n';  // 2
 }
 }  // namespace move_bug
 

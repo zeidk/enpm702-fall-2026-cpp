@@ -15,70 +15,69 @@
 
 namespace accessors {
 
-// The class of this section: the setter checks the speed limit, the getter is
-// [[nodiscard]], const and noexcept.
+// The class of this section: the setter checks the maximum speed, the getter
+// is [[nodiscard]], const and noexcept.
 namespace with_check {
-class CruiseControl {
+class Vehicle {
  public:
-  void set_target_speed(double target_speed);
+  void set_speed(double speed);
 
   // [Slide 31] [[nodiscard]] and noexcept
-  [[nodiscard]] double get_target_speed() const noexcept {
-    return target_speed_;
+  [[nodiscard]] double get_speed() const noexcept {
+    return speed_;
   }
 
   // [Slide 30] The Compiler Checks const
-  // double get_target_speed_bad() const {
-  //   target_speed_ = 0.0;  // does not compile
-  //   return target_speed_;
+  // double get_speed_bad() const {
+  //   speed_ = 0.0;  // does not compile
+  //   return speed_;
   // }
-  // error: assignment of member 'CruiseControl::target_speed_' in read-only object
+  // error: assignment of member 'Vehicle::speed_' in read-only object
 
   // [Slide 34] Not const, Not noexcept: the same setter, marked noexcept.
-  // void set_target_speed_noexcept(double target_speed) noexcept {
-  //   if (target_speed < 0.0 || target_speed > speed_limit_) {
+  // void set_speed_noexcept(double speed) noexcept {
+  //   if (speed < 0.0 || speed > max_speed_) {
   //     throw std::invalid_argument{
-  //         "target speed must be from 0 to the speed limit"};
+  //         "speed must be from 0 to the maximum speed"};
   //   }
-  //   target_speed_ = target_speed;
+  //   speed_ = speed;
   // }
   // warning: 'throw' will always call 'terminate' [-Wterminate]
   // Called with 20.0, the program stops (exit status 134):
   // terminate called after throwing an instance of 'std::invalid_argument'
-  //   what():  target speed must be from 0 to the speed limit
+  //   what():  speed must be from 0 to the maximum speed
 
  private:
-  double speed_limit_{13.4};  // m/s
-  double target_speed_{0.0};  // m/s
+  double max_speed_{13.4};  // m/s
+  double speed_{0.0};       // m/s
 };
 
 // [Slide 32] Mutators
-void CruiseControl::set_target_speed(double target_speed) {
-  if (target_speed < 0.0 || target_speed > speed_limit_) {
+void Vehicle::set_speed(double speed) {
+  if (speed < 0.0 || speed > max_speed_) {
     throw std::invalid_argument{
-        "target speed must be from 0 to the speed limit"};
+        "speed must be from 0 to the maximum speed"};
   }
-  target_speed_ = target_speed;
+  speed_ = speed;
 }
 }  // namespace with_check
 
 // [Slide 31] [[nodiscard]] and noexcept
-// ego_cruise.get_target_speed();  // the result is thrown away: a warning
-// warning: ignoring return value of
-//          'double CruiseControl::get_target_speed() const',
+// downtown_car.get_speed();  // the result is thrown away: a warning
+// warning: ignoring return value of 'double Vehicle::get_speed() const',
 //          declared with attribute 'nodiscard' [-Wunused-result]
 
 // [Slide 33] A Broken Rule Is Caught
 namespace rule_caught {
 void run() {
-  with_check::CruiseControl ego_cruise;
-  ego_cruise.set_target_speed(12.0);
+  with_check::Vehicle downtown_car;
+  downtown_car.set_speed(12.0);
   try {
-    ego_cruise.set_target_speed(20.0);  // above the limit, 13.4
+    downtown_car.set_speed(20.0);  // above the maximum, 13.4
   } catch (const std::invalid_argument& e) {
     std::cout << "caught: " << e.what() << '\n';
   }
-  std::cout << ego_cruise.get_target_speed() << '\n';  // 12
+  std::cout << downtown_car.get_speed() << '\n';  // 12
 }
 }  // namespace rule_caught
 

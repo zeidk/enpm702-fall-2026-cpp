@@ -17,12 +17,12 @@
 
 namespace undefined {
 
-/// [Slide 62] Without the Destructor: three Track objects that never delete.
+/// [Slide 62] Without the Destructor: three SensorMount objects that never delete.
 namespace no_destructor {
 void run();
 }
 
-/// [Slide 64] Double Free, Measured: a copied Track deletes its Obstacle twice.
+/// [Slide 64] Double Free, Measured: a copied SensorMount deletes its Sensor twice.
 namespace double_free {
 void run();
 }

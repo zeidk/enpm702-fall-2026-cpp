@@ -14,43 +14,43 @@
 #include <memory>
 #include <vector>
 
-#include "obstacle.hpp"
+#include "sensor.hpp"
 #include "slides.hpp"
 
 namespace {
 
 // [Appendix iii] Returning a Large Member
 namespace large_member {
-class Tracker {
+class RoboTaxi {
  public:
-  int add(Pose pose, double speed, bool is_static = false) {
+  int add_sensor(SensorType type, double range) {
     const int id{next_id_++};
-    tracks_.push_back(std::make_unique<Obstacle>(id, pose, speed, is_static));
+    sensors_.push_back(std::make_unique<Sensor>(id, type, range));
     return id;
   }
 
-  [[nodiscard]] const std::vector<std::unique_ptr<Obstacle>>&
-  get_tracks() const noexcept {
-    return tracks_;
+  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>&
+  get_sensors() const noexcept {
+    return sensors_;
   }
 
   // Returning a copy does not compile: each std::unique_ptr would be copied.
-  // [[nodiscard]] std::vector<std::unique_ptr<Obstacle>> get_tracks_copy() const {
-  //   return tracks_;
+  // [[nodiscard]] std::vector<std::unique_ptr<Sensor>> get_sensors_copy() const {
+  //   return sensors_;
   // }
 
  private:
-  std::vector<std::unique_ptr<Obstacle>> tracks_;
+  std::vector<std::unique_ptr<Sensor>> sensors_;
   inline static int next_id_{1};
 };
 
 void run() {
-  Tracker front;
-  front.add(Pose{20.0, -3.0, 0.0}, 0.0, true);
-  front.add(Pose{12.0, -1.0, 0.0}, 4.0);
-  for (const std::unique_ptr<Obstacle>& track : front.get_tracks()) {
-    std::cout << track->id << ' ' << track->speed << '\n';
-  }  // prints 1 0, then 2 4
+  RoboTaxi taxi_a;
+  taxi_a.add_sensor(SensorType::lidar, 100.0);
+  taxi_a.add_sensor(SensorType::camera, 80.0);
+  for (const std::unique_ptr<Sensor>& sensor : taxi_a.get_sensors()) {
+    std::cout << sensor->get_id() << ' ' << sensor->get_range() << '\n';
+  }  // prints 1 100, then 2 80
 }
 }  // namespace large_member
 

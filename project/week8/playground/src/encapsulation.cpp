@@ -16,37 +16,36 @@ namespace encapsulation {
 
 // [Slide 25] The Source File
 // The class of [Slide 21], and its methods defined outside it with
-// CruiseControl::, as cruise_control.hpp and cruise_control.cpp would hold them.
+// Vehicle::, as vehicle.hpp and vehicle.cpp would hold them.
 namespace source_file {
-class CruiseControl {
+class Vehicle {
  public:  // any code may call these
-  void set_target_speed(double speed);
-  double get_target_speed() const;
+  void set_speed(double speed);
+  double get_speed() const;
 
- private:  // only CruiseControl's own methods may use these
-  double speed_limit_{13.4};  // m/s
-  double target_speed_{0.0};  // m/s
+ private:  // only Vehicle's own methods may use these
+  double max_speed_{13.4};  // m/s
+  double speed_{0.0};       // m/s
 };
 
-void CruiseControl::set_target_speed(double speed) {
-  target_speed_ = speed;
+void Vehicle::set_speed(double speed) {
+  speed_ = speed;
 }
 
-double CruiseControl::get_target_speed() const {
-  return target_speed_;
+double Vehicle::get_speed() const {
+  return speed_;
 }
 
-// [Slide 26] Without CruiseControl::
-// void set_target_speed(double speed) {
-//   target_speed_ = speed;
+// [Slide 26] Without Vehicle::
+// void set_speed(double speed) {
+//   speed_ = speed;
 // }
-// error: 'target_speed_' was not declared in this scope;
-//        did you mean 'set_target_speed'?
+// error: 'speed_' was not declared in this scope; did you mean 'speed'?
 
 void run() {
-  CruiseControl ego_cruise;
-  ego_cruise.set_target_speed(12.0);
-  std::cout << ego_cruise.get_target_speed() << '\n';  // 12
+  Vehicle downtown_car;
+  downtown_car.set_speed(12.0);
+  std::cout << downtown_car.get_speed() << '\n';  // 12
 }
 }  // namespace source_file
 
@@ -54,27 +53,27 @@ void run() {
 // The data members hold km/h; the methods still take and give m/s. The calls
 // are those of [Slide 10], unchanged.
 namespace changing_inside {
-class CruiseControl {
+class Vehicle {
  public:
-  void set_target_speed(double speed) {
-    target_speed_kmh_ = speed * 3.6;
+  void set_speed(double speed) {
+    speed_kmh_ = speed * 3.6;
   }
-  double get_target_speed() const {
-    return target_speed_kmh_ / 3.6;
+  double get_speed() const {
+    return speed_kmh_ / 3.6;
   }
 
  private:
-  double speed_limit_kmh_{48.24};  // 13.4 * 3.6
-  double target_speed_kmh_{0.0};
+  double max_speed_kmh_{48.24};  // 13.4 * 3.6
+  double speed_kmh_{0.0};
 };
 
 void run() {
-  CruiseControl ego_cruise;
-  CruiseControl test_cruise;
-  ego_cruise.set_target_speed(12.0);
-  test_cruise.set_target_speed(10.0);
-  std::cout << ego_cruise.get_target_speed() << ' '
-            << test_cruise.get_target_speed() << '\n';  // 12 10
+  Vehicle downtown_car;
+  Vehicle airport_car;
+  downtown_car.set_speed(12.0);
+  airport_car.set_speed(10.0);
+  std::cout << downtown_car.get_speed() << ' '
+            << airport_car.get_speed() << '\n';  // 12 10
 }
 }  // namespace changing_inside
 

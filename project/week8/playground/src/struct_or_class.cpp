@@ -15,34 +15,34 @@ namespace struct_or_class {
 
 // [Slide 16] Default Access
 namespace default_access {
-struct OpenSpeed { double target_speed{0.0}; };
-class HiddenSpeed { double target_speed{0.0}; };
+struct OpenSpeed { double speed{0.0}; };
+class HiddenSpeed { double speed{0.0}; };
 
 void run() {
   OpenSpeed open;
-  open.target_speed = 12.0;    // OK: a struct's members are public
+  open.speed = 12.0;    // OK: a struct's members are public
   HiddenSpeed hidden;
-  // hidden.target_speed = 12.0;  // does not compile:
-  // error: 'double struct_or_class::default_access::HiddenSpeed::target_speed'
+  // hidden.speed = 12.0;  // does not compile:
+  // error: 'double struct_or_class::default_access::HiddenSpeed::speed'
   //        is private within this context
   // (the slide's code has no namespaces, so the slide's error names HiddenSpeed only)
   (void)hidden;
-  std::cout << open.target_speed << '\n';  // 12
+  std::cout << open.speed << '\n';  // 12
 }
 }  // namespace default_access
 
 // [Slide 17] A Rule Nothing Checks
 namespace nothing_checks {
-struct CruiseData {
-  double speed_limit{13.4};  // m/s
-  double target_speed{0.0};  // m/s, must stay from 0 to speed_limit
+struct VehicleData {
+  double max_speed{13.4};  // m/s
+  double speed{0.0};       // m/s, must stay from 0 to max_speed
 };
 
 void run() {
-  CruiseData cruise;
-  cruise.target_speed = 20.0;  // compiles: any code can break the rule
-  std::cout << cruise.target_speed << " > "
-            << cruise.speed_limit << '\n';  // 20 > 13.4
+  VehicleData data;
+  data.speed = 20.0;  // compiles: any code can break the rule
+  std::cout << data.speed << " > "
+            << data.max_speed << '\n';  // 20 > 13.4
 }
 }  // namespace nothing_checks
 

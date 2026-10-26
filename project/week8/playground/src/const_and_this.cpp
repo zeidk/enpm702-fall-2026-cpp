@@ -11,90 +11,89 @@
 #include <stdexcept>
 #include <type_traits>
 
-#include "cruise_control.hpp"
 #include "sections.hpp"
+#include "vehicle.hpp"
 
 namespace const_and_this {
 
 // [Slide 52] Calling a Mutator
 namespace const_object {
 void run() {
-  const CruiseControl city_cruise{13.4, 12.0};
-  std::cout << city_cruise.get_target_speed() << '\n';  // 12
-  // city_cruise.set_target_speed(10.0);  // does not compile:
-  // error: passing 'const CruiseControl' as 'this' argument discards qualifiers
+  const Vehicle logged_car{13.4, 12.0};
+  std::cout << logged_car.get_speed() << '\n';  // 12
+  // logged_car.set_speed(10.0);  // does not compile:
+  // error: passing 'const Vehicle' as 'this' argument discards qualifiers
 }
 }  // namespace const_object
 
 // [Slide 53] Through a const Reference
-// class CruiseControl {
+// class Vehicle {
 //  public:
-//   double get_target_speed() { return target_speed_; }  // const left out
+//   double get_speed() { return speed_; }  // const left out
 //   ...
 // };
-// void show(const CruiseControl& cruise) {
-//   std::cout << cruise.get_target_speed() << '\n';  // does not compile
+// void show(const Vehicle& vehicle) {
+//   std::cout << vehicle.get_speed() << '\n';  // does not compile
 // }
-// error: passing 'const CruiseControl' as 'this' argument discards qualifiers
+// error: passing 'const Vehicle' as 'this' argument discards qualifiers
 
 // [Slide 56] One Method, Many Objects
 // A copy of the class whose setter prints this.
 namespace one_method {
-class CruiseControl {
+class Vehicle {
  public:
-  explicit CruiseControl(double speed_limit) : speed_limit_{speed_limit} {}
-  void set_target_speed(double target_speed) {
-    std::cout << "this:        " << this << '\n';
-    if (target_speed < 0.0 || target_speed > speed_limit_) {
+  explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
+  void set_speed(double speed) {
+    std::cout << "this:          " << this << '\n';
+    if (speed < 0.0 || speed > max_speed_) {
       throw std::invalid_argument{
-          "target speed must be from 0 to the speed limit"};
+          "speed must be from 0 to the maximum speed"};
     }
-    target_speed_ = target_speed;  // means this->target_speed_
+    speed_ = speed;  // means this->speed_
   }
 
  private:
-  double speed_limit_;
-  double target_speed_{0.0};
+  double max_speed_;
+  double speed_{0.0};
 };
 
 void run() {
-  CruiseControl ego_cruise{13.4};
-  std::cout << "&ego_cruise: " << &ego_cruise << '\n';
-  ego_cruise.set_target_speed(12.0);  // the two addresses match
+  Vehicle downtown_car{13.4};
+  std::cout << "&downtown_car: " << &downtown_car << '\n';
+  downtown_car.set_speed(12.0);  // the two addresses match
 }
 }  // namespace one_method
 
 // [Slides 57 and 58] The class checks the type of this in both kinds of
-// method, and has increase(), which returns *this.
+// method, and has speed_up(), which returns *this.
 namespace this_pointer {
-class CruiseControl {
+class Vehicle {
  public:
-  explicit CruiseControl(double speed_limit) : speed_limit_{speed_limit} {}
-  CruiseControl(double speed_limit, double target_speed)
-      : CruiseControl{speed_limit} {
-    set_target_speed(target_speed);
+  explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
+  Vehicle(double max_speed, double speed) : Vehicle{max_speed} {
+    set_speed(speed);
   }
 
-  void set_target_speed(double target_speed) {
+  void set_speed(double speed) {
     // [Slide 57] The Type of this: in a method that is not const
-    static_assert(std::is_same_v<decltype(this), CruiseControl*>);
-    if (target_speed < 0.0 || target_speed > speed_limit_) {
+    static_assert(std::is_same_v<decltype(this), Vehicle*>);
+    if (speed < 0.0 || speed > max_speed_) {
       throw std::invalid_argument{
-          "target speed must be from 0 to the speed limit"};
+          "speed must be from 0 to the maximum speed"};
     }
-    target_speed_ = target_speed;  // means this->target_speed_
+    speed_ = speed;  // means this->speed_
   }
 
-  [[nodiscard]] double get_target_speed() const noexcept {
+  [[nodiscard]] double get_speed() const noexcept {
     // [Slide 57] The Type of this: in a const method
-    static_assert(std::is_same_v<decltype(this), const CruiseControl*>);
-    return target_speed_;
+    static_assert(std::is_same_v<decltype(this), const Vehicle*>);
+    return speed_;
   }
 
   // [Slide 58] Returning *this
-  CruiseControl& increase(double step) {
-    set_target_speed(target_speed_ + step);  // the check runs here
-    return *this;                            // the object itself
+  Vehicle& speed_up(double step) {
+    set_speed(speed_ + step);  // the check runs here
+    return *this;              // the object itself
   }
 
   // [Slide 57] this cannot be assigned:
@@ -102,14 +101,14 @@ class CruiseControl {
   // error: lvalue required as left operand of assignment
 
  private:
-  double speed_limit_;
-  double target_speed_{0.0};
+  double max_speed_;
+  double speed_{0.0};
 };
 
 void run_return_this() {
-  CruiseControl ego_cruise{13.4, 12.0};
-  ego_cruise.increase(0.5).increase(0.5);
-  std::cout << ego_cruise.get_target_speed() << '\n';  // 13
+  Vehicle downtown_car{13.4, 12.0};
+  downtown_car.speed_up(0.5).speed_up(0.5);
+  std::cout << downtown_car.get_speed() << '\n';  // 13
 }
 }  // namespace this_pointer
 

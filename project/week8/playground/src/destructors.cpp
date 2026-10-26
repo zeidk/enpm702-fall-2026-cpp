@@ -3,8 +3,8 @@
  * @brief L8 Section 8, Destructors: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Part of week8_playground. Each slide's Track is its own class, in
- * its own namespace, because the class changes from slide to slide: a raw
+ * @details Part of week8_playground. Each slide's SensorMount is its own class,
+ * in its own namespace, because the class changes from slide to slide: a raw
  * pointer and a destructor ([Slide 60]), the rule of five ([Slides 66 to 68]),
  * a std::unique_ptr ([Slides 70 and 71]), deleted copies ([Slide 72]).
  *
@@ -18,211 +18,214 @@
 #include <utility>
 #include <vector>
 
-#include "obstacle.hpp"
 #include "sections.hpp"
+#include "sensor.hpp"
 #include "undefined.hpp"
 
 namespace destructors {
 
-// [Slide 61] When It Runs: the Track of [Slide 60], and ~Track also prints.
+// [Slide 61] When It Runs: the SensorMount of [Slide 60], and ~SensorMount
+// also prints.
 namespace when_it_runs {
-class Track {  // owns one Obstacle on the heap
+class SensorMount {  // owns one Sensor on the heap
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
-  ~Track() {
-    std::cout << "~Track: id " << obstacle_->id << '\n';
-    delete obstacle_;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  ~SensorMount() {
+    std::cout << "~SensorMount: id " << sensor_->get_id() << '\n';
+    delete sensor_;
   }
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 void run() {
   {
-    Track parked{Obstacle{1}};   // id 1; the
-    Track cyclist{Obstacle{2}};  // rest default
+    SensorMount roof{Sensor{1}};   // id 1; the
+    SensorMount front{Sensor{2}};  // rest default
     std::cout << "end of scope\n";
   }
-  auto pedestrian{
-      std::make_unique<Track>(Obstacle{3})};
-  pedestrian.reset();
+  auto rear{
+      std::make_unique<SensorMount>(Sensor{3})};
+  rear.reset();
   std::cout << "after reset\n";
 }
 }  // namespace when_it_runs
 
-// [Slides 66 to 68] The Rule of Five. ~Track prints as on [Slide 61], and 0
-// when the Track owns nothing (after a move).
+// [Slides 66 to 68] The Rule of Five. ~SensorMount prints as on [Slide 61],
+// and 0 when the SensorMount owns nothing (after a move).
 namespace five {
-class Track {
+class SensorMount {
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
 
-  ~Track() {
-    std::cout << "~Track: id " << (obstacle_ != nullptr ? obstacle_->id : 0) << '\n';
-    delete obstacle_;
+  ~SensorMount() {
+    std::cout << "~SensorMount: id " << (sensor_ != nullptr ? sensor_->get_id() : 0) << '\n';
+    delete sensor_;
   }
 
   // [Slide 66] The Copies
-  Track(const Track& other)  // a new Obstacle with other's values
-      : obstacle_{new Obstacle{*other.obstacle_}} {}
+  SensorMount(const SensorMount& other)  // a new Sensor with other's values
+      : sensor_{new Sensor{*other.sensor_}} {}
 
-  Track& operator=(const Track& other) {
-    *obstacle_ = *other.obstacle_;  // into our own Obstacle
+  SensorMount& operator=(const SensorMount& other) {
+    *sensor_ = *other.sensor_;  // into our own Sensor
     return *this;
   }
 
   // [Slide 67] The Moves
-  Track(Track&& other) noexcept : obstacle_{other.obstacle_} {
-    other.obstacle_ = nullptr;  // the source owns nothing now
+  SensorMount(SensorMount&& other) noexcept : sensor_{other.sensor_} {
+    other.sensor_ = nullptr;  // the source owns nothing now
   }
 
-  Track& operator=(Track&& other) noexcept {
-    if (this != &other) {       // t = std::move(t) must not delete
-      delete obstacle_;         // give back what we owned
-      obstacle_ = other.obstacle_;
-      other.obstacle_ = nullptr;
+  SensorMount& operator=(SensorMount&& other) noexcept {
+    if (this != &other) {   // m = std::move(m) must not delete
+      delete sensor_;       // give back what we owned
+      sensor_ = other.sensor_;
+      other.sensor_ = nullptr;
     }
     return *this;
   }
 
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 // [Slide 68] All Five, Run
 void run() {
-  Track cyclist{Obstacle{2}};
-  Track copy{cyclist};
-  std::cout << "copy: id " << copy.get().id << ", own Obstacle: "
-            << (&copy.get() != &cyclist.get()) << '\n';  // copy: id 2, own Obstacle: 1
-  Track parked{Obstacle{1}};
-  copy = parked;
-  std::cout << "after copy assignment: id " << copy.get().id << '\n';  // id 1
-  Track moved{std::move(cyclist)};
-  std::cout << "moved: id " << moved.get().id << '\n';  // id 2
-  parked = std::move(moved);
-  std::cout << "after move assignment: id " << parked.get().id << '\n';  // id 2
-}  // ~Track: id 0, id 2, id 1, id 0
+  SensorMount front{Sensor{2}};
+  SensorMount copy{front};
+  std::cout << "copy: id " << copy.get().get_id() << ", own Sensor: "
+            << (&copy.get() != &front.get()) << '\n';  // copy: id 2, own Sensor: 1
+  SensorMount roof{Sensor{1}};
+  copy = roof;
+  std::cout << "after copy assignment: id " << copy.get().get_id() << '\n';  // id 1
+  SensorMount moved{std::move(front)};
+  std::cout << "moved: id " << moved.get().get_id() << '\n';  // id 2
+  roof = std::move(moved);
+  std::cout << "after move assignment: id " << roof.get().get_id() << '\n';  // id 2
+}  // ~SensorMount: id 0, id 2, id 1, id 0
 }  // namespace five
 
 // [Slides 70 and 71] The Rule of Zero
 namespace zero {
-class Track {
+class SensorMount {
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{std::make_unique<Obstacle>(seen)} {}
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{std::make_unique<Sensor>(sensor)} {}
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  std::unique_ptr<Obstacle> obstacle_;  // deletes the Obstacle
+  std::unique_ptr<Sensor> sensor_;  // deletes the Sensor
 };
 
 void run() {
-  Track cyclist{Obstacle{2, Pose{12.0, -1.0, 0.0}, 4.0}};
-  Track moved{std::move(cyclist)};  // OK: moves the unique_ptr
-  std::cout << moved.get().id << '\n';  // 2
-  // Track copy{moved};             // does not compile:
-  // error: use of deleted function 'Track::Track(const Track&)'
-  // note: 'Track::Track(const Track&)' is implicitly deleted because the
-  //       default definition would be ill-formed:
+  SensorMount front{Sensor{2, SensorType::camera, 80.0}};
+  SensorMount moved{std::move(front)};  // OK: moves the unique_ptr
+  std::cout << moved.get().get_id() << '\n';  // 2
+  // SensorMount copy{moved};           // does not compile:
+  // error: use of deleted function 'SensorMount::SensorMount(const SensorMount&)'
+  // note: 'SensorMount::SensorMount(const SensorMount&)' is implicitly deleted
+  //       because the default definition would be ill-formed:
 }
 }  // namespace zero
 
-// [Slide 72] = default and = delete: the raw-pointer Track, move-only.
-// Remove the two move lines and Track moved{std::move(cyclist)}; picks the
-// deleted copy: error: use of deleted function 'Track::Track(const Track&)'
+// [Slide 72] = default and = delete: the raw-pointer SensorMount, move-only.
+// Remove the two move lines and SensorMount moved{std::move(front)}; picks the
+// deleted copy: error: use of deleted function
+// 'SensorMount::SensorMount(const SensorMount&)'
 namespace move_only {
-class Track {  // the raw-pointer Track, move-only on purpose
+class SensorMount {  // the raw-pointer SensorMount, move-only on purpose
  public:
-  explicit Track(const Obstacle& seen)
-      : obstacle_{new Obstacle{seen}} {}
-  ~Track() { delete obstacle_; }
-  Track(const Track&) = delete;             // no copies
-  Track& operator=(const Track&) = delete;
-  Track(Track&& other) noexcept : obstacle_{other.obstacle_} {
-    other.obstacle_ = nullptr;
+  explicit SensorMount(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  ~SensorMount() { delete sensor_; }
+  SensorMount(const SensorMount&) = delete;  // no copies
+  SensorMount& operator=(const SensorMount&) = delete;
+  SensorMount(SensorMount&& other) noexcept : sensor_{other.sensor_} {
+    other.sensor_ = nullptr;
   }
-  Track& operator=(Track&& other) noexcept {
+  SensorMount& operator=(SensorMount&& other) noexcept {
     if (this != &other) {
-      delete obstacle_;
-      obstacle_ = other.obstacle_;
-      other.obstacle_ = nullptr;
+      delete sensor_;
+      sensor_ = other.sensor_;
+      other.sensor_ = nullptr;
     }
     return *this;
   }
-  [[nodiscard]] const Obstacle& get() const noexcept {
-    return *obstacle_;
+  [[nodiscard]] const Sensor& get() const noexcept {
+    return *sensor_;
   }
 
  private:
-  Obstacle* obstacle_;
+  Sensor* sensor_;
 };
 
 void run() {
-  Track cyclist{Obstacle{2}};
-  Track moved{std::move(cyclist)};
-  std::cout << moved.get().id << '\n';  // 2
+  SensorMount front{Sensor{2}};
+  SensorMount moved{std::move(front)};
+  std::cout << moved.get().get_id() << '\n';  // 2
 }
 }  // namespace move_only
 
-// [Slide 73] The Tracker, with an id counter in each object. Section 9 makes
-// the counter static: ../../common/include/tracker.hpp.
-namespace tracker {
-class Tracker {  // owns one Obstacle for each obstacle it sees
+// [Slide 73] The RoboTaxi, with an id counter in each object. Section 9 makes
+// the counter static: ../../common/include/robotaxi.hpp.
+namespace robotaxi {
+class RoboTaxi {  // owns one Sensor for each sensor it carries
  public:
-  int add(Pose pose, double speed, bool is_static = false) {
+  int add_sensor(SensorType type, double range) {
     const int id{next_id_++};
-    tracks_.push_back(std::make_unique<Obstacle>(id, pose, speed, is_static));
+    sensors_.push_back(std::make_unique<Sensor>(id, type, range));
     return id;
   }
-  bool lose(int id) {
-    return std::erase_if(tracks_, [id](const std::unique_ptr<Obstacle>& track) {
-             return track->id == id;
+  bool remove_sensor(int id) {
+    return std::erase_if(sensors_, [id](const std::unique_ptr<Sensor>& sensor) {
+             return sensor->get_id() == id;
            }) > 0;
   }
-  [[nodiscard]] const Obstacle* find(int id) const {
-    for (const std::unique_ptr<Obstacle>& track : tracks_) {
-      if (track->id == id) {
-        return track.get();
+  [[nodiscard]] const Sensor* find_sensor(int id) const {
+    for (const std::unique_ptr<Sensor>& sensor : sensors_) {
+      if (sensor->get_id() == id) {
+        return sensor.get();
       }
     }
     return nullptr;
   }
-  [[nodiscard]] std::size_t size() const noexcept {
-    return tracks_.size();
+  [[nodiscard]] std::size_t sensor_count() const noexcept {
+    return sensors_.size();
   }
 
  private:
-  std::vector<std::unique_ptr<Obstacle>> tracks_;
-  int next_id_{1};  // the id add() gives next
+  std::vector<std::unique_ptr<Sensor>> sensors_;
+  int next_id_{1};  // the id add_sensor() gives next
 };
 
 void run() {
-  Tracker front;
-  const int parked{front.add(Pose{20.0, -3.0, 0.0}, 0.0, true)};
-  const int cyclist{front.add(Pose{12.0, -1.0, 0.0}, 4.0)};
-  std::cout << parked << ' ' << cyclist << ' ' << front.size() << '\n';  // 1 2 2
-  if (const Obstacle* seen{front.find(cyclist)}) {
-    std::cout << seen->speed << '\n';  // 4
+  RoboTaxi taxi;
+  const int lidar{taxi.add_sensor(SensorType::lidar, 100.0)};
+  const int camera{taxi.add_sensor(SensorType::camera, 80.0)};
+  std::cout << lidar << ' ' << camera << ' ' << taxi.sensor_count() << '\n';  // 1 2 2
+  if (const Sensor* found{taxi.find_sensor(camera)}) {
+    std::cout << found->get_range() << '\n';  // 80
   }
-  front.lose(cyclist);
-  std::cout << front.size() << ' ' << (front.find(cyclist) == nullptr) << '\n';  // 1 1
-  // Tracker copy{front};  // does not compile: errors from inside std::vector,
+  taxi.remove_sensor(camera);
+  std::cout << taxi.sensor_count() << ' '
+            << (taxi.find_sensor(camera) == nullptr) << '\n';  // 1 1
+  // RoboTaxi copy{taxi};  // does not compile: errors from inside std::vector,
   // use of deleted function 'std::unique_ptr<...>::unique_ptr(const std::unique_ptr<...>&)'
 }
-}  // namespace tracker
+}  // namespace robotaxi
 
 std::vector<Slide> slides() {
   return {
@@ -232,7 +235,7 @@ std::vector<Slide> slides() {
       {68, "All Five, Run", five::run},
       {71, "What the Compiler Writes Now", zero::run},
       {72, "= default and = delete", move_only::run},
-      {73, "The Tracker", tracker::run},
+      {73, "The RoboTaxi", robotaxi::run},
       {69, "Discussion: Who Deletes What?", undefined::move_bug::run, true},
   };
 }
