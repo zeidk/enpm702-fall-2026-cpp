@@ -10,7 +10,7 @@
  * [Slide 25] uses the Vehicle of ../../common/include/vehicle.hpp, whose
  * set_speed() checks the invariant. [Slide 27] uses the Sensor of
  * ../../common/include/sensor.hpp; its constructor, defined in the class there,
- * runs in constructors.cpp ([Slide 72]).
+ * runs in constructors.cpp ([Slide 71]).
  */
 #include <iostream>
 #include <stdexcept>

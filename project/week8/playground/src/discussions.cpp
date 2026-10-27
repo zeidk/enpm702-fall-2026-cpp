@@ -15,7 +15,7 @@
 
 namespace discussions {
 
-// [Slide 74] Discussion: Spot the Bug. The class as given, with its line
+// [Slide 73] Discussion: Spot the Bug. The class as given, with its line
 // numbers on the slide:
 //    3  FollowingGap(double speed): time_{2.0}, distance_{time_ * speed} {}
 //       ...
@@ -147,7 +147,7 @@ void run() {
 std::vector<Slide> slides() {
   return {
       {49, "Discussion: Returning a Reference", return_ref::run},
-      {74, "Discussion: Spot the Bug", following_gap::run},
+      {73, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 

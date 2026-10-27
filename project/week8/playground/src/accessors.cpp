@@ -9,8 +9,8 @@
  * is commented out where its slide shows it: uncomment it, build, and you get
  * the slide's error.
  *
- * [Slide 54] ends the program on purpose, so a full run skips it. Run it on
- * its own: 702run week8_playground 54
+ * [Slide 53] ends the program on purpose, so a full run skips it. Run it on
+ * its own: 702run week8_playground 53
  *
  * The Live Coding slide (Step 4) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion slides of this
@@ -113,14 +113,14 @@ void run() {
 }
 }  // namespace rule_caught
 
-// [Slide 54] Not const, Not noexcept: the setter of [Slide 51], marked
+// [Slide 53] Not const, Not noexcept: the setter of [Slide 51], marked
 // noexcept. It still throws, so the promise is false: called with 20.0, the
 // program stops, and the catch of the Step 4 block never runs. g++ warns at
 // the throw:
 //   warning: 'throw' will always call 'terminate' [-Wterminate]
 // The two pragma lines turn that warning off for this one function only, so
 // the programs build with no warning. Run it on its own (a full run skips it):
-//   702run week8_playground 54
+//   702run week8_playground 53
 // It prints, then stops with exit status 134:
 //   terminate called after throwing an instance of 'std::invalid_argument'
 //     what():  speed must be from 0 to the maximum speed
@@ -159,7 +159,7 @@ void run() {
 }
 }  // namespace false_promise
 
-// [Slide 55] A Getter and Setter That Add Nothing
+// [Slide 54] A Getter and Setter That Add Nothing
 namespace trivial_pair {
 class Position {  // no rule about x
  public:
@@ -205,8 +205,8 @@ std::vector<Slide> slides() {
       {48, "Where noexcept Goes", where_noexcept::run},
       {50, "Returning a Large Member", large_member::run},
       {51, "Mutators", rule_caught::run},
-      {54, "Not const, Not noexcept", false_promise::run, true},
-      {55, "A Getter and Setter That Add Nothing", trivial_pair::run},
+      {53, "Not const, Not noexcept", false_promise::run, true},
+      {54, "A Getter and Setter That Add Nothing", trivial_pair::run},
   };
 }
 

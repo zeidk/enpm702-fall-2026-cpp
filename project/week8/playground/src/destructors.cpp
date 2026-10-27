@@ -6,8 +6,8 @@
  * @details Part of week8_playground: main.cpp collects slides() from every
  * section file and runs them. The slides show when a destructor runs
  * ([Slides 87 and 88]) and an accessor that returns the sensors by const&
- * ([Slide 89]), which uses the finished class, ../../common/include/vehicle.hpp.
- * You write the sensors_ member on your own in Live Coding Step 6 ([Slide 90]),
+ * ([Slide 88]), which uses the finished class, ../../common/include/vehicle.hpp.
+ * You write the sensors_ member on your own in Live Coding Step 6 ([Slide 89]),
  * in ../../live/src/main.cpp (week8_live).
  *
  * appendix_slides(), which week8_appendix runs, lists the rule of zero of the
@@ -30,7 +30,7 @@
 
 namespace destructors {
 
-// [Slide 88] Destructor and [Slide 89] When It Runs: a Vehicle with a
+// [Slide 87] Destructor and [Slide 88] When It Runs: a Vehicle with a
 // constructor that takes the speeds, and a destructor that prints the speed.
 namespace when_it_runs {
 class Vehicle {
@@ -112,8 +112,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {88, "Destructor", when_it_runs::run},
-      {89, "When It Runs", when_it_runs::run},
+      {87, "Destructor", when_it_runs::run},
+      {88, "When It Runs", when_it_runs::run},
   };
 }
 

@@ -7,10 +7,10 @@
  *
  * @code
  * 702run week9_appendix        # every appendix frame
- * 702run week9_appendix xi     # only [Appendix xi]; 702run week9_appendix 11 works too
+ * 702run week9_appendix x      # only [Appendix x]; 702run week9_appendix 10 works too
  * @endcode
  *
- * Appendix iii to ix, "What the Live Coding Replaces", hold the class of Live
+ * Appendix iii to viii, "What the Live Coding Replaces", hold the class of Live
  * Coding: Step 1 and code that goes with Steps 4 to 7. Each frame keeps the
  * classes of its step, written here in its own namespace: simple classes with a
  * virtual drive() in Steps 4 and 5, and the final classes of ../../common from
@@ -23,7 +23,6 @@
 #include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include "position.hpp"
 #include "robotaxi.hpp"
@@ -45,7 +44,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 23] runs it.
 
-// The classes of [Appendix iv] and [Appendix v]: as on [Slide 57], drive()
+// The classes of [Appendix iv]: as on [Slide 57], drive()
 // is virtual, and RoboTaxi and Taxi override it.
 namespace runtime {
 class Vehicle {
@@ -93,22 +92,9 @@ void run() {
   start_shift(taxi, trip);      // Taxi: Ana drives 500 m
 }
 }  // namespace one_function
-
-// [Appendix v] Vehicles of Both Kinds in One Vector
-namespace mixed_fleet {
-void run() {
-  const Route trip{make_trip()};
-  std::vector<std::unique_ptr<Vehicle>> vehicles;
-  vehicles.push_back(std::make_unique<RoboTaxi>(13.4));
-  vehicles.push_back(std::make_unique<Taxi>(13.4, "Ana"));
-  for (const std::unique_ptr<Vehicle>& vehicle : vehicles) {
-    vehicle->drive(trip);
-  }
-}
-}  // namespace mixed_fleet
 }  // namespace runtime
 
-// [Appendix vi] With a virtual Destructor. Both destructors print; ~Vehicle is
+// [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
 // virtual. The run is the code of [Slide 70], fixed.
 namespace virtual_dtor {
 class Vehicle {
@@ -144,7 +130,7 @@ void run() {
 }  // ~Taxi, then ~Vehicle
 }  // namespace virtual_dtor
 
-// [Appendix vii] No Vehicle Objects. The abstract Vehicle of ../../common. Does
+// [Appendix vi] No Vehicle Objects. The abstract Vehicle of ../../common. Does
 // not compile:
 //   Vehicle vehicle{13.4};
 // error: cannot declare variable 'vehicle' to be of abstract type 'Vehicle'
@@ -161,7 +147,7 @@ void run() {
 }
 }  // namespace no_vehicle
 
-// [Appendix viii] RoboTaxi and Taxi
+// [Appendix vii] RoboTaxi and Taxi
 namespace concrete {
 void run() {
   const Route trip{make_trip()};
@@ -174,12 +160,12 @@ void run() {
 }
 }  // namespace concrete
 
-// [Appendix ix] A final Class. RoboTaxi is final in ../../common. Does not
+// [Appendix viii] A final Class. RoboTaxi is final in ../../common. Does not
 // compile:
 //   class SuperRoboTaxi : public RoboTaxi {};
 // error: cannot derive from 'final' base 'RoboTaxi' in derived type 'SuperRoboTaxi'
 
-// [Appendix xi] Multiple Inheritance
+// [Appendix x] Multiple Inheritance
 namespace multiple {
 class Chargeable {  // anything that can be charged
  public:
@@ -206,7 +192,7 @@ void run() {
 }
 }  // namespace multiple
 
-// [Appendix xiv] Copying a Vehicle of the Design. Neither compiles:
+// [Appendix xiii] Copying a Vehicle of the Design. Neither compiles:
 //   Taxi copy{taxi};             // the sensors cannot be copied (std::unique_ptr, L8)
 //   Taxi moved{std::move(taxi)};  // the declared destructor stops the moves
 // Each gives 4 errors, from inside std::vector. The copy is not suppressed:
@@ -222,11 +208,10 @@ int main(int argc, char* argv[]) {
   return run_slides(
       {
           {4, "One Function for Every Vehicle", runtime::one_function::run},
-          {5, "Vehicles of Both Kinds in One Vector", runtime::mixed_fleet::run},
-          {6, "With a virtual Destructor", virtual_dtor::run},
-          {7, "No Vehicle Objects", no_vehicle::run},
-          {8, "RoboTaxi and Taxi", concrete::run},
-          {11, "Multiple Inheritance", multiple::run},
+          {5, "With a virtual Destructor", virtual_dtor::run},
+          {6, "No Vehicle Objects", no_vehicle::run},
+          {7, "RoboTaxi and Taxi", concrete::run},
+          {10, "Multiple Inheritance", multiple::run},
       },
       argc, argv, Part::appendix);
 }

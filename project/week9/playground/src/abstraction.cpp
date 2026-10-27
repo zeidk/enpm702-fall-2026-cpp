@@ -11,7 +11,7 @@
  * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  *
  * The frames that Live Coding: Steps 6 and 7 replace are in
- * ../../appendix/src/appendix.cpp: [Appendix vii], [Appendix viii] and [Appendix ix].
+ * ../../appendix/src/appendix.cpp: [Appendix vi], [Appendix vii] and [Appendix viii].
  */
 #include <memory>
 #include <vector>

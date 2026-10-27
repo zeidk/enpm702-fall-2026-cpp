@@ -8,7 +8,7 @@
 #   702run week9_playground       run the code of every slide
 #   702run week9_playground 55    run only the code of [Slide 55]
 #   702run week9_appendix         run the code of every appendix frame
-#   702run week9_appendix xi      run only the code of [Appendix xi]
+#   702run week9_appendix x       run only the code of [Appendix x]
 #   702run week9_live             run the classes of the Live Coding steps
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
@@ -55,7 +55,7 @@ target_link_options(week9_playground PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # The appendix: the code of every appendix frame that has code. Pass the
-# frame's number, as a roman numeral (xi) or not (11). The program is linked
+# frame's number, as a roman numeral (x) or not (10). The program is linked
 # with -fsanitize, as week9_playground is, so
 # the run of "With a virtual Destructor" is checked for a leak and a wrong
 # delete.

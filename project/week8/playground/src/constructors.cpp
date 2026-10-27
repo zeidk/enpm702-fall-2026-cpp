@@ -10,13 +10,13 @@
  * with what the compiler says. Each commented-out class is in a namespace of
  * its own, so uncommenting one leaves the rest of the file as it was.
  *
- * [Slide 61] shows a first version of the constructor, written in the class
+ * [Slide 60] shows a first version of the constructor, written in the class
  * (declared and defined in one place), whose body assigns each member; the
- * Vehicle of param_ctor below is that version. [Slide 63] shows it split into
+ * Vehicle of param_ctor below is that version. [Slide 62] shows it split into
  * a header and a source file; the course defines every constructor in the
- * class. From [Slide 64] on, the slides use the full class, Vehicle in
+ * class. From [Slide 63] on, the slides use the full class, Vehicle in
  * ../../common/include/vehicle.hpp, whose constructors, defined in the class,
- * use the member initializer list of [Slide 70].
+ * use the member initializer list of [Slide 69].
  *
  * The Live Coding slide (Step 5) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion Spot the Bug is in
@@ -34,7 +34,7 @@
 
 namespace constructors {
 
-// [Slide 58] Default Constructor: the first version of Vehicle declares no
+// [Slide 57] Default Constructor: the first version of Vehicle declares no
 // constructor, so the compiler writes the default constructor. It sets each
 // data member from its default member initializer.
 namespace compiler_default {
@@ -56,7 +56,7 @@ void run() {
 }
 }  // namespace compiler_default
 
-// [Slide 59] A User-Defined Default Constructor
+// [Slide 58] A User-Defined Default Constructor
 namespace user_default_ctor {
 class Vehicle {
  public:
@@ -77,7 +77,7 @@ void run() {
 }
 }  // namespace user_default_ctor
 
-// [Slide 60] A Member with No Initializer
+// [Slide 59] A Member with No Initializer
 namespace no_initializer {
 class Vehicle {
  public:
@@ -103,10 +103,10 @@ void run() {
 }
 }  // namespace no_initializer
 
-// [Slide 61] Constructor with Parameters: a first version, written in the
+// [Slide 60] Constructor with Parameters: a first version, written in the
 // class (declared and defined in one place), where the body assigns each
 // member. ../../common/include/vehicle.hpp uses the member initializer list of
-// [Slide 70] instead.
+// [Slide 69] instead.
 namespace param_ctor {
 class Vehicle {
  public:
@@ -136,7 +136,7 @@ void run() {
 }
 }  // namespace param_ctor
 
-// [Slide 62] Two Kinds of Default Values: the Vehicle of [Slide 61]. The
+// [Slide 61] Two Kinds of Default Values: the Vehicle of [Slide 60]. The
 // default argument gives color its value when the caller leaves it out; the
 // default member initializers give speed_ and mileage_ theirs.
 namespace default_values {
@@ -148,8 +148,8 @@ void run() {
 }
 }  // namespace default_values
 
-// [Slide 63] The Default Argument in the Header: the constructor of
-// [Slide 61], split into a declaration (vehicle.hpp) and a definition
+// [Slide 62] The Default Argument in the Header: the constructor of
+// [Slide 60], split into a declaration (vehicle.hpp) and a definition
 // (vehicle.cpp). The default argument is written once, in the declaration.
 // Written again in the definition, it does not compile:
 // namespace default_twice {
@@ -172,7 +172,7 @@ void run() {
 // note: previous specification in 'constructors::default_twice::Vehicle::Vehicle(double, const std::string&)' here
 // (the slide's code has no namespaces, so the slide's messages name Vehicle only)
 
-// [Slide 64] Discussion: Which Lines Compile? The answers: car_a and car_b
+// [Slide 63] Discussion: Which Lines Compile? The answers: car_a and car_b
 // compile, parked_car does not. The class declares a constructor, so the
 // compiler writes no default constructor.
 namespace no_default {
@@ -188,7 +188,7 @@ void run() {
 }
 }  // namespace no_default
 
-// [Slide 65] Braces or Parentheses
+// [Slide 64] Braces or Parentheses
 namespace braces_parens {
 void run() {
   Vehicle car_b{13.4, "blue"};  // braces: it runs the constructor
@@ -204,7 +204,7 @@ void run() {
 }
 }  // namespace braces_parens
 
-// [Slide 66] Narrowing and Member Defaults
+// [Slide 65] Narrowing and Member Defaults
 namespace narrowing {
 class MemberDefault {  // a member's default value, in a class
  public:
@@ -228,7 +228,7 @@ void run() {
 }
 }  // namespace narrowing
 
-// [Slide 67] Assignment in the Body: the Code, and [Slide 68] Assignment
+// [Slide 66] Assignment in the Body: the Code, and [Slide 67] Assignment
 // Builds a Member Twice, its output
 namespace builds_twice {
 class PaperTray {
@@ -258,7 +258,7 @@ void run() {
 }
 }  // namespace builds_twice
 
-// [Slide 69] Assignment Fails for a const Member
+// [Slide 68] Assignment Fails for a const Member
 // namespace const_member {
 // class Vehicle {
 //  public:
@@ -277,7 +277,7 @@ void run() {
 // error: assignment of read-only member 'constructors::const_member::Vehicle::max_speed_'
 // (the slide's code has no namespaces, so the slide's error names Vehicle only)
 
-// [Slide 70] Member Initializer List: the constructor of [Slide 61], defined
+// [Slide 69] Member Initializer List: the constructor of [Slide 60], defined
 // in the class with the list. The run uses the full class,
 // ../../common/include/vehicle.hpp, whose list also sets id_ from the static
 // counter of the appendix's static Members.
@@ -288,8 +288,8 @@ void run() {
 }
 }  // namespace init_list
 
-// [Slide 71] The List Fixes Both Problems: the Printer of [Slide 67] and the
-// Vehicle of [Slide 69], with the member initializer list.
+// [Slide 70] The List Fixes Both Problems: the Printer of [Slide 66] and the
+// Vehicle of [Slide 68], with the member initializer list.
 namespace list_fixes {
 class Vehicle {
  public:
@@ -308,7 +308,7 @@ class Printer {
     std::cout << "Printer constructor body\n";
   }
  private:
-  builds_twice::PaperTray tray_;  // the PaperTray of [Slide 67]
+  builds_twice::PaperTray tray_;  // the PaperTray of [Slide 66]
 };
 
 void run() {
@@ -319,7 +319,7 @@ void run() {
 }
 }  // namespace list_fixes
 
-// [Slide 72] The Range Check: Sensor's constructor, of ../../common/include/sensor.hpp,
+// [Slide 71] The Range Check: Sensor's constructor, of ../../common/include/sensor.hpp,
 // sets every member in the list, then checks the range.
 namespace range_check {
 void run() {
@@ -331,7 +331,7 @@ void run() {
 }
 }  // namespace range_check
 
-// [Slide 73] Declaration Order
+// [Slide 72] Declaration Order
 // namespace declaration_order {
 // class Vehicle {
 //  public:
@@ -349,7 +349,7 @@ void run() {
 // warning:   when initialized here [-Wreorder]
 // (the slide's code has no namespaces, so the slide's warnings name Vehicle only)
 
-// [Slide 75] explicit and [Slide 76] A Conversion Nobody Asked For: the
+// [Slide 74] explicit and [Slide 75] A Conversion Nobody Asked For: the
 // constructor of Vehicle in ../../common/include/vehicle.hpp is explicit.
 namespace conversion {
 void show(const Vehicle& vehicle) {
@@ -367,7 +367,7 @@ void run() {
 }
 }  // namespace conversion
 
-// [Slide 77] Delegating Constructor
+// [Slide 76] Delegating Constructor
 namespace delegating {
 void run() {
   Vehicle car_a{13.4, 12.0};
@@ -384,25 +384,25 @@ void run_commented_out() { print_commented_out("playground/src/constructors.cpp"
 
 std::vector<Slide> slides() {
   return {
-      {58, "Default Constructor", compiler_default::run},
-      {59, "A User-Defined Default Constructor", user_default_ctor::run},
-      {60, "A Member with No Initializer", no_initializer::run},
-      {61, "Constructor with Parameters", param_ctor::run},
-      {62, "Two Kinds of Default Values", default_values::run},
-      {63, "The Default Argument in the Header", run_commented_out},
-      {64, "Discussion: Which Lines Compile?", no_default::run},
-      {65, "Braces or Parentheses", braces_parens::run},
-      {66, "Narrowing and Member Defaults", narrowing::run},
-      {67, "Assignment in the Body: the Code", builds_twice::run},
-      {68, "Assignment Builds a Member Twice", builds_twice::run},
-      {69, "Assignment Fails for a const Member", run_commented_out},
-      {70, "Member Initializer List", init_list::run},
-      {71, "The List Fixes Both Problems", list_fixes::run},
-      {72, "The Range Check", range_check::run},
-      {73, "Declaration Order", run_commented_out},
-      {75, "explicit", conversion::run},
-      {76, "A Conversion Nobody Asked For", conversion::run},
-      {77, "Delegating Constructor", delegating::run},
+      {57, "Default Constructor", compiler_default::run},
+      {58, "A User-Defined Default Constructor", user_default_ctor::run},
+      {59, "A Member with No Initializer", no_initializer::run},
+      {60, "Constructor with Parameters", param_ctor::run},
+      {61, "Two Kinds of Default Values", default_values::run},
+      {62, "The Default Argument in the Header", run_commented_out},
+      {63, "Discussion: Which Lines Compile?", no_default::run},
+      {64, "Braces or Parentheses", braces_parens::run},
+      {65, "Narrowing and Member Defaults", narrowing::run},
+      {66, "Assignment in the Body: the Code", builds_twice::run},
+      {67, "Assignment Builds a Member Twice", builds_twice::run},
+      {68, "Assignment Fails for a const Member", run_commented_out},
+      {69, "Member Initializer List", init_list::run},
+      {70, "The List Fixes Both Problems", list_fixes::run},
+      {71, "The Range Check", range_check::run},
+      {72, "Declaration Order", run_commented_out},
+      {74, "explicit", conversion::run},
+      {75, "A Conversion Nobody Asked For", conversion::run},
+      {76, "Delegating Constructor", delegating::run},
   };
 }
 
