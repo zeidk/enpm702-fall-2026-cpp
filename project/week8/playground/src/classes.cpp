@@ -57,14 +57,16 @@ void Vehicle::set_speed(double speed) {
 
 void run() {
   VehicleData car_a;
+  set_speed(car_a, 12.0);  // ok
+  std::cout << car_a.speed << '\n';  // 12: the check ran
   car_a.speed = -50.0;  // compiles
   std::cout << car_a.speed << '\n';  // -50: the check of set_speed never ran
 
   Vehicle car_b;
+  car_b.set_speed(12.0);  // ok: the only way to change speed_, so the check runs
   // car_b.speed_ = -50.0;  // error
   // error: 'double classes::two_ways::Vehicle::speed_' is private within this context
   // (the slide's code has no namespaces, so the slide's error names Vehicle only)
-  car_b.set_speed(12.0);  // the only way to change speed_: the check runs
 }
 }  // namespace two_ways
 
