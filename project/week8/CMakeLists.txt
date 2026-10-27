@@ -85,7 +85,7 @@ target_link_options(week8_appendix PRIVATE -fsanitize=address,undefined)
 # -----------------------------------------------------------------------------
 # 5. Live coding: the class Vehicle we write together in class, step by step
 #    (the "Live Coding" slides). One header and one source file in live/, and
-#    main.cpp, which has one commented block per step. Step 5 uses the course's
+#    main.cpp, which has one commented block per step. Step 6 uses the course's
 #    Sensor, so the target also builds common/src/sensor.cpp and finds
 #    sensor.hpp in common/include. live/include comes first, so "vehicle.hpp"
 #    is the one we write, not common's.

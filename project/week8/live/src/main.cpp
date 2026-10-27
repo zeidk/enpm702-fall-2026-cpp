@@ -10,16 +10,17 @@
  * 702run week8_live
  * @endcode
  *
- * The five "Live Coding" slides of L8 build one class, Vehicle, in five steps.
+ * The six "Live Coding" slides of L8 build one class, Vehicle, in six steps. You
+ * write Step 2 on your own.
  * main() has one commented block for each step that prints something: when we
  * finish a step, we uncomment its block, then build and run. Each block prints
- * "[Step N]", then what that step adds. From Step 2 on, the class is in
+ * "[Step N]", then what that step adds. From Step 3 on, the class is in
  * ../include/vehicle.hpp and vehicle.cpp. Sensor is the course's own, in
  * ../../common/include.
  */
 #include <iostream>
-#include <memory>     // Step 5: std::unique_ptr
-#include <stdexcept>  // Step 3: std::invalid_argument
+#include <memory>     // Step 6: std::unique_ptr
+#include <stdexcept>  // Step 4: std::invalid_argument
 #include <string>
 
 #include "vehicle.hpp"
@@ -28,37 +29,37 @@
 //         are max_speed_{13.4}, speed_{0.0}, color_{"white"} and mileage_{0.0}.
 //         Its public methods are set_speed() and get_speed(), with their bodies
 //         in the class. set_speed() checks nothing yet.
-// Step 2: the class moves to vehicle.hpp, and the bodies of its methods to
+// Step 3: the class moves to vehicle.hpp, and the bodies of its methods to
 //         vehicle.cpp.
 
 int main() {
   // Step 1: two objects of one class, each with its own speed.
   // {
   //   std::cout << "[Step 1]\n";
-  //   Vehicle car_a;  // Step 4: Vehicle car_a{13.4};
-  //   Vehicle car_b;  // Step 4: Vehicle car_b{13.4};
+  //   Vehicle car_a;  // Step 5: Vehicle car_a{13.4};
+  //   Vehicle car_b;  // Step 5: Vehicle car_b{13.4};
   //   car_a.set_speed(12.0);
   //   car_b.set_speed(10.0);
   //   std::cout << car_a.get_speed() << ' ' << car_b.get_speed() << '\n';
   //   std::cout << sizeof(Vehicle) << '\n';
   // }
 
-  // Your turn (after Step 1): write this block yourself. Make car_a on the
+  // Step 2: write this block yourself. Make car_a on the
   // stack and car_b on the heap with std::make_unique<Vehicle>(), set their
   // speeds to 12 and 10, and print each speed: "." for car_a, "->" for car_b.
-  // It prints [Your turn], then 12, then 10.
+  // It prints [Step 2], then 12, then 10.
   // {
-  //   std::cout << "[Your turn]\n";
+  //   std::cout << "[Step 2]\n";
   //
   // }
 
-  // Step 2: no new block. The class moves to vehicle.hpp and vehicle.cpp, and
+  // Step 3: no new block. The class moves to vehicle.hpp and vehicle.cpp, and
   //         the output does not change.
 
-  // Step 3: set_speed() refuses a speed above the maximum.
+  // Step 4: set_speed() refuses a speed above the maximum.
   // {
-  //   std::cout << "[Step 3]\n";
-  //   Vehicle car_a;  // Step 4: Vehicle car_a{13.4};
+  //   std::cout << "[Step 4]\n";
+  //   Vehicle car_a;  // Step 5: Vehicle car_a{13.4};
   //   car_a.set_speed(12.0);
   //   try {
   //     car_a.set_speed(20.0);  // above the maximum, 13.4
@@ -68,9 +69,9 @@ int main() {
   //   std::cout << car_a.get_speed() << '\n';
   // }
 
-  // Step 4: the constructors.
+  // Step 5: the constructors.
   // {
-  //   std::cout << "[Step 4]\n";
+  //   std::cout << "[Step 5]\n";
   //   Vehicle car_a{13.4};          // white: the default argument
   //   Vehicle car_b{13.4, "blue"};
   //   Vehicle car_c{13.4, 12.0};    // the delegating constructor
@@ -84,9 +85,9 @@ int main() {
   //   }
   // }
 
-  // Step 5: a Vehicle that owns its sensors.
+  // Step 6: a Vehicle that owns its sensors.
   // {
-  //   std::cout << "[Step 5]\n";
+  //   std::cout << "[Step 6]\n";
   //   Vehicle car_a{13.4};
   //   car_a.add_sensor(SensorType::lidar, 100.0);
   //   car_a.add_sensor(SensorType::camera, 80.0);

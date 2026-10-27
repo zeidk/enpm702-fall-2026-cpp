@@ -7,7 +7,7 @@
  * section file and runs them. The slides show when a destructor runs
  * ([Slides 89 and 90]) and an accessor that returns the sensors by const&
  * ([Slide 92]), which uses the finished class, ../../common/include/vehicle.hpp.
- * We write the sensors_ member together in Live Coding Step 5 ([Slide 91]),
+ * We write the sensors_ member together in Live Coding Step 6 ([Slide 91]),
  * in ../../live/src/main.cpp (week8_live).
  *
  * appendix_slides(), which week8_appendix runs, lists the appendix frame Many

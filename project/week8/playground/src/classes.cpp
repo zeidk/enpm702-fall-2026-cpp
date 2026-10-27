@@ -11,7 +11,7 @@
  * constructor and no check. It is defined here, in namespace first_version.
  * The full class is in ../../common/include/vehicle.hpp.
  *
- * The Live Coding slides (Step 1 and Your Turn) have no code here: we write
+ * The Live Coding slides (Steps 1 and 2) have no code here: we write
  * that code together in ../../live/src/main.cpp (week8_live).
  */
 #include <iostream>

@@ -12,7 +12,7 @@
  * [Slide 54] ends the program on purpose, so a full run skips it. Run it on
  * its own: 702run week8_playground 54
  *
- * The Live Coding slide (Step 3) has no code here: we write that code together
+ * The Live Coding slide (Step 4) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion slides of this
  * section are in discussions.cpp.
  */
@@ -122,7 +122,7 @@ void run() {
 
 // [Slide 54] Not const, Not noexcept: the setter of [Slide 51], marked
 // noexcept. It still throws, so the promise is false: called with 20.0, the
-// program stops, and the catch of the Step 3 block never runs. g++ warns at
+// program stops, and the catch of the Step 4 block never runs. g++ warns at
 // the throw:
 //   warning: 'throw' will always call 'terminate' [-Wterminate]
 // The two pragma lines turn that warning off for this one function only, so

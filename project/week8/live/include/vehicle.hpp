@@ -11,22 +11,22 @@
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
  * (30 * 0.44704 = 13.41), a value chosen for the examples.
  */
-// Step 2: #pragma once (L5) goes here, before the includes.
+// Step 3: #pragma once (L5) goes here, before the includes.
 
-#include <cstddef>  // Step 5: std::size_t
-#include <memory>   // Step 5: std::unique_ptr
+#include <cstddef>  // Step 6: std::size_t
+#include <memory>   // Step 6: std::unique_ptr
 #include <string>
-#include <vector>   // Step 5: std::vector
+#include <vector>   // Step 6: std::vector
 
-#include "sensor.hpp"  // Step 5: Sensor and SensorType, in ../../common/include
+#include "sensor.hpp"  // Step 6: Sensor and SensorType, in ../../common/include
 
-// Step 2: the class Vehicle of main.cpp, with only the declarations of its
+// Step 3: the class Vehicle of main.cpp, with only the declarations of its
 //         methods set_speed() and get_speed(). Their bodies go to vehicle.cpp.
-// Step 3: get_speed() moves into the class, body and all, as a one-line
+// Step 4: get_speed() moves into the class, body and all, as a one-line
 //         accessor that is [[nodiscard]], const and noexcept.
-// Step 4: the constructors explicit Vehicle(double max_speed,
+// Step 5: the constructors explicit Vehicle(double max_speed,
 //         const std::string& color = "white") and Vehicle(double max_speed,
 //         double speed), and the accessor get_color(). The data members
 //         max_speed_ and color_ lose their { } values: the constructor sets them.
-// Step 5: the data member sensors_, a std::vector<std::unique_ptr<Sensor>>, and
+// Step 6: the data member sensors_, a std::vector<std::unique_ptr<Sensor>>, and
 //         the methods add_sensor(), sensor_count() and get_sensors().

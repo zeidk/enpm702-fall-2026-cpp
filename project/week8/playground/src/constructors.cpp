@@ -17,7 +17,7 @@
  * Vehicle in ../../common/include/vehicle.hpp and ../../common/src/vehicle.cpp,
  * whose constructor uses the member initializer list of [Slide 71].
  *
- * The Live Coding slide (Step 4) has no code here: we write that code together
+ * The Live Coding slide (Step 5) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion Spot the Bug is in
  * discussions.cpp.
  */
