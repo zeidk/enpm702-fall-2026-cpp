@@ -19,12 +19,12 @@
 
 namespace undefined {
 
-// [Slide 69] Deleting through a Base Pointer
-// [Slide 70] Measured with AddressSanitizer
+// [Slide 70] Deleting through a Base Pointer
+// [Slide 71] Measured with AddressSanitizer
 // ~Vehicle is not virtual. The std::unique_ptr<Vehicle> deletes a Taxi through
 // a Vehicle*: undefined behavior ([expr.delete] 7.6.2.8 paragraph 3). Only
 // ~Vehicle runs. AddressSanitizer stops the program; with that check off,
-//   ASAN_OPTIONS=new_delete_type_mismatch=0 702run week9_playground 70
+//   ASAN_OPTIONS=new_delete_type_mismatch=0 702run week9_playground 71
 // LeakSanitizer finds the driver's name, which ~Taxi never gave back. The name
 // is longer than 15 characters, so std::string keeps it on the heap.
 namespace nonvirtual_dtor {
@@ -65,7 +65,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {70, "Measured with AddressSanitizer", nonvirtual_dtor::run, true},
+      {70, "Deleting through a Base Pointer", nonvirtual_dtor::run, true},
+      {71, "Measured with AddressSanitizer", nonvirtual_dtor::run, true},
   };
 }
 

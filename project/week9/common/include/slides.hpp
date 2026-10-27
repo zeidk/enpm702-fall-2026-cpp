@@ -3,7 +3,7 @@
  * @brief The list of slides a program can run, and the function that runs it.
  * @author Zeid Kootbally
  *
- * @details week8_playground and week8_appendix both use it: each builds a
+ * @details week9_playground and week9_appendix both use it: each builds a
  * list of Slide entries, one per frame that has code, and hands it to
  * run_slides(). Slide is a struct (Lecture 6), and @c run is a pointer
  * to a function (Lecture 6, appendix).

@@ -6,8 +6,9 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_playground       run the code of every slide
-#   702run week9_playground 58    run only the code of [Slide 58]
+#   702run week9_playground 55    run only the code of [Slide 55]
 #   702run week9_appendix         run the code of every appendix frame
+#   702run week9_appendix xiv     run only the code of [Appendix xiv]
 #   702run week9_live             run the classes we write together in class
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
@@ -53,15 +54,21 @@ target_link_options(week9_playground PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # The appendix: the code of every appendix frame that has code. Pass the
-# frame's number, as a roman numeral (iv) or not (4).
+# frame's number, as a roman numeral (xiv) or not (14). The frames that the
+# Live Coding replaces use L8's Vehicle, from playground/include, before
+# Step 4. The program is linked with -fsanitize, as week9_playground is, so
+# the run of "With a virtual Destructor" is checked for a leak and a wrong
+# delete.
 # -----------------------------------------------------------------------------
 add_executable(week9_appendix appendix/src/appendix.cpp
     common/src/sensor.cpp
     common/src/route.cpp
     common/src/vehicle.cpp
+    common/src/robotaxi.cpp
     common/src/taxi.cpp
     common/src/slides.cpp)
-target_include_directories(week9_appendix PRIVATE common/include)
+target_include_directories(week9_appendix PRIVATE common/include playground/include)
+target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # Live coding: L8's Vehicle and the classes of L9, which we write together in

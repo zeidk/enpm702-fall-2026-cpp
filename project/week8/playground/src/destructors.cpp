@@ -1,126 +1,92 @@
 /**
  * @file destructors.cpp
- * @brief L8 Section 8, Destructors: the code of every slide, runnable.
+ * @brief L8, Destructors: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Part of week8_playground. The slides build Vehicle's ownership of its
- * sensors in steps, and each step's Vehicle is its own class, in its own
- * namespace: one raw Sensor* and a destructor ([Slide 63]), the rule of five
- * ([Slides 69 to 71]), a std::unique_ptr ([Slides 73 and 74]), deleted copies
- * ([Slide 75]), then the sensors_ of the class diagram ([Slide 76]). Each step
- * leaves out the speed members of the earlier sections. The finished class is
- * ../../common/include/vehicle.hpp.
+ * @details Part of week8_playground: main.cpp collects slides() from every
+ * section file and runs them. The slides show when a destructor runs
+ * ([Slides 89 and 90]) and an accessor that returns the sensors by const&
+ * ([Slide 92]), which uses the finished class, ../../common/include/vehicle.hpp.
+ * We write the sensors_ member together in Live Coding Step 5 ([Slide 91]),
+ * in ../../live/src/main.cpp (week8_live).
  *
- * The leak of [Slide 65] and the double free of [Slide 67] are in
- * ../../undefined/src/undefined.cpp, built with the sanitizers. They run only
- * when asked for by number.
+ * appendix_slides(), which week8_appendix runs, lists the appendix frame Many
+ * Sensors ([Appendix x]) and the rule of zero of the reading page Rule of Five
+ * and Rule of Zero on Read the Docs ([Reading: zero]): 702run week8_appendix zero.
+ * The Vehicle that owns its Sensor through a raw pointer, and the rule of five,
+ * are in ../../appendix/src/appendix.cpp.
  */
 #include <cstddef>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
 #include "sections.hpp"
 #include "sensor.hpp"
-#include "undefined.hpp"
+#include "vehicle.hpp"
 
 namespace destructors {
 
-// [Slide 64] When It Runs: the Vehicle of [Slide 63], and ~Vehicle also prints.
+// [Slide 89] Destructor and [Slide 90] When It Runs: the class of
+// [Appendix ix], The Class So Far, with a destructor that prints the speed.
 namespace when_it_runs {
-class Vehicle {  // a first owner: one Sensor on the heap
+class Vehicle {
  public:
-  explicit Vehicle(const Sensor& sensor)
-      : sensor_{new Sensor{sensor}} {}
-  ~Vehicle() {
-    std::cout << "~Vehicle: sensor " << sensor_->get_id() << '\n';
-    delete sensor_;
+  explicit Vehicle(double max_speed, const std::string& color = "white")
+      : max_speed_{max_speed}, color_{color} {
+    if (max_speed_ <= 0.0) {
+      throw std::invalid_argument{"maximum speed must be greater than 0"};
+    }
   }
-  [[nodiscard]] const Sensor& get_sensor() const noexcept {
-    return *sensor_;
+  Vehicle(double max_speed, double speed) : Vehicle{max_speed} {
+    set_speed(speed);
+  }
+  ~Vehicle() {  // prints, to show when it runs
+    std::cout << "~Vehicle: speed " << speed_ << '\n';
+  }
+  [[nodiscard]] double get_max_speed() const noexcept { return max_speed_; }
+  [[nodiscard]] double get_speed() const noexcept { return speed_; }
+  void set_speed(double speed) {
+    if (speed < 0.0 || speed > max_speed_) {
+      throw std::invalid_argument{"speed must be from 0 to the maximum speed"};
+    }
+    speed_ = speed;
+  }
+  void add_mileage(double meters) {
+    if (meters < 0.0) {
+      throw std::invalid_argument{"a trip's distance must be at least 0"};
+    }
+    mileage_ += meters;
   }
 
  private:
-  Sensor* sensor_;
+  double max_speed_;     // m/s, greater than 0
+  double speed_{0.0};    // m/s, from 0 to max_speed_
+  std::string color_;    // from the constructor
+  double mileage_{0.0};  // m driven, never goes down
 };
 
 void run() {
   {
-    Vehicle downtown_car{Sensor{1}};  // sensor id 1;
-    Vehicle airport_car{Sensor{2}};   // the rest default
+    Vehicle car_a{13.4, 12.0};
+    Vehicle car_b{13.4, 10.0};
     std::cout << "end of scope\n";
   }
   auto spare_car{
-      std::make_unique<Vehicle>(Sensor{3})};
+      std::make_unique<Vehicle>(13.4, 5.0)};
   spare_car.reset();
   std::cout << "after reset\n";
-}
+}  // prints: end of scope, ~Vehicle: speed 10, ~Vehicle: speed 12,
+   // ~Vehicle: speed 5, after reset
 }  // namespace when_it_runs
 
-// [Slides 69 to 71] The Rule of Five. ~Vehicle prints as on [Slide 64], and 0
-// when the Vehicle owns nothing (after a move).
-namespace five {
-class Vehicle {
- public:
-  explicit Vehicle(const Sensor& sensor)
-      : sensor_{new Sensor{sensor}} {}
-
-  ~Vehicle() {
-    std::cout << "~Vehicle: sensor " << (sensor_ != nullptr ? sensor_->get_id() : 0) << '\n';
-    delete sensor_;
-  }
-
-  // [Slide 69] The Copies
-  Vehicle(const Vehicle& other)  // a new Sensor with other's values
-      : sensor_{new Sensor{*other.sensor_}} {}
-
-  Vehicle& operator=(const Vehicle& other) {
-    *sensor_ = *other.sensor_;  // into our own Sensor
-    return *this;
-  }
-
-  // [Slide 70] The Moves
-  Vehicle(Vehicle&& other) noexcept : sensor_{other.sensor_} {
-    other.sensor_ = nullptr;  // the source owns nothing now
-  }
-
-  Vehicle& operator=(Vehicle&& other) noexcept {
-    if (this != &other) {   // v = std::move(v) must not delete
-      delete sensor_;       // give back what we owned
-      sensor_ = other.sensor_;
-      other.sensor_ = nullptr;
-    }
-    return *this;
-  }
-
-  [[nodiscard]] const Sensor& get_sensor() const noexcept {
-    return *sensor_;
-  }
-
- private:
-  Sensor* sensor_;
-};
-
-// [Slide 71] All Five, Run
-void run() {
-  Vehicle airport_car{Sensor{2}};
-  Vehicle copy{airport_car};
-  std::cout << "copy: sensor " << copy.get_sensor().get_id() << ", own Sensor: "
-            << (&copy.get_sensor() != &airport_car.get_sensor()) << '\n';  // copy: sensor 2, own Sensor: 1
-  Vehicle downtown_car{Sensor{1}};
-  copy = downtown_car;
-  std::cout << "after copy assignment: sensor " << copy.get_sensor().get_id() << '\n';  // 1
-  Vehicle moved{std::move(airport_car)};
-  std::cout << "moved: sensor " << moved.get_sensor().get_id() << '\n';  // 2
-  downtown_car = std::move(moved);
-  std::cout << "after move assignment: sensor " << downtown_car.get_sensor().get_id() << '\n';  // 2
-}  // ~Vehicle: sensor 0, 2, 1, 0
-}  // namespace five
-
-// [Slides 73 and 74] The Rule of Zero
+// [Reading: zero] Rule of Zero, and What the Compiler Writes Now: the reading
+// page Rule of Five and Rule of Zero on Read the Docs. 702run week8_appendix zero
 namespace zero {
-class Vehicle {
+class Vehicle {  // one Sensor only, before sensors_
  public:
   explicit Vehicle(const Sensor& sensor)
       : sensor_{std::make_unique<Sensor>(sensor)} {}
@@ -133,54 +99,18 @@ class Vehicle {
 };
 
 void run() {
-  Vehicle airport_car{Sensor{2, SensorType::camera, 80.0}};
-  Vehicle moved{std::move(airport_car)};  // OK: moves the unique_ptr
+  Vehicle car_b{Sensor{2, SensorType::camera, 80.0}};  // one Sensor only
+  Vehicle moved{std::move(car_b)};  // OK: moves the unique_ptr
   std::cout << moved.get_sensor().get_id() << '\n';  // 2
-  // Vehicle copy{moved};                 // does not compile:
-  // error: use of deleted function 'Vehicle::Vehicle(const Vehicle&)'
-  // note: 'Vehicle::Vehicle(const Vehicle&)' is implicitly deleted because the
+  // Vehicle copy{moved};  // does not compile:
+  // error: use of deleted function 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)'
+  // note: 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)' is implicitly deleted because the
   //       default definition would be ill-formed:
+  // (the page's code has no namespaces, so the page's error names Vehicle only)
 }
 }  // namespace zero
 
-// [Slide 75] = default and = delete: the raw-pointer Vehicle, move-only.
-// Remove the two move lines and Vehicle moved{std::move(airport_car)}; picks the
-// deleted copy: error: use of deleted function 'Vehicle::Vehicle(const Vehicle&)'
-namespace move_only {
-class Vehicle {  // the raw-pointer Vehicle, move-only on purpose
- public:
-  explicit Vehicle(const Sensor& sensor)
-      : sensor_{new Sensor{sensor}} {}
-  ~Vehicle() { delete sensor_; }
-  Vehicle(const Vehicle&) = delete;             // no copies
-  Vehicle& operator=(const Vehicle&) = delete;
-  Vehicle(Vehicle&& other) noexcept : sensor_{other.sensor_} {
-    other.sensor_ = nullptr;
-  }
-  Vehicle& operator=(Vehicle&& other) noexcept {
-    if (this != &other) {
-      delete sensor_;
-      sensor_ = other.sensor_;
-      other.sensor_ = nullptr;
-    }
-    return *this;
-  }
-  [[nodiscard]] const Sensor& get_sensor() const noexcept {
-    return *sensor_;
-  }
-
- private:
-  Sensor* sensor_;
-};
-
-void run() {
-  Vehicle airport_car{Sensor{2}};
-  Vehicle moved{std::move(airport_car)};
-  std::cout << moved.get_sensor().get_id() << '\n';  // 2
-}
-}  // namespace move_only
-
-// [Slide 76] Many Sensors: the sensors_ of the class diagram. The finished
+// [Appendix x] Many Sensors: the sensors_ of the class diagram. The finished
 // class, with the speed members and the id, is ../../common/include/vehicle.hpp.
 namespace many_sensors {
 class Vehicle {  // owns one Sensor for each sensor it carries
@@ -199,25 +129,48 @@ class Vehicle {  // owns one Sensor for each sensor it carries
 };
 
 void run() {
-  Vehicle downtown_car;
-  const int lidar{downtown_car.add_sensor(SensorType::lidar, 100.0)};
-  const int camera{downtown_car.add_sensor(SensorType::camera, 80.0)};
-  std::cout << lidar << ' ' << camera << ' ' << downtown_car.sensor_count() << '\n';  // 1 2 2
-  // Vehicle copy{downtown_car};  // does not compile: errors from inside std::vector,
-  // use of deleted function 'std::unique_ptr<...>::unique_ptr(const std::unique_ptr<...>&)'
+  Vehicle car_a;
+  const int lidar{car_a.add_sensor(SensorType::lidar, 100.0)};
+  const int camera{car_a.add_sensor(SensorType::camera, 80.0)};
+  std::cout << lidar << ' ' << camera << ' ' << car_a.sensor_count() << '\n';  // 1 2 2
+  // Vehicle copy{car_a};  // does not compile. The errors come from the
+  // standard library code that copies the std::vector (stl_uninitialized.h,
+  // stl_construct.h): it cannot copy a std::unique_ptr. The first one is
+  // error: static assertion failed: result type must be constructible from input type
 }
 }  // namespace many_sensors
 
+// [Slide 92] Returning a Large Member: get_sensors(), the accessor of the
+// finished Vehicle in ../../common/include/vehicle.hpp.
+namespace large_member {
+void run() {
+  Vehicle car_a{13.4};
+  car_a.add_sensor(SensorType::lidar, 100.0);  // id 1
+  car_a.add_sensor(SensorType::camera, 80.0);  // id 2
+  for (const std::unique_ptr<Sensor>& sensor :
+       car_a.get_sensors()) {
+    std::cout << sensor->get_id() << ' ' << sensor->get_range() << '\n';
+  }  // prints 1 100, then 2 80
+  // An accessor that returns a copy does not compile: each std::unique_ptr
+  // would be copied. In the class in vehicle.hpp:
+  // [[nodiscard]] std::vector<std::unique_ptr<Sensor>> get_sensors_copy() const {
+  //   return sensors_;
+  // }
+}
+}  // namespace large_member
+
 std::vector<Slide> slides() {
   return {
-      {64, "When It Runs", when_it_runs::run},
-      {65, "Without the Destructor", undefined::no_destructor::run, true},
-      {67, "Double Free, Measured", undefined::double_free::run, true},
-      {71, "All Five, Run", five::run},
-      {74, "What the Compiler Writes Now", zero::run},
-      {75, "= default and = delete", move_only::run},
-      {76, "Many Sensors", many_sensors::run},
-      {72, "Discussion: Who Deletes What?", undefined::move_bug::run, true},
+      {89, "Destructor", when_it_runs::run},
+      {90, "When It Runs", when_it_runs::run},
+      {92, "Returning a Large Member", large_member::run},
+  };
+}
+
+std::vector<Slide> appendix_slides() {
+  return {
+      {10, "Many Sensors", many_sensors::run},
+      {0, "Rule of Zero", zero::run, false, "zero"},
   };
 }
 

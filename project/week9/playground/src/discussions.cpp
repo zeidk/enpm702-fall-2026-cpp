@@ -7,6 +7,7 @@
  */
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -30,7 +31,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return trip;
 }
 
-// [Slide 48] Discussion: What Prints First? A Taxi whose
+// [Slide 49] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -71,7 +72,7 @@ void run() {
 // warning:   base 'discussions::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Slide 61] Discussion: Which drive() Runs?
+// [Slide 62] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -107,7 +108,7 @@ void run() {
 }
 }  // namespace which
 
-// [Slide 72] Discussion: Who Needs a virtual Destructor?
+// [Slide 73] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -120,18 +121,22 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Slide 81] Discussion: Add a RoboBus. One answer: a new
-// class, and no change to Fleet.
+// [Slide 82] Discussion: Add a RoboBus. One answer: a new
+// class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus final : public Vehicle {
  public:
-  RoboBus(double max_speed, int seats) : Vehicle{max_speed}, seats_{seats} {}
+  RoboBus(double max_speed, int seats) : Vehicle{max_speed}, seats_{seats} {
+    if (seats_ <= 0) {
+      throw std::invalid_argument{"a bus has more than 0 seats"};
+    }
+  }
   void drive(const Route& route) const override {
     std::cout << "RoboBus: " << seats_ << " seats, drives " << route.length() << " m\n";
   }
 
  private:
-  int seats_;
+  int seats_;  // more than 0
 };
 
 void run() {
@@ -145,10 +150,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {48, "Discussion: What Prints First?", order::run},
-      {61, "Discussion: Which drive() Runs?", which::run},
-      {72, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-      {81, "Discussion: Add a RoboBus", robobus::run},
+      {49, "Discussion: What Prints First?", order::run},
+      {62, "Discussion: Which drive() Runs?", which::run},
+      {73, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+      {82, "Discussion: Add a RoboBus", robobus::run},
   };
 }
 

@@ -11,8 +11,9 @@
  *   Vehicle pointer runs its own destructor first (Core Guidelines C.35).
  *
  * Everything else is L8's: the invariant (the speed stays from 0 to the
- * maximum speed, and the maximum speed is greater than 0), the id from a static
- * counter, and the sensors it owns through std::unique_ptr (composition).
+ * maximum speed, the maximum speed is greater than 0, and the mileage never
+ * goes down), the color, the id from a static counter, and the sensors it owns
+ * through std::unique_ptr (composition).
  *
  * A Vehicle cannot be copied (std::unique_ptr cannot be copied, L8) and cannot
  * be moved (a declared destructor stops the compiler from writing the moves).
@@ -26,6 +27,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "route.hpp"
@@ -35,14 +37,15 @@
 class Vehicle {
  public:
   /**
-   * @brief Starts with a speed of 0 and no sensor.
+   * @brief Starts with a speed of 0, a mileage of 0 and no sensor.
    * @param max_speed The maximum speed, in m/s. Must be greater than 0.
+   * @param color Its color. Any color name is a color, so there is nothing to check.
    * @throw std::invalid_argument if @p max_speed is not greater than 0.
    */
-  explicit Vehicle(double max_speed);
+  explicit Vehicle(double max_speed, const std::string& color = "white");
 
   /**
-   * @brief Starts with the given speed.
+   * @brief Starts with the given speed. The color is "white".
    * @param max_speed The maximum speed, in m/s. Must be greater than 0.
    * @param speed The speed to drive at, in m/s, from 0 to @p max_speed.
    * @throw std::invalid_argument if either value breaks the invariant.
@@ -52,11 +55,14 @@ class Vehicle {
   /// Virtual: deleting through a Vehicle pointer runs the derived destructor.
   virtual ~Vehicle() = default;
 
-  /// Drives the route. Each derived class says how: pure virtual.
+  /// Drives the route. Each derived class says how: pure virtual ([Slide 76]).
   virtual void drive(const Route& route) const = 0;
 
   /// Its id, from the counter of the class.
   [[nodiscard]] int get_id() const noexcept { return id_; }
+
+  /// The color, given to the constructor.
+  [[nodiscard]] const std::string& get_color() const noexcept { return color_; }
 
   /// The maximum speed, in m/s.
   [[nodiscard]] double get_max_speed() const noexcept { return max_speed_; }
@@ -71,6 +77,16 @@ class Vehicle {
    */
   void set_speed(double speed);
 
+  /// The distance driven so far, in m.
+  [[nodiscard]] double get_mileage() const noexcept { return mileage_; }
+
+  /**
+   * @brief Adds the distance of a trip to the mileage.
+   * @param meters The trip's distance, in m. At least 0: the mileage never goes down.
+   * @throw std::invalid_argument if @p meters is less than 0.
+   */
+  void add_mileage(double meters);
+
   /**
    * @brief Mounts a new sensor. The Vehicle owns it.
    * @return The new Sensor's id: 1 for the first sensor, 2 for the second, ...
@@ -81,6 +97,11 @@ class Vehicle {
   /// How many sensors the vehicle carries.
   [[nodiscard]] std::size_t sensor_count() const noexcept { return sensors_.size(); }
 
+  /// The sensors, by const reference: no copy, and the caller cannot change them.
+  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept {
+    return sensors_;
+  }
+
   /// The id the next Vehicle gets.
   [[nodiscard]] static int next_id() noexcept { return next_id_; }
 
@@ -89,5 +110,7 @@ class Vehicle {
   int id_;                        ///< from next_id_
   double max_speed_;              ///< m/s, greater than 0
   double speed_{0.0};             ///< m/s, from 0 to max_speed_
+  std::string color_;             ///< from the constructor
+  double mileage_{0.0};           ///< m driven, never goes down
   std::vector<std::unique_ptr<Sensor>> sensors_;  ///< composition: the only owner of each
 };

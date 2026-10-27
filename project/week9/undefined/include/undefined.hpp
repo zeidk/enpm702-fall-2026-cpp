@@ -9,7 +9,8 @@
  *
  * Each slide is listed with run_alone set, so a full run skips it:
  * @code
- * 702run week9_playground 70    # [Slide 70] Measured with AddressSanitizer
+ * 702run week9_playground 70    # [Slide 70] Deleting through a Base Pointer
+ * 702run week9_playground 71    # [Slide 71] Measured with AddressSanitizer
  * @endcode
  */
 #pragma once

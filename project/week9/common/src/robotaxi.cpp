@@ -2,13 +2,16 @@
  * @file robotaxi.cpp
  * @brief The methods of RoboTaxi that are not defined in the class.
  * @author Zeid Kootbally
+ *
+ * @details RoboTaxi::drive() is the code of [Slide 79], Concrete Classes. It
+ * calls Vehicle's public sensor_count(): sensors_ is Vehicle's private member.
  */
 #include "robotaxi.hpp"
 
 #include <iostream>
 
 void RoboTaxi::drive(const Route& route) const {
-  if (sensor_count() == 0) {  // Vehicle's public method: sensors_ is private
+  if (sensor_count() == 0) {  // FR-4: no sensor, no driving
     std::cout << "RoboTaxi: no sensor, stays parked\n";
     return;
   }

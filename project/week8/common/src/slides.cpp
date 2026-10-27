@@ -32,9 +32,11 @@ std::string to_roman(int number) {
   return roman;
 }
 
-// How the slide is asked for on the command line: "12", or "iv" in the appendix.
-std::string as_typed(int number, Part part) {
-  return part == Part::lecture ? std::to_string(number) : to_roman(number);
+// How the slide is asked for on the command line: "12", "iv" in the appendix,
+// or the key of a reading part, such as "five".
+std::string as_typed(const Slide& slide, Part part) {
+  if (!slide.key.empty()) { return std::string{slide.key}; }
+  return part == Part::lecture ? std::to_string(slide.number) : to_roman(slide.number);
 }
 
 // "12" gives 12. In the appendix, "iv" and "IV" give 4 too. 0 means neither.
@@ -58,8 +60,9 @@ int parse_number(std::string_view text, Part part) {
 }
 
 void print_header(const Slide& slide, Part part) {
-  const std::string header{(part == Part::lecture ? "[Slide " : "[Appendix ") +
-                           as_typed(slide.number, part) + "] " + std::string{slide.title}};
+  std::string label{"[Reading: "};
+  if (slide.key.empty()) { label = part == Part::lecture ? "[Slide " : "[Appendix "; }
+  const std::string header{label + as_typed(slide, part) + "] " + std::string{slide.title}};
   const std::string rule(header.size(), '-');  // ( ), not { }: { } means a list of two chars
   std::cout << rule << '\n' << header << '\n' << rule << '\n';
 }
@@ -67,13 +70,20 @@ void print_header(const Slide& slide, Part part) {
 }  // namespace
 
 int run_slides(std::vector<Slide> slides, int argc, char* argv[], Part part) {
-  std::stable_sort(slides.begin(), slides.end(),
-                   [](const Slide& a, const Slide& b) { return a.number < b.number; });
-  for (std::size_t i{1}; i < slides.size(); ++i) {
-    if (slides[i].number == slides[i - 1].number) {
-      std::cerr << "two entries for slide " << as_typed(slides[i].number, part) << ": \""
-                << slides[i - 1].title << "\" and \"" << slides[i].title << "\"\n";
-      return 1;
+  // The frames first, by number; then the reading parts, in the order listed.
+  std::stable_sort(slides.begin(), slides.end(), [](const Slide& a, const Slide& b) {
+    const bool a_named{!a.key.empty()};
+    const bool b_named{!b.key.empty()};
+    if (a_named != b_named) { return b_named; }
+    return !a_named && a.number < b.number;
+  });
+  for (std::size_t i{0}; i < slides.size(); ++i) {
+    for (std::size_t j{i + 1}; j < slides.size(); ++j) {
+      if (as_typed(slides[i], part) == as_typed(slides[j], part)) {
+        std::cerr << "two entries for " << as_typed(slides[i], part) << ": \""
+                  << slides[i].title << "\" and \"" << slides[j].title << "\"\n";
+        return 1;
+      }
     }
   }
 
@@ -83,9 +93,9 @@ int run_slides(std::vector<Slide> slides, int argc, char* argv[], Part part) {
     for (const Slide& slide : slides) {
       print_header(slide, part);
       if (slide.run_alone) {
-        std::cout << "Skipped: this code leaks or has undefined behavior, so it runs only on "
-                     "its own: 702run "
-                  << program << ' ' << as_typed(slide.number, part) << '\n';
+        std::cout << "Skipped: this code stops the program, leaks or has undefined behavior, "
+                     "so it runs only on its own: 702run "
+                  << program << ' ' << as_typed(slide, part) << '\n';
       } else {
         slide.run();
       }
@@ -93,20 +103,26 @@ int run_slides(std::vector<Slide> slides, int argc, char* argv[], Part part) {
     return 0;
   }
 
-  const int number{argc == 2 ? parse_number(argv[1], part) : 0};
-  if (number == 0) {
-    std::cerr << "usage: 702run " << program
-              << (part == Part::lecture ? " [slide number, such as 12]\n"
-                                        : " [appendix frame, such as iv or 4]\n");
-    return 1;
+  const Slide* match{nullptr};
+  if (argc == 2) {
+    const std::string_view asked{argv[1]};
+    const int number{parse_number(asked, part)};
+    for (const Slide& slide : slides) {
+      const bool named_match{!slide.key.empty() && slide.key == asked};
+      const bool number_match{slide.key.empty() && number != 0 && slide.number == number};
+      if (named_match || number_match) {
+        match = &slide;
+        break;
+      }
+    }
   }
-
-  const auto match{std::find_if(slides.begin(), slides.end(),
-                                [number](const Slide& slide) { return slide.number == number; })};
-  if (match == slides.end()) {
-    std::cerr << (part == Part::lecture ? "Slide " : "Appendix frame ") << as_typed(number, part)
-              << " has no code in " << program << ". Frames with code:";
-    for (const Slide& slide : slides) { std::cerr << ' ' << as_typed(slide.number, part); }
+  if (match == nullptr) {
+    if (argc == 2) { std::cerr << argv[1] << " is not a slide with code in " << program << ".\n"; }
+    std::cerr << "usage: 702run " << program
+              << (part == Part::lecture ? " [slide number, such as 9]\n"
+                                        : " [appendix frame, such as xi or 11, or a reading key]\n")
+              << "Slides with code in " << program << ':';
+    for (const Slide& slide : slides) { std::cerr << ' ' << as_typed(slide, part); }
     std::cerr << '\n';
     return 1;
   }
@@ -118,4 +134,12 @@ int run_slides(std::vector<Slide> slides, int argc, char* argv[], Part part) {
   print_header(*match, part);
   match->run();
   return 0;
+}
+
+void print_commented_out(std::string_view file) {
+  std::cout << "This slide's code does not compile, or makes the compiler warn, so it is\n"
+               "commented out in "
+            << file
+            << ", with what the compiler says.\n"
+               "Uncomment it and build to see the message.\n";
 }

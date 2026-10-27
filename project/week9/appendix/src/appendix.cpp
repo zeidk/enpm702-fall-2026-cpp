@@ -7,14 +7,28 @@
  *
  * @code
  * 702run week9_appendix        # every appendix frame
- * 702run week9_appendix iv     # only [Appendix iv]
+ * 702run week9_appendix xiv    # only [Appendix xiv]; 702run week9_appendix 14 works too
  * @endcode
+ *
+ * Appendix iii to xii, "What the Live Coding Replaces", hold the code of the
+ * seven "Live Coding" slides, one step at a time. Each frame keeps the classes
+ * of its step, written here in its own namespace: L8's Vehicle (l8::Vehicle, in
+ * ../../playground/include/l8_vehicle.hpp) before Step 4, simple classes with a
+ * virtual drive() in Steps 4 and 5, and the final classes of ../../common from
+ * Step 6 on.
+ *
+ * The frames that do not compile are kept here as comments, with the error
+ * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  */
 #include <iostream>
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
+#include "l8_vehicle.hpp"
 #include "position.hpp"
+#include "robotaxi.hpp"
 #include "route.hpp"
 #include "slides.hpp"
 #include "taxi.hpp"
@@ -22,7 +36,189 @@
 
 namespace {
 
-// [Appendix 4] Multiple Inheritance
+Route make_trip() {  // 500 m: (0, 0) to (300, 400)
+  Route trip;
+  trip.add(Position{0.0, 0.0});
+  trip.add(Position{300.0, 400.0});
+  return trip;
+}
+
+// [Appendix iii] A Passenger Rides a Vehicle and [Appendix iv] A Fleet of
+// Shared Vehicles show the classes only, with no output. Both classes are in
+// ../../playground/src/relationships.cpp, where [Slide 23] and [Slide 27] run
+// them.
+
+// [Appendix v] RoboTaxi Is a Vehicle
+namespace robotaxi_is_a {
+class RoboTaxi : public l8::Vehicle {  // L8's Vehicle
+ public:
+  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+};
+
+void run() {
+  const Route trip{make_trip()};
+  RoboTaxi robotaxi{13.4};
+  robotaxi.add_sensor(SensorType::lidar, 100.0);  // Vehicle's methods,
+  robotaxi.set_speed(10.0);                       // all inherited
+  std::cout << robotaxi.sensor_count() << '\n';   // 1
+  robotaxi.drive(trip);                           // 500 m at 10 m/s: 50 s
+}
+}  // namespace robotaxi_is_a
+
+// [Appendix vi] Taxi Is a Vehicle Too
+namespace taxi_too {
+class Taxi : public l8::Vehicle {
+ public:
+  Taxi(double max_speed, std::string driver_name)
+      : Vehicle{max_speed}, driver_name_{std::move(driver_name)} {}
+
+ private:
+  std::string driver_name_;  // empty: no driver
+};
+
+void run() {
+  const Route trip{make_trip()};
+  Taxi taxi{13.4, "Ana"};
+  taxi.set_speed(10.0);
+  taxi.drive(trip);  // 500 m at 10 m/s: 50 s
+}
+}  // namespace taxi_too
+
+// The classes of [Appendix vii] and [Appendix viii]: as on [Slide 57], drive()
+// is virtual, and RoboTaxi and Taxi override it.
+namespace runtime {
+class Vehicle {
+ public:
+  explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
+  virtual ~Vehicle() = default;
+  virtual void drive(const Route& route) const {
+    std::cout << "Vehicle: drives " << route.length() << " m\n";
+  }
+
+ private:
+  double max_speed_;
+  double speed_{0.0};
+};
+
+class RoboTaxi : public Vehicle {
+ public:
+  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  void drive(const Route& route) const override {
+    std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
+  }
+};
+
+class Taxi : public Vehicle {
+ public:
+  Taxi(double max_speed, std::string driver_name)
+      : Vehicle{max_speed}, driver_name_{std::move(driver_name)} {}
+  void drive(const Route& route) const override {
+    std::cout << "Taxi: " << driver_name_ << " drives " << route.length() << " m\n";
+  }
+
+ private:
+  std::string driver_name_;
+};
+
+// [Appendix vii] One Function for Every Vehicle
+void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
+
+namespace one_function {
+void run() {
+  const Route trip{make_trip()};
+  RoboTaxi robotaxi{13.4};
+  Taxi taxi{13.4, "Ana"};
+  start_shift(robotaxi, trip);  // RoboTaxi: drives itself 500 m
+  start_shift(taxi, trip);      // Taxi: Ana drives 500 m
+}
+}  // namespace one_function
+
+// [Appendix viii] Vehicles of Both Kinds in One Vector
+namespace mixed_fleet {
+void run() {
+  const Route trip{make_trip()};
+  std::vector<std::unique_ptr<Vehicle>> vehicles;
+  vehicles.push_back(std::make_unique<RoboTaxi>(13.4));
+  vehicles.push_back(std::make_unique<Taxi>(13.4, "Ana"));
+  for (const std::unique_ptr<Vehicle>& vehicle : vehicles) {
+    vehicle->drive(trip);
+  }
+}
+}  // namespace mixed_fleet
+}  // namespace runtime
+
+// [Appendix ix] With a virtual Destructor. Both destructors print; ~Vehicle is
+// virtual. The run is the code of [Slide 70], fixed.
+namespace virtual_dtor {
+class Vehicle {
+ public:
+  explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
+  virtual ~Vehicle() { std::cout << "~Vehicle\n"; }
+  virtual void drive(const Route& route) const {
+    std::cout << "Vehicle: drives " << route.length() << " m\n";
+  }
+
+ private:
+  double max_speed_;
+  double speed_{0.0};
+};
+
+class Taxi : public Vehicle {
+ public:
+  Taxi(double max_speed, std::string driver_name)
+      : Vehicle{max_speed}, driver_name_{std::move(driver_name)} {}
+  ~Taxi() override { std::cout << "~Taxi\n"; }
+  void drive(const Route& route) const override {
+    std::cout << "Taxi: " << driver_name_ << " drives " << route.length() << " m\n";
+  }
+
+ private:
+  std::string driver_name_;
+};
+
+void run() {
+  const Route trip{make_trip()};
+  std::unique_ptr<Vehicle> vehicle{std::make_unique<Taxi>(13.4, "Ana Maria Rodrigues")};
+  vehicle->drive(trip);
+}  // ~Taxi, then ~Vehicle
+}  // namespace virtual_dtor
+
+// [Appendix x] No Vehicle Objects. The abstract Vehicle of ../../common. Does
+// not compile:
+//   Vehicle vehicle{13.4};
+// error: cannot declare variable 'vehicle' to be of abstract type 'Vehicle'
+// note:   because the following virtual functions are pure within 'Vehicle':
+// note:     'virtual void Vehicle::drive(const Route&) const'
+// A reference or a pointer to Vehicle is fine:
+namespace no_vehicle {
+void run() {
+  const Route trip{make_trip()};
+  RoboTaxi robotaxi{13.4};
+  robotaxi.add_sensor(SensorType::lidar, 100.0);
+  const Vehicle& vehicle{robotaxi};  // a reference to Vehicle is fine
+  vehicle.drive(trip);  // RoboTaxi: 1 sensor checked, drives 500 m
+}
+}  // namespace no_vehicle
+
+// [Appendix xi] RoboTaxi and Taxi
+namespace concrete {
+void run() {
+  const Route trip{make_trip()};
+  RoboTaxi robotaxi{13.4};
+  robotaxi.drive(trip);  // RoboTaxi: no sensor, stays parked
+  robotaxi.add_sensor(SensorType::lidar, 100.0);
+  robotaxi.drive(trip);  // RoboTaxi: 1 sensor checked, drives 500 m
+  Taxi taxi{13.4, "Ana"};
+  taxi.drive(trip);      // Taxi: Ana drives 500 m
+}
+}  // namespace concrete
+
+// [Appendix xii] A final Class. RoboTaxi is final in ../../common. Does not
+// compile:
+//   class SuperRoboTaxi : public RoboTaxi {};
+// error: cannot derive from 'final' base 'RoboTaxi' in derived type 'SuperRoboTaxi'
+
+// [Appendix xiv] Multiple Inheritance
 namespace multiple {
 class Chargeable {  // anything that can be charged
  public:
@@ -40,9 +236,7 @@ class ElectricTaxi final : public Vehicle, public Chargeable {
 };
 
 void run() {
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
+  const Route trip{make_trip()};
   ElectricTaxi taxi{13.4};
   Vehicle& vehicle{taxi};
   Chargeable& chargeable{taxi};
@@ -51,14 +245,29 @@ void run() {
 }
 }  // namespace multiple
 
-// [Appendix 7] Copying a Vehicle. Neither compiles:
+// [Appendix xvii] Copying a Vehicle of the Design. Neither compiles:
 //   Taxi copy{taxi};             // the sensors cannot be copied (std::unique_ptr, L8)
 //   Taxi moved{std::move(taxi)};  // the declared destructor stops the moves
-// The errors are on the frame.
+// Each gives 4 errors, from inside std::vector. The copy is not suppressed:
+// std::is_copy_constructible_v<Taxi> is true. With
+//   Vehicle(const Vehicle&) = delete;
+//   Vehicle& operator=(const Vehicle&) = delete;
+// in Vehicle, the trait is false, and the copy stops with
+// error: use of deleted function 'Taxi::Taxi(const Taxi&)'
 
 }  // namespace
 
 int main(int argc, char* argv[]) {
-  return run_slides({{4, "Multiple Inheritance", multiple::run}}, argc, argv,
-                    Part::appendix);
+  return run_slides(
+      {
+          {5, "RoboTaxi Is a Vehicle", robotaxi_is_a::run},
+          {6, "Taxi Is a Vehicle Too", taxi_too::run},
+          {7, "One Function for Every Vehicle", runtime::one_function::run},
+          {8, "Vehicles of Both Kinds in One Vector", runtime::mixed_fleet::run},
+          {9, "With a virtual Destructor", virtual_dtor::run},
+          {10, "No Vehicle Objects", no_vehicle::run},
+          {11, "RoboTaxi and Taxi", concrete::run},
+          {14, "Multiple Inheritance", multiple::run},
+      },
+      argc, argv, Part::appendix);
 }
