@@ -73,7 +73,7 @@ void run() {
 // Appendix frames xii, A Method Defined in Its Class, and xiii, inline Does
 // Not Force Inlining, have no code to run. They compare the
 // assembly g++ 13.3 writes for a call of the in-class get_speed() of Short
-// Methods in the Class (lecture slide 43): with -O2 the call becomes one read
+// Methods in the Class (lecture slide 42): with -O2 the call becomes one read
 // of speed_, with -O0 it stays a call. With the body in another source file,
 // the call stays a call at -O2.
 

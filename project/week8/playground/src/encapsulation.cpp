@@ -16,8 +16,8 @@
 
 namespace encapsulation {
 
-// [Slide 36] Access Specifiers, [Appendix iii] The Header File and
-// [Appendix iv] The Source File: the class of [Slide 36], and its methods
+// [Slide 35] Access Specifiers, [Appendix iii] The Header File and
+// [Appendix iv] The Source File: the class of [Slide 35], and its methods
 // defined outside it with Vehicle::, as vehicle.hpp and vehicle.cpp would hold
 // them.
 namespace source_file {
@@ -61,7 +61,7 @@ void run() {
 void run_without_scope() { print_commented_out("playground/src/encapsulation.cpp"); }
 }  // namespace source_file
 
-// [Slide 42] Changing the Inside
+// [Slide 41] Changing the Inside
 // The data members hold km/h; the methods still take and give m/s. The speed
 // calls are those of Live Coding Step 1 ([Slide 18]), unchanged.
 namespace changing_inside {
@@ -95,7 +95,7 @@ void run() {
 }
 }  // namespace changing_inside
 
-// [Slide 43] Short Methods in the Class: get_speed() is defined in the class,
+// [Slide 42] Short Methods in the Class: get_speed() is defined in the class,
 // set_speed() outside it, as vehicle.cpp would hold it.
 namespace short_methods {
 class Vehicle {  // in vehicle.hpp
@@ -123,9 +123,9 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {36, "Access Specifiers", source_file::run},
-      {42, "Changing the Inside", changing_inside::run},
-      {43, "Short Methods in the Class", short_methods::run},
+      {35, "Access Specifiers", source_file::run},
+      {41, "Changing the Inside", changing_inside::run},
+      {42, "Short Methods in the Class", short_methods::run},
   };
 }
 

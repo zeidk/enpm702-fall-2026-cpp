@@ -7,10 +7,10 @@
  * section file and runs them. Code that does not compile is commented out
  * where its slide shows it: uncomment it, build, and you get the slide's error.
  *
- * [Slide 27] uses the Vehicle of ../../common/include/vehicle.hpp, whose
- * set_speed() checks the invariant. [Slide 29] uses the Sensor of
+ * [Slide 26] uses the Vehicle of ../../common/include/vehicle.hpp, whose
+ * set_speed() checks the invariant. [Slide 28] uses the Sensor of
  * ../../common/include/sensor.hpp; its constructor, in ../../common/src/sensor.cpp,
- * runs in constructors.cpp ([Slide 73]).
+ * runs in constructors.cpp ([Slide 71]).
  */
 #include <iostream>
 #include <stdexcept>
@@ -21,7 +21,7 @@
 
 namespace struct_or_class {
 
-// [Slide 27] The Invariant of Vehicle: 0.0 <= speed_ && speed_ <= max_speed_.
+// [Slide 26] The Invariant of Vehicle: 0.0 <= speed_ && speed_ <= max_speed_.
 // set_speed(-50.0) would break it, so set_speed() throws and the speed keeps
 // its old value. The constructor, Vehicle{13.4}, comes in the Constructors
 // section; 13.4 m/s is the maximum speed of the examples.
@@ -37,7 +37,7 @@ void run() {
 }
 }  // namespace invariant
 
-// [Slide 29] The Sensor Class: the defaults make a lidar that sees 100 m.
+// [Slide 28] The Sensor Class: the defaults make a lidar that sees 100 m.
 namespace sensor_class {
 void run() {
   const Sensor lidar{1};
@@ -47,7 +47,7 @@ void run() {
 }
 }  // namespace sensor_class
 
-// [Slide 30] Default Access
+// [Slide 29] Default Access
 namespace default_access {
 struct Position {  // no access specifier
   double x{0.0};
@@ -70,7 +70,7 @@ void run() {
 }
 }  // namespace default_access
 
-// [Slide 31] A Rule Nothing Checks
+// [Slide 30] A Rule Nothing Checks
 namespace nothing_checks {
 struct VehicleData {
   double max_speed{13.4};  // m/s
@@ -87,10 +87,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {27, "The Invariant of Vehicle", invariant::run},
-      {29, "The Sensor Class", sensor_class::run},
-      {30, "Default Access", default_access::run},
-      {31, "A Rule Nothing Checks", nothing_checks::run},
+      {26, "The Invariant of Vehicle", invariant::run},
+      {28, "The Sensor Class", sensor_class::run},
+      {29, "Default Access", default_access::run},
+      {30, "A Rule Nothing Checks", nothing_checks::run},
   };
 }
 

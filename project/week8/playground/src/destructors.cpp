@@ -5,8 +5,8 @@
  *
  * @details Part of week8_playground: main.cpp collects slides() from every
  * section file and runs them. The slides show when a destructor runs
- * ([Slides 89 and 90]) and an accessor that returns the sensors by const&
- * ([Slide 92]), which uses the finished class, ../../common/include/vehicle.hpp.
+ * ([Slides 87 and 88]) and an accessor that returns the sensors by const&
+ * ([Slide 90]), which uses the finished class, ../../common/include/vehicle.hpp.
  * We write the sensors_ member together in Live Coding Step 6 ([Slide 91]),
  * in ../../live/src/main.cpp (week8_live).
  *
@@ -30,7 +30,7 @@
 
 namespace destructors {
 
-// [Slide 89] Destructor and [Slide 90] When It Runs: the class of
+// [Slide 87] Destructor and [Slide 88] When It Runs: the class of
 // [Appendix ix], The Class So Far, with a destructor that prints the speed.
 namespace when_it_runs {
 class Vehicle {
@@ -140,7 +140,7 @@ void run() {
 }
 }  // namespace many_sensors
 
-// [Slide 92] Returning a Large Member: get_sensors(), the accessor of the
+// [Slide 90] Returning a Large Member: get_sensors(), the accessor of the
 // finished Vehicle in ../../common/include/vehicle.hpp.
 namespace large_member {
 void run() {
@@ -161,9 +161,9 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {89, "Destructor", when_it_runs::run},
-      {90, "When It Runs", when_it_runs::run},
-      {92, "Returning a Large Member", large_member::run},
+      {87, "Destructor", when_it_runs::run},
+      {88, "When It Runs", when_it_runs::run},
+      {90, "Returning a Large Member", large_member::run},
   };
 }
 

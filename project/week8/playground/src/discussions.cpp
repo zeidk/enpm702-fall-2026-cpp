@@ -15,62 +15,7 @@
 
 namespace discussions {
 
-// [Slide 56] Discussion: The School Zone. The option the notes pick: a maximum
-// that is not greater than 0 throws; a speed above the new maximum is lowered
-// to it.
-namespace school_zone {
-class Vehicle {
- public:
-  explicit Vehicle(double max_speed) : max_speed_{max_speed} {
-    if (max_speed_ <= 0.0) {
-      throw std::invalid_argument{"maximum speed must be greater than 0"};
-    }
-  }
-  [[nodiscard]] double get_max_speed() const noexcept { return max_speed_; }
-  [[nodiscard]] double get_speed() const noexcept { return speed_; }
-  void set_speed(double speed) {
-    if (speed < 0.0 || speed > max_speed_) {
-      throw std::invalid_argument{
-          "speed must be from 0 to the maximum speed"};
-    }
-    speed_ = speed;
-  }
-
-  // Not const: it changes max_speed_. Not noexcept: it can throw.
-  void set_max_speed(double max_speed) {
-    if (max_speed <= 0.0) {
-      throw std::invalid_argument{"maximum speed must be greater than 0"};
-    }
-    max_speed_ = max_speed;
-    if (speed_ > max_speed_) {
-      speed_ = max_speed_;  // slow down to the new maximum
-    }
-  }
-
- private:
-  double max_speed_;
-  double speed_{0.0};
-};
-
-void run() {
-  Vehicle car_a{13.4};
-  car_a.set_speed(12.0);
-  car_a.set_max_speed(8.9);  // the school zone
-  std::cout << car_a.get_max_speed() << ' '
-            << car_a.get_speed() << '\n';  // 8.9 8.9
-  car_a.set_max_speed(13.4);  // out of the zone: the speed stays 8.9
-  std::cout << car_a.get_max_speed() << ' '
-            << car_a.get_speed() << '\n';  // 13.4 8.9
-  try {
-    car_a.set_max_speed(-1.0);
-  } catch (const std::invalid_argument& e) {
-    std::cout << "caught: " << e.what() << '\n';
-  }
-  std::cout << car_a.get_max_speed() << '\n';  // 13.4: unchanged
-}
-}  // namespace school_zone
-
-// [Slide 75] Discussion: Spot the Bug. The class as given, with its line
+// [Slide 73] Discussion: Spot the Bug. The class as given, with its line
 // numbers on the slide:
 //    3  FollowingGap(double speed): time_{2.0}, distance_{time_ * speed} {}
 //       ...
@@ -173,7 +118,7 @@ void run() {
 }
 }  // namespace will_it_compile
 
-// [Slide 50] Discussion: Returning a Reference. With double&, code outside
+// [Slide 49] Discussion: Returning a Reference. With double&, code outside
 // the class writes through the reference: car_a.get_speed() = 50.0; compiles
 // with no warning, no check runs, and the speed is 50, above the maximum of
 // 13.4. With const double& get_speed() const instead, the line
@@ -201,9 +146,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {50, "Discussion: Returning a Reference", return_ref::run},
-      {56, "Discussion: The School Zone", school_zone::run},
-      {75, "Discussion: Spot the Bug", following_gap::run},
+      {49, "Discussion: Returning a Reference", return_ref::run},
+      {73, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 
