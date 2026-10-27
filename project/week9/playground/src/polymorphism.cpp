@@ -13,7 +13,7 @@
  * The slide that deletes a Taxi through a Vehicle pointer with no virtual
  * destructor is undefined behavior: it is in ../../undefined/src/undefined.cpp.
  * The frames that Live Coding: Steps 4 and 5 replace are in
- * ../../appendix/src/appendix.cpp: [Appendix vii], [Appendix viii] and [Appendix ix].
+ * ../../appendix/src/appendix.cpp: [Appendix iv], [Appendix v] and [Appendix vi].
  */
 #include <iostream>
 #include <memory>

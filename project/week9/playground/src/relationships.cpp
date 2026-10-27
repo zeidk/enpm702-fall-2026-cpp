@@ -66,9 +66,8 @@ void run() {
 }
 }  // namespace association
 
-// [Appendix iv] A Fleet of Shared Vehicles. The class only: [Slide 27] runs it,
-// and Live Coding: Step 2 writes it in ../../live. The same code as
-// ../../common/src/fleet.cpp.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 27] runs it.
+// The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
   void add(std::shared_ptr<Vehicle> vehicle) {

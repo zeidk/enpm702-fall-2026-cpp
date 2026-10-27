@@ -5,7 +5,8 @@
  * @author Zeid Kootbally
  *
  * @details Vehicle's methods are L8's. Each "Step N" comment below says what
- * that step adds or changes here.
+ * that step adds or changes here. We write Step 1 together; you write Steps 2
+ * to 7 on your own.
  */
 #include "fleet.hpp"
 

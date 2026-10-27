@@ -48,7 +48,7 @@ void run() {
 
 }  // namespace source_file
 
-// [Slide 40] Changing the Inside
+// [Slide 41] Changing the Inside
 // The data members hold km/h; the methods still take and give m/s. The speed
 // calls are those of Live Coding Step 1 ([Slide 18]), unchanged.
 namespace changing_inside {
@@ -82,7 +82,7 @@ void run() {
 }
 }  // namespace changing_inside
 
-// [Slide 41] A Body in the Class: get_speed() is defined in the class,
+// [Slide 42] A Body in the Class: get_speed() is defined in the class,
 // set_speed() outside it, as vehicle.cpp would hold it. The course's own code
 // defines every method in vehicle.cpp and only the constructors in the class.
 namespace short_methods {
@@ -112,8 +112,8 @@ void run() {
 std::vector<Slide> slides() {
   return {
       {34, "Access Specifiers", source_file::run},
-      {40, "Changing the Inside", changing_inside::run},
-      {41, "A Body in the Class", short_methods::run},
+      {41, "Changing the Inside", changing_inside::run},
+      {42, "A Body in the Class", short_methods::run},
   };
 }
 

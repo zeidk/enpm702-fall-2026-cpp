@@ -21,8 +21,6 @@
 namespace inheritance {
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// runs are [Appendix v] RoboTaxi Is a Vehicle and [Appendix vi] Taxi Is a
-// Vehicle Too, in ../../appendix/src/appendix.cpp (week9_appendix). Their
 // sizes are on [Slide 40].
 class RoboTaxi : public l8::Vehicle {
  public:

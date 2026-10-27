@@ -15,7 +15,7 @@
 
 namespace discussions {
 
-// [Slide 73] Discussion: Spot the Bug. The class as given, with its line
+// [Slide 74] Discussion: Spot the Bug. The class as given, with its line
 // numbers on the slide:
 //    3  FollowingGap(double speed): time_{2.0}, distance_{time_ * speed} {}
 //       ...
@@ -118,7 +118,7 @@ void run() {
 }
 }  // namespace will_it_compile
 
-// [Slide 48] Discussion: Returning a Reference. With double&, code outside
+// [Slide 49] Discussion: Returning a Reference. With double&, code outside
 // the class writes through the reference: car_a.get_speed() = 50.0; compiles
 // with no warning, no check runs, and the speed is 50, above the maximum of
 // 13.4. With const double& get_speed() const instead, the line
@@ -146,8 +146,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {48, "Discussion: Returning a Reference", return_ref::run},
-      {73, "Discussion: Spot the Bug", following_gap::run},
+      {49, "Discussion: Returning a Reference", return_ref::run},
+      {74, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 

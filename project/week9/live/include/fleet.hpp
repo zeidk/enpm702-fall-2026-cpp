@@ -1,7 +1,8 @@
 /**
  * @file fleet.hpp
- * @brief L9, live coding: L8's Vehicle, and the classes of L9, which we write in
- *        class, step by step.
+ * @brief L9, live coding: L8's Vehicle, and the classes of L9, which you write
+ *        in class, step by step. We write Step 1 together; you write Steps 2
+ *        to 7 on your own.
  * @author Zeid Kootbally
  *
  * @details One header for the five classes of the "Live Coding" slides of L9.

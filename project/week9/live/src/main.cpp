@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @brief L9, live coding: the program that uses the classes we write in class.
+ * @brief L9, live coding: the program that uses the classes you write in class.
  * @author Zeid Kootbally
  *
  * @details Build target: @c week9_live, built with AddressSanitizer and
@@ -11,7 +11,8 @@
  * 702run week9_live
  * @endcode
  *
- * The seven "Live Coding" slides of L9 add to L8's Vehicle in seven steps.
+ * The seven "Live Coding" slides of L9 add to L8's Vehicle in seven steps. We
+ * write Step 1 together; you write Steps 2 to 7 on your own.
  * main() has one commented block for each step that prints something: when we
  * finish a step, we uncomment its block, then build and run. Each block prints
  * "[Step N]", then what that step adds. The classes are in

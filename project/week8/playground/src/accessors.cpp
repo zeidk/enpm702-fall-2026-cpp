@@ -9,8 +9,8 @@
  * is commented out where its slide shows it: uncomment it, build, and you get
  * the slide's error.
  *
- * [Slide 53] ends the program on purpose, so a full run skips it. Run it on
- * its own: 702run week8_playground 53
+ * [Slide 54] ends the program on purpose, so a full run skips it. Run it on
+ * its own: 702run week8_playground 54
  *
  * The Live Coding slide (Step 4) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion slides of this
@@ -25,13 +25,13 @@
 namespace accessors {
 
 // The class of this section: the setter checks the maximum speed, the getter
-// is const ([Slide 44]), [[nodiscard]] ([Slide 45]) and noexcept ([Slide 46]).
+// is const ([Slide 45]), [[nodiscard]] ([Slide 46]) and noexcept ([Slide 47]).
 namespace with_check {
 class Vehicle {
  public:
   void set_speed(double speed);
 
-  // [Slide 44] Accessors, [Slide 45] [[nodiscard]] and [Slide 46] noexcept
+  // [Slide 45] Accessors, [Slide 46] [[nodiscard]] and [Slide 47] noexcept
   [[nodiscard]] double get_speed() const noexcept {
     return speed_;
   }
@@ -41,7 +41,7 @@ class Vehicle {
   double speed_{0.0};       // m/s
 };
 
-// [Slide 50] Mutators: the mutator that checks
+// [Slide 51] Mutators: the mutator that checks
 void Vehicle::set_speed(double speed) {
   if (speed < 0.0 || speed > max_speed_) {
     throw std::invalid_argument{
@@ -53,7 +53,7 @@ void Vehicle::set_speed(double speed) {
 
 using with_check::Vehicle;
 
-// [Slide 44] Accessors: get_speed() reads the state and changes nothing.
+// [Slide 45] Accessors: get_speed() reads the state and changes nothing.
 namespace const_accessor {
 void run() {
   const Vehicle car_a;  // a const object can call a const method
@@ -61,7 +61,7 @@ void run() {
 }
 }  // namespace const_accessor
 
-// [Slide 45] [[nodiscard]]
+// [Slide 46] [[nodiscard]]
 namespace nodiscard {
 void run() {
   Vehicle car_a;
@@ -75,7 +75,7 @@ void run() {
 }
 }  // namespace nodiscard
 
-// [Slide 46] noexcept: the promise, checked by code. noexcept( ) does not call
+// [Slide 47] noexcept: the promise, checked by code. noexcept( ) does not call
 // get_speed(); it asks the compiler whether the call can throw. It is true
 // here, false without the noexcept. For get_speed(), g++ 13.3 at -O2 writes the
 // same machine code with or without it.
@@ -86,7 +86,7 @@ void run() {
 }
 }  // namespace promise
 
-// [Slide 47] Where noexcept Goes: code that depends on the promise. Remove the
+// [Slide 48] Where noexcept Goes: code that depends on the promise. Remove the
 // noexcept of get_speed() and the static_assert stops compiling. set_speed()
 // throws for a bad speed, so it is not noexcept.
 namespace where_noexcept {
@@ -99,7 +99,7 @@ void run() {
 }
 }  // namespace where_noexcept
 
-// [Slide 50] Mutators
+// [Slide 51] Mutators
 namespace rule_caught {
 void run() {
   Vehicle car_a;
@@ -113,14 +113,14 @@ void run() {
 }
 }  // namespace rule_caught
 
-// [Slide 53] Not const, Not noexcept: the setter of [Slide 50], marked
+// [Slide 54] Not const, Not noexcept: the setter of [Slide 51], marked
 // noexcept. It still throws, so the promise is false: called with 20.0, the
 // program stops, and the catch of the Step 4 block never runs. g++ warns at
 // the throw:
 //   warning: 'throw' will always call 'terminate' [-Wterminate]
 // The two pragma lines turn that warning off for this one function only, so
 // the programs build with no warning. Run it on its own (a full run skips it):
-//   702run week8_playground 53
+//   702run week8_playground 54
 // It prints, then stops with exit status 134:
 //   terminate called after throwing an instance of 'std::invalid_argument'
 //     what():  speed must be from 0 to the maximum speed
@@ -159,7 +159,7 @@ void run() {
 }
 }  // namespace false_promise
 
-// [Slide 54] A Getter and Setter That Add Nothing
+// [Slide 55] A Getter and Setter That Add Nothing
 namespace trivial_pair {
 class Position {  // no rule about x
  public:
@@ -178,7 +178,7 @@ void run() {
 }  // namespace trivial_pair
 
 
-// [Slide 49] Returning a Large Member: get_color() returns the std::string
+// [Slide 50] Returning a Large Member: get_color() returns the std::string
 // member by const&, so the string is not copied.
 namespace large_member {
 class Vehicle {
@@ -199,14 +199,14 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {44, "Accessors", const_accessor::run},
-      {45, "[[nodiscard]]", nodiscard::run},
-      {46, "noexcept", promise::run},
-      {47, "Where noexcept Goes", where_noexcept::run},
-      {49, "Returning a Large Member", large_member::run},
-      {50, "Mutators", rule_caught::run},
-      {53, "Not const, Not noexcept", false_promise::run, true},
-      {54, "A Getter and Setter That Add Nothing", trivial_pair::run},
+      {45, "Accessors", const_accessor::run},
+      {46, "[[nodiscard]]", nodiscard::run},
+      {47, "noexcept", promise::run},
+      {48, "Where noexcept Goes", where_noexcept::run},
+      {50, "Returning a Large Member", large_member::run},
+      {51, "Mutators", rule_caught::run},
+      {54, "Not const, Not noexcept", false_promise::run, true},
+      {55, "A Getter and Setter That Add Nothing", trivial_pair::run},
   };
 }
 
