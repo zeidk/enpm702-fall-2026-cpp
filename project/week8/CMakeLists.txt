@@ -53,3 +53,19 @@ target_link_options(week8_playground PRIVATE -fsanitize=address,undefined)
 add_executable(week8_appendix appendix/src/appendix.cpp common/src/sensor.cpp
     common/src/slides.cpp)
 target_include_directories(week8_appendix PRIVATE common/include)
+
+# -----------------------------------------------------------------------------
+# Live coding: the class Vehicle we write together in class, step by step (the
+# "Live Coding" slides). One header and one source file in live/, and main.cpp,
+# which has one commented block per step. Step 5 uses the course's Sensor, so
+# the target also builds common/src/sensor.cpp and finds sensor.hpp in
+# common/include. live/include comes first, so "vehicle.hpp" is the one we
+# write, not common's.
+#
+#   702build week8_live
+#   702run week8_live
+# -----------------------------------------------------------------------------
+add_executable(week8_live live/src/main.cpp
+    live/src/vehicle.cpp
+    common/src/sensor.cpp)
+target_include_directories(week8_live PRIVATE live/include common/include)

@@ -1,0 +1,104 @@
+/**
+ * @file main.cpp
+ * @brief L9, live coding: the program that uses the classes we write in class.
+ * @author Zeid Kootbally
+ *
+ * @details Build target: @c week9_live, built with AddressSanitizer and
+ * UndefinedBehaviorSanitizer.
+ *
+ * @code
+ * 702build week9_live
+ * 702run week9_live
+ * @endcode
+ *
+ * The seven "Live Coding" slides of L9 add to L8's Vehicle in seven steps.
+ * main() has one commented block for each step that prints something: when we
+ * finish a step, we uncomment its block, then build and run. Each block prints
+ * "[Step N]", then what that step adds. The classes are in
+ * ../include/fleet.hpp and fleet.cpp. Route, Position and Sensor are the
+ * course's own, in ../../common/include.
+ */
+#include <iostream>
+#include <memory>
+
+#include "fleet.hpp"
+#include "position.hpp"
+#include "route.hpp"
+
+// Step 7: a class that derives from RoboTaxi, here, above main():
+//         class SuperRoboTaxi : public RoboTaxi {};
+//         Build, read the error, then delete it.
+
+int main() {
+  // The 500 m trip of the slides: (0, 0) to (300, 400), the long side of a
+  // 300, 400, 500 right triangle. Steps 4 and 5 drive it.
+  Route trip;
+  trip.add(Position{0.0, 0.0});
+  trip.add(Position{300.0, 400.0});
+
+  // Step 1: a Passenger does not keep its Vehicle alive.
+  // {
+  //   std::cout << "[Step 1]\n";
+  //   auto car_a{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   Passenger maya{"Maya"};
+  //   maya.board(car_a);
+  //   std::cout << car_a.use_count() << '\n';
+  //   std::weak_ptr<Vehicle> watcher{car_a};
+  //   car_a.reset();  // the only owner lets go
+  //   std::cout << std::boolalpha << watcher.expired() << '\n';
+  //   maya.leave();
+  // }
+
+  // Step 2: a Fleet shares its vehicles.
+  // {
+  //   std::cout << "[Step 2]\n";
+  //   auto car_a{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   auto car_b{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   Fleet fleet;
+  //   fleet.add(car_a);
+  //   fleet.add(car_b);
+  //   fleet.add(car_a);  // already in the fleet: not added again
+  //   std::cout << fleet.size() << ' ' << car_a.use_count() << '\n';
+  //   fleet.remove(car_b->get_id());
+  //   std::cout << fleet.size() << ' ' << car_b.use_count() << '\n';
+  // }
+
+  // Step 3: RoboTaxi and Taxi use Vehicle's methods, and a Fleet holds both.
+  // {
+  //   std::cout << "[Step 3]\n";
+  //   RoboTaxi robotaxi{13.4};
+  //   robotaxi.add_sensor(SensorType::lidar, 100.0);
+  //   Taxi taxi{13.4, "Ana"};
+  //   taxi.set_speed(10.0);
+  //   std::cout << robotaxi.sensor_count() << ' ' << taxi.get_speed() << '\n';
+  //   Fleet fleet;
+  //   fleet.add(std::make_shared<RoboTaxi>(13.4));
+  //   fleet.add(std::make_shared<Taxi>(13.4, "Ana"));
+  //   std::cout << fleet.size() << '\n';
+  // }
+
+  // Step 4: one loop drives both kinds, each with its own drive().
+  // {
+  //   std::cout << "[Step 4]\n";
+  //   Fleet fleet;
+  //   fleet.add(std::make_shared<RoboTaxi>(13.4));
+  //   fleet.add(std::make_shared<Taxi>(13.4, "Ana"));
+  //   fleet.drive_all(trip);
+  // }
+
+  // Step 5: a Taxi deleted through a Vehicle pointer. The name has 19
+  //         characters, so std::string keeps it on the heap. Uncomment the
+  //         block before Vehicle has a virtual destructor, and run.
+  // {
+  //   std::cout << "[Step 5]\n";
+  //   std::unique_ptr<Vehicle> vehicle{std::make_unique<Taxi>(13.4, "Ana Maria Rodrigues")};
+  //   vehicle->drive(trip);
+  // }
+
+  // Step 6: no Vehicle object. Uncomment the line, build, read the error, then
+  //         comment it out again. In the Step 1 and Step 2 blocks, change
+  //         std::make_shared<Vehicle> to std::make_shared<RoboTaxi>.
+  // Vehicle vehicle{13.4};
+
+  // Step 7: no new block. Write the class SuperRoboTaxi above main().
+}

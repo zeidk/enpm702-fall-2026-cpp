@@ -6,8 +6,9 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_playground       run the code of every slide
-#   702run week9_playground 20    run only the code of [Slide 20]
+#   702run week9_playground 58    run only the code of [Slide 58]
 #   702run week9_appendix         run the code of every appendix frame
+#   702run week9_live             run the classes we write together in class
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week9_playground)
@@ -16,6 +17,9 @@
 #                 (abstract), RoboTaxi, Taxi, Fleet, Passenger, and L8's Sensor,
 #                 SensorType, Position and Route
 #   undefined/    the slides that have undefined behavior, built with sanitizers
+#   live/         L8's Vehicle and the classes of L9 that we write together on
+#                 the "Live Coding" slides (week9_live): one header, one source
+#                 file and main.cpp
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -58,3 +62,23 @@ add_executable(week9_appendix appendix/src/appendix.cpp
     common/src/taxi.cpp
     common/src/slides.cpp)
 target_include_directories(week9_appendix PRIVATE common/include)
+
+# -----------------------------------------------------------------------------
+# Live coding: L8's Vehicle and the classes of L9, which we write together in
+# class, step by step (the "Live Coding" slides). One header and one source
+# file in live/, and main.cpp, which has one commented block per step. Route,
+# Position and Sensor are the course's, so the target also builds
+# common/src/route.cpp and common/src/sensor.cpp and finds their headers in
+# common/include. live/include comes first, so "fleet.hpp" is the one we write,
+# not common's. Step 5 deletes a Taxi through a Vehicle pointer, so the whole
+# program is built with AddressSanitizer and UndefinedBehaviorSanitizer, as
+# undefined/ is: the run stops with a report until Vehicle has a virtual
+# destructor.
+# -----------------------------------------------------------------------------
+add_executable(week9_live live/src/main.cpp
+    live/src/fleet.cpp
+    common/src/route.cpp
+    common/src/sensor.cpp)
+target_include_directories(week9_live PRIVATE live/include common/include)
+target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
+target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
