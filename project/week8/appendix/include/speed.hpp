@@ -1,6 +1,6 @@
 /**
  * @file speed.hpp
- * @brief [Appendix xi] One Definition in Many Files: a function defined in a
+ * @brief [Appendix ii] One Definition in Many Files: a function defined in a
  *        header.
  * @author Zeid Kootbally
  *

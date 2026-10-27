@@ -8,7 +8,7 @@
 #   702run week8_playground 9     run only the code of [Slide 9]
 #   702run week8_appendix         run the code of every appendix frame, then
 #                                 of the reading page Rule of Five and Rule of Zero
-#   702run week8_appendix xi      run only the code of [Appendix xi]
+#   702run week8_appendix ii      run only the code of [Appendix ii]
 #   702run week8_appendix five    run only the part "five" of the reading page
 #   702run week8_live             run the class we write together in class
 #

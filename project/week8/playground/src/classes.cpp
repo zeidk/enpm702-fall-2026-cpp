@@ -108,21 +108,6 @@ void run() {
 }
 }  // namespace object
 
-// [Appendix ii] State and Behavior
-namespace two_objects {
-void run() {
-  Vehicle car_a;
-  Vehicle car_b;
-
-  car_a.set_speed(12.0);
-  car_b.set_speed(10.0);
-
-  std::cout << car_a.get_speed() << ' '
-    << car_b.get_speed() << '\n';  // 12 10
-  std::cout << sizeof(Vehicle) << '\n';    // 56
-}
-}  // namespace two_objects
-
 std::vector<Slide> slides() {
   return {
       {9, "Two Ways to Write the Same Program", two_ways::run},
@@ -133,7 +118,6 @@ std::vector<Slide> slides() {
 
 std::vector<Slide> appendix_slides() {
   return {
-      {2, "State and Behavior", two_objects::run},
   };
 }
 

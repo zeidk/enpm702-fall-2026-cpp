@@ -15,7 +15,7 @@
 
 namespace discussions {
 
-// [Slide 72] Discussion: Spot the Bug. The class as given, with its line
+// [Slide 73] Discussion: Spot the Bug. The class as given, with its line
 // numbers on the slide:
 //    3  FollowingGap(double speed): time_{2.0}, distance_{time_ * speed} {}
 //       ...
@@ -46,8 +46,8 @@ void run() {
 }
 }  // namespace following_gap
 
-// [Appendix xviii] Discussion: Will It Compile? The class of [Appendix ix],
-// The Class So Far, copied here. It owns nothing by hand, so the compiler writes its copy
+// [Appendix ix] Discussion: Will It Compile? A Vehicle with the speed
+// members and the two constructors, copied here. It owns nothing by hand, so the compiler writes its copy
 // constructor and copy assignment, and lines 7 and 8 compile. The Vehicle of
 // ../../common/include/vehicle.hpp also has sensors_, a std::vector of
 // std::unique_ptr, so it is move-only: with it, lines 7 and 8 do not compile.
@@ -147,13 +147,13 @@ void run() {
 std::vector<Slide> slides() {
   return {
       {48, "Discussion: Returning a Reference", return_ref::run},
-      {72, "Discussion: Spot the Bug", following_gap::run},
+      {73, "Discussion: Spot the Bug", following_gap::run},
   };
 }
 
 std::vector<Slide> appendix_slides() {
   return {
-      {18, "Discussion: Will It Compile?", will_it_compile::run},
+      {9, "Discussion: Will It Compile?", will_it_compile::run},
   };
 }
 

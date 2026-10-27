@@ -1,6 +1,6 @@
 /**
  * @file speed_user.cpp
- * @brief [Appendix xi] One Definition in Many Files: the slide's a.cpp.
+ * @brief [Appendix ii] One Definition in Many Files: the slide's a.cpp.
  * @author Zeid Kootbally
  *
  * @details A second source file that includes speed.hpp, so the program

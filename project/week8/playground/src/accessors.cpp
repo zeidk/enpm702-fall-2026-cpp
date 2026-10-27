@@ -9,7 +9,7 @@
  * is commented out where its slide shows it: uncomment it, build, and you get
  * the slide's error.
  *
- * [Slide 52] ends the program on purpose, so a full run skips it. Run it on
+ * [Slide 53] ends the program on purpose, so a full run skips it. Run it on
  * its own: 702run week8_playground 53
  *
  * The Live Coding slide (Step 4) has no code here: we write that code together
@@ -17,6 +17,7 @@
  * section are in discussions.cpp.
  */
 #include <iostream>
+#include <string>
 #include <stdexcept>
 
 #include "sections.hpp"
@@ -35,20 +36,12 @@ class Vehicle {
     return speed_;
   }
 
-  // [Appendix vi] The Compiler Checks const
-  // double get_speed_bad() const {
-  //   speed_ = 0.0;  // does not compile
-  //   return speed_;
-  // }
-  // error: assignment of member 'accessors::with_check::Vehicle::speed_' in read-only object
-  // (the slide's code has no namespaces, so the slide's error names Vehicle only)
-
  private:
   double max_speed_{13.4};  // m/s
   double speed_{0.0};       // m/s
 };
 
-// [Slide 49] Mutators: the mutator that checks
+// [Slide 50] Mutators: the mutator that checks
 void Vehicle::set_speed(double speed) {
   if (speed < 0.0 || speed > max_speed_) {
     throw std::invalid_argument{
@@ -106,7 +99,7 @@ void run() {
 }
 }  // namespace where_noexcept
 
-// [Slide 49] Mutators and [Appendix vii] A Broken Rule Is Caught
+// [Slide 50] Mutators
 namespace rule_caught {
 void run() {
   Vehicle car_a;
@@ -120,7 +113,7 @@ void run() {
 }
 }  // namespace rule_caught
 
-// [Slide 52] Not const, Not noexcept: the setter of [Slide 49], marked
+// [Slide 53] Not const, Not noexcept: the setter of [Slide 50], marked
 // noexcept. It still throws, so the promise is false: called with 20.0, the
 // program stops, and the catch of the Step 4 block never runs. g++ warns at
 // the throw:
@@ -166,7 +159,7 @@ void run() {
 }
 }  // namespace false_promise
 
-// [Slide 53] A Getter and Setter That Add Nothing
+// [Slide 54] A Getter and Setter That Add Nothing
 namespace trivial_pair {
 class Position {  // no rule about x
  public:
@@ -184,7 +177,25 @@ void run() {
 }
 }  // namespace trivial_pair
 
-void run_const_checked() { print_commented_out("playground/src/accessors.cpp"); }
+
+// [Slide 49] Returning a Large Member: get_color() returns the std::string
+// member by const&, so the string is not copied.
+namespace large_member {
+class Vehicle {
+ public:
+  [[nodiscard]] const std::string& get_color() const noexcept {
+    return color_;  // no copy of the string
+  }
+
+ private:
+  std::string color_{"white"};
+};
+
+void run() {
+  Vehicle car_a;
+  std::cout << car_a.get_color() << '\n';  // prints white
+}
+}  // namespace large_member
 
 std::vector<Slide> slides() {
   return {
@@ -192,16 +203,15 @@ std::vector<Slide> slides() {
       {45, "[[nodiscard]]", nodiscard::run},
       {46, "noexcept", promise::run},
       {47, "Where noexcept Goes", where_noexcept::run},
-      {49, "Mutators", rule_caught::run},
-      {52, "Not const, Not noexcept", false_promise::run, true},
-      {53, "A Getter and Setter That Add Nothing", trivial_pair::run},
+      {49, "Returning a Large Member", large_member::run},
+      {50, "Mutators", rule_caught::run},
+      {53, "Not const, Not noexcept", false_promise::run, true},
+      {54, "A Getter and Setter That Add Nothing", trivial_pair::run},
   };
 }
 
 std::vector<Slide> appendix_slides() {
   return {
-      {6, "The Compiler Checks const", run_const_checked},
-      {7, "A Broken Rule Is Caught", rule_caught::run},
   };
 }
 

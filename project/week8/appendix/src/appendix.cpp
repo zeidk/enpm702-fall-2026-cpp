@@ -9,12 +9,12 @@
  * @code
  * 702build week8_appendix
  * 702run week8_appendix         # every appendix frame, then every reading part
- * 702run week8_appendix xi      # only [Appendix xi]; 702run week8_appendix 11 works too
+ * 702run week8_appendix ii      # only [Appendix ii]; 702run week8_appendix 2 works too
  * 702run week8_appendix five    # only [Reading: five], a part of the reading page
  * @endcode
  *
  * The appendix frames are numbered i, ii, iii, ... in their top-left corner,
- * and @c "[Appendix xi]" is that number. Most appendix frames belong to a
+ * and @c "[Appendix ii]" is that number. Most appendix frames belong to a
  * section of the lecture, so their code is in that section's file in
  * ../../playground/src/, listed in its appendix_slides(): State and Behavior
  * (classes.cpp), Header and Source (encapsulation.cpp), The Compiler Checks
@@ -51,7 +51,7 @@
 
 double a();  // defined in speed_user.cpp
 
-// [Appendix xi] One Definition in Many Files: kmh() is defined in
+// [Appendix ii] One Definition in Many Files: kmh() is defined in
 // ../include/speed.hpp, which this file and speed_user.cpp (the slide's a.cpp)
 // both include, so the program holds two definitions of kmh(). They are the
 // same, and kmh() is inline, so the program links. This run() is the slide's
@@ -263,7 +263,7 @@ int main(int argc, char* argv[]) {
   // reading page, with 0 for its number and its key last. true: the code
   // leaks or has undefined behavior, so it runs only when asked for.
   std::vector<Slide> slides{
-      {11, "One Definition in Many Files", one_definition::run},
+      {2, "One Definition in Many Files", one_definition::run},
       {0, "A Class That Owns Memory", raw_owner::run, false, "raw_owner"},
       {0, "Without the Destructor", undefined::no_destructor::run, true, "no_destructor"},
       {0, "Double Free, Measured", undefined::double_free::run, true, "double_free"},

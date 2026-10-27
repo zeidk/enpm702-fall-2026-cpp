@@ -16,8 +16,7 @@
 
 namespace encapsulation {
 
-// [Slide 34] Access Specifiers, [Appendix iii] The Header File and
-// [Appendix iv] The Source File: the class of [Slide 34], and its methods
+// [Slide 34] Access Specifiers: the class of [Slide 34], with its methods
 // defined outside it with Vehicle::, as vehicle.hpp and vehicle.cpp would hold
 // them.
 namespace source_file {
@@ -41,24 +40,12 @@ double Vehicle::get_speed() const {
   return speed_;
 }
 
-// [Appendix v] Without Vehicle::
-// // vehicle.cpp, with "Vehicle::" left out
-// void set_speed(double speed) {
-//   speed_ = speed;
-// }
-// error: 'speed_' was not declared in this scope; did you mean 'speed'?
-// With the definition above removed instead, Vehicle::set_speed is declared
-// but defined nowhere, and the program does not link:
-// undefined reference to `encapsulation::source_file::Vehicle::set_speed(double)'
-// (the slide's code has no namespaces, so the slide's error names Vehicle only)
-
 void run() {
   Vehicle car_a;
   car_a.set_speed(12.0);  // a public method: any code may call it
   std::cout << car_a.get_speed() << '\n';  // 12
 }
 
-void run_without_scope() { print_commented_out("playground/src/encapsulation.cpp"); }
 }  // namespace source_file
 
 // [Slide 40] Changing the Inside
@@ -132,9 +119,6 @@ std::vector<Slide> slides() {
 
 std::vector<Slide> appendix_slides() {
   return {
-      {3, "The Header File", source_file::run},
-      {4, "The Source File", source_file::run},
-      {5, "Without Vehicle::", source_file::run_without_scope},
   };
 }
 

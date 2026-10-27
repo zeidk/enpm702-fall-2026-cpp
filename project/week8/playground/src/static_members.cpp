@@ -18,7 +18,7 @@
 
 namespace static_members {
 
-// [Appendix xxii] Two Vehicles, the Same Id
+// [Appendix xiii] Two Vehicles, the Same Id
 namespace same_ids {
 class Vehicle {
  public:
@@ -44,7 +44,7 @@ void run() {
 }
 }  // namespace same_ids
 
-// [Appendix xxiii] One Counter for the Class
+// [Appendix xiv] One Counter for the Class
 namespace one_counter {
 class Vehicle {
  public:
@@ -72,8 +72,8 @@ void run() {
 }
 }  // namespace one_counter
 
-// [Appendix xxiv] A static Method Has No this: next_id() is called on the
-// class, with no object. The class is that of [Appendix xxiii], with a counter
+// [Appendix xv] A static Method Has No this: next_id() is called on the
+// class, with no object. The class is that of [Appendix xiv], with a counter
 // of its own, so it starts at 1 whatever ran before.
 namespace static_method {
 class Vehicle {
@@ -105,9 +105,9 @@ void run() {
 
 std::vector<Slide> appendix_slides() {
   return {
-      {22, "Two Vehicles, the Same Id", same_ids::run},
-      {23, "One Counter for the Class", one_counter::run},
-      {24, "A static Method Has No this", static_method::run},
+      {13, "Two Vehicles, the Same Id", same_ids::run},
+      {14, "One Counter for the Class", one_counter::run},
+      {15, "A static Method Has No this", static_method::run},
   };
 }
 
