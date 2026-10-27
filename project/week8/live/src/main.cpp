@@ -10,8 +10,8 @@
  * 702run week8_live
  * @endcode
  *
- * The six "Live Coding" slides of L8 build one class, Vehicle, in six steps. You
- * write Step 2 on your own.
+ * The six "Live Coding" slides of L8 build one class, Vehicle, in six steps. We
+ * write Step 1 together; you write Steps 2 to 6 on your own.
  * main() has one commented block for each step that prints something: when we
  * finish a step, we uncomment its block, then build and run. Each block prints
  * "[Step N]", then what that step adds. From Step 3 on, the class is in

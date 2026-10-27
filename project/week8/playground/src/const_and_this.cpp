@@ -101,7 +101,7 @@ void run() {
 // error: passing 'const const_and_this::const_ref::Vehicle' as 'this' argument discards qualifiers [-fpermissive]
 // (the slide's code has no namespaces, so the slide's error names Vehicle only)
 
-// [Slide 81] One Method, Many Objects
+// [Slide 80] One Method, Many Objects
 // A copy of the class whose setter prints this.
 namespace one_method {
 class Vehicle {
@@ -128,7 +128,7 @@ void run() {
 }
 }  // namespace one_method
 
-// [Slide 82] The Type of this and [Slide 83] Returning *this: the class
+// [Slide 81] The Type of this and [Slide 82] Returning *this: the class
 // checks the type of this in both kinds of method, and has speed_up(), which
 // returns *this.
 namespace this_pointer {
@@ -140,7 +140,7 @@ class Vehicle {
   }
 
   void set_speed(double speed) {
-    // [Slide 82] The Type of this: in a method that is not const
+    // [Slide 81] The Type of this: in a method that is not const
     static_assert(std::is_same_v<decltype(this), Vehicle*>);
     if (speed < 0.0 || speed > max_speed_) {
       throw std::invalid_argument{
@@ -150,7 +150,7 @@ class Vehicle {
   }
 
   [[nodiscard]] double get_speed() const noexcept {
-    // [Slide 82] The Type of this: in a const method
+    // [Slide 81] The Type of this: in a const method
     static_assert(std::is_same_v<decltype(this), const Vehicle*>);
     // speed_ = 1.0;  // the const is on the Vehicle, not on the pointer:
     // error: assignment of member 'const_and_this::this_pointer::Vehicle::speed_' in read-only object
@@ -158,13 +158,13 @@ class Vehicle {
     return speed_;
   }
 
-  // [Slide 83] Returning *this
+  // [Slide 82] Returning *this
   Vehicle& speed_up(double step) {
     set_speed(speed_ + step);  // the check runs here
     return *this;              // the object itself
   }
 
-  // [Slide 82] The Type of this: this cannot be assigned:
+  // [Slide 81] The Type of this: this cannot be assigned:
   // void reseat() { this = nullptr; }
   // error: lvalue required as left operand of assignment
 
@@ -173,7 +173,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 82] The Type of this: the two static_asserts in the class are
+// [Slide 81] The Type of this: the two static_asserts in the class are
 // checked when this file compiles. If either type were wrong, the build would
 // stop, so the run only reports what they check.
 void run_type_of_this() {
@@ -181,7 +181,7 @@ void run_type_of_this() {
                "get_speed() const: this is a const Vehicle*\n";
 }
 
-// [Slide 83] Returning *this
+// [Slide 82] Returning *this
 void run_return_this() {
   Vehicle car_a{13.4, 12.0};
   car_a.speed_up(0.5).speed_up(0.5);
@@ -193,9 +193,9 @@ void run_const_ref() { print_commented_out("playground/src/const_and_this.cpp");
 
 std::vector<Slide> slides() {
   return {
-      {81, "One Method, Many Objects", one_method::run},
-      {82, "The Type of this", this_pointer::run_type_of_this},
-      {83, "Returning *this", this_pointer::run_return_this},
+      {80, "One Method, Many Objects", one_method::run},
+      {81, "The Type of this", this_pointer::run_type_of_this},
+      {82, "Returning *this", this_pointer::run_return_this},
   };
 }
 

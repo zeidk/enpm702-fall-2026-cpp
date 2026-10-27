@@ -20,7 +20,7 @@ namespace {
 // 4 gives "iv": the appendix frames are numbered this way in the deck.
 std::string to_roman(int number) {
   constexpr std::array<std::pair<int, std::string_view>, 9> digits{{
-      {100, "c"}, {90, "xc"}, {50, "l"}, {40, "xl"}, {10, "x"},
+      {100, "c"}, {89, "xc"}, {49, "l"}, {40, "xl"}, {10, "x"},
       {9, "ix"}, {5, "v"}, {4, "iv"}, {1, "i"}}};
   std::string roman;
   for (const auto& [value, letters] : digits) {
