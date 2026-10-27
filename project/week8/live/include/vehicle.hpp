@@ -22,11 +22,12 @@
 
 // Step 3: the class Vehicle of main.cpp, with only the declarations of its
 //         methods set_speed() and get_speed(). Their bodies go to vehicle.cpp.
-// Step 4: get_speed() moves into the class, body and all, as a one-line
-//         accessor that is [[nodiscard]], const and noexcept.
-// Step 5: the constructors explicit Vehicle(double max_speed,
-//         const std::string& color = "white") and Vehicle(double max_speed,
-//         double speed), and the accessor get_color(). The data members
-//         max_speed_ and color_ lose their { } values: the constructor sets them.
+// Step 4: the declaration of get_speed() gets [[nodiscard]], const and
+//         noexcept. Its body stays in vehicle.cpp.
+// Step 5: the two constructors, defined here in the class, body and all:
+//         explicit Vehicle(double max_speed, const std::string& color = "white")
+//         and Vehicle(double max_speed, double speed). Then the declaration of
+//         the accessor get_color(). The data members max_speed_ and color_ lose
+//         their { } values: the constructor sets them.
 // Step 6: the data member sensors_, a std::vector<std::unique_ptr<Sensor>>, and
-//         the methods add_sensor(), sensor_count() and get_sensors().
+//         the declarations of add_sensor(), sensor_count() and get_sensors().

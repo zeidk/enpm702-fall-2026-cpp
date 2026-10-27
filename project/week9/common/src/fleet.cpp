@@ -1,6 +1,6 @@
 /**
  * @file fleet.cpp
- * @brief The methods of Fleet that are not defined in the class.
+ * @brief The methods of Fleet.
  * @author Zeid Kootbally
  */
 #include "fleet.hpp"
@@ -23,3 +23,5 @@ bool Fleet::remove(int id) {
            return vehicle->get_id() == id;
          }) > 0;
 }
+
+std::size_t Fleet::size() const noexcept { return vehicles_.size(); }

@@ -36,7 +36,7 @@ class Fleet {
   bool remove(int id);
 
   /// How many vehicles the fleet holds.
-  [[nodiscard]] std::size_t size() const noexcept { return vehicles_.size(); }
+  [[nodiscard]] std::size_t size() const noexcept;
 
  private:
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  ///< aggregation: shared

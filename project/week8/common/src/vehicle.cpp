@@ -1,6 +1,7 @@
 /**
  * @file vehicle.cpp
- * @brief The methods of Vehicle that are not defined in the class.
+ * @brief The methods of Vehicle. Its constructors are defined in the class, in
+ *        vehicle.hpp.
  * @author Zeid Kootbally
  */
 #include "vehicle.hpp"
@@ -8,16 +9,13 @@
 #include <iostream>
 #include <stdexcept>
 
-Vehicle::Vehicle(double max_speed, const std::string& color)
-    : id_{next_id_++}, max_speed_{max_speed}, color_{color} {
-  if (max_speed_ <= 0.0) {
-    throw std::invalid_argument{"maximum speed must be greater than 0"};
-  }
-}
+int Vehicle::get_id() const noexcept { return id_; }
 
-Vehicle::Vehicle(double max_speed, double speed) : Vehicle{max_speed} {
-  set_speed(speed);
-}
+const std::string& Vehicle::get_color() const noexcept { return color_; }
+
+double Vehicle::get_max_speed() const noexcept { return max_speed_; }
+
+double Vehicle::get_speed() const noexcept { return speed_; }
 
 void Vehicle::set_speed(double speed) {
   if (speed < 0.0 || speed > max_speed_) {
@@ -25,6 +23,8 @@ void Vehicle::set_speed(double speed) {
   }
   speed_ = speed;
 }
+
+double Vehicle::get_mileage() const noexcept { return mileage_; }
 
 void Vehicle::add_mileage(double meters) {
   if (meters < 0.0) {
@@ -39,6 +39,12 @@ int Vehicle::add_sensor(SensorType type, double range) {
   return id;
 }
 
+std::size_t Vehicle::sensor_count() const noexcept { return sensors_.size(); }
+
+const std::vector<std::unique_ptr<Sensor>>& Vehicle::get_sensors() const noexcept {
+  return sensors_;
+}
+
 void Vehicle::drive(const Route& route) const {
   std::cout << route.length() << " m";
   if (speed_ > 0.0) {
@@ -47,3 +53,5 @@ void Vehicle::drive(const Route& route) const {
     std::cout << ", but the speed is 0\n";
   }
 }
+
+int Vehicle::next_id() noexcept { return next_id_; }

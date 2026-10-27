@@ -12,7 +12,9 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "vehicle.hpp"
 
@@ -23,13 +25,17 @@ class Passenger {
    * @param name The passenger's name.
    * @throw std::invalid_argument if @p name is empty.
    */
-  explicit Passenger(std::string name);
+  explicit Passenger(std::string name) : name_{std::move(name)} {
+    if (name_.empty()) {
+      throw std::invalid_argument{"a passenger has a name"};
+    }
+  }
 
   /// Boards a vehicle (FR-12). The passenger does not own it.
-  void board(const std::shared_ptr<Vehicle>& vehicle) { ride_ = vehicle; }
+  void board(const std::shared_ptr<Vehicle>& vehicle);
 
   /// Gets off the vehicle (FR-12).
-  void leave() noexcept { ride_.reset(); }
+  void leave() noexcept;
 
  private:
   std::string name_;            ///< not empty

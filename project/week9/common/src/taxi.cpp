@@ -1,6 +1,7 @@
 /**
  * @file taxi.cpp
- * @brief The methods of Taxi that are not defined in the class.
+ * @brief The methods of Taxi. Its constructor is defined in the class, in
+ *        taxi.hpp.
  * @author Zeid Kootbally
  */
 #include "taxi.hpp"

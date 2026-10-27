@@ -95,8 +95,9 @@ void run() {
 }
 }  // namespace changing_inside
 
-// [Slide 42] Short Methods in the Class: get_speed() is defined in the class,
-// set_speed() outside it, as vehicle.cpp would hold it.
+// [Slide 42] A Body in the Class: get_speed() is defined in the class,
+// set_speed() outside it, as vehicle.cpp would hold it. The course's own code
+// defines every method in vehicle.cpp and only the constructors in the class.
 namespace short_methods {
 class Vehicle {  // in vehicle.hpp
  public:
@@ -125,7 +126,7 @@ std::vector<Slide> slides() {
   return {
       {35, "Access Specifiers", source_file::run},
       {41, "Changing the Inside", changing_inside::run},
-      {42, "Short Methods in the Class", short_methods::run},
+      {42, "A Body in the Class", short_methods::run},
   };
 }
 

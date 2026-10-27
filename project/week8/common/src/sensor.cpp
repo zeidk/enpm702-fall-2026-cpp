@@ -1,15 +1,13 @@
 /**
  * @file sensor.cpp
- * @brief The methods of Sensor that are not defined in the class.
+ * @brief The methods of Sensor. Its constructor is defined in the class, in
+ *        sensor.hpp.
  * @author Zeid Kootbally
  */
 #include "sensor.hpp"
 
-#include <stdexcept>
+int Sensor::get_id() const noexcept { return id_; }
 
-Sensor::Sensor(int id, SensorType type, double range)
-    : id_{id}, type_{type}, range_{range} {
-  if (range_ < 0.0) {
-    throw std::invalid_argument{"range must be at least 0"};
-  }
-}
+SensorType Sensor::get_type() const noexcept { return type_; }
+
+double Sensor::get_range() const noexcept { return range_; }

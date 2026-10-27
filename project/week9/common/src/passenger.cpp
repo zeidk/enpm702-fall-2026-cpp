@@ -1,15 +1,11 @@
 /**
  * @file passenger.cpp
- * @brief The methods of Passenger that are not defined in the class.
+ * @brief The methods of Passenger. Its constructor is defined in the class, in
+ *        passenger.hpp.
  * @author Zeid Kootbally
  */
 #include "passenger.hpp"
 
-#include <stdexcept>
-#include <utility>
+void Passenger::board(const std::shared_ptr<Vehicle>& vehicle) { ride_ = vehicle; }
 
-Passenger::Passenger(std::string name) : name_{std::move(name)} {
-  if (name_.empty()) {
-    throw std::invalid_argument{"a passenger has a name"};
-  }
-}
+void Passenger::leave() noexcept { ride_.reset(); }

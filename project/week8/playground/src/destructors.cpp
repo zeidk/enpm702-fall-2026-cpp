@@ -152,7 +152,7 @@ void run() {
     std::cout << sensor->get_id() << ' ' << sensor->get_range() << '\n';
   }  // prints 1 100, then 2 80
   // An accessor that returns a copy does not compile: each std::unique_ptr
-  // would be copied. In the class in vehicle.hpp:
+  // would be copied. As a method of Vehicle:
   // [[nodiscard]] std::vector<std::unique_ptr<Sensor>> get_sensors_copy() const {
   //   return sensors_;
   // }

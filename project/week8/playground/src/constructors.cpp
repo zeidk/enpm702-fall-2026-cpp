@@ -12,10 +12,11 @@
  *
  * [Slide 60] shows a first version of the constructor, written in the class
  * (declared and defined in one place), whose body assigns each member; the
- * Vehicle of param_ctor below is that version. [Slide 62] splits it into a
- * header and a source file. From [Slide 63] on, the slides use the full class,
- * Vehicle in ../../common/include/vehicle.hpp and ../../common/src/vehicle.cpp,
- * whose constructor uses the member initializer list of [Slide 69].
+ * Vehicle of param_ctor below is that version. [Slide 62] shows it split into
+ * a header and a source file; the course defines every constructor in the
+ * class. From [Slide 63] on, the slides use the full class, Vehicle in
+ * ../../common/include/vehicle.hpp, whose constructors, defined in the class,
+ * use the member initializer list of [Slide 69].
  *
  * The Live Coding slide (Step 5) has no code here: we write that code together
  * in ../../live/src/main.cpp (week8_live). The discussion Spot the Bug is in
@@ -104,7 +105,7 @@ void run() {
 
 // [Slide 60] Constructor with Parameters: a first version, written in the
 // class (declared and defined in one place), where the body assigns each
-// member. ../../common/src/vehicle.cpp uses the member initializer list of
+// member. ../../common/include/vehicle.hpp uses the member initializer list of
 // [Slide 69] instead.
 namespace param_ctor {
 class Vehicle {
@@ -289,8 +290,8 @@ void run() {
 // (the slide's code has no namespaces, so the slide's error names Vehicle only)
 
 // [Slide 69] Member Initializer List: the constructor of [Slide 60], defined
-// in vehicle.cpp with the list. The run uses the full class,
-// ../../common/src/vehicle.cpp, whose list also sets id_ from the static
+// in the class with the list. The run uses the full class,
+// ../../common/include/vehicle.hpp, whose list also sets id_ from the static
 // counter of the appendix's static Members.
 namespace init_list {
 void run() {
@@ -330,7 +331,7 @@ void run() {
 }
 }  // namespace list_fixes
 
-// [Slide 71] The Range Check: Sensor's constructor, of ../../common/src/sensor.cpp,
+// [Slide 71] The Range Check: Sensor's constructor, of ../../common/include/sensor.hpp,
 // sets every member in the list, then checks the range.
 namespace range_check {
 void run() {

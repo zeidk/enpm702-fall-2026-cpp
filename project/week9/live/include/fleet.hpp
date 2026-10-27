@@ -14,6 +14,9 @@
  *   Step 2) and drives them all in one loop (Step 4).
  * - RoboTaxi and Taxi are two kinds of Vehicle (inheritance, Step 3).
  *
+ * In every class, the constructors are defined in the class, here. Every other
+ * method is declared in the class and defined in fleet.cpp.
+ *
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
  * (30 * 0.44704 = 13.41), a value chosen for the examples.
  */
@@ -21,8 +24,9 @@
 
 #include <cstddef>
 #include <memory>
+#include <stdexcept>
 #include <string>
-#include <utility>  // Step 3: std::move
+#include <utility>  // Steps 1 and 3: std::move
 #include <vector>
 
 #include "route.hpp"   // Step 4: drive() takes a Route, in ../../common/include
@@ -32,10 +36,18 @@
 class Vehicle {
  public:
   /// L8. Throws std::invalid_argument if @p max_speed is not greater than 0.
-  explicit Vehicle(double max_speed, const std::string& color = "white");
+  /// The member initializer list sets id_, max_speed_ and color_, then the body
+  /// checks the maximum speed.
+  explicit Vehicle(double max_speed, const std::string& color = "white")
+      : id_{next_id_++}, max_speed_{max_speed}, color_{color} {
+    if (max_speed_ <= 0.0) {
+      throw std::invalid_argument{"maximum speed must be greater than 0"};
+    }
+  }
 
-  /// L8. Throws std::invalid_argument if either value breaks the invariant.
-  Vehicle(double max_speed, double speed);
+  /// L8: the delegating constructor. Throws std::invalid_argument if either
+  /// value breaks the invariant.
+  Vehicle(double max_speed, double speed) : Vehicle{max_speed} { set_speed(speed); }
 
   // Step 5: the destructor, virtual and = default.
 
@@ -45,19 +57,17 @@ class Vehicle {
 
   /// L8. Throws std::invalid_argument if @p speed is not from 0 to the maximum speed.
   void set_speed(double speed);
-  [[nodiscard]] double get_speed() const noexcept { return speed_; }
-  [[nodiscard]] const std::string& get_color() const noexcept { return color_; }
+  [[nodiscard]] double get_speed() const noexcept;
+  [[nodiscard]] const std::string& get_color() const noexcept;
 
   /// L8. Returns the new Sensor's id: 1, 2, ...
   int add_sensor(SensorType type, double range);
-  [[nodiscard]] std::size_t sensor_count() const noexcept { return sensors_.size(); }
-  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept {
-    return sensors_;
-  }
+  [[nodiscard]] std::size_t sensor_count() const noexcept;
+  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept;
 
   /// L8. The id, and the id the next Vehicle gets.
-  [[nodiscard]] int get_id() const noexcept { return id_; }
-  [[nodiscard]] static int next_id() noexcept { return next_id_; }
+  [[nodiscard]] int get_id() const noexcept;
+  [[nodiscard]] static int next_id() noexcept;
 
  private:
   inline static int next_id_{1};  // one counter for the whole class
@@ -71,19 +81,21 @@ class Vehicle {
 
 // Step 1: the class Passenger. Its private data members are name_, a
 //         std::string, and ride_, a std::weak_ptr<Vehicle>. Its public methods
-//         are an explicit constructor that takes the name (its body, in
-//         fleet.cpp, throws std::invalid_argument for an empty name),
-//         board(const std::shared_ptr<Vehicle>&) and leave().
+//         are an explicit constructor that takes the name, written here in the
+//         class (it throws std::invalid_argument for an empty name), and the
+//         declarations of board(const std::shared_ptr<Vehicle>&) and leave().
 
 // Step 2: the class Fleet. Its private data member is vehicles_, a
-//         std::vector<std::shared_ptr<Vehicle>>. Its public methods are
-//         add(std::shared_ptr<Vehicle>), bool remove(int id) and size().
-// Step 4: Fleet's method drive_all(const Route&), which is const.
+//         std::vector<std::shared_ptr<Vehicle>>. Its public methods, declared
+//         here: add(std::shared_ptr<Vehicle>), bool remove(int id) and size().
+// Step 4: the declaration of Fleet's method drive_all(const Route&), which is
+//         const.
 
-// Step 3: the class RoboTaxi, derived from Vehicle, with an explicit constructor
-//         that takes the maximum speed and passes it to Vehicle.
+// Step 3: the class RoboTaxi, derived from Vehicle, with an explicit constructor,
+//         written here in the class, that takes the maximum speed and passes
+//         it to Vehicle.
 // Step 3: the class Taxi, derived from Vehicle, with the private data member
-//         driver_name_, a std::string, and a constructor that takes the
-//         maximum speed and the driver's name.
-// Step 4: in both classes, drive(const Route&) const override.
+//         driver_name_, a std::string, and a constructor, written here in the
+//         class, that takes the maximum speed and the driver's name.
+// Step 4: in both classes, the declaration drive(const Route&) const override.
 // Step 7: both classes become final.

@@ -1,6 +1,7 @@
 /**
  * @file robotaxi.cpp
- * @brief The methods of RoboTaxi that are not defined in the class.
+ * @brief The methods of RoboTaxi. Its constructor is defined in the class, in
+ *        robotaxi.hpp.
  * @author Zeid Kootbally
  *
  * @details RoboTaxi::drive() is the code of [Slide 79], Concrete Classes. It

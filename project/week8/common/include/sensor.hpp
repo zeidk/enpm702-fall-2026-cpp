@@ -13,6 +13,8 @@
  */
 #pragma once
 
+#include <stdexcept>
+
 /// What kind of sensor it is: a scoped enumeration (Lecture 2).
 enum class SensorType {
   lidar,   ///< light detection and ranging
@@ -30,16 +32,21 @@ class Sensor {
    * @param range How far it sees, in m. Must be at least 0.
    * @throw std::invalid_argument if @p range is less than 0.
    */
-  explicit Sensor(int id, SensorType type = SensorType::lidar, double range = 100.0);
+  explicit Sensor(int id, SensorType type = SensorType::lidar, double range = 100.0)
+      : id_{id}, type_{type}, range_{range} {
+    if (range_ < 0.0) {
+      throw std::invalid_argument{"range must be at least 0"};
+    }
+  }
 
   /// Its id.
-  [[nodiscard]] int get_id() const noexcept { return id_; }
+  [[nodiscard]] int get_id() const noexcept;
 
   /// What kind of sensor it is.
-  [[nodiscard]] SensorType get_type() const noexcept { return type_; }
+  [[nodiscard]] SensorType get_type() const noexcept;
 
   /// How far it sees, in m.
-  [[nodiscard]] double get_range() const noexcept { return range_; }
+  [[nodiscard]] double get_range() const noexcept;
 
  private:
   int id_;           ///< picked by Vehicle::add_sensor()

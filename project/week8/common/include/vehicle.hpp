@@ -14,6 +14,9 @@
  * a Vehicle can be moved and cannot be copied. Its id comes from a static
  * counter, shared by every Vehicle, so no two vehicles get the same id.
  *
+ * The constructors are defined in the class; every other method is defined in
+ * vehicle.cpp (the course's rule).
+ *
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
  * (30 * 0.44704 = 13.41), a value chosen for the examples.
  *
@@ -24,6 +27,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -39,7 +43,12 @@ class Vehicle {
    * @param color Its color. Any color name is a color, so there is nothing to check.
    * @throw std::invalid_argument if @p max_speed is not greater than 0.
    */
-  explicit Vehicle(double max_speed, const std::string& color = "white");
+  explicit Vehicle(double max_speed, const std::string& color = "white")
+      : id_{next_id_++}, max_speed_{max_speed}, color_{color} {
+    if (max_speed_ <= 0.0) {
+      throw std::invalid_argument{"maximum speed must be greater than 0"};
+    }
+  }
 
   /**
    * @brief Starts with the given speed. The color is "white".
@@ -47,19 +56,19 @@ class Vehicle {
    * @param speed The speed to drive at, in m/s, from 0 to @p max_speed.
    * @throw std::invalid_argument if either value breaks the invariant.
    */
-  Vehicle(double max_speed, double speed);
+  Vehicle(double max_speed, double speed) : Vehicle{max_speed} { set_speed(speed); }
 
   /// Its id, from the counter of the class.
-  [[nodiscard]] int get_id() const noexcept { return id_; }
+  [[nodiscard]] int get_id() const noexcept;
 
   /// The color, given to the constructor.
-  [[nodiscard]] const std::string& get_color() const noexcept { return color_; }
+  [[nodiscard]] const std::string& get_color() const noexcept;
 
   /// The maximum speed, in m/s.
-  [[nodiscard]] double get_max_speed() const noexcept { return max_speed_; }
+  [[nodiscard]] double get_max_speed() const noexcept;
 
   /// The speed the vehicle drives at, in m/s.
-  [[nodiscard]] double get_speed() const noexcept { return speed_; }
+  [[nodiscard]] double get_speed() const noexcept;
 
   /**
    * @brief Sets the speed to drive at.
@@ -69,7 +78,7 @@ class Vehicle {
   void set_speed(double speed);
 
   /// The distance driven so far, in m.
-  [[nodiscard]] double get_mileage() const noexcept { return mileage_; }
+  [[nodiscard]] double get_mileage() const noexcept;
 
   /**
    * @brief Adds the distance of a trip to the mileage.
@@ -88,18 +97,16 @@ class Vehicle {
   int add_sensor(SensorType type, double range);
 
   /// How many sensors the vehicle carries.
-  [[nodiscard]] std::size_t sensor_count() const noexcept { return sensors_.size(); }
+  [[nodiscard]] std::size_t sensor_count() const noexcept;
 
   /// The sensors, by const reference: no copy, and the caller cannot change them.
-  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept {
-    return sensors_;
-  }
+  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept;
 
   /// Prints the trip: the route's length, and the time it takes at the speed.
   void drive(const Route& route) const;
 
   /// The id the next Vehicle gets.
-  [[nodiscard]] static int next_id() noexcept { return next_id_; }
+  [[nodiscard]] static int next_id() noexcept;
 
  private:
   inline static int next_id_{1};  ///< one counter for the whole class
