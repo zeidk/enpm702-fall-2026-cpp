@@ -7,6 +7,7 @@
  */
 #include "vehicle.hpp"
 
+#include <iostream>
 #include <stdexcept>
 
 Vehicle::Vehicle(double max_speed, const std::string& color)
@@ -38,4 +39,8 @@ int Vehicle::add_sensor(SensorType type, double range) {
   const int id{static_cast<int>(sensors_.size()) + 1};
   sensors_.push_back(std::make_unique<Sensor>(id, type, range));
   return id;
+}
+
+void Vehicle::log_event(const std::string& event) const {
+  std::cout << "vehicle " << id_ << ": " << event << '\n';
 }

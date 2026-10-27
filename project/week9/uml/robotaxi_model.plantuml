@@ -46,6 +46,7 @@ abstract class Vehicle {
   + get_sensors() : const vector<unique_ptr<Sensor>>&
   + {abstract} drive(const Route&) : void
   + {static} next_id() : int
+  # log_event(const string&) : void
 }
 class Sensor {
   - id_ : int

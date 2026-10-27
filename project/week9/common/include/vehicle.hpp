@@ -3,12 +3,14 @@
  * @brief Vehicle, the abstract base class of RoboTaxi and Taxi (L9).
  * @author Zeid Kootbally
  *
- * @details L8's Vehicle (project/week8/common), with two changes made in L9:
+ * @details L8's Vehicle (project/week8/common), with three changes made in L9:
  * - drive() is a pure virtual method, so Vehicle is an abstract class: no
  *   Vehicle object can be created, only RoboTaxi and Taxi objects. Each says
  *   how it drives.
  * - The destructor is virtual, so deleting a RoboTaxi or a Taxi through a
  *   Vehicle pointer runs its own destructor first (Core Guidelines C.35).
+ * - log_event() is protected: the methods of RoboTaxi and Taxi can call it,
+ *   and code outside the classes cannot.
  *
  * Everything else is L8's: the invariant (the speed stays from 0 to the
  * maximum speed, the maximum speed is greater than 0, and the mileage never
@@ -104,6 +106,11 @@ class Vehicle {
 
   /// The id the next Vehicle gets.
   [[nodiscard]] static int next_id() noexcept { return next_id_; }
+
+ protected:
+  /// Print one line about this vehicle: "vehicle <id>: <event>". For the
+  /// methods of Vehicle and of its derived classes, RoboTaxi and Taxi.
+  void log_event(const std::string& event) const;
 
  private:
   inline static int next_id_{1};  ///< one counter for the whole class
