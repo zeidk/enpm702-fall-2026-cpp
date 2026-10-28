@@ -265,28 +265,35 @@ void run() {
 namespace which_one {
 class Vehicle {
  public:
+  // Constructor
   explicit Vehicle(int id) : id_{id} {
     std::cout << "  constructor, id " << id_ << '\n';
   }
+  // Destructor
   ~Vehicle() { std::cout << "  destructor, id " << id_ << '\n'; }
+  // Copy constructor
   Vehicle(const Vehicle& other) : id_{other.id_} {
     std::cout << "  copy constructor, id " << id_ << '\n';
   }
+  // Copy assignment
   Vehicle& operator=(const Vehicle& other) {
     id_ = other.id_;
     std::cout << "  copy assignment, id " << id_ << '\n';
     return *this;
   }
+  // Move constructor
   Vehicle(Vehicle&& other) noexcept : id_{other.id_} {
     other.id_ = 0;  // as if the source gave its contents away
     std::cout << "  move constructor, id " << id_ << '\n';
   }
+  // Move assignment
   Vehicle& operator=(Vehicle&& other) noexcept {
     id_ = other.id_;
     other.id_ = 0;
     std::cout << "  move assignment, id " << id_ << '\n';
     return *this;
   }
+  // Accessor
   [[nodiscard]] int get_id() const noexcept { return id_; }
 
  private:
