@@ -34,4 +34,10 @@ namespace move_bug {
 void run();
 }
 
+/// [Reading: no_move] Without the Moves: a Vehicle with a destructor and no
+/// moves, so std::move copies it, and the copy deletes the Sensor twice.
+namespace no_move {
+void run();
+}
+
 }  // namespace undefined

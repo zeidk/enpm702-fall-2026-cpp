@@ -106,7 +106,6 @@ void run() {
   // error: use of deleted function 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)'
   // note: 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)' is implicitly deleted because the
   //       default definition would be ill-formed:
-  // (the page's code has no namespaces, so the page's error names Vehicle only)
 }
 }  // namespace zero
 

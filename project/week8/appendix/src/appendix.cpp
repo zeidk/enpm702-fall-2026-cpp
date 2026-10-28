@@ -38,8 +38,10 @@
  * @c ../../undefined/src/undefined.cpp, built with the sanitizers; a full run
  * skips it, and it runs only when asked for by its key.
  */
+#include <cstdio>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -222,7 +224,6 @@ void run() {
 // Remove the two move lines and Vehicle moved{std::move(car_b)}; picks the
 // deleted copy:
 // error: use of deleted function 'move_only::Vehicle::Vehicle(const move_only::Vehicle&)'
-// (the page's code has no namespaces, so the page's error names Vehicle only)
 namespace move_only {
 class Vehicle {  // the raw-pointer Vehicle, move-only on purpose
  public:
@@ -257,6 +258,119 @@ void run() {
 }
 }  // namespace move_only
 
+// [Reading: which_one] Which Function Runs: a Vehicle that owns nothing and
+// prints the name of each special member function when it runs, so each line of
+// run() shows which one it calls. A move sets the source's id to 0, the way the
+// raw-pointer Vehicle of [Reading: five] leaves its source owning nothing.
+namespace which_one {
+class Vehicle {
+ public:
+  explicit Vehicle(int id) : id_{id} {
+    std::cout << "  constructor, id " << id_ << '\n';
+  }
+  ~Vehicle() { std::cout << "  destructor, id " << id_ << '\n'; }
+  Vehicle(const Vehicle& other) : id_{other.id_} {
+    std::cout << "  copy constructor, id " << id_ << '\n';
+  }
+  Vehicle& operator=(const Vehicle& other) {
+    id_ = other.id_;
+    std::cout << "  copy assignment, id " << id_ << '\n';
+    return *this;
+  }
+  Vehicle(Vehicle&& other) noexcept : id_{other.id_} {
+    other.id_ = 0;  // as if the source gave its contents away
+    std::cout << "  move constructor, id " << id_ << '\n';
+  }
+  Vehicle& operator=(Vehicle&& other) noexcept {
+    id_ = other.id_;
+    other.id_ = 0;
+    std::cout << "  move assignment, id " << id_ << '\n';
+    return *this;
+  }
+  [[nodiscard]] int get_id() const noexcept { return id_; }
+
+ private:
+  int id_;
+};
+
+void park(Vehicle vehicle) {  // takes a Vehicle by value: a new object
+  std::cout << "  park(), id " << vehicle.get_id() << '\n';
+}  // vehicle is destroyed here
+
+void run() {
+  std::cout << "1: Vehicle car_a{1};\n";
+  Vehicle car_a{1};
+  std::cout << "2: Vehicle car_b{2};\n";
+  Vehicle car_b{2};
+  std::cout << "3: Vehicle copy{car_a};\n";
+  Vehicle copy{car_a};
+  std::cout << "4: Vehicle other = car_a;\n";
+  Vehicle other = car_a;
+  std::cout << "5: copy = car_b;\n";
+  copy = car_b;
+  std::cout << "6: Vehicle moved{std::move(car_a)};\n";
+  Vehicle moved{std::move(car_a)};
+  std::cout << "7: moved = std::move(car_b);\n";
+  moved = std::move(car_b);
+  std::cout << "8: park(copy);\n";
+  park(copy);
+  std::cout << "9: end of run()\n";
+}
+}  // namespace which_one
+
+// [Reading: file_owner] Beyond Memory: A File. TripLog owns an open file, a
+// std::FILE* from the C library, and must close it with std::fclose(). It
+// follows the rule of five: no copies (two owners would close one file twice),
+// and moves that hand the file over. std::tmpfile() opens a temporary file that
+// the system deletes when the file is closed, so the run leaves nothing behind.
+namespace file_owner {
+class TripLog {
+ public:
+  TripLog() : file_{std::tmpfile()} {
+    if (file_ == nullptr) {
+      throw std::runtime_error{"cannot open a temporary file"};
+    }
+  }
+  ~TripLog() {
+    if (file_ != nullptr) {
+      std::fclose(file_);
+      std::cout << "~TripLog: file closed\n";
+    } else {
+      std::cout << "~TripLog: no file\n";
+    }
+  }
+  TripLog(const TripLog&) = delete;
+  TripLog& operator=(const TripLog&) = delete;
+  TripLog(TripLog&& other) noexcept : file_{other.file_} {
+    other.file_ = nullptr;
+  }
+  TripLog& operator=(TripLog&& other) noexcept {
+    if (this != &other) {
+      if (file_ != nullptr) {
+        std::fclose(file_);
+      }
+      file_ = other.file_;
+      other.file_ = nullptr;
+    }
+    return *this;
+  }
+  void write(const char* line) {
+    std::fputs(line, file_);
+    std::fputs("\n", file_);
+  }
+
+ private:
+  std::FILE* file_;  // the open file, or nullptr after a move
+};
+
+void run() {
+  TripLog log;
+  log.write("trip 1: 4.2 km");
+  TripLog kept{std::move(log)};
+  kept.write("trip 2: 1.5 km");
+}  // ~TripLog: file closed, then ~TripLog: no file
+}  // namespace file_owner
+
 int main(int argc, char* argv[]) {
   // One entry per appendix frame that has code: its number (11 is xi), its
   // title, and the function that runs it. Then one entry per part of the
@@ -264,6 +378,7 @@ int main(int argc, char* argv[]) {
   // leaks or has undefined behavior, so it runs only when asked for.
   std::vector<Slide> slides{
       {2, "One Definition in Many Files", one_definition::run},
+      {0, "Which Function Runs", which_one::run, false, "which_one"},
       {0, "A Class That Owns Memory", raw_owner::run, false, "raw_owner"},
       {0, "Without the Destructor", undefined::no_destructor::run, true, "no_destructor"},
       {0, "Double Free, Measured", undefined::double_free::run, true, "double_free"},
@@ -271,6 +386,8 @@ int main(int argc, char* argv[]) {
       {0, "All Five, Run", five::run, false, "five"},
       {0, "Discussion: Who Deletes What?", undefined::move_bug::run, true, "move_bug"},
       {0, "= default and = delete", move_only::run, false, "move_only"},
+      {0, "Beyond Memory: A File", file_owner::run, false, "file_owner"},
+      {0, "Without the Moves", undefined::no_move::run, true, "no_move"},
   };
   // The frames of the other files, and [Reading: zero] of destructors.cpp.
   for (const std::vector<Slide>& section :

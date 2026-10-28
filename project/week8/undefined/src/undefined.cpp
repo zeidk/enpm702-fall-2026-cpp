@@ -105,4 +105,27 @@ void run() {
 }
 }  // namespace move_bug
 
+// [Reading: no_move] Without the Moves
+// The Vehicle declares a destructor, so the compiler writes no move constructor
+// and no move assignment. std::move(car_b) then finds no move constructor, and
+// the compiler's copy constructor runs: it copies the address, as in
+// [Reading: double_free]. At the end of the scope both destructors delete it:
+// ERROR: AddressSanitizer: attempting double-free on 0x... in thread T0:
+namespace no_move {
+class Vehicle {  // a destructor, and no copy or move written
+ public:
+  explicit Vehicle(const Sensor& sensor)
+      : sensor_{new Sensor{sensor}} {}
+  ~Vehicle() { delete sensor_; }
+
+ private:
+  Sensor* sensor_;
+};
+
+void run() {
+  Vehicle car_b{Sensor{2}};
+  Vehicle moved{std::move(car_b)};  // the compiler's copy constructor runs
+}  // moved deletes the Sensor, then car_b deletes it again
+}  // namespace no_move
+
 }  // namespace undefined
