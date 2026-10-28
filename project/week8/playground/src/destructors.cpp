@@ -10,11 +10,8 @@
  * You write the sensors_ member on your own in Live Coding Step 6 ([Slide 89]),
  * in ../../live/src/main.cpp (week8_live).
  *
- * appendix_slides(), which week8_appendix runs, lists the rule of zero of the
- * reading page Rule of Five and Rule of Zero on Read the Docs ([Reading: zero]):
- * 702run week8_appendix zero.
- * The Vehicle that owns its Sensor through a raw pointer, and the rule of five,
- * are in ../../appendix/src/appendix.cpp.
+ * The code of the reading page Rule of Five and Rule of Zero, on Read the
+ * Docs, is its own program: ../../rule_of_five/, target week8_rule_of_five.
  */
 #include <cstddef>
 #include <iostream>
@@ -83,42 +80,10 @@ void run() {
    // ~Vehicle: speed 5, after reset
 }  // namespace when_it_runs
 
-// [Reading: zero] Rule of Zero, and What the Compiler Writes Now: the reading
-// page Rule of Five and Rule of Zero on Read the Docs. 702run week8_appendix zero
-namespace zero {
-class Vehicle {  // one Sensor only, before sensors_
- public:
-  explicit Vehicle(const Sensor& sensor)
-      : sensor_{std::make_unique<Sensor>(sensor)} {}
-  [[nodiscard]] const Sensor& get_sensor() const noexcept {
-    return *sensor_;
-  }
-
- private:
-  std::unique_ptr<Sensor> sensor_;  // deletes the Sensor
-};
-
-void run() {
-  Vehicle car_b{Sensor{2, SensorType::camera, 80.0}};  // one Sensor only
-  Vehicle moved{std::move(car_b)};  // OK: moves the unique_ptr
-  std::cout << moved.get_sensor().get_id() << '\n';  // 2
-  // Vehicle copy{moved};  // does not compile:
-  // error: use of deleted function 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)'
-  // note: 'destructors::zero::Vehicle::Vehicle(const destructors::zero::Vehicle&)' is implicitly deleted because the
-  //       default definition would be ill-formed:
-}
-}  // namespace zero
-
 std::vector<Slide> slides() {
   return {
       {87, "Destructor", when_it_runs::run},
       {88, "When It Runs", when_it_runs::run},
-  };
-}
-
-std::vector<Slide> appendix_slides() {
-  return {
-      {0, "Rule of Zero", zero::run, false, "zero"},
   };
 }
 

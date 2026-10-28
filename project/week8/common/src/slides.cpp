@@ -117,11 +117,16 @@ int run_slides(std::vector<Slide> slides, int argc, char* argv[], Part part) {
     }
   }
   if (match == nullptr) {
-    if (argc == 2) { std::cerr << argv[1] << " is not a slide with code in " << program << ".\n"; }
-    std::cerr << "usage: 702run " << program
-              << (part == Part::lecture ? " [slide number, such as 9]\n"
-                                        : " [appendix frame, such as xi or 11, or a reading key]\n")
-              << "Slides with code in " << program << ':';
+    if (argc == 2) { std::cerr << argv[1] << " is not a part with code in " << program << ".\n"; }
+    std::cerr << "usage: 702run " << program;
+    if (part == Part::lecture) {
+      std::cerr << " [slide number, such as 9]\n";
+    } else if (part == Part::appendix) {
+      std::cerr << " [appendix frame, such as xi or 11, or a reading key]\n";
+    } else {
+      std::cerr << " [the key of a part, such as five]\n";
+    }
+    std::cerr << "Parts with code in " << program << ':';
     for (const Slide& slide : slides) { std::cerr << ' ' << as_typed(slide, part); }
     std::cerr << '\n';
     return 1;

@@ -47,8 +47,6 @@ std::vector<Slide> appendix_slides();  ///< const Objects, in the appendix
 
 namespace destructors {
 std::vector<Slide> slides();  ///< Destructors: destructors.cpp
-/// Many Sensors, in the appendix, and the rule of zero of the reading page
-std::vector<Slide> appendix_slides();
 }  // namespace destructors
 
 namespace static_members {

@@ -3,15 +3,15 @@
  * @brief The list of slides a program can run, and the function that runs it.
  * @author Zeid Kootbally
  *
- * @details week8_playground and week8_appendix use it: each builds a list of
- * Slide entries, one per frame that has code, and hands it to run_slides().
+ * @details week8_playground, week8_appendix and week8_rule_of_five use it:
+ * each builds a list of Slide entries, one per frame (or part) that has code,
+ * and hands it to run_slides().
  * Slide is a struct (Lecture 6), and @c run is a pointer to a function
  * (Lecture 6, appendix).
  *
- * A few entries are not frames of the deck: they hold the code of a reading
- * page on Read the Docs, such as Rule of Five and Rule of Zero. Each of those
- * has a name, its @c key, instead of a number: @c 702run @c week8_appendix
- * @c five.
+ * week8_rule_of_five lists the parts of a reading page on Read the Docs, Rule
+ * of Five and Rule of Zero, not frames of the deck. Each part has a name, its
+ * @c key, instead of a number: @c 702run @c week8_rule_of_five @c five.
  */
 #pragma once
 
@@ -31,10 +31,11 @@ struct Slide {
   std::string_view key{};
 };
 
-/// Which part of the deck a list of slides comes from.
+/// Which part of the deck a list of slides comes from, or a reading page.
 enum class Part {
   lecture,   ///< numbered 1, 2, 3, ...: "[Slide 12]"
   appendix,  ///< numbered i, ii, iii, ...: "[Appendix iv]"
+  reading,   ///< the parts of a reading page, each named by its key: "[Reading: five]"
 };
 
 /**
