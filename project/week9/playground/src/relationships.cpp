@@ -29,9 +29,11 @@
 
 namespace relationships {
 
+using fleet::Position;
+using fleet::Route;
 using l8::Vehicle;
 
-// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 23] runs it,
+// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 37] runs it,
 // and Live Coding: Step 1 writes it in ../../live.
 class Passenger {
  public:
@@ -48,7 +50,7 @@ class Passenger {
   std::weak_ptr<Vehicle> ride_;  // does not own the Vehicle
 };
 
-// [Slide 23] Two Separate Lifetimes
+// [Slide 37] Two Separate Lifetimes
 // watcher is a second std::weak_ptr, only for the check: expired() is true
 // once the Vehicle is destroyed, while maya's std::weak_ptr still refers to it.
 namespace association {
@@ -66,7 +68,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 27] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 41] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -89,7 +91,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 27] The Vehicles Outlive the Fleet
+// [Slide 41] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -107,7 +109,7 @@ void run() {
 }
 }  // namespace aggregation
 
-// [Slide 31] Each Route Has Its Own Positions
+// [Slide 45] Each Route Has Its Own Positions
 // A Route holds its Position objects by value (composition, as Vehicle holds
 // its Sensors through std::unique_ptr in L8).
 namespace composition {
@@ -121,7 +123,7 @@ void run() {
 }
 }  // namespace composition
 
-// [Slide 35] A Route for One Call
+// [Slide 49] A Route for One Call
 namespace dependency {
 void run() {
   Vehicle car_a{13.4};
@@ -141,10 +143,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {23, "Two Separate Lifetimes", association::run},
-      {27, "The Vehicles Outlive the Fleet", aggregation::run},
-      {31, "Each Route Has Its Own Positions", composition::run},
-      {35, "A Route for One Call", dependency::run},
+      {37, "Two Separate Lifetimes", association::run},
+      {41, "The Vehicles Outlive the Fleet", aggregation::run},
+      {45, "Each Route Has Its Own Positions", composition::run},
+      {49, "A Route for One Call", dependency::run},
   };
 }
 

@@ -5,7 +5,7 @@
  *
  * @details The same members and the same code as L8's Vehicle, written inside
  * the class. The slides of Class Relationships use it: a concrete class whose
- * drive() prints the trip. [Slide 30] shows its sensors_, and [Slide 33] its
+ * drive() prints the trip. [Slide 44] shows its sensors_, and [Slide 47] its
  * drive(). Section 4 makes drive() pure virtual; that version is
  * ../../common/include/vehicle.hpp.
  */
@@ -50,17 +50,17 @@ class Vehicle {
     }
     mileage_ += meters;
   }
-  int add_sensor(SensorType type, double range) {
+  int add_sensor(fleet::SensorType type, double range) {
     const int id{static_cast<int>(sensors_.size()) + 1};
-    sensors_.push_back(std::make_unique<Sensor>(id, type, range));
+    sensors_.push_back(std::make_unique<fleet::Sensor>(id, type, range));
     return id;
   }
   [[nodiscard]] std::size_t sensor_count() const noexcept { return sensors_.size(); }
-  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept {
+  [[nodiscard]] const std::vector<std::unique_ptr<fleet::Sensor>>& get_sensors() const noexcept {
     return sensors_;
   }
   /// Prints the trip: the route's length, and the time it takes at the speed.
-  void drive(const Route& route) const {
+  void drive(const fleet::Route& route) const {
     std::cout << route.length() << " m";
     if (speed_ > 0.0) {
       std::cout << " at " << speed_ << " m/s: " << route.length() / speed_ << " s\n";
@@ -77,7 +77,7 @@ class Vehicle {
   double speed_{0.0};
   std::string color_;
   double mileage_{0.0};
-  std::vector<std::unique_ptr<Sensor>> sensors_;
+  std::vector<std::unique_ptr<fleet::Sensor>> sensors_;
 };
 
 }  // namespace l8

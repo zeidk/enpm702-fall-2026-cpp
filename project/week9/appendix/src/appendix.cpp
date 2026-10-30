@@ -33,6 +33,13 @@
 
 namespace {
 
+using fleet::Position;
+using fleet::RoboTaxi;
+using fleet::Route;
+using fleet::SensorType;
+using fleet::Taxi;
+using fleet::Vehicle;
+
 Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   Route trip;
   trip.add(Position{0.0, 0.0});
@@ -42,9 +49,9 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
-// [Slide 23] runs it.
+// [Slide 37] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 57], drive()
+// The classes of [Appendix iv]: as on [Slide 71], drive()
 // is virtual, and RoboTaxi and Taxi override it.
 namespace runtime {
 class Vehicle {
@@ -95,7 +102,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 70], fixed.
+// virtual. The run is the code of [Slide 84], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:

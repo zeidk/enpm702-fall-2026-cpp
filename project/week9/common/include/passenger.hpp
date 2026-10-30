@@ -18,6 +18,8 @@
 
 #include "vehicle.hpp"
 
+namespace fleet {
+
 /// A person who rides at most one vehicle at a time.
 class Passenger {
  public:
@@ -41,3 +43,5 @@ class Passenger {
   std::string name_;            ///< not empty
   std::weak_ptr<Vehicle> ride_;  ///< association: does not own
 };
+
+}  // namespace fleet

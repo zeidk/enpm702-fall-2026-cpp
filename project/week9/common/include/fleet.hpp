@@ -19,6 +19,8 @@
 
 #include "vehicle.hpp"
 
+namespace fleet {
+
 /// The vehicles of a fleet, shared with the rest of the program.
 class Fleet {
  public:
@@ -41,3 +43,5 @@ class Fleet {
  private:
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  ///< aggregation: shared
 };
+
+}  // namespace fleet

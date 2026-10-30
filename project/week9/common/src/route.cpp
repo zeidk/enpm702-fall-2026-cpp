@@ -8,6 +8,8 @@
 #include <cmath>
 #include <cstddef>
 
+namespace fleet {
+
 void Route::add(Position waypoint) { waypoints_.push_back(waypoint); }
 
 double Route::length() const {
@@ -18,3 +20,5 @@ double Route::length() const {
   }
   return total;
 }
+
+}  // namespace fleet

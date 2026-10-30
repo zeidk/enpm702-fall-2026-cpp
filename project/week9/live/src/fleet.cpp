@@ -15,6 +15,8 @@
 #include <stdexcept>
 #include <utility>    // Step 2: std::move
 
+namespace fleet {
+
 // L8.
 void Vehicle::set_speed(double speed) {
   if (speed < 0.0 || speed > max_speed_) {
@@ -66,3 +68,5 @@ int Vehicle::next_id() noexcept { return next_id_; }
 // Step 4: RoboTaxi::drive() prints "RoboTaxi: drives itself ", the route's
 //         length and " m". Taxi::drive() prints "Taxi: ", the driver's name,
 //         " drives ", the route's length and " m".
+
+}  // namespace fleet

@@ -12,6 +12,8 @@
 
 #include "position.hpp"
 
+namespace fleet {
+
 /// The waypoints of one trip, in order.
 class Route {
  public:
@@ -24,3 +26,5 @@ class Route {
  private:
   std::vector<Position> waypoints_;
 };
+
+}  // namespace fleet

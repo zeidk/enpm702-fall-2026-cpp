@@ -9,6 +9,8 @@
 #include <stdexcept>
 #include <utility>
 
+namespace fleet {
+
 void Fleet::add(std::shared_ptr<Vehicle> vehicle) {
   if (!vehicle) {
     throw std::invalid_argument{"a fleet cannot hold a null vehicle"};
@@ -25,3 +27,5 @@ bool Fleet::remove(int id) {
 }
 
 std::size_t Fleet::size() const noexcept { return vehicles_.size(); }
+
+}  // namespace fleet

@@ -6,6 +6,10 @@
  */
 #include "passenger.hpp"
 
+namespace fleet {
+
 void Passenger::board(const std::shared_ptr<Vehicle>& vehicle) { ride_ = vehicle; }
 
 void Passenger::leave() noexcept { ride_.reset(); }
+
+}  // namespace fleet

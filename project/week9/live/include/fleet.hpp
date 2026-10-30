@@ -15,8 +15,10 @@
  *   Step 2) and drives them all in one loop (Step 4).
  * - RoboTaxi and Taxi are two kinds of Vehicle (inheritance, Step 3).
  *
- * In every class, the constructors are defined in the class, here. Every other
- * method is declared in the class and defined in fleet.cpp.
+ * Every class is in the namespace fleet, with Route, Position and Sensor
+ * (L9, Namespaces). In every class, the constructors are defined in the class,
+ * here. Every other method is declared in the class and defined in fleet.cpp,
+ * inside the same namespace.
  *
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
  * (30 * 0.44704 = 13.41), a value chosen for the examples.
@@ -32,6 +34,8 @@
 
 #include "route.hpp"   // Step 4: drive() takes a Route, in ../../common/include
 #include "sensor.hpp"  // L8: Sensor and SensorType, in ../../common/include
+
+namespace fleet {
 
 /// A vehicle of the robotaxi fleet: its speed stays from 0 to its maximum speed.
 class Vehicle {
@@ -100,3 +104,5 @@ class Vehicle {
 //         class, that takes the maximum speed and the driver's name.
 // Step 4: in both classes, the declaration drive(const Route&) const override.
 // Step 7: both classes become final.
+
+}  // namespace fleet

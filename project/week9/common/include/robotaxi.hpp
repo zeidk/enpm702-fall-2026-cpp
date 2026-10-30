@@ -14,6 +14,8 @@
 #include "route.hpp"
 #include "vehicle.hpp"
 
+namespace fleet {
+
 /// A taxi that drives itself with its sensors.
 class RoboTaxi final : public Vehicle {
  public:
@@ -23,3 +25,5 @@ class RoboTaxi final : public Vehicle {
   /// Drives the route, or stays parked with no sensor.
   void drive(const Route& route) const override;
 };
+
+}  // namespace fleet

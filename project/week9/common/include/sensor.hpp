@@ -15,6 +15,8 @@
 
 #include <stdexcept>
 
+namespace fleet {
+
 /// What kind of sensor it is: a scoped enumeration (Lecture 2).
 enum class SensorType {
   lidar,   ///< light detection and ranging
@@ -53,3 +55,5 @@ class Sensor {
   SensorType type_;  ///< what kind of sensor
   double range_;     ///< m, at least 0
 };
+
+}  // namespace fleet

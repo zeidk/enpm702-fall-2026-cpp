@@ -11,6 +11,8 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace fleet {
+
 int Vehicle::get_id() const noexcept { return id_; }
 
 const std::string& Vehicle::get_color() const noexcept { return color_; }
@@ -52,3 +54,5 @@ int Vehicle::next_id() noexcept { return next_id_; }
 void Vehicle::log_event(const std::string& event) const {
   std::cout << "vehicle " << id_ << ": " << event << '\n';
 }
+
+}  // namespace fleet

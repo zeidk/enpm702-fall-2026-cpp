@@ -17,7 +17,8 @@
  * finish a step, we uncomment its block, then build and run. Each block prints
  * "[Step N]", then what that step adds. The classes are in
  * ../include/fleet.hpp and fleet.cpp. Route, Position and Sensor are the
- * course's own, in ../../common/include.
+ * course's own, in ../../common/include. Every class is in the namespace
+ * fleet, so main() writes fleet:: before each name.
  */
 #include <iostream>
 #include <memory>
@@ -27,24 +28,24 @@
 #include "route.hpp"
 
 // Step 7: a class that derives from RoboTaxi, here, above main():
-//         class SuperRoboTaxi : public RoboTaxi {};
+//         class SuperRoboTaxi : public fleet::RoboTaxi {};
 //         Build, read the error, then delete it.
 
 int main() {
   // The 500 m trip of the slides: (0, 0) to (300, 400), the long side of a
   // 300, 400, 500 right triangle. Steps 4 and 5 drive it.
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
+  fleet::Route trip;
+  trip.add(fleet::Position{0.0, 0.0});
+  trip.add(fleet::Position{300.0, 400.0});
 
   // Step 1: a Passenger does not keep its Vehicle alive.
   // {
   //   std::cout << "[Step 1]\n";
-  //   auto car_a{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
-  //   Passenger maya{"Maya"};
+  //   auto car_a{std::make_shared<fleet::Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   fleet::Passenger maya{"Maya"};
   //   maya.board(car_a);
   //   std::cout << car_a.use_count() << '\n';
-  //   std::weak_ptr<Vehicle> watcher{car_a};
+  //   std::weak_ptr<fleet::Vehicle> watcher{car_a};
   //   car_a.reset();  // the only owner lets go
   //   std::cout << std::boolalpha << watcher.expired() << '\n';
   //   maya.leave();
@@ -53,9 +54,9 @@ int main() {
   // Step 2: a Fleet shares its vehicles.
   // {
   //   std::cout << "[Step 2]\n";
-  //   auto car_a{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
-  //   auto car_b{std::make_shared<Vehicle>(13.4)};  // Step 6: RoboTaxi
-  //   Fleet fleet;
+  //   auto car_a{std::make_shared<fleet::Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   auto car_b{std::make_shared<fleet::Vehicle>(13.4)};  // Step 6: RoboTaxi
+  //   fleet::Fleet fleet;
   //   fleet.add(car_a);
   //   fleet.add(car_b);
   //   fleet.add(car_a);  // already in the fleet: not added again
@@ -67,23 +68,23 @@ int main() {
   // Step 3: RoboTaxi and Taxi use Vehicle's methods, and a Fleet holds both.
   // {
   //   std::cout << "[Step 3]\n";
-  //   RoboTaxi robotaxi{13.4};
-  //   robotaxi.add_sensor(SensorType::lidar, 100.0);
-  //   Taxi taxi{13.4, "Ana"};
+  //   fleet::RoboTaxi robotaxi{13.4};
+  //   robotaxi.add_sensor(fleet::SensorType::lidar, 100.0);
+  //   fleet::Taxi taxi{13.4, "Ana"};
   //   taxi.set_speed(10.0);
   //   std::cout << robotaxi.sensor_count() << ' ' << taxi.get_speed() << '\n';
-  //   Fleet fleet;
-  //   fleet.add(std::make_shared<RoboTaxi>(13.4));
-  //   fleet.add(std::make_shared<Taxi>(13.4, "Ana"));
+  //   fleet::Fleet fleet;
+  //   fleet.add(std::make_shared<fleet::RoboTaxi>(13.4));
+  //   fleet.add(std::make_shared<fleet::Taxi>(13.4, "Ana"));
   //   std::cout << fleet.size() << '\n';
   // }
 
   // Step 4: one loop drives both kinds, each with its own drive().
   // {
   //   std::cout << "[Step 4]\n";
-  //   Fleet fleet;
-  //   fleet.add(std::make_shared<RoboTaxi>(13.4));
-  //   fleet.add(std::make_shared<Taxi>(13.4, "Ana"));
+  //   fleet::Fleet fleet;
+  //   fleet.add(std::make_shared<fleet::RoboTaxi>(13.4));
+  //   fleet.add(std::make_shared<fleet::Taxi>(13.4, "Ana"));
   //   fleet.drive_all(trip);
   // }
 
@@ -92,14 +93,14 @@ int main() {
   //         block before Vehicle has a virtual destructor, and run.
   // {
   //   std::cout << "[Step 5]\n";
-  //   std::unique_ptr<Vehicle> vehicle{std::make_unique<Taxi>(13.4, "Ana Maria Rodrigues")};
+  //   std::unique_ptr<fleet::Vehicle> vehicle{std::make_unique<fleet::Taxi>(13.4, "Ana Maria Rodrigues")};
   //   vehicle->drive(trip);
   // }
 
   // Step 6: no Vehicle object. Uncomment the line, build, read the error, then
   //         comment it out again. In the Step 1 and Step 2 blocks, change
   //         std::make_shared<Vehicle> to std::make_shared<RoboTaxi>.
-  // Vehicle vehicle{13.4};
+  // fleet::Vehicle vehicle{13.4};
 
   // Step 7: no new block. Write the class SuperRoboTaxi above main().
 }

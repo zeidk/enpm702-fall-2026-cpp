@@ -17,6 +17,8 @@
 #include "route.hpp"
 #include "vehicle.hpp"
 
+namespace fleet {
+
 /// A taxi driven by a person.
 class Taxi final : public Vehicle {
  public:
@@ -34,3 +36,5 @@ class Taxi final : public Vehicle {
  private:
   std::string driver_name_;  ///< empty: no driver
 };
+
+}  // namespace fleet

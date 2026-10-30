@@ -4,12 +4,14 @@
  *        robotaxi.hpp.
  * @author Zeid Kootbally
  *
- * @details RoboTaxi::drive() is the code of [Slide 79], Concrete Classes. It
+ * @details RoboTaxi::drive() is the code of [Slide 93], Concrete Classes. It
  * calls Vehicle's public sensor_count(): sensors_ is Vehicle's private member.
  */
 #include "robotaxi.hpp"
 
 #include <iostream>
+
+namespace fleet {
 
 void RoboTaxi::drive(const Route& route) const {
   if (sensor_count() == 0) {  // FR-4: no sensor, no driving
@@ -20,3 +22,5 @@ void RoboTaxi::drive(const Route& route) const {
             << (sensor_count() == 1 ? " sensor" : " sensors") << " checked, drives "
             << route.length() << " m\n";
 }
+
+}  // namespace fleet

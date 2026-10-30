@@ -27,6 +27,15 @@
 
 namespace abstraction {
 
+using fleet::Fleet;
+using fleet::Passenger;
+using fleet::Position;
+using fleet::RoboTaxi;
+using fleet::Route;
+using fleet::SensorType;
+using fleet::Taxi;
+using fleet::Vehicle;
+
 Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   Route trip;
   trip.add(Position{0.0, 0.0});
@@ -34,13 +43,13 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return trip;
 }
 
-// [Slide 80] Forgetting One Override. Taxi without drive():
+// [Slide 94] Forgetting One Override. Taxi without drive():
 //   Taxi taxi{13.4, "Ana"};
 // error: cannot declare variable 'taxi' to be of abstract type 'Taxi'
 // note:   because the following virtual functions are pure within 'Taxi':
 // note:     'virtual void Vehicle::drive(const Route&) const'
 
-// [Slide 81] The Whole Program
+// [Slide 95] The Whole Program
 namespace whole_program {
 void run() {
   const Route trip{make_trip()};
@@ -62,7 +71,7 @@ void run() {
 }
 }  // namespace whole_program
 
-// [Slide 87] A final Method. Does not compile:
+// [Slide 101] A final Method. Does not compile:
 //   class Taxi : public Vehicle {  // Taxi not final, drive() final
 //    public:
 //     void drive(const Route& route) const final;
@@ -76,7 +85,7 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {81, "The Whole Program", whole_program::run},
+      {95, "The Whole Program", whole_program::run},
   };
 }
 

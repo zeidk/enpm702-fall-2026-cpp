@@ -8,8 +8,12 @@
  */
 #pragma once
 
+namespace fleet {
+
 /// A point on the map.
 struct Position {
   double x{0.0};  ///< m, east
   double y{0.0};  ///< m, north
 };
+
+}  // namespace fleet

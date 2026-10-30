@@ -39,6 +39,8 @@
 #include "route.hpp"
 #include "sensor.hpp"
 
+namespace fleet {
+
 /// What every vehicle of the fleet holds and does.
 class Vehicle {
  public:
@@ -66,7 +68,7 @@ class Vehicle {
   /// Virtual: deleting through a Vehicle pointer runs the derived destructor.
   virtual ~Vehicle() = default;
 
-  /// Drives the route. Each derived class says how: pure virtual ([Slide 76]).
+  /// Drives the route. Each derived class says how: pure virtual ([Slide 90]).
   virtual void drive(const Route& route) const = 0;
 
   /// Its id, from the counter of the class.
@@ -128,3 +130,5 @@ class Vehicle {
   double mileage_{0.0};           ///< m driven, never goes down
   std::vector<std::unique_ptr<Sensor>> sensors_;  ///< composition: the only owner of each
 };
+
+}  // namespace fleet
