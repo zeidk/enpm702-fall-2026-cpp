@@ -20,8 +20,8 @@
 #   undefined/    the slides that have undefined behavior, built with sanitizers
 #   live/         L8's Vehicle and the classes of L9, written on the "Live
 #                 Coding" slides (week9_live): Step 1 with the instructor,
-#                 Steps 2 to 7 on your own. One header, one source file and
-#                 main.cpp
+#                 Steps 2 to 7 on your own. One header and one source file
+#                 per class, and main.cpp
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -84,7 +84,11 @@ target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 # destructor.
 # -----------------------------------------------------------------------------
 add_executable(week9_live live/src/main.cpp
+    live/src/vehicle.cpp
+    live/src/passenger.cpp
     live/src/fleet.cpp
+    live/src/robotaxi.cpp
+    live/src/taxi.cpp
     common/src/route.cpp
     common/src/sensor.cpp)
 target_include_directories(week9_live PRIVATE live/include common/include)

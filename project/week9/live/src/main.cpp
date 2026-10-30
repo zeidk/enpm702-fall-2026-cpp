@@ -15,8 +15,7 @@
  * write Step 1 together; you write Steps 2 to 7 on your own.
  * main() has one commented block for each step that prints something: when we
  * finish a step, we uncomment its block, then build and run. Each block prints
- * "[Step N]", then what that step adds. The classes are in
- * ../include/fleet.hpp and fleet.cpp. Route, Position and Sensor are the
+ * "[Step N]", then what that step adds. Each class has its own header in ../include and its own source file here. Route, Position and Sensor are the
  * course's own, in ../../common/include. Every class is in the namespace
  * fleet, so main() writes fleet:: before each name.
  */
@@ -24,8 +23,11 @@
 #include <memory>
 
 #include "fleet.hpp"
+#include "passenger.hpp"
 #include "position.hpp"
+#include "robotaxi.hpp"
 #include "route.hpp"
+#include "taxi.hpp"
 
 // Step 7: a class that derives from RoboTaxi, here, above main():
 //         class SuperRoboTaxi : public fleet::RoboTaxi {};

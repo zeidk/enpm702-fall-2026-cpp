@@ -116,7 +116,7 @@ void run() {
 }
 }  // namespace which
 
-// [Slide 75] Discussion: Who Needs a virtual Destructor?
+// [Slide 74] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -129,7 +129,7 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Slide 84] Discussion: Add a RoboBus. One answer: a new
+// [Slide 83] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus final : public Vehicle {
@@ -160,8 +160,8 @@ std::vector<Slide> slides() {
   return {
       {51, "Discussion: What Prints First?", order::run},
       {64, "Discussion: Which drive() Runs?", which::run},
-      {75, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-      {84, "Discussion: Add a RoboBus", robobus::run},
+      {74, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+      {83, "Discussion: Add a RoboBus", robobus::run},
   };
 }
 
