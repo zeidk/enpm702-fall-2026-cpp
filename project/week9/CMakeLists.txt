@@ -6,7 +6,7 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_playground       run the code of every slide
-#   702run week9_playground 57    run only the code of [Slide 57]
+#   702run week9_playground 56    run only the code of [Slide 56]
 #   702run week9_appendix         run the code of every appendix frame
 #   702run week9_appendix x       run only the code of [Appendix x]
 #   702run week9_live             run the classes of the Live Coding steps

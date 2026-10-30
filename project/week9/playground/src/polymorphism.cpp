@@ -42,7 +42,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // Compile-time polymorphism: no virtual.
 // ---------------------------------------------------------------------------
 namespace compile_time {
-// [Slide 55] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
+// [Slide 54] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
@@ -55,7 +55,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 56] Redefinition
+// [Slide 55] Redefinition
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
@@ -85,7 +85,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 57] Through a Base Reference
+// [Slide 56] Through a Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -97,8 +97,8 @@ void run() {
 }
 }  // namespace base_reference
 
-// [Slide 58] One Overload per Class. In their own namespace, so the calls
-// of [Slide 57] above still find only start_shift(const Vehicle&, const Route&).
+// [Slide 57] One Overload per Class. In their own namespace, so the calls
+// of [Slide 56] above still find only start_shift(const Vehicle&, const Route&).
 namespace overloads {
 void start_shift(const RoboTaxi& robotaxi, const Route& route) { robotaxi.drive(route); }
 void start_shift(const Taxi& taxi, const Route& route) { taxi.drive(route); }
@@ -116,11 +116,11 @@ void run() {
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 59] virtual Method
+// [Slide 58] virtual Method
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 71]
+  virtual ~Vehicle() = default;  // why: [Slide 70]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -130,7 +130,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 65] override: RoboTaxi::drive is marked override.
+// [Slide 64] override: RoboTaxi::drive is marked override.
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
@@ -151,7 +151,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 62] The Cost of virtual: one hidden pointer per object.
+// [Slide 61] The Cost of virtual: one hidden pointer per object.
 // compile_time::Vehicle has the same data members and no virtual method.
 // The table is in the object file, in build/project/week9/CMakeFiles/
 // week9_playground.dir/playground/src/: nm -C polymorphism.cpp.o lists
@@ -167,7 +167,7 @@ void run() {
 }
 }  // namespace vptr
 
-// [Slide 63] Slicing
+// [Slide 62] Slicing
 namespace slicing {
 void run() {
   Taxi taxi{13.4, "Ana"};
@@ -180,7 +180,7 @@ void run() {
 }
 }  // namespace slicing
 
-// [Slide 69] Two Pointers, Two Static Types. Its first two lines are on [Slide 68].
+// [Slide 68] Two Pointers, Two Static Types. Its first two lines are on [Slide 67].
 namespace auto_calls {
 void run() {
   auto robotaxi{std::make_unique<RoboTaxi>(13.4)};
@@ -198,7 +198,7 @@ void run() {
 }
 }  // namespace auto_calls
 
-// [Slide 70] From auto into a Vector of Vehicles. This start_shift takes the
+// [Slide 69] From auto into a Vector of Vehicles. This start_shift takes the
 // ownership of the vehicle, and the route.
 namespace auto_fleet {
 void start_shift(std::unique_ptr<Vehicle> vehicle, const Route& route) {
@@ -220,7 +220,7 @@ void run() {
 }  // namespace runtime
 
 // ---------------------------------------------------------------------------
-// [Slide 66] A Typo That Compiles: no override.
+// [Slide 65] A Typo That Compiles: no override.
 // ---------------------------------------------------------------------------
 namespace typo {
 class Vehicle {
@@ -246,19 +246,19 @@ void run() {
 }
 // With "void drive(const Route& route)" (no const) instead of "drvie", it
 // compiles too, and -Wall warns: see the slide.
-// [Slide 67] override Catches Both. With override, both stop the build.
+// [Slide 66] override Catches Both. With override, both stop the build.
 }  // namespace typo
 
 std::vector<Slide> slides() {
   return {
-      {56, "Redefinition", compile_time::redefinition::run},
-      {57, "Through a Base Reference", compile_time::base_reference::run},
-      {58, "One Overload per Class", compile_time::overloads::run},
-      {62, "The Cost of virtual", runtime::vptr::run},
-      {63, "Slicing", runtime::slicing::run},
-      {66, "A Typo That Compiles", typo::run},
-      {69, "Two Pointers, Two Static Types", runtime::auto_calls::run},
-      {70, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
+      {55, "Redefinition", compile_time::redefinition::run},
+      {56, "Through a Base Reference", compile_time::base_reference::run},
+      {57, "One Overload per Class", compile_time::overloads::run},
+      {61, "The Cost of virtual", runtime::vptr::run},
+      {62, "Slicing", runtime::slicing::run},
+      {65, "A Typo That Compiles", typo::run},
+      {68, "Two Pointers, Two Static Types", runtime::auto_calls::run},
+      {69, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
   };
 }
 
