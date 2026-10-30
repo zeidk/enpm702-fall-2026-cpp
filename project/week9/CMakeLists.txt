@@ -14,7 +14,7 @@
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week9_playground)
 #   appendix/     the code of the appendix frames (week9_appendix)
-#   common/       run_slides() and the classes of the robotaxi design: Vehicle
+#   common/       run_slides() and the classes of the class diagram: Vehicle
 #                 (abstract), RoboTaxi, Taxi, Fleet, Passenger, and L8's Sensor,
 #                 SensorType, Position and Route
 #   undefined/    the slides that have undefined behavior, built with sanitizers

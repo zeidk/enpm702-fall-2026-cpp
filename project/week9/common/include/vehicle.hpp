@@ -68,7 +68,7 @@ class Vehicle {
   /// Virtual: deleting through a Vehicle pointer runs the derived destructor.
   virtual ~Vehicle() = default;
 
-  /// Drives the route. Each derived class says how: pure virtual ([Slide 77]).
+  /// Drives the route. Each derived class says how: pure virtual ([Slide 81]).
   virtual void drive(const Route& route) const = 0;
 
   /// Its id, from the counter of the class.
