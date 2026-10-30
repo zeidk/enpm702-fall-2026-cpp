@@ -5,7 +5,7 @@
  *
  * @details The same members and the same code as L8's Vehicle, written inside
  * the class. The slides of Class Relationships use it: a concrete class whose
- * drive() prints the trip. [Slide 44] shows its sensors_, and [Slide 47] its
+ * drive() prints the trip. [Slide 41] shows its sensors_, and [Slide 44] its
  * drive(). Section 4 makes drive() pure virtual; that version is
  * ../../common/include/vehicle.hpp.
  */
