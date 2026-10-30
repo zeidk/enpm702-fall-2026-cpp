@@ -21,13 +21,13 @@
 namespace inheritance {
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// sizes are on [Slide 41].
+// sizes are on [Slide 42].
 class RoboTaxi : public l8::Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
 };
 
-// Taxi's constructor is also on [Slide 46], Constructors and Inheritance.
+// Taxi's constructor is also on [Slide 47], Constructors and Inheritance.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -37,7 +37,7 @@ class Taxi : public l8::Vehicle {
   std::string driver_name_;  // empty: no driver
 };
 
-// [Slide 41] Inside a Taxi Object
+// [Slide 42] Inside a Taxi Object
 // l8::Vehicle: int id_ (4 bytes, then 4 bytes of padding), two doubles (16),
 // color_, a std::string (32 with libstdc++), mileage_, a double (8), and a
 // std::vector (24 with libstdc++): 88. Taxi adds a std::string: 32 more.
@@ -52,7 +52,7 @@ void run() {
 }
 }  // namespace inside
 
-// [Slide 42] protected Members. L8's Vehicle with one protected method:
+// [Slide 43] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 namespace protected_member {
@@ -87,12 +87,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 43] private Stays private. Does not compile:
+// [Slide 44] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
 // The fix the slide gives: set_speed(get_max_speed());
 
-// [Slide 44] protected Data. If speed_ were protected, a derived class could
+// [Slide 45] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -121,12 +121,12 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 45] public Inheritance. With "class RoboTaxi : Vehicle"
+// [Slide 46] public Inheritance. With "class RoboTaxi : Vehicle"
 // (no public), the base is private, and main() cannot call get_speed():
 // error: 'double Vehicle::get_speed() const' is inaccessible within this context
 // error: 'Vehicle' is not an accessible base of 'RoboTaxi'
 
-// [Slide 47] Without the Base Class Initializer. Does not compile:
+// [Slide 48] Without the Base Class Initializer. Does not compile:
 //   explicit RoboTaxi(double max_speed) {}
 // error: no matching function for call to 'Vehicle::Vehicle()'
 // note: candidate: 'Vehicle::Vehicle(double, double)'
@@ -136,13 +136,13 @@ void run() {
 // The slide cuts the notes after these: the copy and move constructors are
 // candidates too.
 
-// [Slide 48] A Base Member in the List. Does not compile:
+// [Slide 49] A Base Member in the List. Does not compile:
 //   explicit RoboTaxi(double max_speed) : max_speed_{max_speed} {}
 // error: 'double Vehicle::max_speed_' is private within this context
 // error: class 'RoboTaxi' does not have any field named 'max_speed_'
 // error: no matching function for call to 'Vehicle::Vehicle()'
 
-// [Slide 49] Construction and Destruction Order. Both classes
+// [Slide 50] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -177,10 +177,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {41, "Inside a Taxi Object", inside::run},
-      {42, "protected Members", protected_member::run},
-      {44, "protected Data", protected_data::run},
-      {49, "Construction and Destruction Order", order::run},
+      {42, "Inside a Taxi Object", inside::run},
+      {43, "protected Members", protected_member::run},
+      {45, "protected Data", protected_data::run},
+      {50, "Construction and Destruction Order", order::run},
   };
 }
 

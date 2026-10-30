@@ -4,7 +4,7 @@
  *        robotaxi.hpp.
  * @author Zeid Kootbally
  *
- * @details RoboTaxi::drive() is the code of [Slide 80], Concrete Classes. It
+ * @details RoboTaxi::drive() is the code of [Slide 81], Concrete Classes. It
  * calls Vehicle's public sensor_count(): sensors_ is Vehicle's private member.
  */
 #include "robotaxi.hpp"
