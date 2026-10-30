@@ -9,12 +9,17 @@
 #   702run week7_appendix         run the code of every appendix frame
 #   702run week7_appendix ii      run only the code of [Appendix ii]
 #   702run week7_allocations      [Appendix xiv]: count make_shared's allocations
+#   702run week7_value_categories           run every part of the reading page
+#                                           Value Categories that is safe to run
+#   702run week7_value_categories examples  run only the part "examples" of it
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week7_playground)
 #   appendix/     the code of every appendix frame (week7_appendix)
 #   common/       run_slides(), and the Pose and Obstacle types every file shares
 #   undefined/    the slides that leak or have undefined behavior, built with sanitizers
+#   value_categories/  the program of the reading page Value Categories on
+#                 Read the Docs (week7_value_categories)
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -63,3 +68,17 @@ target_link_options(week7_appendix PRIVATE -fsanitize=address,undefined)
 # -----------------------------------------------------------------------------
 add_executable(week7_allocations appendix/src/allocations.cpp)
 target_include_directories(week7_allocations PRIVATE common/include)
+
+# -----------------------------------------------------------------------------
+# 5. The reading page Value Categories (Read the Docs): one program, one
+#    function per part of the page. Pass the part's key:
+#    702run week7_value_categories examples. It is compiled with
+#    AddressSanitizer and UndefinedBehaviorSanitizer: the part "dangling" reads
+#    freed memory and stops with a report, so a full run skips it.
+# -----------------------------------------------------------------------------
+add_executable(week7_value_categories value_categories/src/main.cpp)
+target_include_directories(week7_value_categories PRIVATE common/include
+    value_categories/include)
+target_compile_options(week7_value_categories PRIVATE -fsanitize=address,undefined
+    -fno-omit-frame-pointer)
+target_link_options(week7_value_categories PRIVATE -fsanitize=address,undefined)
