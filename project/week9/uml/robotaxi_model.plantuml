@@ -16,12 +16,15 @@ hide empty members
 left to right direction
 
 class Fleet {
+  - vehicles_ : vector<shared_ptr<Vehicle>>
   + add(shared_ptr<Vehicle>) : void
   + remove(int) : bool
   + size() : size_t
 }
 class Passenger {
   - name_ : string
+  - ride_ : weak_ptr<Vehicle>
+  + Passenger(string)
   + board(shared_ptr<Vehicle>) : void
   + leave() : void
 }
@@ -32,6 +35,7 @@ abstract class Vehicle {
   - speed_ : double
   - color_ : string
   - mileage_ : double
+  - sensors_ : vector<unique_ptr<Sensor>>
   + Vehicle(double, const string& = "white")
   + Vehicle(double, double)
   + get_id() : int
@@ -63,6 +67,7 @@ enum SensorType <<enumeration>> {
   radar
 }
 class Route {
+  - waypoints_ : vector<Position>
   + add(Position) : void
   + length() : double
 }
@@ -71,10 +76,12 @@ class Position <<struct>> {
   + y : double
 }
 class RoboTaxi <<final>> {
+  + RoboTaxi(double)
   + drive(const Route&) : void
 }
 class Taxi <<final>> {
   - driver_name_ : string
+  + Taxi(double, string)
   + drive(const Route&) : void
 }
 
