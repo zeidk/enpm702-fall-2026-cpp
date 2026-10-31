@@ -49,7 +49,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
-// [Slide 25] runs it.
+// [Slide 26] runs it.
 
 // The classes of [Appendix iv]: as on [Slide 64], drive()
 // is virtual, and RoboTaxi and Taxi override it.
