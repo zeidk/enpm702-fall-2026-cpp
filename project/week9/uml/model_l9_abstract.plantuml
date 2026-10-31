@@ -1,0 +1,90 @@
+@startuml model_l9_abstract
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 22
+skinparam ranksep 50
+skinparam ArrowThickness 1.5
+hide circle
+hide members
+skinparam minClassWidth 60
+skinparam classStereotypeFontSize 14
+left to right direction
+
+class Fleet #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - vehicles_ : vector<shared_ptr<Vehicle>>
+  + add(shared_ptr<Vehicle>) : void
+  + remove(int) : bool
+  + size() : size_t
+}
+class Passenger #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - name_ : string
+  - ride_ : weak_ptr<Vehicle>
+  + board(shared_ptr<Vehicle>) : void
+  + leave() : void
+}
+abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  - id_ : int
+  - {static} next_id_ : int
+  - max_speed_ : double
+  - speed_ : double
+  - color_ : string
+  - mileage_ : double
+  - sensors_ : vector<unique_ptr<Sensor>>
+  + Vehicle(double)
+  + get_id() : int
+  + get_color() : const string&
+  + get_max_speed() : double
+  + get_speed() : double
+  + set_speed(double) : void
+  + get_mileage() : double
+  + add_mileage(double) : void
+  + add_sensor(SensorType, double) : int
+  + sensor_count() : size_t
+  + get_sensors() : const vector<unique_ptr<Sensor>>&
+  + {abstract} drive(const Route&) : void
+}
+class Sensor #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - id_ : int
+  - type_ : SensorType
+  - range_ : double
+  + Sensor(int, SensorType, double)
+  + get_id() : int
+  + get_type() : SensorType
+  + get_range() : double
+}
+enum SensorType <<enumeration>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  lidar
+  camera
+  radar
+}
+class Route #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - waypoints_ : vector<Position>
+  + add(Position) : void
+  + length() : double
+}
+class Position <<struct>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  + x : double
+  + y : double
+}
+class RoboTaxi <<final>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  + drive(const Route&) : void
+}
+class Taxi <<final>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - driver_name_ : string
+  + drive(const Route&) : void
+}
+
+Fleet "<color:#8A8A8A>1</color>" o-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Vehicle : <color:#8A8A8A>holds</color>
+Passenger "<color:#8A8A8A>0..*</color>" -[#A0A0A0]-> "<color:#8A8A8A>0..1</color>" Vehicle : <color:#8A8A8A>rides</color>
+Vehicle "<color:#8A8A8A>1</color>" *-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Sensor : <color:#8A8A8A>owns</color>
+Vehicle .[#A0A0A0].> Route : <color:#8A8A8A>uses</color>
+Route "<color:#8A8A8A>1</color>" *-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Position : <color:#8A8A8A>has</color>
+Sensor .[#A0A0A0].> SensorType
+Vehicle <|-[#A0A0A0]- RoboTaxi
+Vehicle <|-[#A0A0A0]- Taxi
+@enduml

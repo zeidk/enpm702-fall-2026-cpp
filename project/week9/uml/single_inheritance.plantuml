@@ -1,0 +1,25 @@
+@startuml single_inheritance
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam ArrowThickness 1.5
+hide circle
+hide empty attributes
+class Animal {
+  - species_ : string
+  + make_sound(sound : string) : void
+}
+class Bird {
+  - wing_span_ : double
+  + can_fly() : bool
+}
+class Elephant {
+  + use_trunk() : void
+}
+Animal <|-- Bird
+Animal <|-- Elephant
+@enduml

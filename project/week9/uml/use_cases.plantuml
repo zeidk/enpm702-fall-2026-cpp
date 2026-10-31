@@ -1,0 +1,36 @@
+@startuml use_cases
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowThickness 1.5
+left to right direction
+
+actor Passenger
+actor Driver
+actor Operator
+actor "Sensor" as Sensor <<hardware>>
+
+rectangle "Robotaxi fleet software" {
+  usecase "Request a ride\n(FR-1)" as UC1
+  usecase "Board and leave\na vehicle (FR-12)" as UC2
+  usecase "Query a vehicle's\nstatus (FR-6)" as UC3
+  usecase "Drive a Taxi\n(FR-3)" as UC4
+  usecase "Add and remove\nvehicles (FR-10)" as UC5
+  usecase "Assign a driver\n(FR-11)" as UC6
+  usecase "Read the event log\n(FR-7)" as UC7
+  usecase "Send sensor\nreadings (FR-8)" as UC8
+}
+
+Passenger -- UC1
+Passenger -- UC2
+Passenger -- UC3
+Driver -- UC4
+UC3 -- Operator
+UC5 -- Operator
+UC6 -- Operator
+UC7 -- Operator
+UC8 -- Sensor
+@enduml

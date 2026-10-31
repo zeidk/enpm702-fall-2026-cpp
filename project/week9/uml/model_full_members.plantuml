@@ -1,0 +1,96 @@
+@startuml model_full_members
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 75
+skinparam ArrowThickness 1.5
+hide circle
+hide empty members
+
+
+left to right direction
+
+class Fleet {
+  - vehicles_ : vector<shared_ptr<Vehicle>>
+  + add(shared_ptr<Vehicle>) : void
+  + remove(int) : bool
+  + size() : size_t
+}
+class Passenger {
+  - name_ : string
+  - ride_ : weak_ptr<Vehicle>
+  + Passenger(string)
+  + board(shared_ptr<Vehicle>) : void
+  + leave() : void
+}
+abstract class Vehicle {
+  - id_ : int
+  - {static} next_id_ : int
+  - max_speed_ : double
+  - speed_ : double
+  - color_ : string
+  - mileage_ : double
+  - sensors_ : vector<unique_ptr<Sensor>>
+  + Vehicle(double, const string& = "white")
+  + Vehicle(double, double)
+  + get_id() : int
+  + get_color() : const string&
+  + get_max_speed() : double
+  + get_speed() : double
+  + set_speed(double) : void
+  + get_mileage() : double
+  + add_mileage(double) : void
+  + add_sensor(SensorType, double) : int
+  + sensor_count() : size_t
+  + get_sensors() : const vector<unique_ptr<Sensor>>&
+  + {abstract} drive(const Route&) : void
+  + {static} next_id() : int
+  # log_event(const string&) : void
+}
+class Sensor {
+  - id_ : int
+  - type_ : SensorType
+  - range_ : double
+  + Sensor(int, SensorType = lidar, double = 100.0)
+  + get_id() : int
+  + get_type() : SensorType
+  + get_range() : double
+}
+enum SensorType <<enumeration>> {
+  lidar
+  camera
+  radar
+}
+class Route {
+  - waypoints_ : vector<Position>
+  + add(Position) : void
+  + length() : double
+}
+class Position <<struct>> {
+  + x : double
+  + y : double
+}
+class RoboTaxi <<final>> {
+  + RoboTaxi(double)
+  + drive(const Route&) : void
+}
+class Taxi <<final>> {
+  - driver_name_ : string
+  + Taxi(double, string)
+  + drive(const Route&) : void
+}
+
+Fleet "1" o-- "-vehicles_  0..*" Vehicle : holds
+Passenger "0..*" --> "-ride_  0..1" Vehicle : rides
+Vehicle "1" *-- "-sensors_  0..*" Sensor : owns
+Vehicle ..> Route : uses
+Route "1" *-- "-waypoints_  0..*" Position : has
+Sensor ..> SensorType
+Vehicle <|-- RoboTaxi
+Vehicle <|-- Taxi
+@enduml

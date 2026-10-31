@@ -1,0 +1,48 @@
+@startuml decide_relationship
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 17
+skinparam shadowing false
+skinparam ArrowThickness 1.5
+start
+if (Is an A a kind of B?) then (yes)
+  :**Inheritance**
+  class A : public B
+  //RoboTaxi// is
+  a //Vehicle//;
+else (no)
+  if (Does A use B
+without keeping it?) then (yes)
+    :**Dependency**
+    a const B&
+    parameter
+    //Vehicle// uses
+    a //Route//;
+  else (no)
+    if (Can B exist
+without A?) then (no)
+      :**Composition**
+      std::unique_ptr~<B>,
+      or a B member
+      //Vehicle// owns
+      its //Sensor//s;
+    else (yes)
+      if (Must A keep
+B alive?) then (yes)
+        :**Aggregation**
+        std::shared_ptr~<B>
+        //Fleet// holds
+        //Vehicle//s;
+      else (no)
+        :**Association**
+        std::weak_ptr~<B>
+        //Passenger// rides
+        a //Vehicle//;
+      endif
+    endif
+  endif
+endif
+stop
+@enduml

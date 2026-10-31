@@ -68,7 +68,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 35] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 34] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -91,7 +91,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 35] The Vehicles Outlive the Fleet
+// [Slide 34] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -109,7 +109,7 @@ void run() {
 }
 }  // namespace aggregation
 
-// [Slide 43] Each Route Has Its Own Positions
+// [Slide 42] Each Route Has Its Own Positions
 // A Route holds its Position objects by value (composition, as Vehicle holds
 // its Sensors through std::unique_ptr). A shared ride: Ana's stop is added
 // to a copy of Maya's route.
@@ -145,8 +145,8 @@ void run() {
 std::vector<Slide> slides() {
   return {
       {26, "Two Separate Lifetimes", association::run},
-      {35, "The Vehicles Outlive the Fleet", aggregation::run},
-      {43, "Each Route Has Its Own Positions", composition::run},
+      {34, "The Vehicles Outlive the Fleet", aggregation::run},
+      {42, "Each Route Has Its Own Positions", composition::run},
       {47, "A Route for One Call", dependency::run},
   };
 }

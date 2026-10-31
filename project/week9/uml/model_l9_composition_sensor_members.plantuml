@@ -1,0 +1,53 @@
+@startuml model_l9_composition_sensor_members
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 75
+skinparam ArrowThickness 1.5
+hide circle
+hide empty members
+
+
+left to right direction
+
+abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  - id_ : int
+  - {static} next_id_ : int
+  - max_speed_ : double
+  - speed_ : double
+  - color_ : string
+  - mileage_ : double
+  - sensors_ : vector<unique_ptr<Sensor>>
+  + Vehicle(double, const string& = "white")
+  + Vehicle(double, double)
+  + get_id() : int
+  + get_color() : const string&
+  + get_max_speed() : double
+  + get_speed() : double
+  + set_speed(double) : void
+  + get_mileage() : double
+  + add_mileage(double) : void
+  + add_sensor(SensorType, double) : int
+  + sensor_count() : size_t
+  + get_sensors() : const vector<unique_ptr<Sensor>>&
+  + {abstract} drive(const Route&) : void
+  + {static} next_id() : int
+  # log_event(const string&) : void
+}
+class Sensor #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  - id_ : int
+  - type_ : SensorType
+  - range_ : double
+  + Sensor(int, SensorType = lidar, double = 100.0)
+  + get_id() : int
+  + get_type() : SensorType
+  + get_range() : double
+}
+
+Vehicle "<color:#6A1B9A>1</color>" *-[#6A1B9A,thickness=2]- "<color:#6A1B9A>-sensors_  0..*</color>" Sensor : <color:#6A1B9A>owns</color>
+@enduml

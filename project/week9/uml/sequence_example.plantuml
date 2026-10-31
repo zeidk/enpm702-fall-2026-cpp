@@ -1,0 +1,52 @@
+@startuml sequence_example
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowThickness 1.5
+skinparam sequenceMessageAlign direction
+hide footbox
+skinparam ParticipantPadding 40
+
+participant "main()" as main
+participant "maya_ride : Route" as maya_ride
+participant "robotaxi : RoboTaxi" as robotaxi
+participant ": Sensor" as sensor
+participant "taxi : Taxi" as taxi
+participant "company : Fleet" as company
+participant "maya : Passenger" as maya
+
+main -> maya_ride : add(Position{0.0, 0.0})
+main -> maya_ride : add(Position{300.0, 400.0})
+create robotaxi
+main -> robotaxi : make_shared<RoboTaxi>(13.4)
+main -> robotaxi : add_sensor(lidar, 100.0)
+activate robotaxi
+create sensor
+robotaxi -> sensor : make_unique<Sensor>(1, lidar, 100.0)
+robotaxi --> main : 1
+deactivate robotaxi
+create taxi
+main -> taxi : make_shared<Taxi>(13.4, "Ana")
+main -> company : add(robotaxi)
+main -> company : add(taxi)
+main -> company : size()
+company --> main : 2
+create maya
+main -> maya : Passenger{"Maya"}
+main -> maya : board(robotaxi)
+main -> robotaxi : drive(maya_ride)
+activate robotaxi
+robotaxi -> robotaxi : sensor_count()
+robotaxi -> maya_ride : length()
+maya_ride --> robotaxi : 500
+deactivate robotaxi
+main -> maya : leave()
+main -> taxi : drive(maya_ride)
+activate taxi
+taxi -> maya_ride : length()
+maya_ride --> taxi : 500
+deactivate taxi
+@enduml

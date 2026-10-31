@@ -1,0 +1,28 @@
+@startuml multiple_inheritance
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam ArrowThickness 1.5
+hide circle
+hide empty attributes
+class Animal {
+  - has_tail_ : bool
+  - has_wings_ : bool
+  - has_horns_ : bool
+  + can_fly() : bool
+}
+class Human {
+  - is_bipedal_ : bool
+  + speak() : void
+}
+class MythicalCreature {
+  - powers_ : vector<string>
+  + use_power(power : string) : void
+}
+Animal <|-- MythicalCreature
+Human <|-- MythicalCreature
+@enduml

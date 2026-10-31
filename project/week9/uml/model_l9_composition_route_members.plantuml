@@ -1,0 +1,29 @@
+@startuml model_l9_composition_route_members
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 75
+skinparam ArrowThickness 1.5
+hide circle
+hide empty members
+
+
+left to right direction
+
+class Route #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  - waypoints_ : vector<Position>
+  + add(Position) : void
+  + length() : double
+}
+class Position <<struct>> #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  + x : double
+  + y : double
+}
+
+Route "<color:#6A1B9A>1</color>" *-[#6A1B9A,thickness=2]---- "<color:#6A1B9A>-waypoints_  0..*</color>" Position : <color:#6A1B9A>has</color>
+@enduml

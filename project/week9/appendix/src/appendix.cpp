@@ -178,9 +178,10 @@ void run() {
 namespace multiple {
 class Animal {
  public:
+  explicit Animal(bool has_wings) : has_wings_{has_wings} {}
   [[nodiscard]] bool can_fly() const noexcept { return has_wings_; }
 
- protected:
+ private:
   bool has_tail_{true};
   bool has_wings_{false};
   bool has_horns_{false};
@@ -190,16 +191,14 @@ class Human {
  public:
   void speak() const { std::cout << "Human: speaks\n"; }
 
- protected:
+ private:
   bool is_bipedal_{true};
 };
 
 class MythicalCreature : public Animal, public Human {
  public:
   MythicalCreature(bool has_wings, std::vector<std::string> powers)
-      : powers_{std::move(powers)} {
-    has_wings_ = has_wings;  // a protected member of Animal
-  }
+      : Animal{has_wings}, powers_{std::move(powers)} {}
   void use_power(const std::string& power) const {
     const bool has_it{std::ranges::find(powers_, power) != powers_.end()};
     std::cout << (has_it ? "uses " : "does not have ") << power << '\n';
