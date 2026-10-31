@@ -19,10 +19,12 @@
  * The frames that do not compile are kept here as comments, with the error
  * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  */
+#include <algorithm>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "position.hpp"
 #include "robotaxi.hpp"
@@ -41,17 +43,17 @@ using fleet::Taxi;
 using fleet::Vehicle;
 
 Route make_trip() {  // 500 m: (0, 0) to (300, 400)
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
-  return trip;
+  Route maya_ride;
+  maya_ride.add(Position{0.0, 0.0});
+  maya_ride.add(Position{300.0, 400.0});
+  return maya_ride;
 }
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 29] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 72], drive()
+// The classes of [Appendix iv]: as on [Slide 79], drive()
 // is virtual, and RoboTaxi and Taxi override it.
 namespace runtime {
 class Vehicle {
@@ -92,17 +94,17 @@ void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(rou
 
 namespace one_function {
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   RoboTaxi robotaxi{13.4};
   Taxi taxi{13.4, "Ana"};
-  start_shift(robotaxi, trip);  // RoboTaxi: drives itself 500 m
-  start_shift(taxi, trip);      // Taxi: Ana drives 500 m
+  start_shift(robotaxi, maya_ride);  // RoboTaxi: drives itself 500 m
+  start_shift(taxi, maya_ride);      // Taxi: Ana drives 500 m
 }
 }  // namespace one_function
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 91], fixed.
+// virtual. The run is the code of [Slide 92], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -131,9 +133,9 @@ class Taxi : public Vehicle {
 };
 
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   std::unique_ptr<Vehicle> vehicle{std::make_unique<Taxi>(13.4, "Ana Maria Rodrigues")};
-  vehicle->drive(trip);
+  vehicle->drive(maya_ride);
 }  // ~Taxi, then ~Vehicle
 }  // namespace virtual_dtor
 
@@ -146,24 +148,24 @@ void run() {
 // A reference or a pointer to Vehicle is fine:
 namespace no_vehicle {
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   RoboTaxi robotaxi{13.4};
   robotaxi.add_sensor(SensorType::lidar, 100.0);
   const Vehicle& vehicle{robotaxi};  // a reference to Vehicle is fine
-  vehicle.drive(trip);  // RoboTaxi: 1 sensor checked, drives 500 m
+  vehicle.drive(maya_ride);  // RoboTaxi: 1 sensor checked, drives 500 m
 }
 }  // namespace no_vehicle
 
 // [Appendix vii] RoboTaxi and Taxi
 namespace concrete {
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   RoboTaxi robotaxi{13.4};
-  robotaxi.drive(trip);  // RoboTaxi: no sensor, stays parked
+  robotaxi.drive(maya_ride);  // RoboTaxi: no sensor, stays parked
   robotaxi.add_sensor(SensorType::lidar, 100.0);
-  robotaxi.drive(trip);  // RoboTaxi: 1 sensor checked, drives 500 m
+  robotaxi.drive(maya_ride);  // RoboTaxi: 1 sensor checked, drives 500 m
   Taxi taxi{13.4, "Ana"};
-  taxi.drive(trip);      // Taxi: Ana drives 500 m
+  taxi.drive(maya_ride);      // Taxi: Ana drives 500 m
 }
 }  // namespace concrete
 
@@ -174,28 +176,46 @@ void run() {
 
 // [Appendix ix] Multiple Inheritance
 namespace multiple {
-class Chargeable {  // anything that can be charged
+class Animal {
  public:
-  virtual ~Chargeable() = default;
-  virtual void charge() = 0;
+  [[nodiscard]] bool can_fly() const noexcept { return has_wings_; }
+
+ protected:
+  bool has_tail_{true};
+  bool has_wings_{false};
+  bool has_horns_{false};
 };
 
-class ElectricTaxi final : public Vehicle, public Chargeable {
+class Human {
  public:
-  explicit ElectricTaxi(double max_speed) : Vehicle{max_speed} {}
-  void drive(const Route& route) const override {
-    std::cout << "ElectricTaxi: drives " << route.length() << " m\n";
+  void speak() const { std::cout << "Human: speaks\n"; }
+
+ protected:
+  bool is_bipedal_{true};
+};
+
+class MythicalCreature : public Animal, public Human {
+ public:
+  MythicalCreature(bool has_wings, std::vector<std::string> powers)
+      : powers_{std::move(powers)} {
+    has_wings_ = has_wings;  // a protected member of Animal
   }
-  void charge() override { std::cout << "ElectricTaxi: charges\n"; }
+  void use_power(const std::string& power) const {
+    const bool has_it{std::ranges::find(powers_, power) != powers_.end()};
+    std::cout << (has_it ? "uses " : "does not have ") << power << '\n';
+  }
+
+ private:
+  std::vector<std::string> powers_;
 };
 
 void run() {
-  const Route trip{make_trip()};
-  ElectricTaxi taxi{13.4};
-  Vehicle& vehicle{taxi};
-  Chargeable& chargeable{taxi};
-  vehicle.drive(trip);  // ElectricTaxi: drives 500 m
-  chargeable.charge();  // ElectricTaxi: charges
+  MythicalCreature sphinx{true, {"riddle"}};
+  const Animal& animal{sphinx};
+  const Human& human{sphinx};
+  std::cout << std::boolalpha << animal.can_fly() << '\n';  // true
+  human.speak();               // Human: speaks
+  sphinx.use_power("riddle");  // uses riddle
 }
 }  // namespace multiple
 

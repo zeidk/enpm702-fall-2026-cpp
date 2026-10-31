@@ -37,22 +37,22 @@ using fleet::Taxi;
 using fleet::Vehicle;
 
 Route make_trip() {  // 500 m: (0, 0) to (300, 400)
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
-  return trip;
+  Route maya_ride;
+  maya_ride.add(Position{0.0, 0.0});
+  maya_ride.add(Position{300.0, 400.0});
+  return maya_ride;
 }
 
-// [Slide 100] Forgetting One Override. Taxi without drive():
+// [Slide 101] Forgetting One Override. Taxi without drive():
 //   Taxi taxi{13.4, "Ana"};
 // error: cannot declare variable 'taxi' to be of abstract type 'Taxi'
 // note:   because the following virtual functions are pure within 'Taxi':
 // note:     'virtual void Vehicle::drive(const Route&) const'
 
-// [Slide 101] The Whole Program
+// [Slide 102] The Whole Program
 namespace whole_program {
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   auto robotaxi{std::make_shared<RoboTaxi>(13.4)};
   robotaxi->add_sensor(SensorType::lidar, 100.0);
   robotaxi->add_sensor(SensorType::camera, 80.0);
@@ -66,12 +66,12 @@ void run() {
 
   const std::vector<std::shared_ptr<Vehicle>> today{robotaxi, taxi};
   for (const std::shared_ptr<Vehicle>& vehicle : today) {
-    vehicle->drive(trip);
+    vehicle->drive(maya_ride);
   }
 }
 }  // namespace whole_program
 
-// [Slide 107] A final Method. Does not compile:
+// [Slide 108] A final Method. Does not compile:
 //   class Taxi : public Vehicle {  // Taxi not final, drive() final
 //    public:
 //     void drive(const Route& route) const final;
@@ -85,7 +85,7 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {101, "The Whole Program", whole_program::run},
+      {102, "The Whole Program", whole_program::run},
   };
 }
 

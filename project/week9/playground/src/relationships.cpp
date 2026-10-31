@@ -109,30 +109,31 @@ void run() {
 }
 }  // namespace aggregation
 
-// [Slide 42] Each Route Has Its Own Positions
+// [Slide 43] Each Route Has Its Own Positions
 // A Route holds its Position objects by value (composition, as Vehicle holds
-// its Sensors through std::unique_ptr in L8).
+// its Sensors through std::unique_ptr). A shared ride: Ana's stop is added
+// to a copy of Maya's route.
 namespace composition {
 void run() {
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
-  Route longer{trip};               // copies the Positions too
-  longer.add(Position{300.0, 0.0});  // 400 m more
-  std::cout << trip.length() << ' ' << longer.length() << '\n';  // 500 900
+  Route maya_ride;
+  maya_ride.add(Position{0.0, 0.0});      // pickup
+  maya_ride.add(Position{300.0, 400.0});  // Maya's stop: 500 m
+  Route shared_ride{maya_ride};           // copies the Positions too
+  shared_ride.add(Position{300.0, 0.0});  // Ana's stop: 400 m more
+  std::cout << maya_ride.length() << ' ' << shared_ride.length() << '\n';  // 500 900
 }
 }  // namespace composition
 
-// [Slide 46] A Route for One Call
+// [Slide 47] A Route for One Call
 namespace dependency {
 void run() {
   Vehicle car_a{13.4};
   car_a.set_speed(10.0);
   {
-    Route trip;
-    trip.add(Position{0.0, 0.0});
-    trip.add(Position{300.0, 400.0});
-    car_a.drive(trip);  // 500 m at 10 m/s: 50 s
+    Route maya_ride;
+    maya_ride.add(Position{0.0, 0.0});
+    maya_ride.add(Position{300.0, 400.0});
+    car_a.drive(maya_ride);  // 500 m at 10 m/s: 50 s
   }  // the Route is gone; the Vehicle kept nothing of it
   Route next;
   next.add(Position{0.0, 0.0});
@@ -145,8 +146,8 @@ std::vector<Slide> slides() {
   return {
       {29, "Two Separate Lifetimes", association::run},
       {36, "The Vehicles Outlive the Fleet", aggregation::run},
-      {42, "Each Route Has Its Own Positions", composition::run},
-      {46, "A Route for One Call", dependency::run},
+      {43, "Each Route Has Its Own Positions", composition::run},
+      {47, "A Route for One Call", dependency::run},
   };
 }
 

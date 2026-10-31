@@ -36,11 +36,11 @@
 //         Build, read the error, then delete it.
 
 int main() {
-  // The 500 m trip of the slides: (0, 0) to (300, 400), the long side of a
+  // maya_ride, the 500 m route of the slides: (0, 0) to (300, 400), the long side of a
   // 300, 400, 500 right triangle. Steps 4 and 5 drive it.
-  fleet::Route trip;
-  trip.add(fleet::Position{0.0, 0.0});
-  trip.add(fleet::Position{300.0, 400.0});
+  fleet::Route maya_ride;
+  maya_ride.add(fleet::Position{0.0, 0.0});
+  maya_ride.add(fleet::Position{300.0, 400.0});
 
   // Step 1: a Passenger does not keep its Vehicle alive.
   // {

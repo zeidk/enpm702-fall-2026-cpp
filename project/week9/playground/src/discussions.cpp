@@ -33,13 +33,13 @@ using fleet::Taxi;
 using fleet::Vehicle;
 
 Route make_trip() {  // 500 m: (0, 0) to (300, 400)
-  Route trip;
-  trip.add(Position{0.0, 0.0});
-  trip.add(Position{300.0, 400.0});
-  return trip;
+  Route maya_ride;
+  maya_ride.add(Position{0.0, 0.0});
+  maya_ride.add(Position{300.0, 400.0});
+  return maya_ride;
 }
 
-// [Slide 65] Discussion: What Prints First? A Taxi whose
+// [Slide 66] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -80,7 +80,7 @@ void run() {
 // warning:   base 'discussions::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Slide 83] Discussion: Which drive() Runs?
+// [Slide 84] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -103,20 +103,20 @@ class RoboTaxi : public Vehicle {
 };
 
 void run() {
-  const Route trip{make_trip()};
+  const Route maya_ride{make_trip()};
   RoboTaxi robotaxi{13.4};
   Vehicle& ref{robotaxi};
   Vehicle* ptr{&robotaxi};
   Vehicle copy{robotaxi};
-  robotaxi.drive(trip);      // 1: RoboTaxi: drives itself 500 m
-  ref.drive(trip);           // 2: RoboTaxi: drives itself 500 m
-  ptr->drive(trip);          // 3: RoboTaxi: drives itself 500 m
-  copy.drive(trip);          // 4: Vehicle: drives 500 m
-  ref.Vehicle::drive(trip);  // 5: Vehicle: drives 500 m
+  robotaxi.drive(maya_ride);      // 1: RoboTaxi: drives itself 500 m
+  ref.drive(maya_ride);           // 2: RoboTaxi: drives itself 500 m
+  ptr->drive(maya_ride);          // 3: RoboTaxi: drives itself 500 m
+  copy.drive(maya_ride);          // 4: Vehicle: drives 500 m
+  ref.Vehicle::drive(maya_ride);  // 5: Vehicle: drives 500 m
 }
 }  // namespace which
 
-// [Slide 93] Discussion: Who Needs a virtual Destructor?
+// [Slide 94] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -129,7 +129,7 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Slide 102] Discussion: Add a RoboBus. One answer: a new
+// [Slide 103] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus final : public Vehicle {
@@ -158,10 +158,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {65, "Discussion: What Prints First?", order::run},
-      {83, "Discussion: Which drive() Runs?", which::run},
-      {93, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-      {102, "Discussion: Add a RoboBus", robobus::run},
+      {66, "Discussion: What Prints First?", order::run},
+      {84, "Discussion: Which drive() Runs?", which::run},
+      {94, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+      {103, "Discussion: Add a RoboBus", robobus::run},
   };
 }
 
