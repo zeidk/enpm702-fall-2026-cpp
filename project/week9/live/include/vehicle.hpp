@@ -1,9 +1,9 @@
 /**
  * @file vehicle.hpp
- * @brief L9, live coding: the class Vehicle, which you write in class.
+ * @brief L9, live coding: the class Vehicle, given. Read it before Step 1.
  * @author Zeid Kootbally
  *
- * @details The Vehicle you already wrote: its speed stays from 0 to its maximum
+ * @details Given, not written in class: its speed stays from 0 to its maximum
  * speed. L9 changes it: a virtual drive() (Step 4), a virtual destructor
  * (Step 5), and drive() pure virtual (Step 6), so Vehicle becomes abstract.
  * One class per file: the classes derived from Vehicle are in their own
@@ -28,7 +28,7 @@ namespace fleet {
 /// A vehicle of the robotaxi fleet: its speed stays from 0 to its maximum speed.
 class Vehicle {
  public:
-  /// L8. Throws std::invalid_argument if @p max_speed is not greater than 0.
+  /// Throws std::invalid_argument if @p max_speed is not greater than 0.
   /// The member initializer list sets id_, max_speed_ and color_, then the body
   /// checks the maximum speed.
   explicit Vehicle(double max_speed, const std::string& color = "white")
@@ -38,7 +38,7 @@ class Vehicle {
     }
   }
 
-  /// L8: the delegating constructor. Throws std::invalid_argument if either
+  /// The delegating constructor. Throws std::invalid_argument if either
   /// value breaks the invariant.
   Vehicle(double max_speed, double speed) : Vehicle{max_speed} { set_speed(speed); }
 
@@ -48,19 +48,32 @@ class Vehicle {
   //         Its body goes to vehicle.cpp.
   // Step 6: drive() becomes pure virtual (= 0).
 
-  /// L8. Throws std::invalid_argument if @p speed is not from 0 to the maximum speed.
+  /// Throws std::invalid_argument if @p speed is not from 0 to the maximum speed.
   void set_speed(double speed);
   [[nodiscard]] double get_speed() const noexcept;
   [[nodiscard]] const std::string& get_color() const noexcept;
+  /// The maximum speed, in m/s.
+  [[nodiscard]] double get_max_speed() const noexcept;
 
-  /// L8. Returns the new Sensor's id: 1, 2, ...
+  /// The distance driven so far, in m.
+  [[nodiscard]] double get_mileage() const noexcept;
+  /// Adds the distance of a trip to the mileage. Throws std::invalid_argument
+  /// if @p meters is less than 0: the mileage never goes down.
+  void add_mileage(double meters);
+
+  /// Returns the new Sensor's id: 1, 2, ...
   int add_sensor(SensorType type, double range);
   [[nodiscard]] std::size_t sensor_count() const noexcept;
   [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept;
 
-  /// L8. The id, and the id the next Vehicle gets.
+  /// The id, and the id the next Vehicle gets.
   [[nodiscard]] int get_id() const noexcept;
   [[nodiscard]] static int next_id() noexcept;
+
+ protected:
+  /// Prints one line about this vehicle: "vehicle <id>: <event>". For the
+  /// methods of Vehicle and of the classes derived from it.
+  void log_event(const std::string& event) const;
 
  private:
   inline static int next_id_{1};  // one counter for the whole class
