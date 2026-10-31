@@ -7,7 +7,7 @@
  *
  * @code
  * 702run week9_appendix        # every appendix frame
- * 702run week9_appendix x      # only [Appendix x]; 702run week9_appendix 10 works too
+ * 702run week9_appendix ix     # only [Appendix ix]; 702run week9_appendix 9 works too
  * @endcode
  *
  * Appendix iii to viii, "What the Live Coding Replaces", hold the class of Live
@@ -49,9 +49,9 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
-// [Slide 28] runs it.
+// [Slide 29] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 67], drive()
+// The classes of [Appendix iv]: as on [Slide 72], drive()
 // is virtual, and RoboTaxi and Taxi override it.
 namespace runtime {
 class Vehicle {
@@ -102,7 +102,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 80], fixed.
+// virtual. The run is the code of [Slide 91], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -172,7 +172,7 @@ void run() {
 //   class SuperRoboTaxi : public RoboTaxi {};
 // error: cannot derive from 'final' base 'RoboTaxi' in derived type 'SuperRoboTaxi'
 
-// [Appendix x] Multiple Inheritance
+// [Appendix ix] Multiple Inheritance
 namespace multiple {
 class Chargeable {  // anything that can be charged
  public:
@@ -199,7 +199,7 @@ void run() {
 }
 }  // namespace multiple
 
-// [Appendix xiii] Copying a Vehicle of the Design. Neither compiles:
+// [Appendix xi] Copying a Vehicle of the Design. Neither compiles:
 //   Taxi copy{taxi};             // the sensors cannot be copied (std::unique_ptr, L8)
 //   Taxi moved{std::move(taxi)};  // the declared destructor stops the moves
 // Each gives 4 errors, from inside std::vector. The copy is not suppressed:
@@ -218,7 +218,7 @@ int main(int argc, char* argv[]) {
           {5, "With a virtual Destructor", virtual_dtor::run},
           {6, "No Vehicle Objects", no_vehicle::run},
           {7, "RoboTaxi and Taxi", concrete::run},
-          {10, "Multiple Inheritance", multiple::run},
+          {9, "Multiple Inheritance", multiple::run},
       },
       argc, argv, Part::appendix);
 }

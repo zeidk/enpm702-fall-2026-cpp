@@ -39,7 +39,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return trip;
 }
 
-// [Slide 59] Discussion: What Prints First? A Taxi whose
+// [Slide 65] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -80,7 +80,7 @@ void run() {
 // warning:   base 'discussions::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Slide 72] Discussion: Which drive() Runs?
+// [Slide 83] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -116,7 +116,7 @@ void run() {
 }
 }  // namespace which
 
-// [Slide 82] Discussion: Who Needs a virtual Destructor?
+// [Slide 93] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -129,7 +129,7 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Slide 91] Discussion: Add a RoboBus. One answer: a new
+// [Slide 102] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus final : public Vehicle {
@@ -158,10 +158,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {59, "Discussion: What Prints First?", order::run},
-      {72, "Discussion: Which drive() Runs?", which::run},
-      {82, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-      {91, "Discussion: Add a RoboBus", robobus::run},
+      {65, "Discussion: What Prints First?", order::run},
+      {83, "Discussion: Which drive() Runs?", which::run},
+      {93, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+      {102, "Discussion: Add a RoboBus", robobus::run},
   };
 }
 

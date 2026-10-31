@@ -12,7 +12,8 @@
  * @endcode
  *
  * The seven "Live Coding" slides of L9 build on the given Vehicle in seven
- * steps. We write Step 1 together; you write Steps 2 to 7 on your own.
+ * steps. We write Step 1 together; you write Steps 2 to 5 on your own, and
+ * Steps 6 and 7 at home.
  * main() has one commented block for each step that prints something: when we
  * finish a step, we uncomment its block, then build and run. Each block prints
  * "[Step N]", then what that step adds. Each class has its own header in

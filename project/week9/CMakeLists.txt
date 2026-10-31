@@ -21,7 +21,7 @@
 #   live/         the classes of the "Live Coding" slides (week9_live):
 #                 Vehicle, Sensor, Route and Position are given; Passenger,
 #                 Fleet, RoboTaxi and Taxi are written in class, Step 1 with
-#                 the instructor, Steps 2 to 7 on your own. One header and
+#                 the instructor, Steps 2 to 5 on your own, 6 and 7 at home. One header and
 #                 one source file per class (Position: a header only), and
 #                 main.cpp
 # =============================================================================
@@ -74,8 +74,8 @@ target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # Live coding: L8's Vehicle and the classes of L9, written in class, step by
-# step (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 7 on
-# your own. One header and one source
+# step (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on
+# your own, Steps 6 and 7 at home. One header and one source
 # file in live/, and main.cpp, which has one commented block per step. Route,
 # Position and Sensor are the course's, so the target also builds
 # common/src/route.cpp and common/src/sensor.cpp and finds their headers in
