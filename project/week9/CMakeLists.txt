@@ -18,10 +18,12 @@
 #                 (abstract), RoboTaxi, Taxi, Fleet, Passenger, and L8's Sensor,
 #                 SensorType, Position and Route
 #   undefined/    the slides that have undefined behavior, built with sanitizers
-#   live/         L8's Vehicle and the classes of L9, written on the "Live
-#                 Coding" slides (week9_live): Step 1 with the instructor,
-#                 Steps 2 to 7 on your own. One header and one source file
-#                 per class, and main.cpp
+#   live/         the classes of the "Live Coding" slides (week9_live):
+#                 Vehicle, Sensor, Route and Position are given; Passenger,
+#                 Fleet, RoboTaxi and Taxi are written in class, Step 1 with
+#                 the instructor, Steps 2 to 7 on your own. One header and
+#                 one source file per class (Position: a header only), and
+#                 main.cpp
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -89,8 +91,8 @@ add_executable(week9_live live/src/main.cpp
     live/src/fleet.cpp
     live/src/robotaxi.cpp
     live/src/taxi.cpp
-    common/src/route.cpp
-    common/src/sensor.cpp)
-target_include_directories(week9_live PRIVATE live/include common/include)
+    live/src/sensor.cpp
+    live/src/route.cpp)
+target_include_directories(week9_live PRIVATE live/include)
 target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
 target_link_options(week9_live PRIVATE -fsanitize=address,undefined)

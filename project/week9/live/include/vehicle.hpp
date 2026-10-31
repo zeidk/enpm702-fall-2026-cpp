@@ -20,8 +20,8 @@
 #include <string>
 #include <vector>
 
-#include "route.hpp"   // Step 4: drive() takes a Route, in ../../common/include
-#include "sensor.hpp"  // Sensor and SensorType, in ../../common/include
+#include "route.hpp"   // Step 4: drive() takes a Route
+#include "sensor.hpp"  // Sensor and SensorType
 
 namespace fleet {
 
