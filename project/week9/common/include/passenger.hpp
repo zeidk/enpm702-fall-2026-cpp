@@ -4,7 +4,7 @@
  * @author Zeid Kootbally
  *
  * @details A Passenger rides a Vehicle and neither owns the other
- * (association). It keeps a std::weak_ptr<Vehicle> (L7): it can reach the
+ * (association). It keeps a std::weak_ptr<Vehicle>: it can reach the
  * vehicle while the vehicle exists, and it never keeps the vehicle alive.
  *
  * The invariant: the name is not empty.
