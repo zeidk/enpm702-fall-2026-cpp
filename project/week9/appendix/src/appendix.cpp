@@ -51,9 +51,9 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
-// [Slide 29] runs it.
+// [Slide 26] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 79], drive()
+// The classes of [Appendix iv]: as on [Slide 82], drive()
 // is virtual, and RoboTaxi and Taxi override it.
 namespace runtime {
 class Vehicle {
@@ -104,7 +104,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 92], fixed.
+// virtual. The run is the code of [Slide 95], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:

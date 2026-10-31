@@ -11,6 +11,7 @@
  * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  */
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -21,13 +22,13 @@
 namespace inheritance {
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// sizes are on [Slide 56].
+// sizes are on [Slide 55].
 class RoboTaxi : public l8::Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
 };
 
-// Taxi's constructor is also on [Slide 62], Constructors and Inheritance.
+// Taxi's constructor is also on [Slide 65], Constructors and Inheritance.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -37,7 +38,7 @@ class Taxi : public l8::Vehicle {
   std::string driver_name_;  // empty: no driver
 };
 
-// [Slide 56] Inside a Taxi Object
+// [Slide 55] Inside a Taxi Object
 // l8::Vehicle: int id_ (4 bytes, then 4 bytes of padding), two doubles (16),
 // color_, a std::string (32 with libstdc++), mileage_, a double (8), and a
 // std::vector (24 with libstdc++): 88. Taxi adds a std::string: 32 more.
@@ -52,7 +53,23 @@ void run() {
 }
 }  // namespace inside
 
-// [Slide 57] protected Members. L8's Vehicle with one protected method:
+// [Slide 56] A Vehicle Reference and a Vehicle Pointer to a Taxi. No cast:
+// both refer to the Vehicle part of taxi, its base subobject.
+namespace base_ref {
+void run() {
+  Taxi taxi{13.4, "Ana"};
+  l8::Vehicle& vehicle{taxi};   // no cast needed
+  l8::Vehicle* pointer{&taxi};  // no cast needed
+  vehicle.set_speed(10.0);
+  std::cout << pointer->get_speed() << '\n';  // 10: the same object
+}
+}  // namespace base_ref
+
+// [Slide 57] Not the Other Way. Does not compile:
+//   Taxi* back{pointer};
+// error: invalid conversion from 'l8::Vehicle*' to 'inheritance::Taxi*' [-fpermissive]
+
+// [Slide 59] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 namespace protected_member {
@@ -87,12 +104,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 58] private Stays private. Does not compile:
+// [Slide 59] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
 // The fix the slide gives: set_speed(get_max_speed());
 
-// [Slide 59] protected Data. If speed_ were protected, a derived class could
+// [Slide 60] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -121,12 +138,36 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 60] public Inheritance. With "class RoboTaxi : Vehicle"
+// [Slide 61] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
+// reads it with get_speed() and writes it with set_speed(), so the check runs.
+namespace through_methods {
+class RoboTaxi : public l8::Vehicle {
+ public:
+  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  void slow_down() { set_speed(get_speed() / 2.0); }  // read, then write
+  void speed_up() { set_speed(20.0); }                 // checked: throws
+};
+
+void run() {
+  RoboTaxi car_a{13.4};
+  car_a.set_speed(10.0);
+  car_a.slow_down();
+  std::cout << car_a.get_speed() << '\n';  // 5
+  try {
+    car_a.speed_up();
+  } catch (const std::invalid_argument& e) {
+    std::cout << e.what() << '\n';  // speed must be from 0 to the maximum speed
+  }
+  std::cout << car_a.get_speed() << '\n';  // 5: unchanged
+}
+}  // namespace through_methods
+
+// [Slide 62] public Inheritance. With "class RoboTaxi : Vehicle"
 // (no public), the base is private, and main() cannot call get_speed():
 // error: 'double Vehicle::get_speed() const' is inaccessible within this context
 // error: 'Vehicle' is not an accessible base of 'RoboTaxi'
 
-// [Slide 63] Without the Base Class Initializer. Does not compile:
+// [Slide 65] Without the Base Class Initializer. Does not compile:
 //   explicit RoboTaxi(double max_speed) {}
 // error: no matching function for call to 'Vehicle::Vehicle()'
 // note: candidate: 'Vehicle::Vehicle(double, double)'
@@ -136,13 +177,13 @@ void run() {
 // The slide cuts the notes after these: the copy and move constructors are
 // candidates too.
 
-// [Slide 64] A Base Member in the List. Does not compile:
+// [Slide 66] A Base Member in the List. Does not compile:
 //   explicit RoboTaxi(double max_speed) : max_speed_{max_speed} {}
 // error: 'double Vehicle::max_speed_' is private within this context
 // error: class 'RoboTaxi' does not have any field named 'max_speed_'
 // error: no matching function for call to 'Vehicle::Vehicle()'
 
-// [Slide 65] Construction and Destruction Order. Both classes
+// [Slide 67] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -177,10 +218,12 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {56, "Inside a Taxi Object", inside::run},
-      {57, "protected Members", protected_member::run},
-      {59, "protected Data", protected_data::run},
-      {65, "Construction and Destruction Order", order::run},
+      {55, "Inside a Taxi Object", inside::run},
+      {56, "A Vehicle Reference and a Vehicle Pointer to a Taxi", base_ref::run},
+      {59, "protected Members", protected_member::run},
+      {60, "protected Data", protected_data::run},
+      {61, "Through Vehicle's public Methods", through_methods::run},
+      {67, "Construction and Destruction Order", order::run},
   };
 }
 

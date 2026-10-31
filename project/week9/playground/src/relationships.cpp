@@ -33,7 +33,7 @@ using fleet::Position;
 using fleet::Route;
 using l8::Vehicle;
 
-// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 29] runs it,
+// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 26] runs it,
 // and Live Coding: Step 1 writes it in ../../live.
 class Passenger {
  public:
@@ -50,7 +50,7 @@ class Passenger {
   std::weak_ptr<Vehicle> ride_;  // does not own the Vehicle
 };
 
-// [Slide 29] Two Separate Lifetimes
+// [Slide 26] Two Separate Lifetimes
 // watcher is a second std::weak_ptr, only for the check: expired() is true
 // once the Vehicle is destroyed, while maya's std::weak_ptr still refers to it.
 namespace association {
@@ -68,7 +68,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 36] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 35] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -91,7 +91,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 36] The Vehicles Outlive the Fleet
+// [Slide 35] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -144,8 +144,8 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {29, "Two Separate Lifetimes", association::run},
-      {36, "The Vehicles Outlive the Fleet", aggregation::run},
+      {26, "Two Separate Lifetimes", association::run},
+      {35, "The Vehicles Outlive the Fleet", aggregation::run},
       {43, "Each Route Has Its Own Positions", composition::run},
       {47, "A Route for One Call", dependency::run},
   };
