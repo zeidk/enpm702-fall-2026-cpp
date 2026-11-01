@@ -130,39 +130,36 @@ target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
 # -----------------------------------------------------------------------------
 # [Slide 26] Two Headers That Include Each Other
 # [Slide 27] A Forward Declaration Breaks the Cycle
-# A class A that keeps a list of B objects and a class B that refers back to
-# its A: a two-way association. Each header needs the other class's name, and
+# A class A that refers to a B and a class B that refers back to its A: a
+# two-way association. Each header needs the other class's name, and
 # a forward declaration gives it the name only. The program prints "built".
 #
 # [Slide 26] includes each header from the other instead. These two headers,
-# "// ..." line included, are the files that gave the errors below.
-# a.hpp:
+# comment line and "// ..." line included, are the files that gave the error
+# below.
 #
+#   // a.hpp
 #   #pragma once
-#   #include <vector>
 #   #include "b.hpp"
 #   class A {
 #     // ...
 #    private:
-#     std::vector<const B*> bs_;
+#     B* b_;
 #   };
 #
-# b.hpp:
-#
+#   // b.hpp
 #   #pragma once
-#   #include <memory>
 #   #include "a.hpp"
 #   class B {
 #     // ...
 #    private:
-#     std::weak_ptr<A> a_;
+#     A* a_;
 #   };
 #
-# A main.cpp whose first line is #include "a.hpp" stops with these two
-# errors, the first of three (g++ 13.3, -std=c++20):
+# A main.cpp whose first line is #include "a.hpp" stops with this error, the
+# only one (g++ 13.3, -std=c++20 -Wall -Wextra -pedantic-errors -Wshadow):
 #
-#   b.hpp:7:17: error: 'A' was not declared in this scope
-#   b.hpp:7:18: error: template argument 1 is invalid
+#   b.hpp:7:3: error: 'A' does not name a type
 #
 # a.hpp includes b.hpp, which includes a.hpp again; #pragma once skips that
 # copy, so B is compiled before A is declared.
