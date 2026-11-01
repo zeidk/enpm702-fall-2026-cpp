@@ -13,8 +13,9 @@
 #include "parts.hpp"
 #include "position.hpp"
 
-// [Slide 68] Operators Are Overloaded Functions: the operator<< of
-// position.cpp, then the two lines of run() that make end and print it.
+// [Not on a slide since 2026-11-01] Operators Are Overloaded Functions: the
+// operator<< of position.cpp, then the two lines of run() that make end and
+// print it.
 namespace print {
 void run() {
   const fleet::Position start{0.0, 0.0};

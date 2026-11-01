@@ -73,11 +73,21 @@ class Position <<struct>> {
   + y : double
 }
 class RoboTaxi <<final>> {
+  - operating_zone_ : string
+  - automation_level_ : AutomationLevel
   + drive(const Route&) : void
 }
 class Taxi <<final>> {
   - driver_name_ : string
   + drive(const Route&) : void
+}
+enum AutomationLevel <<enumeration>> {
+  level_0
+  level_1
+  level_2
+  level_3
+  level_4
+  level_5
 }
 
 Fleet "1" o-- "0..*" Vehicle : holds
@@ -88,4 +98,5 @@ Route "1" *-- "0..*" Position : has
 Sensor --> "1" SensorType : has type
 Vehicle <|-- RoboTaxi
 Vehicle <|-- Taxi
+RoboTaxi --> "1" AutomationLevel : has level
 @enduml

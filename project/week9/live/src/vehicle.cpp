@@ -56,7 +56,12 @@ void Vehicle::log_event(const std::string& event) const {
   std::cout << "vehicle " << id_ << ": " << event << '\n';
 }
 
-// Step 4: Vehicle::drive() prints "Vehicle: drives ", the route's length and " m".
-// Step 6: Vehicle::drive() is deleted: a pure virtual method has no body.
+// Step 4: define Vehicle::drive(const Route& route) const. Its body prints one
+//         line to std::cout: "Vehicle: drives ", then route.length(), then
+//         " m" and a new line. For a 500 m route it prints
+//         "Vehicle: drives 500 m". The definition does not repeat virtual:
+//         only the declaration in vehicle.hpp has it.
+// Step 6: Vehicle::drive() is deleted. drive() is pure virtual now, and
+//         Vehicle gives it no body: RoboTaxi and Taxi each define their own.
 
 }  // namespace fleet

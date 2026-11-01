@@ -93,8 +93,10 @@ int main() {
   // }
 
   // Step 5: a Taxi deleted through a Vehicle pointer. The name has 19
-  //         characters, so std::string keeps it on the heap. Uncomment the
-  //         block before Vehicle has a virtual destructor, and run.
+  //         characters, so std::string keeps it on the heap. First add the
+  //         virtual destructor in vehicle.hpp, then uncomment the block, build
+  //         and run: the Taxi drives 500 m, and AddressSanitizer reports
+  //         nothing.
   // {
   //   std::cout << "[Step 5]\n";
   //   std::unique_ptr<fleet::Vehicle> vehicle{std::make_unique<fleet::Taxi>(13.4, "Ana Maria Rodrigues")};

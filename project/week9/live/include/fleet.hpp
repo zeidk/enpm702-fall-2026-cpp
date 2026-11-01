@@ -21,7 +21,10 @@ namespace fleet {
 // Step 2: the class Fleet. Its private data member is vehicles_, a
 //         std::vector<std::shared_ptr<Vehicle>>. Its public methods, declared
 //         here: add(std::shared_ptr<Vehicle>), bool remove(int id) and size().
-// Step 4: the declaration of Fleet's method drive_all(const Route&), which is
-//         const.
+// Step 4: in the public part of Fleet, declare the method drive_all(). It
+//         returns nothing, takes the route by const reference and does not
+//         change the Fleet (const):
+//         void drive_all(const Route& route) const;
+//         Its body goes to fleet.cpp.
 
 }  // namespace fleet

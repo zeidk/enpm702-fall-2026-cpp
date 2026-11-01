@@ -6,7 +6,7 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_playground       run the code of every slide
-#   702run week9_playground 71    run only the code of [Slide 71]
+#   702run week9_playground 70    run only the code of [Slide 70]
 #   702run week9_appendix         run the code of every appendix frame
 #   702run week9_appendix xi      run only the code of [Appendix xi]
 #   702run week9_live             run the classes of the Live Coding steps
@@ -20,8 +20,8 @@
 #   playground/   the code of every slide, one file per section (week9_playground)
 #   appendix/     the code of the appendix frames (week9_appendix)
 #   common/       run_slides() and the classes of the class diagram: Vehicle
-#                 (abstract), RoboTaxi, Taxi, Fleet, Passenger, and L8's Sensor,
-#                 SensorType, Position and Route
+#                 (abstract), RoboTaxi and its AutomationLevel, Taxi, Fleet, Passenger, and
+#                 L8's Sensor, SensorType, Position and Route
 #   undefined/    the slides that have undefined behavior, built with sanitizers
 #   operators/    the program of the reading page Operator Overloading on Read
 #                 the Docs, one file per part (week9_operators), with its own
@@ -29,10 +29,10 @@
 #   cycle/        two small classes, A and B, that refer to each other, with
 #                 forward declarations instead of a cyclic include (week9_cycle)
 #   live/         the classes of the "Live Coding" slides (week9_live):
-#                 Vehicle, Sensor, Route and Position are given; Passenger,
+#                 Vehicle, Sensor, AutomationLevel, Route and Position are given; Passenger,
 #                 Fleet, RoboTaxi and Taxi are written in class, Step 1 with
 #                 the instructor, Steps 2 to 5 on your own, 6 and 7 at home. One header and
-#                 one source file per class (Position: a header only), and
+#                 one source file per class (Position and AutomationLevel: a header only), and
 #                 main.cpp
 # =============================================================================
 
@@ -105,17 +105,15 @@ target_compile_options(week9_operators PRIVATE -fsanitize=address,undefined
 target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
-# Live coding: L8's Vehicle and the classes of L9, written in class, step by
-# step (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on
-# your own, Steps 6 and 7 at home. One header and one source
-# file in live/, and main.cpp, which has one commented block per step. Route,
-# Position and Sensor are the course's, so the target also builds
-# common/src/route.cpp and common/src/sensor.cpp and finds their headers in
-# common/include. live/include comes first, so "fleet.hpp" is the one you write,
-# not common's. Step 5 deletes a Taxi through a Vehicle pointer, so the whole
-# program is built with AddressSanitizer and UndefinedBehaviorSanitizer, as
-# undefined/ is: the run stops with a report until Vehicle has a virtual
-# destructor.
+# Live coding: Vehicle and the classes of L9, written in class, step by step
+# (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on your
+# own, Steps 6 and 7 at home. One header and one source file per class in
+# live/, and main.cpp, which has one commented block per step. Route, Position,
+# Sensor and AutomationLevel are given in live/ too, so week9_live is built
+# from live/ alone. The Step 5 block deletes a Taxi through a Vehicle pointer,
+# so the whole program is built with AddressSanitizer and
+# UndefinedBehaviorSanitizer, as undefined/ is: without the virtual destructor
+# that Step 5 adds to Vehicle, the run would stop with a report.
 # -----------------------------------------------------------------------------
 add_executable(week9_live live/src/main.cpp
     live/src/vehicle.cpp

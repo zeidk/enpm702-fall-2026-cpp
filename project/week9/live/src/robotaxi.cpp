@@ -6,13 +6,18 @@
 #include "robotaxi.hpp"
 
 #include <iostream>  // Step 4: drive() prints
+#include <utility>   // Step 3: std::move
 
 namespace fleet {
 
 // Step 3: the getters get_operating_zone() and get_automation_level() return
-//         operating_zone_ and automation_level_.
+//         operating_zone_ and automation_level_. change_zone() moves its
+//         parameter into operating_zone_ (std::move).
 
-// Step 4: RoboTaxi::drive() prints "RoboTaxi: drives itself ", the route's
-//         length and " m".
+// Step 4: define RoboTaxi::drive(const Route& route) const. Its body prints one
+//         line to std::cout: "RoboTaxi: drives itself ", then route.length(),
+//         then " m" and a new line. For the 500 m route it prints
+//         "RoboTaxi: drives itself 500 m". The definition does not repeat
+//         override: only the declaration in robotaxi.hpp has it.
 
 }  // namespace fleet

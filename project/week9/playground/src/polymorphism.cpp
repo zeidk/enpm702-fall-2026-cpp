@@ -25,12 +25,14 @@
 #include <utility>
 #include <vector>
 
+#include "automation_level.hpp"
 #include "position.hpp"
 #include "route.hpp"
 #include "sections.hpp"
 
 namespace polymorphism {
 
+using fleet::AutomationLevel;
 using fleet::Position;
 using fleet::Route;
 
@@ -62,7 +64,7 @@ class Vehicle {
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -71,8 +73,8 @@ class RoboTaxi : public Vehicle {
   }
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -96,7 +98,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 71] Through a Base Reference
+// [Slide 70] Through a Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -114,11 +116,11 @@ void run() {
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 72] virtual Methods in the Base Class
+// [Slide 71] virtual Methods in the Base Class
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 80]
+  virtual ~Vehicle() = default;  // why: [Slide 79]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -128,11 +130,11 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 77] override: RoboTaxi::drive is marked override.
+// [Slide 75] override: RoboTaxi::drive is marked override.
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -141,8 +143,8 @@ class RoboTaxi : public Vehicle {
   }
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -157,7 +159,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 74] Slicing
+// [Slide 73] Slicing
 namespace slicing {
 void run() {
   Taxi taxi{13.4, "Ana"};
@@ -173,7 +175,7 @@ void run() {
 }  // namespace runtime
 
 // ---------------------------------------------------------------------------
-// [Slide 78] A Typo That Compiles: no override.
+// [Slide 76] A Typo That Compiles: no override.
 // ---------------------------------------------------------------------------
 namespace typo {
 class Vehicle {
@@ -202,15 +204,15 @@ void run() {
 // Mistake 2 on the slide, "void drive(const Route& route);" (no const), is
 // left out here: it compiles too, but -Wall warns (-Woverloaded-virtual=), and
 // this build has no warnings.
-// [Slide 79] override Catches Both. With override, both stop the build.
+// [Slide 77] override Catches Both. With override, both stop the build.
 }  // namespace typo
 
 std::vector<Slide> slides() {
   return {
       {67, "Redefinition", compile_time::redefinition::run},
-      {71, "Through a Base Reference", compile_time::base_reference::run},
-      {74, "Slicing", runtime::slicing::run},
-      {78, "A Typo That Compiles", typo::run},
+      {70, "Through a Base Reference", compile_time::base_reference::run},
+      {73, "Slicing", runtime::slicing::run},
+      {76, "A Typo That Compiles", typo::run},
   };
 }
 

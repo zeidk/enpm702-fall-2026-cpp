@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 
+#include "automation_level.hpp"
 #include "fleet.hpp"
 #include "l8_vehicle.hpp"
 #include "position.hpp"
@@ -40,6 +41,7 @@
 
 namespace {
 
+using fleet::AutomationLevel;
 using fleet::Fleet;
 using fleet::Position;
 using fleet::RoboTaxi;
@@ -60,7 +62,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 25] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 72], drive()
+// The classes of [Appendix iv]: as on [Slide 71], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
 // ([Appendix xv] and [Appendix xvi]) and The Cost of virtual ([Appendix xix])
 // use them too.
@@ -81,7 +83,7 @@ class Vehicle {
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -90,8 +92,8 @@ class RoboTaxi : public Vehicle {
   }
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -121,7 +123,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 81], fixed.
+// virtual. The run is the code of [Slide 80], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -250,7 +252,7 @@ void run() {
 
 // [Appendix xiii] A Base Member in the List. Does not compile:
 //   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-//                     int automation_level = 4)
+//                     AutomationLevel automation_level = AutomationLevel::level_4)
 //       : max_speed_{max_speed},
 //         operating_zone_{std::move(operating_zone)},
 //         automation_level_{automation_level} {}
@@ -311,7 +313,7 @@ void run() {
 
 // [Appendix xix] The Cost of virtual: one hidden pointer per object.
 // compile_time::Vehicle is a copy of the Vehicle of [Slide 65], with no virtual
-// method; runtime::Vehicle above is a copy of the one of [Slide 72]. Both have
+// method; runtime::Vehicle above is a copy of the one of [Slide 71]. Both have
 // the same data members.
 // The frame's nm line reads week9_playground's object file, where the
 // originals are: nm -C polymorphism.cpp.o, in build/project/week9/CMakeFiles/
@@ -393,20 +395,20 @@ void run() {
 // l8::Vehicle: int id_ (4 bytes, then 4 bytes of padding), two doubles (16),
 // color_, a std::string (32 with libstdc++), mileage_, a double (8), and a
 // std::vector (24 with libstdc++): 88. RoboTaxi adds a std::string (32) and an
-// int (4, then 4 bytes of padding): 40 more, 128. Taxi adds a std::string: 32
-// more, 120.
+// AutomationLevel (4, as an int, then 4 bytes of padding): 40 more, 128. Taxi
+// adds a std::string: 32 more, 120.
 namespace inside {
 class RoboTaxi : public l8::Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 class Taxi : public l8::Vehicle {
@@ -433,7 +435,7 @@ namespace compile_time {
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -442,8 +444,8 @@ class RoboTaxi : public Vehicle {
   }
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -530,7 +532,7 @@ class Vehicle {
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -539,8 +541,8 @@ class RoboTaxi : public Vehicle {
   }
 
  private:
-  std::string operating_zone_;  // the area it may drive in
-  int automation_level_;        // SAE J3016 level of driving automation
+  std::string operating_zone_;        // the area it may drive in
+  AutomationLevel automation_level_;  // SAE J3016 level of driving automation
 };
 
 void run() {

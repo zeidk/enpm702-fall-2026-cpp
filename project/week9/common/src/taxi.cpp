@@ -7,6 +7,7 @@
 #include "taxi.hpp"
 
 #include <iostream>
+#include <utility>
 
 namespace fleet {
 
@@ -17,5 +18,7 @@ void Taxi::drive(const Route& route) const {
   }
   std::cout << "Taxi: " << driver_name_ << " drives " << route.length() << " m\n";
 }
+
+void Taxi::assign_driver(std::string driver_name) { driver_name_ = std::move(driver_name); }
 
 }  // namespace fleet

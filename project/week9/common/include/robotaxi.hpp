@@ -6,7 +6,9 @@
  * @details A RoboTaxi is a Vehicle (inheritance). Its own drive() checks the
  * sensors first: a robotaxi with no sensor does not move (the requirement FR-4
  * asks for one or more). It adds two data members: the area it may drive in,
- * and its level of driving automation (SAE J3016). The sensors are Vehicle's.
+ * and its level of driving automation (SAE J3016), an AutomationLevel. The
+ * sensors are Vehicle's.
+ * change_zone() moves it to another area; Vehicle has no such method.
  *
  * RoboTaxi is final: a derived class could override drive() and skip the
  * sensor check.
@@ -16,6 +18,7 @@
 #include <string>
 #include <utility>
 
+#include "automation_level.hpp"
 #include "route.hpp"
 #include "vehicle.hpp"
 
@@ -28,10 +31,10 @@ class RoboTaxi final : public Vehicle {
    * @brief Starts parked, with no sensor.
    * @param max_speed The maximum speed, in m/s, passed to Vehicle.
    * @param operating_zone The area it may drive in.
-   * @param automation_level Its SAE J3016 level of driving automation.
+   * @param automation_level Its SAE J3016 level of driving automation, Level 0 to 5.
    */
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
-                    int automation_level = 4)
+                    AutomationLevel automation_level = AutomationLevel::level_4)
       : Vehicle{max_speed},
         operating_zone_{std::move(operating_zone)},
         automation_level_{automation_level} {}
@@ -39,15 +42,22 @@ class RoboTaxi final : public Vehicle {
   /// Drives the route, or stays parked with no sensor.
   void drive(const Route& route) const override;
 
-  /// The area it may drive in, given to the constructor.
+  /// The area it may drive in: from the constructor, or from the last change_zone().
   [[nodiscard]] const std::string& get_operating_zone() const noexcept;
 
   /// Its SAE J3016 level of driving automation, given to the constructor.
-  [[nodiscard]] int get_automation_level() const noexcept;
+  [[nodiscard]] AutomationLevel get_automation_level() const noexcept;
+
+  /**
+   * @brief Sets a new area to drive in, in place of the old one. It meets FR-4.4,
+   *        Change the operating zone.
+   * @param operating_zone The new area it may drive in.
+   */
+  void change_zone(std::string operating_zone);
 
  private:
-  std::string operating_zone_;  ///< the area it may drive in
-  int automation_level_;        ///< SAE J3016 level of driving automation
+  std::string operating_zone_;        ///< the area it may drive in
+  AutomationLevel automation_level_;  ///< SAE J3016 level of driving automation
 };
 
 }  // namespace fleet

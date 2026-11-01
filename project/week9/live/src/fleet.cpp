@@ -18,6 +18,10 @@ namespace fleet {
 //         returns true if it removed one. Fleet::size() returns how many
 //         vehicles the fleet holds.
 
-// Step 4: Fleet::drive_all() calls drive() on every vehicle, in one loop.
+// Step 4: define Fleet::drive_all(const Route& route) const. Its body is one
+//         range-based for loop over vehicles_ that calls drive(route) on each
+//         vehicle, through its std::shared_ptr<Vehicle> (->). It names only
+//         Vehicle: each object runs the drive() of its own class, so the Step 4
+//         block prints the RoboTaxi line, then the Taxi line.
 
 }  // namespace fleet

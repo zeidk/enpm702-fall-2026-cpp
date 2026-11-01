@@ -41,15 +41,17 @@ abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
 }
 class RoboTaxi <<final>> #back:FFF3E0;line:E65100;text:000000 {
   - operating_zone_ : string
-  - automation_level_ : int
-  + RoboTaxi(double, string = "College Park", int = 4)
+  - automation_level_ : AutomationLevel
+  + RoboTaxi(double, string = "College Park", AutomationLevel = level_4)
   + get_operating_zone() : const string&
-  + get_automation_level() : int
+  + get_automation_level() : AutomationLevel
+  + change_zone(string) : void
   + drive(const Route&) : void
 }
 class Taxi <<final>> #back:FFF3E0;line:E65100;text:000000 {
   - driver_name_ : string
   + Taxi(double, string)
+  + assign_driver(string) : void
   + drive(const Route&) : void
 }
 

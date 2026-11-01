@@ -42,9 +42,17 @@ class Vehicle {
   /// value breaks the invariant.
   Vehicle(double max_speed, double speed) : Vehicle{max_speed} { set_speed(speed); }
 
-  // Step 5: the destructor, virtual and = default.
+  // Step 5: first add the destructor here, virtual and = default:
+  //         virtual ~Vehicle() = default;
+  //         Deleting a RoboTaxi or a Taxi through a Vehicle pointer then runs
+  //         its own destructor first, then ~Vehicle. Then uncomment the Step 5
+  //         block in main.cpp.
 
-  // Step 4: the virtual method drive(), which takes a const Route& and is const.
+  // Step 4: declare the method drive() here, with virtual in front, so a call
+  //         through a Vehicle& or a Vehicle* runs the drive() of the object's
+  //         own class. It returns nothing, takes the route by const reference
+  //         and does not change the Vehicle (const):
+  //         virtual void drive(const Route& route) const;
   //         Its body goes to vehicle.cpp.
   // Step 6: drive() becomes pure virtual (= 0).
 
