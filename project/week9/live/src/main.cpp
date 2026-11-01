@@ -18,8 +18,9 @@
  * finish a step, we uncomment its block, then build and run. Each block prints
  * "[Step N]", then what that step adds. Each class has its own header in
  * ../include and its own source file here. Vehicle, Sensor, Route and
- * Position are given; you write the others. Every class is in the namespace
- * fleet, so main() writes fleet:: before each name.
+ * Position are given, and so is the class Fleet without its method bodies;
+ * you write the rest. Every class is in the namespace fleet, so main()
+ * writes fleet:: before each name.
  */
 #include <iostream>
 #include <memory>

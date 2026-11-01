@@ -13,7 +13,7 @@
  * The frames that Live Coding: Steps 6 and 7 replace are in
  * ../../appendix/src/appendix.cpp: [Appendix vi], [Appendix vii] and [Appendix viii].
  * A final Method is there too: [Appendix ix], and Discussion: Add a RoboBus:
- * [Appendix xxxviii].
+ * [Appendix xxxix].
  */
 #include <memory>
 #include <vector>

@@ -15,9 +15,9 @@
  * destructor is undefined behavior: it is in ../../undefined/src/undefined.cpp.
  * The frames that Live Coding: Steps 4 and 5 replace are in
  * ../../appendix/src/appendix.cpp: [Appendix iv] and [Appendix v]. The
- * appendix frames auto or a Base Pointer ([Appendix xiv] to [Appendix xvii]),
- * The Cost of virtual ([Appendix xix]) and One Overload per Class
- * ([Appendix xxix]) are there too, with copies of the runtime and compile_time
+ * appendix frames auto or a Base Pointer ([Appendix xv] to [Appendix xviii]),
+ * The Cost of virtual ([Appendix xx]) and One Overload per Class
+ * ([Appendix xxx]) are there too, with copies of the runtime and compile_time
  * classes of this file.
  */
 #include <iostream>

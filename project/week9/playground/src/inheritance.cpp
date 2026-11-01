@@ -26,7 +26,7 @@ namespace inheritance {
 using fleet::AutomationLevel;
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// sizes are on [Appendix xxvii], Inside a Taxi Object, in
+// sizes are on [Appendix xxviii], Inside a Taxi Object, in
 // ../../appendix/src/appendix.cpp, with copies of these two classes. Each has
 // one method that Vehicle does not have, change_zone() and assign_driver(), for
 // [Slide 53] and [Slide 52]. Each class declares it; its body is below the
@@ -266,7 +266,7 @@ void run() {
 // The notes after these are cut: the copy and move constructors are
 // candidates too.
 
-// A Base Member in the List is an appendix frame: [Appendix xiii], in
+// A Base Member in the List is an appendix frame: [Appendix xiv], in
 // ../../appendix/src/appendix.cpp.
 
 // [Slide 62] Construction and Destruction Order. Both classes

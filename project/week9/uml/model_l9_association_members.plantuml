@@ -9,7 +9,7 @@ skinparam classAttributeIconSize 0
 skinparam nodesep 30
 skinparam ranksep 75
 skinparam ArrowThickness 1.5
-hide circle
+
 hide empty members
 
 

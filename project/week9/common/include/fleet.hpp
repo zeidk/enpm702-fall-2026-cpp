@@ -19,29 +19,55 @@
 
 #include "vehicle.hpp"
 
+/**
+ * @brief The classes of the ride service program (L9).
+ *
+ * Every class of the program is in fleet, so common names such as Vehicle,
+ * Route and Sensor cannot clash with the same names in another library. The
+ * namespace is documented here only: Doxygen joins every comment it finds on a
+ * namespace, so the other headers open it without one.
+ */
 namespace fleet {
 
-/// The vehicles of a fleet, shared with the rest of the program.
+/**
+ * @brief The vehicles one company runs.
+ *
+ * A Fleet shares its vehicles with the rest of the program (aggregation): it
+ * keeps a std::shared_ptr to each, so a vehicle can exist before the fleet,
+ * after it, and in another fleet. It names only Vehicle, never RoboTaxi or
+ * Taxi, so a new kind of vehicle needs no change here.
+ *
+ * Invariant: no null pointer and no vehicle twice.
+ */
 class Fleet {
  public:
   /**
-   * @brief Adds a vehicle to the fleet. A vehicle already in it is not added again.
+   * @brief Adds @p vehicle to the fleet, unless the fleet already holds it.
+   * @param vehicle The vehicle to add. The fleet becomes one of its owners.
    * @throw std::invalid_argument if @p vehicle is null.
    */
   void add(std::shared_ptr<Vehicle> vehicle);
 
   /**
-   * @brief Removes the vehicle with this id. The vehicle lives on while other
-   *        code holds it.
-   * @return False when no vehicle of the fleet has that id.
+   * @brief Removes the vehicle whose id is @p id from the fleet.
+   * @param id The id of the vehicle to remove, as Vehicle::get_id() gives it.
+   * @return true if a vehicle was removed, false if no vehicle of the fleet
+   *         has this id.
+   * @note The vehicle lives on while other code still holds it.
    */
   bool remove(int id);
 
-  /// How many vehicles the fleet holds.
+  /**
+   * @brief Returns how many vehicles the fleet holds.
+   * @return The number of elements in vehicles_.
+   */
   [[nodiscard]] std::size_t size() const noexcept;
 
  private:
-  std::vector<std::shared_ptr<Vehicle>> vehicles_;  ///< aggregation: shared
+  /// The fleet's vehicles. Each std::shared_ptr makes the fleet one of the
+  /// vehicle's owners (aggregation). Invariant: no null pointer and no vehicle
+  /// twice.
+  std::vector<std::shared_ptr<Vehicle>> vehicles_;
 };
 
 }  // namespace fleet

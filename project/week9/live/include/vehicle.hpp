@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-#include "route.hpp"   // Step 4: drive() takes a Route
+#include "route.hpp"   // drive() takes a Route
 #include "sensor.hpp"  // Sensor and SensorType
 
 namespace fleet {
@@ -48,13 +48,15 @@ class Vehicle {
   //         its own destructor first, then ~Vehicle. Then uncomment the Step 5
   //         block in main.cpp.
 
-  // Step 4: declare the method drive() here, with virtual in front, so a call
-  //         through a Vehicle& or a Vehicle* runs the drive() of the object's
-  //         own class. It returns nothing, takes the route by const reference
-  //         and does not change the Vehicle (const):
+  /// Drives @p route and prints one line: "Vehicle: drives <length> m".
+  /// The Route is a parameter: Vehicle uses it during the call and keeps no
+  /// Route member. That is a dependency.
+  // Step 4: add virtual in front of this declaration, so a call through a
+  //         Vehicle& or a Vehicle* runs the drive() of the object's own class:
   //         virtual void drive(const Route& route) const;
-  //         Its body goes to vehicle.cpp.
+  //         Its body in vehicle.cpp does not change.
   // Step 6: drive() becomes pure virtual (= 0).
+  void drive(const Route& route) const;
 
   /// Throws std::invalid_argument if @p speed is not from 0 to the maximum speed.
   void set_speed(double speed);

@@ -64,7 +64,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // The classes of [Appendix iv]: as on [Slide 71], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
-// ([Appendix xv] and [Appendix xvi]) and The Cost of virtual ([Appendix xix])
+// ([Appendix xvi] and [Appendix xvii]) and The Cost of virtual ([Appendix xx])
 // use them too.
 namespace runtime {
 class Vehicle {
@@ -250,7 +250,40 @@ void run() {
 }
 }  // namespace multiple
 
-// [Appendix xiii] A Base Member in the List. Does not compile:
+// [Appendix xiii] When protected and private Inheritance Make Sense. Shuttle
+// reuses the code of PreTripCheck, and that code calls ok(), which Shuttle
+// overrides. A Shuttle is not a kind of PreTripCheck, so the inheritance is
+// private. The pattern is the isocpp FAQ's, at
+// https://isocpp.org/wiki/faq/private-inheritance
+// The destructor is protected and non-virtual: Core Guidelines C.35.
+namespace private_base {
+class PreTripCheck {
+ protected:
+  ~PreTripCheck() = default;
+  void check() const {
+    std::cout << (ok() ? "go\n" : "stop\n");
+  }
+  virtual bool ok() const = 0;
+};
+
+class Shuttle : private PreTripCheck {
+ public:
+  void start() const { check(); }
+
+ private:
+  bool ok() const override { return true; }
+};
+
+void run() {
+  Shuttle shuttle;
+  shuttle.start();  // go
+  // Does not compile:
+  //   const PreTripCheck& base{shuttle};
+  // error: 'PreTripCheck' is an inaccessible base of 'Shuttle'
+}
+}  // namespace private_base
+
+// [Appendix xiv] A Base Member in the List. Does not compile:
 //   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
 //                     AutomationLevel automation_level = AutomationLevel::level_4)
 //       : max_speed_{max_speed},
@@ -261,8 +294,8 @@ void run() {
 // error: no matching function for call to 'Vehicle::Vehicle()'
 
 namespace runtime {
-// [Appendix xv] Two Pointers, Two Static Types. Its first two lines are on
-// [Appendix xiv], auto or a Base Pointer.
+// [Appendix xvi] Two Pointers, Two Static Types. Its first two lines are on
+// [Appendix xv], auto or a Base Pointer.
 namespace auto_calls {
 void run() {
   auto robotaxi{std::make_unique<RoboTaxi>(13.4)};
@@ -280,7 +313,7 @@ void run() {
 }
 }  // namespace auto_calls
 
-// [Appendix xvi] From auto into a Vector of Vehicles. hand_over takes the
+// [Appendix xvii] From auto into a Vector of Vehicles. hand_over takes the
 // ownership of the vehicle, and the route.
 namespace auto_fleet {
 void hand_over(std::unique_ptr<Vehicle> vehicle, const Route& route) {
@@ -301,7 +334,7 @@ void run() {
 }  // namespace auto_fleet
 }  // namespace runtime
 
-// [Appendix xviii] Copying a Vehicle of the Design. Neither compiles:
+// [Appendix xix] Copying a Vehicle of the Design. Neither compiles:
 //   Taxi copy{taxi};             // the sensors cannot be copied (std::unique_ptr, L8)
 //   Taxi moved{std::move(taxi)};  // the declared destructor stops the moves
 // Each gives 4 errors, from inside std::vector. The copy is not suppressed:
@@ -311,7 +344,7 @@ void run() {
 // in Vehicle, the trait is false, and the copy stops with
 // error: use of deleted function 'Taxi::Taxi(const Taxi&)'
 
-// [Appendix xix] The Cost of virtual: one hidden pointer per object.
+// [Appendix xx] The Cost of virtual: one hidden pointer per object.
 // compile_time::Vehicle is a copy of the Vehicle of [Slide 65], with no virtual
 // method; runtime::Vehicle above is a copy of the one of [Slide 71]. Both have
 // the same data members.
@@ -349,7 +382,7 @@ void run() {
 // appendix.
 // ---------------------------------------------------------------------------
 
-// [Appendix xxiii] Each Route Has Its Own Positions
+// [Appendix xxiv] Each Route Has Its Own Positions
 // A Route holds its Position objects by value (composition, as Vehicle holds
 // its Sensors through std::unique_ptr). A shared ride: Ana's stop is added
 // to a copy of Maya's route.
@@ -364,7 +397,7 @@ void run() {
 }
 }  // namespace composition
 
-// [Appendix xxvi] A Route for One Call
+// [Appendix xxvii] A Route for One Call
 // l8::Vehicle (../../playground/include/l8_vehicle.hpp) is the concrete class
 // the students already have: its drive() prints the route's length and
 // length / speed. The frame says so; the Abstraction section makes drive()
@@ -388,7 +421,7 @@ void run() {
 }
 }  // namespace dependency
 
-// [Appendix xxvii] Inside a Taxi Object
+// [Appendix xxviii] Inside a Taxi Object
 // RoboTaxi and Taxi on L8's Vehicle (l8::Vehicle), as Live Coding: Step 3
 // writes them: copies of the two classes of
 // ../../playground/src/inheritance.cpp.
@@ -428,7 +461,7 @@ void run() {
 }
 }  // namespace inside
 
-// [Appendix xxix] One Overload per Class. RoboTaxi and Taxi redefine drive(),
+// [Appendix xxx] One Overload per Class. RoboTaxi and Taxi redefine drive(),
 // as on [Slide 67], Redefinition: copies of the classes of
 // ../../playground/src/polymorphism.cpp, on the compile_time::Vehicle above.
 namespace compile_time {
@@ -474,7 +507,7 @@ void run() {
 }  // namespace compile_time
 
 
-// [Appendix xxxiv] Discussion: What Prints First? A Taxi whose
+// [Appendix xxxv] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -515,7 +548,7 @@ void run() {
 // warning:   base '{anonymous}::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Appendix xxxvi] Discussion: Which drive() Runs?
+// [Appendix xxxvii] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -558,7 +591,7 @@ void run() {
 }
 }  // namespace which
 
-// [Appendix xxxvii] Discussion: Who Needs a virtual Destructor?
+// [Appendix xxxviii] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -571,7 +604,7 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Appendix xxxviii] Discussion: Add a RoboBus. One answer: a new
+// [Appendix xxxix] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus : public Vehicle {
@@ -598,7 +631,7 @@ void run() {
 }
 }  // namespace robobus
 
-// [Appendix xl] std::find on a Vector: code to copy for Live Coding: Step 2,
+// [Appendix xli] std::find on a Vector: code to copy for Live Coding: Step 2,
 // on a vector of numbers. std::find is in <algorithm>.
 namespace find_value {
 void run() {
@@ -615,7 +648,7 @@ void run() {
 }
 }  // namespace find_value
 
-// [Appendix xli] std::erase_if on a Vector: code to copy for Live Coding:
+// [Appendix xlii] std::erase_if on a Vector: code to copy for Live Coding:
 // Step 2. The std::erase_if for a vector is in <vector> (C++20).
 namespace erase_value {
 void run() {
@@ -643,19 +676,20 @@ int main(int argc, char* argv[]) {
           {6, "No Vehicle Objects", no_vehicle::run},
           {7, "RoboTaxi and Taxi", concrete::run},
           {11, "Multiple Inheritance, the Code", multiple::run},
-          {15, "Two Pointers, Two Static Types", runtime::auto_calls::run},
-          {16, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
-          {19, "The Cost of virtual", vptr::run},
-          {23, "Each Route Has Its Own Positions", composition::run},
-          {26, "A Route for One Call", dependency::run},
-          {27, "Inside a Taxi Object", inside::run},
-          {29, "One Overload per Class", compile_time::overloads::run},
-          {34, "Discussion: What Prints First?", order::run},
-          {36, "Discussion: Which drive() Runs?", which::run},
-          {37, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-          {38, "Discussion: Add a RoboBus", robobus::run},
-          {40, "std::find on a Vector", find_value::run},
-          {41, "std::erase_if on a Vector", erase_value::run},
+          {13, "When protected and private Inheritance Make Sense", private_base::run},
+          {16, "Two Pointers, Two Static Types", runtime::auto_calls::run},
+          {17, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
+          {20, "The Cost of virtual", vptr::run},
+          {24, "Each Route Has Its Own Positions", composition::run},
+          {27, "A Route for One Call", dependency::run},
+          {28, "Inside a Taxi Object", inside::run},
+          {30, "One Overload per Class", compile_time::overloads::run},
+          {35, "Discussion: What Prints First?", order::run},
+          {37, "Discussion: Which drive() Runs?", which::run},
+          {38, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+          {39, "Discussion: Add a RoboBus", robobus::run},
+          {41, "std::find on a Vector", find_value::run},
+          {42, "std::erase_if on a Vector", erase_value::run},
       },
       argc, argv, Part::appendix);
 }

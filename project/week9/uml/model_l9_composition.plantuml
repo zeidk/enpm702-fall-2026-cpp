@@ -9,7 +9,7 @@ skinparam classAttributeIconSize 0
 skinparam nodesep 22
 skinparam ranksep 50
 skinparam ArrowThickness 1.5
-hide circle
+
 hide members
 skinparam minClassWidth 60
 skinparam classStereotypeFontSize 14
