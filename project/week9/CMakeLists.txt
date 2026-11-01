@@ -29,11 +29,12 @@
 #   cycle/        two small classes, A and B, that refer to each other, with
 #                 forward declarations instead of a cyclic include (week9_cycle)
 #   live/         the classes of the "Live Coding" slides (week9_live):
-#                 Vehicle, Sensor, AutomationLevel, Route and Position are given; Passenger,
-#                 Fleet, RoboTaxi and Taxi are written in class, Step 1 with
-#                 the instructor, Steps 2 to 5 on your own, 6 and 7 at home. One header and
-#                 one source file per class (Position and AutomationLevel: a header only), and
-#                 main.cpp
+#                 Vehicle, Sensor, SensorType, AutomationLevel, Route and
+#                 Position are given; Passenger, Fleet, RoboTaxi and Taxi are
+#                 written in class, Step 1 with the instructor, Steps 2 to 5
+#                 on your own, 6 and 7 at home. One header and one source file
+#                 per class (Position, SensorType and AutomationLevel: a header
+#                 only), and main.cpp
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -109,8 +110,8 @@ target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
 # (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on your
 # own, Steps 6 and 7 at home. One header and one source file per class in
 # live/, and main.cpp, which has one commented block per step. Route, Position,
-# Sensor and AutomationLevel are given in live/ too, so week9_live is built
-# from live/ alone. The Step 5 block deletes a Taxi through a Vehicle pointer,
+# Sensor, SensorType and AutomationLevel are given in live/ too, so week9_live
+# is built from live/ alone. The Step 5 block deletes a Taxi through a Vehicle pointer,
 # so the whole program is built with AddressSanitizer and
 # UndefinedBehaviorSanitizer, as undefined/ is: without the virtual destructor
 # that Step 5 adds to Vehicle, the run would stop with a report.
@@ -128,13 +129,13 @@ target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit
 target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
-# [Slide 26] Two Headers That Include Each Other
-# [Slide 27] A Forward Declaration Breaks the Cycle
+# [Slide 27] Two Headers That Include Each Other
+# [Slide 28] A Forward Declaration Breaks the Cycle
 # A class A that refers to a B and a class B that refers back to its A: a
 # two-way association. Each header needs the other class's name, and
 # a forward declaration gives it the name only. The program prints "built".
 #
-# [Slide 26] includes each header from the other instead. These two headers,
+# [Slide 27] includes each header from the other instead. These two headers,
 # comment line and "// ..." line included, are the files that gave the error
 # below.
 #

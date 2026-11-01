@@ -8,7 +8,9 @@
  * https://saemobilus.sae.org/standards/j3016_202609-taxonomy-definitions-terms-related-driving-automation-systems-road-motor-vehicles).
  * The requirement FR-4.3 allows these six and no other, so the level is a
  * scoped enumeration, not an int: a number such as 7 cannot be passed where
- * an AutomationLevel is expected.
+ * an AutomationLevel is expected. A cast still makes one:
+ * static_cast<AutomationLevel>(7) compiles and gives a level that names no
+ * enumerator, so RoboTaxi's constructor checks the level too.
  *
  * With g++ 13.3 on x86-64: sizeof(AutomationLevel) is 4 (its underlying type
  * is int).

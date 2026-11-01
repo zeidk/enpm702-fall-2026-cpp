@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <stdexcept>  // Step 3: std::invalid_argument
 #include <string>
 #include <utility>  // Step 3: std::move
 
@@ -23,7 +24,10 @@ namespace fleet {
 //         driving automation, from automation_level.hpp). An explicit
 //         constructor, written here in the class, takes the maximum speed,
 //         the zone (default "College Park") and the level (default
-//         AutomationLevel::level_4), and passes the maximum speed to Vehicle. Two
+//         AutomationLevel::level_4), and passes the maximum speed to Vehicle.
+//         Its body throws std::invalid_argument{"unknown automation level"}
+//         for a level that is not level_0 to level_5 (a number cast to
+//         AutomationLevel, such as static_cast<AutomationLevel>(7)). Two
 //         const getters, get_operating_zone() and get_automation_level(),
 //         and the method change_zone(std::string operating_zone), which
 //         Vehicle does not have, are declared here and defined in robotaxi.cpp.

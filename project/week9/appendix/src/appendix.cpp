@@ -60,7 +60,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 
 // [Appendix iii] A Passenger Rides a Vehicle shows the class only, with no
 // output. The class is in ../../playground/src/relationships.cpp, where
-// [Slide 25] runs it.
+// [Slide 26] runs it.
 
 // The classes of [Appendix iv]: as on [Slide 71], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
@@ -288,7 +288,12 @@ void run() {
 //                     AutomationLevel automation_level = AutomationLevel::level_4)
 //       : max_speed_{max_speed},
 //         operating_zone_{std::move(operating_zone)},
-//         automation_level_{automation_level} {}
+//         automation_level_{automation_level} {
+//     if (automation_level_ < AutomationLevel::level_0 ||
+//         automation_level_ > AutomationLevel::level_5) {
+//       throw std::invalid_argument{"unknown automation level"};
+//     }
+//   }
 // error: 'double Vehicle::max_speed_' is private within this context
 // error: class 'RoboTaxi' does not have any field named 'max_speed_'
 // error: no matching function for call to 'Vehicle::Vehicle()'
