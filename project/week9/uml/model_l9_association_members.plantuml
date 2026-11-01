@@ -15,14 +15,14 @@ hide empty members
 
 left to right direction
 
-class Passenger #back:F3E8FF;line:6A1B9A;text:000000 {
+class Passenger #back:FFF3E0;line:E65100;text:000000 {
   - name_ : string
   - ride_ : weak_ptr<Vehicle>
   + Passenger(string)
   + board(shared_ptr<Vehicle>) : void
   + leave() : void
 }
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -47,5 +47,5 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   # log_event(const string&) : void
 }
 
-Passenger "<color:#000000>0..*</color>" -[#6A1B9A,thickness=2]-> "<color:#000000>-ride_  0..1</color>" Vehicle : <color:#000000>rides</color>
+Passenger "<color:#000000>0..*</color>" -[#E65100,thickness=2]-> "<color:#000000>-ride_  0..1</color>" Vehicle : <color:#000000>rides</color>
 @enduml

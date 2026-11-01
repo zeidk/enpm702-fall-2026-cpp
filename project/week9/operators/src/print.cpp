@@ -13,7 +13,7 @@
 #include "parts.hpp"
 #include "position.hpp"
 
-// [Slide 65] Operators Are Overloaded Functions: the operator<< of
+// [Slide 68] Operators Are Overloaded Functions: the operator<< of
 // position.cpp, then the two lines of run() that make end and print it.
 namespace print {
 void run() {

@@ -15,13 +15,13 @@ hide empty members
 
 left to right direction
 
-class Fleet #back:F3E8FF;line:6A1B9A;text:000000 {
+class Fleet #back:FFF3E0;line:E65100;text:000000 {
   - vehicles_ : vector<shared_ptr<Vehicle>>
   + add(shared_ptr<Vehicle>) : void
   + remove(int) : bool
   + size() : size_t
 }
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -46,5 +46,5 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   # log_event(const string&) : void
 }
 
-Fleet "<color:#000000>1</color>" o-[#6A1B9A,thickness=2]- "<color:#000000>-vehicles_  0..*</color>" Vehicle : <color:#000000>holds</color>
+Fleet "<color:#000000>1</color>" o-[#E65100,thickness=2]- "<color:#000000>-vehicles_  0..*</color>" Vehicle : <color:#000000>holds</color>
 @enduml

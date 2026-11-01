@@ -3,9 +3,10 @@
  * @brief L9 Section 3, Polymorphism: the code of every slide, runnable.
  * @author Zeid Kootbally
  *
- * @details Part of week9_playground. The classes here keep only what these
- * slides need (a maximum speed, a speed, drive), so the output shows which
- * drive() runs. Three versions, one per namespace:
+ * @details Part of week9_playground. The classes here keep few members (a
+ * maximum speed, a speed, drive; the RoboTaxi of compile_time and runtime also
+ * keeps its operating zone and automation level, and Taxi its driver's name),
+ * so the output shows which drive() runs. Three versions, one per namespace:
  * - compile_time: drive() is not virtual. Each class redefines it.
  * - runtime: drive() is virtual, and RoboTaxi and Taxi override it.
  * - typo: RoboTaxi misspells drive() and has no override.
@@ -14,9 +15,9 @@
  * destructor is undefined behavior: it is in ../../undefined/src/undefined.cpp.
  * The frames that Live Coding: Steps 4 and 5 replace are in
  * ../../appendix/src/appendix.cpp: [Appendix iv] and [Appendix v]. The
- * appendix frames auto or a Base Pointer ([Appendix xv] to [Appendix xviii]),
- * The Cost of virtual ([Appendix xx]) and One Overload per Class
- * ([Appendix xxx]) are there too, with copies of the runtime and compile_time
+ * appendix frames auto or a Base Pointer ([Appendix xiv] to [Appendix xvii]),
+ * The Cost of virtual ([Appendix xix]) and One Overload per Class
+ * ([Appendix xxix]) are there too, with copies of the runtime and compile_time
  * classes of this file.
  */
 #include <iostream>
@@ -44,7 +45,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // Compile-time polymorphism: no virtual.
 // ---------------------------------------------------------------------------
 namespace compile_time {
-// [Slide 62] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
+// [Slide 65] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
@@ -57,13 +58,21 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 64] Redefinition
+// [Slide 67] Redefinition
 class RoboTaxi : public Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
   void drive(const Route& route) const {  // redefines Vehicle::drive
     std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
   }
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -87,7 +96,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 68] Through a Base Reference
+// [Slide 71] Through a Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -105,11 +114,11 @@ void run() {
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 69] virtual Methods in the Base Class
+// [Slide 72] virtual Methods in the Base Class
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 75]
+  virtual ~Vehicle() = default;  // why: [Slide 80]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -119,13 +128,21 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 72] override: RoboTaxi::drive is marked override.
+// [Slide 77] override: RoboTaxi::drive is marked override.
 class RoboTaxi : public Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
   void drive(const Route& route) const override {
     std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
   }
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -140,7 +157,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 70] Slicing
+// [Slide 74] Slicing
 namespace slicing {
 void run() {
   Taxi taxi{13.4, "Ana"};
@@ -156,7 +173,7 @@ void run() {
 }  // namespace runtime
 
 // ---------------------------------------------------------------------------
-// [Slide 73] A Typo That Compiles: no override.
+// [Slide 78] A Typo That Compiles: no override.
 // ---------------------------------------------------------------------------
 namespace typo {
 class Vehicle {
@@ -185,15 +202,15 @@ void run() {
 // Mistake 2 on the slide, "void drive(const Route& route);" (no const), is
 // left out here: it compiles too, but -Wall warns (-Woverloaded-virtual=), and
 // this build has no warnings.
-// [Slide 74] override Catches Both. With override, both stop the build.
+// [Slide 79] override Catches Both. With override, both stop the build.
 }  // namespace typo
 
 std::vector<Slide> slides() {
   return {
-      {64, "Redefinition", compile_time::redefinition::run},
-      {68, "Through a Base Reference", compile_time::base_reference::run},
-      {70, "Slicing", runtime::slicing::run},
-      {73, "A Typo That Compiles", typo::run},
+      {67, "Redefinition", compile_time::redefinition::run},
+      {71, "Through a Base Reference", compile_time::base_reference::run},
+      {74, "Slicing", runtime::slicing::run},
+      {78, "A Typo That Compiles", typo::run},
   };
 }
 

@@ -60,9 +60,9 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 25] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 69], drive()
+// The classes of [Appendix iv]: as on [Slide 72], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
-// ([Appendix xvi] and [Appendix xvii]) and The Cost of virtual ([Appendix xx])
+// ([Appendix xv] and [Appendix xvi]) and The Cost of virtual ([Appendix xix])
 // use them too.
 namespace runtime {
 class Vehicle {
@@ -80,10 +80,18 @@ class Vehicle {
 
 class RoboTaxi : public Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
   void drive(const Route& route) const override {
     std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
   }
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -113,7 +121,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 76], fixed.
+// virtual. The run is the code of [Slide 81], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -240,15 +248,19 @@ void run() {
 }
 }  // namespace multiple
 
-// [Appendix xiv] A Base Member in the List. Does not compile:
-//   explicit RoboTaxi(double max_speed) : max_speed_{max_speed} {}
+// [Appendix xiii] A Base Member in the List. Does not compile:
+//   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+//                     int automation_level = 4)
+//       : max_speed_{max_speed},
+//         operating_zone_{std::move(operating_zone)},
+//         automation_level_{automation_level} {}
 // error: 'double Vehicle::max_speed_' is private within this context
 // error: class 'RoboTaxi' does not have any field named 'max_speed_'
 // error: no matching function for call to 'Vehicle::Vehicle()'
 
 namespace runtime {
-// [Appendix xvi] Two Pointers, Two Static Types. Its first two lines are on
-// [Appendix xv], auto or a Base Pointer.
+// [Appendix xv] Two Pointers, Two Static Types. Its first two lines are on
+// [Appendix xiv], auto or a Base Pointer.
 namespace auto_calls {
 void run() {
   auto robotaxi{std::make_unique<RoboTaxi>(13.4)};
@@ -266,7 +278,7 @@ void run() {
 }
 }  // namespace auto_calls
 
-// [Appendix xvii] From auto into a Vector of Vehicles. hand_over takes the
+// [Appendix xvi] From auto into a Vector of Vehicles. hand_over takes the
 // ownership of the vehicle, and the route.
 namespace auto_fleet {
 void hand_over(std::unique_ptr<Vehicle> vehicle, const Route& route) {
@@ -287,7 +299,7 @@ void run() {
 }  // namespace auto_fleet
 }  // namespace runtime
 
-// [Appendix xix] Copying a Vehicle of the Design. Neither compiles:
+// [Appendix xviii] Copying a Vehicle of the Design. Neither compiles:
 //   Taxi copy{taxi};             // the sensors cannot be copied (std::unique_ptr, L8)
 //   Taxi moved{std::move(taxi)};  // the declared destructor stops the moves
 // Each gives 4 errors, from inside std::vector. The copy is not suppressed:
@@ -297,9 +309,9 @@ void run() {
 // in Vehicle, the trait is false, and the copy stops with
 // error: use of deleted function 'Taxi::Taxi(const Taxi&)'
 
-// [Appendix xx] The Cost of virtual: one hidden pointer per object.
-// compile_time::Vehicle is a copy of the Vehicle of [Slide 62], with no virtual
-// method; runtime::Vehicle above is a copy of the one of [Slide 69]. Both have
+// [Appendix xix] The Cost of virtual: one hidden pointer per object.
+// compile_time::Vehicle is a copy of the Vehicle of [Slide 65], with no virtual
+// method; runtime::Vehicle above is a copy of the one of [Slide 72]. Both have
 // the same data members.
 // The frame's nm line reads week9_playground's object file, where the
 // originals are: nm -C polymorphism.cpp.o, in build/project/week9/CMakeFiles/
@@ -335,7 +347,7 @@ void run() {
 // appendix.
 // ---------------------------------------------------------------------------
 
-// [Appendix xxiv] Each Route Has Its Own Positions
+// [Appendix xxiii] Each Route Has Its Own Positions
 // A Route holds its Position objects by value (composition, as Vehicle holds
 // its Sensors through std::unique_ptr). A shared ride: Ana's stop is added
 // to a copy of Maya's route.
@@ -350,7 +362,7 @@ void run() {
 }
 }  // namespace composition
 
-// [Appendix xxvii] A Route for One Call
+// [Appendix xxvi] A Route for One Call
 // l8::Vehicle (../../playground/include/l8_vehicle.hpp) is the concrete class
 // the students already have: its drive() prints the route's length and
 // length / speed. The frame says so; the Abstraction section makes drive()
@@ -374,17 +386,27 @@ void run() {
 }
 }  // namespace dependency
 
-// [Appendix xxviii] Inside a Taxi Object
+// [Appendix xxvii] Inside a Taxi Object
 // RoboTaxi and Taxi on L8's Vehicle (l8::Vehicle), as Live Coding: Step 3
 // writes them: copies of the two classes of
 // ../../playground/src/inheritance.cpp.
 // l8::Vehicle: int id_ (4 bytes, then 4 bytes of padding), two doubles (16),
 // color_, a std::string (32 with libstdc++), mileage_, a double (8), and a
-// std::vector (24 with libstdc++): 88. Taxi adds a std::string: 32 more.
+// std::vector (24 with libstdc++): 88. RoboTaxi adds a std::string (32) and an
+// int (4, then 4 bytes of padding): 40 more, 128. Taxi adds a std::string: 32
+// more, 120.
 namespace inside {
 class RoboTaxi : public l8::Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 class Taxi : public l8::Vehicle {
@@ -399,21 +421,29 @@ class Taxi : public l8::Vehicle {
 void run() {
   Taxi taxi{13.4, "Ana"};
   std::cout << sizeof(l8::Vehicle) << ' ' << sizeof(RoboTaxi) << ' '
-            << sizeof(Taxi) << '\n';         // 88 88 120
+            << sizeof(Taxi) << '\n';         // 88 128 120
   std::cout << sizeof(std::string) << '\n';  // 32
 }
 }  // namespace inside
 
-// [Appendix xxx] One Overload per Class. RoboTaxi and Taxi redefine drive(),
-// as on [Slide 64], Redefinition: copies of the classes of
+// [Appendix xxix] One Overload per Class. RoboTaxi and Taxi redefine drive(),
+// as on [Slide 67], Redefinition: copies of the classes of
 // ../../playground/src/polymorphism.cpp, on the compile_time::Vehicle above.
 namespace compile_time {
 class RoboTaxi : public Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
   void drive(const Route& route) const {  // redefines Vehicle::drive
     std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
   }
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 class Taxi : public Vehicle {
@@ -442,7 +472,7 @@ void run() {
 }  // namespace compile_time
 
 
-// [Appendix xxxv] Discussion: What Prints First? A Taxi whose
+// [Appendix xxxiv] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -483,7 +513,7 @@ void run() {
 // warning:   base '{anonymous}::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Appendix xxxvii] Discussion: Which drive() Runs?
+// [Appendix xxxvi] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -499,10 +529,18 @@ class Vehicle {
 
 class RoboTaxi : public Vehicle {
  public:
-  explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
+  explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
+                    int automation_level = 4)
+      : Vehicle{max_speed},
+        operating_zone_{std::move(operating_zone)},
+        automation_level_{automation_level} {}
   void drive(const Route& route) const override {
     std::cout << "RoboTaxi: drives itself " << route.length() << " m\n";
   }
+
+ private:
+  std::string operating_zone_;  // the area it may drive in
+  int automation_level_;        // SAE J3016 level of driving automation
 };
 
 void run() {
@@ -518,7 +556,7 @@ void run() {
 }
 }  // namespace which
 
-// [Appendix xxxviii] Discussion: Who Needs a virtual Destructor?
+// [Appendix xxxvii] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -531,7 +569,7 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Appendix xxxix] Discussion: Add a RoboBus. One answer: a new
+// [Appendix xxxviii] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
 class RoboBus : public Vehicle {
@@ -558,6 +596,40 @@ void run() {
 }
 }  // namespace robobus
 
+// [Appendix xl] std::find on a Vector: code to copy for Live Coding: Step 2,
+// on a vector of numbers. std::find is in <algorithm>.
+namespace find_value {
+void run() {
+  std::vector<int> numbers{4, 8, 15, 16, 23, 42};
+  // std::find returns end() when 15 is not there
+  if (std::find(numbers.begin(), numbers.end(), 15) != numbers.end()) {
+    std::cout << "15 is there\n";
+  }
+  // add 7 only if it is not there yet
+  if (std::find(numbers.begin(), numbers.end(), 7) == numbers.end()) {
+    numbers.push_back(7);
+  }
+  std::cout << numbers.size() << '\n';
+}
+}  // namespace find_value
+
+// [Appendix xli] std::erase_if on a Vector: code to copy for Live Coding:
+// Step 2. The std::erase_if for a vector is in <vector> (C++20).
+namespace erase_value {
+void run() {
+  std::vector<int> numbers{4, 8, 15, 16, 23, 42};
+  // erase every element the lambda accepts; it returns how many it erased
+  auto erased{std::erase_if(numbers, [](int n) { return n % 2 == 0; })};
+  std::cout << erased << " erased, " << numbers.size() << " left\n";
+  int target{23};
+  std::erase_if(numbers, [target](int n) { return n == target; });
+  for (int n : numbers) {
+    std::cout << n << ' ';
+  }
+  std::cout << '\n';
+}
+}  // namespace erase_value
+
 
 }  // namespace
 
@@ -569,17 +641,19 @@ int main(int argc, char* argv[]) {
           {6, "No Vehicle Objects", no_vehicle::run},
           {7, "RoboTaxi and Taxi", concrete::run},
           {11, "Multiple Inheritance, the Code", multiple::run},
-          {16, "Two Pointers, Two Static Types", runtime::auto_calls::run},
-          {17, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
-          {20, "The Cost of virtual", vptr::run},
-          {24, "Each Route Has Its Own Positions", composition::run},
-          {27, "A Route for One Call", dependency::run},
-          {28, "Inside a Taxi Object", inside::run},
-          {30, "One Overload per Class", compile_time::overloads::run},
-          {35, "Discussion: What Prints First?", order::run},
-          {37, "Discussion: Which drive() Runs?", which::run},
-          {38, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-          {39, "Discussion: Add a RoboBus", robobus::run},
+          {15, "Two Pointers, Two Static Types", runtime::auto_calls::run},
+          {16, "From auto into a Vector of Vehicles", runtime::auto_fleet::run},
+          {19, "The Cost of virtual", vptr::run},
+          {23, "Each Route Has Its Own Positions", composition::run},
+          {26, "A Route for One Call", dependency::run},
+          {27, "Inside a Taxi Object", inside::run},
+          {29, "One Overload per Class", compile_time::overloads::run},
+          {34, "Discussion: What Prints First?", order::run},
+          {36, "Discussion: Which drive() Runs?", which::run},
+          {37, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+          {38, "Discussion: Add a RoboBus", robobus::run},
+          {40, "std::find on a Vector", find_value::run},
+          {41, "std::erase_if on a Vector", erase_value::run},
       },
       argc, argv, Part::appendix);
 }

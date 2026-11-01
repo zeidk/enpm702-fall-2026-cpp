@@ -15,7 +15,7 @@ hide empty members
 
 left to right direction
 
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -39,7 +39,7 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   + {static} next_id() : int
   # log_event(const string&) : void
 }
-class Sensor #back:F3E8FF;line:6A1B9A;text:000000 {
+class Sensor #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - type_ : SensorType
   - range_ : double
@@ -49,5 +49,5 @@ class Sensor #back:F3E8FF;line:6A1B9A;text:000000 {
   + get_range() : double
 }
 
-Vehicle "<color:#000000>1</color>" *-[#6A1B9A,thickness=2]- "<color:#000000>-sensors_  0..*</color>" Sensor : <color:#000000>owns</color>
+Vehicle "<color:#000000>1</color>" *-[#E65100,thickness=2]- "<color:#000000>-sensors_  0..*</color>" Sensor : <color:#000000>owns</color>
 @enduml

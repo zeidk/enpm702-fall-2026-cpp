@@ -15,7 +15,7 @@ hide empty members
 
 left to right direction
 
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -39,16 +39,20 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   + {static} next_id() : int
   # log_event(const string&) : void
 }
-class RoboTaxi <<final>> #back:F3E8FF;line:6A1B9A;text:000000 {
-  + RoboTaxi(double)
+class RoboTaxi <<final>> #back:FFF3E0;line:E65100;text:000000 {
+  - operating_zone_ : string
+  - automation_level_ : int
+  + RoboTaxi(double, string = "College Park", int = 4)
+  + get_operating_zone() : const string&
+  + get_automation_level() : int
   + drive(const Route&) : void
 }
-class Taxi <<final>> #back:F3E8FF;line:6A1B9A;text:000000 {
+class Taxi <<final>> #back:FFF3E0;line:E65100;text:000000 {
   - driver_name_ : string
   + Taxi(double, string)
   + drive(const Route&) : void
 }
 
-Vehicle <|-[#6A1B9A,thickness=2]- RoboTaxi
-Vehicle <|-[#6A1B9A,thickness=2]- Taxi
+Vehicle <|-[#E65100,thickness=2]- RoboTaxi
+Vehicle <|-[#E65100,thickness=2]- Taxi
 @enduml

@@ -27,7 +27,7 @@ class Passenger #back:FFFFFF;line:A0A0A0;text:8A8A8A {
   + board(shared_ptr<Vehicle>) : void
   + leave() : void
 }
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -49,7 +49,7 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   + {abstract} drive(const Route&) : void
   # log_event(const string&) : void
 }
-class Sensor #back:F3E8FF;line:6A1B9A;text:000000 {
+class Sensor #back:FFF3E0;line:E65100;text:000000 {
   - id_ : int
   - type_ : SensorType
   - range_ : double
@@ -63,16 +63,18 @@ enum SensorType <<enumeration>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
   camera
   radar
 }
-class Route #back:F3E8FF;line:6A1B9A;text:000000 {
+class Route #back:FFF3E0;line:E65100;text:000000 {
   - waypoints_ : vector<Position>
   + add(Position) : void
   + length() : double
 }
-class Position <<struct>> #back:F3E8FF;line:6A1B9A;text:000000 {
+class Position <<struct>> #back:FFF3E0;line:E65100;text:000000 {
   + x : double
   + y : double
 }
 class RoboTaxi <<final>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
+  - operating_zone_ : string
+  - automation_level_ : int
   + drive(const Route&) : void
 }
 class Taxi <<final>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
@@ -82,9 +84,9 @@ class Taxi <<final>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
 
 Fleet "<color:#8A8A8A>1</color>" o-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Vehicle : <color:#8A8A8A>holds</color>
 Passenger "<color:#8A8A8A>0..*</color>" -[#A0A0A0]-> "<color:#8A8A8A>0..1</color>" Vehicle : <color:#8A8A8A>rides</color>
-Vehicle "<color:#000000>1</color>" *-[#6A1B9A,thickness=2]- "<color:#000000>0..*</color>" Sensor : <color:#000000>owns</color>
+Vehicle "<color:#000000>1</color>" *-[#E65100,thickness=2]- "<color:#000000>0..*</color>" Sensor : <color:#000000>owns</color>
 Vehicle .[#A0A0A0].> Route : <color:#8A8A8A>uses</color>
-Route "<color:#000000>1</color>" *-[#6A1B9A,thickness=2]- "<color:#000000>0..*</color>" Position : <color:#000000>has</color>
+Route "<color:#000000>1</color>" *-[#E65100,thickness=2]- "<color:#000000>0..*</color>" Position : <color:#000000>has</color>
 Sensor -[#A0A0A0]-> "<color:#8A8A8A>1</color>" SensorType : <color:#8A8A8A>has type</color>
 Vehicle <|-[#A0A0A0]- RoboTaxi
 Vehicle <|-[#A0A0A0]- Taxi

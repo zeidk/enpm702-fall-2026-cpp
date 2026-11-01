@@ -76,7 +76,11 @@ class Position <<struct>> {
   + y : double
 }
 class RoboTaxi <<final>> {
-  + RoboTaxi(double)
+  - operating_zone_ : string
+  - automation_level_ : int
+  + RoboTaxi(double, string = "College Park", int = 4)
+  + get_operating_zone() : const string&
+  + get_automation_level() : int
   + drive(const Route&) : void
 }
 class Taxi <<final>> {

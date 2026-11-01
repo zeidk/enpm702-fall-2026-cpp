@@ -15,16 +15,16 @@ hide empty members
 
 left to right direction
 
-class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
+class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   + drive(const Route&) : void
 }
-class RoboTaxi #back:F3E8FF;line:6A1B9A;text:000000 {
+class RoboTaxi #back:FFF3E0;line:E65100;text:000000 {
   + drive(const Route&) : void
 }
-class Taxi #back:F3E8FF;line:6A1B9A;text:000000 {
+class Taxi #back:FFF3E0;line:E65100;text:000000 {
   + drive(const Route&) : void
 }
 
-Vehicle <|-[#6A1B9A,thickness=2]- RoboTaxi
-Vehicle <|-[#6A1B9A,thickness=2]- Taxi
+Vehicle <|-[#E65100,thickness=2]- RoboTaxi
+Vehicle <|-[#E65100,thickness=2]- Taxi
 @enduml
