@@ -6,6 +6,7 @@
 #include "robotaxi.hpp"
 
 #include <iostream>  // Step 4: drive() prints
+#include <stdexcept>  // Step 3: std::invalid_argument
 #include <utility>   // Step 3: std::move
 
 namespace fleet {

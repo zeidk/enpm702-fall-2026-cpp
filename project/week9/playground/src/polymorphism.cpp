@@ -47,7 +47,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // Compile-time polymorphism: no virtual.
 // ---------------------------------------------------------------------------
 namespace compile_time {
-// [Slide 65] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
+// [Slide 66] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
@@ -60,7 +60,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 67] Redefinition
+// [Slide 68] Redefinition
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
@@ -98,7 +98,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 70] Through a Base Reference
+// [Slide 71] Through a Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -116,11 +116,11 @@ void run() {
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 71] virtual Methods in the Base Class
+// [Slide 72] virtual Methods in the Base Class
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 79]
+  virtual ~Vehicle() = default;  // why: [Slide 80]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -130,7 +130,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 75] override: RoboTaxi::drive is marked override.
+// [Slide 76] override: RoboTaxi::drive is marked override.
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
@@ -159,7 +159,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 73] Slicing
+// [Slide 74] Slicing
 namespace slicing {
 void run() {
   Taxi taxi{13.4, "Ana"};
@@ -175,7 +175,7 @@ void run() {
 }  // namespace runtime
 
 // ---------------------------------------------------------------------------
-// [Slide 76] A Typo That Compiles: no override.
+// [Slide 77] A Typo That Compiles: no override.
 // ---------------------------------------------------------------------------
 namespace typo {
 class Vehicle {
@@ -204,15 +204,15 @@ void run() {
 // Mistake 2 on the slide, "void drive(const Route& route);" (no const), is
 // left out here: it compiles too, but -Wall warns (-Woverloaded-virtual=), and
 // this build has no warnings.
-// [Slide 77] override Catches Both. With override, both stop the build.
+// [Slide 78] override Catches Both. With override, both stop the build.
 }  // namespace typo
 
 std::vector<Slide> slides() {
   return {
-      {67, "Redefinition", compile_time::redefinition::run},
-      {70, "Through a Base Reference", compile_time::base_reference::run},
-      {73, "Slicing", runtime::slicing::run},
-      {76, "A Typo That Compiles", typo::run},
+      {68, "Redefinition", compile_time::redefinition::run},
+      {71, "Through a Base Reference", compile_time::base_reference::run},
+      {74, "Slicing", runtime::slicing::run},
+      {77, "A Typo That Compiles", typo::run},
   };
 }
 

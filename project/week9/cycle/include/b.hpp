@@ -10,7 +10,7 @@
 // [Slide 28] A Forward Declaration Breaks the Cycle
 #pragma once
 
-class A;  // the name only
+class A;  // name only
 
 class B {
  public:

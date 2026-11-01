@@ -22,7 +22,7 @@ namespace undefined {
 using fleet::Position;
 using fleet::Route;
 
-// [Slide 80] Deleting through a Base Pointer
+// [Slide 81] Deleting through a Base Pointer
 // ~Vehicle is not virtual. The std::unique_ptr<Vehicle> deletes a Taxi through
 // a Vehicle*: undefined behavior ([expr.delete] 7.6.2.8 paragraph 3). Only
 // ~Vehicle runs. AddressSanitizer stops the program; with that check off,
@@ -70,7 +70,7 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {80, "Deleting through a Base Pointer", nonvirtual_dtor::run, true},
+      {81, "Deleting through a Base Pointer", nonvirtual_dtor::run, true},
   };
 }
 

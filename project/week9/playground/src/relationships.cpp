@@ -81,7 +81,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 34] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 35] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -104,7 +104,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 34] The Vehicles Outlive the Fleet
+// [Slide 35] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -126,7 +126,7 @@ std::vector<Slide> slides() {
   return {
       {5, "Owners Keep Objects Alive", ownership::run},
       {26, "Two Separate Lifetimes", association::run},
-      {34, "The Vehicles Outlive the Fleet", aggregation::run},
+      {35, "The Vehicles Outlive the Fleet", aggregation::run},
   };
 }
 

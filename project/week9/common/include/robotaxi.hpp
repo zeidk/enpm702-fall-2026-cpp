@@ -16,7 +16,6 @@
  */
 #pragma once
 
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -39,14 +38,10 @@ class RoboTaxi final : public Vehicle {
    */
   explicit RoboTaxi(double max_speed, std::string operating_zone = "College Park",
                     AutomationLevel automation_level = AutomationLevel::level_4)
-      : Vehicle{max_speed},
+      // check_level runs before Vehicle's constructor, so a rejected RoboTaxi takes no id
+      : Vehicle{(check_level(automation_level), max_speed)},
         operating_zone_{std::move(operating_zone)},
-        automation_level_{automation_level} {
-    if (automation_level_ < AutomationLevel::level_0 ||
-        automation_level_ > AutomationLevel::level_5) {
-      throw std::invalid_argument{"unknown automation level"};
-    }
-  }
+        automation_level_{automation_level} {}
 
   /// Drives the route, or stays parked with no sensor.
   void drive(const Route& route) const override;
@@ -65,6 +60,9 @@ class RoboTaxi final : public Vehicle {
   void change_zone(std::string operating_zone);
 
  private:
+  /// Throws std::invalid_argument for a level that is not level_0 to level_5.
+  static void check_level(AutomationLevel automation_level);
+
   std::string operating_zone_;        ///< the area it may drive in
   AutomationLevel automation_level_;  ///< SAE J3016 level of driving automation
 };
