@@ -26,10 +26,10 @@ namespace inheritance {
 using fleet::AutomationLevel;
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// sizes are on [Appendix xxviii], Inside a Taxi Object, in
+// sizes are on [Appendix xxvii], Inside a Taxi Object, in
 // ../../appendix/src/appendix.cpp, with copies of these two classes. Each has
 // one method that Vehicle does not have, change_zone() and assign_driver(), for
-// [Slide 55] and [Slide 54]. Each class declares it; its body is below the
+// [Slide 58] and [Slide 57]. Each class declares it; its body is below the
 // class, as it is in robotaxi.cpp and taxi.cpp in the program.
 class RoboTaxi : public l8::Vehicle {
  public:
@@ -49,7 +49,7 @@ void RoboTaxi::change_zone(std::string operating_zone) {
   operating_zone_ = std::move(operating_zone);
 }
 
-// Taxi's constructor is also on [Slide 62], Base Class Initializer.
+// Taxi's constructor is also on [Slide 65], Base Class Initializer.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -62,7 +62,7 @@ class Taxi : public l8::Vehicle {
 
 void Taxi::assign_driver(std::string driver_name) { driver_name_ = std::move(driver_name); }
 
-// [Slide 52] A RoboTaxi in Memory. car_a holds every data member of Vehicle,
+// [Slide 55] A RoboTaxi in Memory. car_a holds every data member of Vehicle,
 // all private: Vehicle's public methods read them. RoboTaxi adds
 // operating_zone_, a std::string (32 bytes), and automation_level_, an
 // AutomationLevel (4 bytes, as an int, then 4 bytes of padding): 88 + 40 = 128
@@ -77,7 +77,7 @@ void run() {
 }
 }  // namespace robotaxi_memory
 
-// [Slide 53] A Taxi through a Pointer. taxi, on the stack, is one pointer (8
+// [Slide 56] A Taxi through a Pointer. taxi, on the stack, is one pointer (8
 // bytes); the Taxi on the heap is its Vehicle part (88) and driver_name_ (32).
 namespace taxi_pointer {
 void run() {
@@ -87,7 +87,7 @@ void run() {
 }
 }  // namespace taxi_pointer
 
-// [Slide 54] A Base Class Reference to a Derived Object. No cast: vehicle is
+// [Slide 57] A Base Class Reference to a Derived Object. No cast: vehicle is
 // another name for the Vehicle part of taxi, its base subobject. The compiler
 // checks a call through vehicle against Vehicle's members only, so
 // assign_driver() is reachable only through taxi.
@@ -104,7 +104,7 @@ void run() {
 // error: 'class l8::Vehicle' has no member named 'assign_driver'
 }  // namespace base_ref
 
-// [Slide 55] A Base Class Pointer to a Derived Object. No cast: pointer holds
+// [Slide 58] A Base Class Pointer to a Derived Object. No cast: pointer holds
 // the address of the Vehicle part of robotaxi, then of taxi. As with a
 // reference, change_zone() is reachable only through robotaxi.
 namespace base_ptr {
@@ -122,11 +122,11 @@ void run() {
 // error: 'class l8::Vehicle' has no member named 'change_zone'
 }  // namespace base_ptr
 
-// [Slide 56] Not the Other Way. Does not compile:
+// [Slide 59] Not the Other Way. Does not compile:
 //   Taxi* back{pointer};
 // error: invalid conversion from 'l8::Vehicle*' to 'inheritance::Taxi*' [-fpermissive]
 
-// [Slide 57] protected Members. L8's Vehicle with one protected method:
+// [Slide 60] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 // The class declares log_event(); its body is below the class, as it is in
@@ -173,12 +173,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 58] private Stays private. Does not compile:
+// [Slide 61] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
-// The fix goes through Vehicle's public methods: [Slide 60].
+// The fix goes through Vehicle's public methods: [Slide 63].
 
-// [Slide 59] protected Data. If speed_ were protected, a derived class could
+// [Slide 62] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -215,7 +215,7 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 60] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
+// [Slide 63] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
 // reads it with get_speed() and writes it with set_speed(), so the check runs.
 namespace through_methods {
 class RoboTaxi : public l8::Vehicle {
@@ -247,7 +247,7 @@ void run() {
 }
 }  // namespace through_methods
 
-// [Slide 47] No Specifier Means private Inheritance. With "class RoboTaxi : Vehicle"
+// [Slide 49] No Specifier Means private Inheritance. With "class RoboTaxi : Vehicle"
 // (no public), the base is private, and main() cannot call get_speed():
 // error: 'double Vehicle::get_speed() const' is inaccessible within this context
 // error: 'Vehicle' is not an accessible base of 'RoboTaxi'
@@ -266,10 +266,10 @@ void run() {
 // The notes after these are cut: the copy and move constructors are
 // candidates too.
 
-// A Base Member in the List is an appendix frame: [Appendix xiv], in
+// A Base Member in the List is an appendix frame: [Appendix xiii], in
 // ../../appendix/src/appendix.cpp.
 
-// [Slide 63] Construction and Destruction Order. Both classes
+// [Slide 66] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -312,14 +312,14 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {52, "A RoboTaxi in Memory", robotaxi_memory::run},
-      {53, "A Taxi through a Pointer", taxi_pointer::run},
-      {54, "A Base Class Reference to a Derived Object", base_ref::run},
-      {55, "A Base Class Pointer to a Derived Object", base_ptr::run},
-      {57, "protected Members", protected_member::run},
-      {59, "protected Data", protected_data::run},
-      {60, "Through Vehicle's public Methods", through_methods::run},
-      {63, "Construction and Destruction Order", order::run},
+      {55, "A RoboTaxi in Memory", robotaxi_memory::run},
+      {56, "A Taxi through a Pointer", taxi_pointer::run},
+      {57, "A Base Class Reference to a Derived Object", base_ref::run},
+      {58, "A Base Class Pointer to a Derived Object", base_ptr::run},
+      {60, "protected Members", protected_member::run},
+      {62, "protected Data", protected_data::run},
+      {63, "Through Vehicle's public Methods", through_methods::run},
+      {66, "Construction and Destruction Order", order::run},
   };
 }
 
