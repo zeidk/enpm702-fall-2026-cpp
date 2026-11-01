@@ -8,7 +8,7 @@
  * @code
  * 702build week9_playground
  * 702run week9_playground        # every slide, in order
- * 702run week9_playground 78     # only [Slide 78]
+ * 702run week9_playground 67     # only [Slide 67]
  * @endcode
  *
  * @c "[Slide N]" is the number in the top-left corner of the slide. The code
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
   std::vector<Slide> slides;
   for (const std::vector<Slide>& section :
        {relationships::slides(), inheritance::slides(), polymorphism::slides(),
-        abstraction::slides(), discussions::slides(), undefined::slides()}) {
+        abstraction::slides(), undefined::slides()}) {
     slides.insert(slides.end(), section.begin(), section.end());
   }
   return run_slides(slides, argc, argv, Part::lecture);

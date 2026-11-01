@@ -15,7 +15,7 @@ hide empty members
 
 left to right direction
 
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -39,11 +39,11 @@ abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
   + {static} next_id() : int
   # log_event(const string&) : void
 }
-class Route #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Route #back:F3E8FF;line:6A1B9A;text:000000 {
   - waypoints_ : vector<Position>
   + add(Position) : void
   + length() : double
 }
 
-Vehicle .[#6A1B9A,thickness=2,dashed].> Route : <color:#6A1B9A>uses</color>
+Vehicle .[#6A1B9A,thickness=2,dashed].> Route : <color:#000000>uses</color>
 @enduml

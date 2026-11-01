@@ -15,15 +15,15 @@ hide empty members
 
 left to right direction
 
-class Route #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Route #back:F3E8FF;line:6A1B9A;text:000000 {
   - waypoints_ : vector<Position>
   + add(Position) : void
   + length() : double
 }
-class Position <<struct>> #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Position <<struct>> #back:F3E8FF;line:6A1B9A;text:000000 {
   + x : double
   + y : double
 }
 
-Route "<color:#6A1B9A>1</color>" *-[#6A1B9A,thickness=2]---- "<color:#6A1B9A>-waypoints_  0..*</color>" Position : <color:#6A1B9A>has</color>
+Route "<color:#000000>1</color>" *-[#6A1B9A,thickness=2]---- "<color:#000000>-waypoints_  0..*</color>" Position : <color:#000000>has</color>
 @enduml

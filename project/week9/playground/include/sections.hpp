@@ -29,7 +29,3 @@ std::vector<Slide> slides();  ///< Section 3, Polymorphism: polymorphism.cpp
 namespace abstraction {
 std::vector<Slide> slides();  ///< Sections 4 and 5, Abstraction and final: abstraction.cpp
 }
-
-namespace discussions {
-std::vector<Slide> slides();  ///< The code behind the discussion slides: discussions.cpp
-}

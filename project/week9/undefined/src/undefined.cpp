@@ -22,11 +22,11 @@ namespace undefined {
 using fleet::Position;
 using fleet::Route;
 
-// [Slide 88] Deleting through a Base Pointer
+// [Slide 75] Deleting through a Base Pointer
 // ~Vehicle is not virtual. The std::unique_ptr<Vehicle> deletes a Taxi through
 // a Vehicle*: undefined behavior ([expr.delete] 7.6.2.8 paragraph 3). Only
 // ~Vehicle runs. AddressSanitizer stops the program; with that check off,
-//   ASAN_OPTIONS=new_delete_type_mismatch=0 702run week9_playground 88
+//   ASAN_OPTIONS=new_delete_type_mismatch=0 702run week9_playground 75
 // LeakSanitizer finds the driver's name, which ~Taxi never gave back. The name
 // is longer than 15 characters, so std::string keeps it on the heap.
 // The Sizes in the Report (the next slide): with g++ 13.3, this small Vehicle
@@ -70,7 +70,7 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {88, "Deleting through a Base Pointer", nonvirtual_dtor::run, true},
+      {75, "Deleting through a Base Pointer", nonvirtual_dtor::run, true},
   };
 }
 

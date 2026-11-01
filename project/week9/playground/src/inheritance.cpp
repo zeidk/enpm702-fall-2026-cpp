@@ -11,6 +11,7 @@
  * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  */
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -22,13 +23,14 @@
 namespace inheritance {
 
 // RoboTaxi and Taxi on L8's Vehicle, as Live Coding: Step 3 writes them. Their
-// sizes are on [Slide 53].
+// sizes are on [Appendix xxviii], Inside a Taxi Object, in
+// ../../appendix/src/appendix.cpp, with copies of these two classes.
 class RoboTaxi : public l8::Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
 };
 
-// Taxi's constructor is also on [Slide 61], Base Class Initializer.
+// Taxi's constructor is also on [Slide 56], Base Class Initializer.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -38,20 +40,30 @@ class Taxi : public l8::Vehicle {
   std::string driver_name_;  // empty: no driver
 };
 
-// [Slide 53] Inside a Taxi Object
-// l8::Vehicle: int id_ (4 bytes, then 4 bytes of padding), two doubles (16),
-// color_, a std::string (32 with libstdc++), mileage_, a double (8), and a
-// std::vector (24 with libstdc++): 88. Taxi adds a std::string: 32 more.
-namespace inside {
+// [Slide 47] A RoboTaxi in Memory. car_a holds every data member of Vehicle,
+// all private: Vehicle's public methods read them. RoboTaxi adds none, so both
+// sizes are 88 (g++ 13.3). Run alone, car_a's id is 1.
+namespace robotaxi_memory {
 void run() {
-  Taxi taxi{13.4, "Ana"};
-  std::cout << sizeof(l8::Vehicle) << ' ' << sizeof(RoboTaxi) << ' '
-            << sizeof(Taxi) << '\n';         // 88 88 120
-  std::cout << sizeof(std::string) << '\n';  // 32
+  RoboTaxi car_a{13.4};
+  std::cout << car_a.get_id() << ' ' << car_a.get_max_speed() << ' '
+            << car_a.get_speed() << ' ' << car_a.get_color() << ' '
+            << car_a.get_mileage() << ' ' << car_a.sensor_count() << '\n';
+  std::cout << sizeof(l8::Vehicle) << ' ' << sizeof(RoboTaxi) << '\n';  // 88 88
 }
-}  // namespace inside
+}  // namespace robotaxi_memory
 
-// [Slide 54] A Vehicle Reference and a Vehicle Pointer to a Taxi. No cast:
+// [Slide 48] A Taxi through a Pointer. taxi, on the stack, is one pointer (8
+// bytes); the Taxi on the heap is its Vehicle part (88) and driver_name_ (32).
+namespace taxi_pointer {
+void run() {
+  auto taxi{std::make_unique<Taxi>(13.4, "Ana")};
+  std::cout << sizeof(taxi) << ' ' << sizeof(*taxi) << '\n';  // 8 120
+  std::cout << taxi->get_color() << '\n';                     // the Vehicle part
+}
+}  // namespace taxi_pointer
+
+// [Slide 49] A Vehicle Reference and a Vehicle Pointer to a Taxi. No cast:
 // both refer to the Vehicle part of taxi, its base subobject.
 namespace base_ref {
 void run() {
@@ -64,11 +76,11 @@ void run() {
 }
 }  // namespace base_ref
 
-// [Slide 55] Not the Other Way. Does not compile:
+// [Slide 50] Not the Other Way. Does not compile:
 //   Taxi* back{pointer};
 // error: invalid conversion from 'l8::Vehicle*' to 'inheritance::Taxi*' [-fpermissive]
 
-// [Slide 56] protected Members. L8's Vehicle with one protected method:
+// [Slide 51] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 // The class declares log_event(); its body is below the class, as it is in
@@ -107,12 +119,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 57] private Stays private. Does not compile:
+// [Slide 52] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
-// The fix goes through Vehicle's public methods: [Slide 59].
+// The fix goes through Vehicle's public methods: [Slide 54].
 
-// [Slide 58] protected Data. If speed_ were protected, a derived class could
+// [Slide 53] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -141,7 +153,7 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 59] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
+// [Slide 54] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
 // reads it with get_speed() and writes it with set_speed(), so the check runs.
 namespace through_methods {
 class RoboTaxi : public l8::Vehicle {
@@ -165,12 +177,12 @@ void run() {
 }
 }  // namespace through_methods
 
-// [Slide 60] public Inheritance. With "class RoboTaxi : Vehicle"
+// [Slide 55] public Inheritance. With "class RoboTaxi : Vehicle"
 // (no public), the base is private, and main() cannot call get_speed():
 // error: 'double Vehicle::get_speed() const' is inaccessible within this context
 // error: 'Vehicle' is not an accessible base of 'RoboTaxi'
 
-// [Slide 62] Without the Base Class Initializer. Does not compile:
+// [Slide 57] Without the Base Class Initializer. Does not compile:
 //   explicit RoboTaxi(double max_speed) {}
 // error: no matching function for call to 'Vehicle::Vehicle()'
 // note: candidate: 'Vehicle::Vehicle(double, double)'
@@ -180,10 +192,10 @@ void run() {
 // The slide cuts the notes after these: the copy and move constructors are
 // candidates too.
 
-// A Base Member in the List is an appendix frame: [Appendix xvii], in
+// A Base Member in the List is an appendix frame: [Appendix xiv], in
 // ../../appendix/src/appendix.cpp.
 
-// [Slide 63] Construction and Destruction Order. Both classes
+// [Slide 58] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -218,12 +230,13 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {53, "Inside a Taxi Object", inside::run},
-      {54, "A Vehicle Reference and a Vehicle Pointer to a Taxi", base_ref::run},
-      {56, "protected Members", protected_member::run},
-      {58, "protected Data", protected_data::run},
-      {59, "Through Vehicle's public Methods", through_methods::run},
-      {63, "Construction and Destruction Order", order::run},
+      {47, "A RoboTaxi in Memory", robotaxi_memory::run},
+      {48, "A Taxi through a Pointer", taxi_pointer::run},
+      {49, "A Vehicle Reference and a Vehicle Pointer to a Taxi", base_ref::run},
+      {51, "protected Members", protected_member::run},
+      {53, "protected Data", protected_data::run},
+      {54, "Through Vehicle's public Methods", through_methods::run},
+      {58, "Construction and Destruction Order", order::run},
   };
 }
 

@@ -12,7 +12,8 @@
 namespace fleet {
 
 // Step 2: Fleet::add() throws std::invalid_argument for a null pointer, and
-//         adds the vehicle only if std::find does not find it in vehicles_.
+//         skips a vehicle already in the fleet: std::find (from <algorithm>)
+//         returns vehicles_.end() when the vehicle is not there.
 //         Fleet::remove() erases the vehicle with that id (std::erase_if) and
 //         returns true if it removed one. Fleet::size() returns how many
 //         vehicles the fleet holds.

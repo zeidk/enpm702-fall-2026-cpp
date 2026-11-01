@@ -6,9 +6,9 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_playground       run the code of every slide
-#   702run week9_playground 59    run only the code of [Slide 59]
+#   702run week9_playground 67    run only the code of [Slide 67]
 #   702run week9_appendix         run the code of every appendix frame
-#   702run week9_appendix x       run only the code of [Appendix x]
+#   702run week9_appendix xi      run only the code of [Appendix xi]
 #   702run week9_live             run the classes of the Live Coding steps
 #   702run week9_operators        run every part of the reading page Operator
 #                                 Overloading
@@ -26,7 +26,7 @@
 #   operators/    the program of the reading page Operator Overloading on Read
 #                 the Docs, one file per part (week9_operators), with its own
 #                 Position and Route
-#   cycle/        a small Vehicle and Passenger that refer to each other, with
+#   cycle/        two small classes, A and B, that refer to each other, with
 #                 forward declarations instead of a cyclic include (week9_cycle)
 #   live/         the classes of the "Live Coding" slides (week9_live):
 #                 Vehicle, Sensor, Route and Position are given; Passenger,
@@ -51,7 +51,6 @@ add_executable(week9_playground playground/src/main.cpp
     playground/src/inheritance.cpp
     playground/src/polymorphism.cpp
     playground/src/abstraction.cpp
-    playground/src/discussions.cpp
     undefined/src/undefined.cpp
     common/src/sensor.cpp
     common/src/route.cpp
@@ -78,8 +77,9 @@ add_executable(week9_appendix appendix/src/appendix.cpp
     common/src/vehicle.cpp
     common/src/robotaxi.cpp
     common/src/taxi.cpp
+    common/src/fleet.cpp
     common/src/slides.cpp)
-target_include_directories(week9_appendix PRIVATE common/include)
+target_include_directories(week9_appendix PRIVATE common/include playground/include)
 target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
@@ -130,47 +130,46 @@ target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit
 target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
-# [Slide 28] Two Headers That Include Each Other
-# [Slide 29] A Forward Declaration Breaks the Cycle
-# A small Vehicle that keeps its riders and a small Passenger that rides it: a
-# two-way association. Each header needs the other class's name, and a forward
-# declaration gives it the name only. The program prints "built".
+# [Slide 26] Two Headers That Include Each Other
+# [Slide 27] A Forward Declaration Breaks the Cycle
+# A class A that keeps a list of B objects and a class B that refers back to
+# its A: a two-way association. Each header needs the other class's name, and
+# a forward declaration gives it the name only. The program prints "built".
 #
-# [Slide 28] includes each header from the other instead. These two headers,
+# [Slide 26] includes each header from the other instead. These two headers,
 # "// ..." line included, are the files that gave the errors below.
-# vehicle.hpp:
+# a.hpp:
 #
 #   #pragma once
 #   #include <vector>
-#   #include "passenger.hpp"
-#   class Vehicle {
+#   #include "b.hpp"
+#   class A {
 #     // ...
 #    private:
-#     std::vector<const Passenger*> riders_;
+#     std::vector<const B*> bs_;
 #   };
 #
-# passenger.hpp:
+# b.hpp:
 #
 #   #pragma once
 #   #include <memory>
-#   #include "vehicle.hpp"
-#   class Passenger {
+#   #include "a.hpp"
+#   class B {
 #     // ...
 #    private:
-#     std::weak_ptr<Vehicle> ride_;
+#     std::weak_ptr<A> a_;
 #   };
 #
-# A main.cpp whose first line is #include "vehicle.hpp" stops with these two
+# A main.cpp whose first line is #include "a.hpp" stops with these two
 # errors, the first of three (g++ 13.3, -std=c++20):
 #
-#   passenger.hpp:7:17: error: 'Vehicle' was not declared in this scope
-#   passenger.hpp:7:24: error: template argument 1 is invalid
+#   b.hpp:7:17: error: 'A' was not declared in this scope
+#   b.hpp:7:18: error: template argument 1 is invalid
 #
-# vehicle.hpp includes passenger.hpp, which includes vehicle.hpp again;
-# #pragma once skips that copy, so Passenger is compiled before Vehicle is
-# declared.
+# a.hpp includes b.hpp, which includes a.hpp again; #pragma once skips that
+# copy, so B is compiled before A is declared.
 # -----------------------------------------------------------------------------
 add_executable(week9_cycle cycle/src/main.cpp
-    cycle/src/vehicle.cpp
-    cycle/src/passenger.cpp)
+    cycle/src/a.cpp
+    cycle/src/b.cpp)
 target_include_directories(week9_cycle PRIVATE cycle/include)

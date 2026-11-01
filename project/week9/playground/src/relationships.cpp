@@ -1,7 +1,6 @@
 /**
  * @file relationships.cpp
- * @brief L9 Section 2, Class Relationships: association, aggregation,
- *        composition and dependency.
+ * @brief L9 Section 2, Class Relationships: association and aggregation.
  * @author Zeid Kootbally
  *
  * @details Part of week9_playground. These slides come before inheritance, so
@@ -10,8 +9,8 @@
  * against it; the final versions, in ../../common, are the same code against
  * the abstract Vehicle of Section 4.
  *
- * The routes are chosen for the examples: (0, 0) to (300, 400) is 500 m, the
- * hypotenuse of a 300-400-500 triangle.
+ * The code of the composition and dependency frames, Each Route Has Its Own
+ * Positions and A Route for One Call, is in ../../appendix/src/appendix.cpp.
  */
 #include <algorithm>
 #include <cstddef>
@@ -23,14 +22,10 @@
 #include <vector>
 
 #include "l8_vehicle.hpp"
-#include "position.hpp"
-#include "route.hpp"
 #include "sections.hpp"
 
 namespace relationships {
 
-using fleet::Position;
-using fleet::Route;
 using l8::Vehicle;
 
 // [Slide 5] Owners Keep Objects Alive
@@ -51,7 +46,7 @@ void run() {
 }
 }  // namespace ownership
 
-// [Appendix vi] A Passenger Rides a Vehicle. The class only: [Slide 25] runs it,
+// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 25] runs it,
 // and Live Coding: Step 1 writes it in ../../live.
 class Passenger {
  public:
@@ -86,7 +81,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 35] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 33] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -109,7 +104,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 35] The Vehicles Outlive the Fleet
+// [Slide 33] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -127,49 +122,11 @@ void run() {
 }
 }  // namespace aggregation
 
-// [Slide 42] Each Route Has Its Own Positions
-// A Route holds its Position objects by value (composition, as Vehicle holds
-// its Sensors through std::unique_ptr). A shared ride: Ana's stop is added
-// to a copy of Maya's route.
-namespace composition {
-void run() {
-  Route maya_ride;
-  maya_ride.add(Position{0.0, 0.0});      // pickup
-  maya_ride.add(Position{300.0, 400.0});  // Maya's stop: 500 m
-  Route shared_ride{maya_ride};           // copies the Positions too
-  shared_ride.add(Position{300.0, 0.0});  // Ana's stop: 400 m more
-  std::cout << maya_ride.length() << ' ' << shared_ride.length() << '\n';  // 500 900
-}
-}  // namespace composition
-
-// [Slide 48] A Route for One Call
-// l8::Vehicle is the concrete class the students already have: its drive()
-// prints the route's length and length / speed. The slide says so; the
-// Abstraction section makes drive() pure virtual (../../common).
-namespace dependency {
-void run() {
-  Vehicle car_a{13.4};
-  car_a.set_speed(10.0);
-  {
-    Route maya_ride;
-    maya_ride.add(Position{0.0, 0.0});
-    maya_ride.add(Position{300.0, 400.0});
-    car_a.drive(maya_ride);  // 500 m at 10 m/s: 50 s
-  }  // the Route is gone; the Vehicle kept nothing of it
-  Route next;
-  next.add(Position{0.0, 0.0});
-  next.add(Position{0.0, 200.0});
-  car_a.drive(next);    // 200 m at 10 m/s: 20 s
-}
-}  // namespace dependency
-
 std::vector<Slide> slides() {
   return {
       {5, "Owners Keep Objects Alive", ownership::run},
       {25, "Two Separate Lifetimes", association::run},
-      {35, "The Vehicles Outlive the Fleet", aggregation::run},
-      {42, "Each Route Has Its Own Positions", composition::run},
-      {48, "A Route for One Call", dependency::run},
+      {33, "The Vehicles Outlive the Fleet", aggregation::run},
   };
 }
 

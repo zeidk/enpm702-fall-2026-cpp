@@ -13,10 +13,11 @@
  * The slide that deletes a Taxi through a Vehicle pointer with no virtual
  * destructor is undefined behavior: it is in ../../undefined/src/undefined.cpp.
  * The frames that Live Coding: Steps 4 and 5 replace are in
- * ../../appendix/src/appendix.cpp: [Appendix vii] and [Appendix viii]. The
- * appendix frames auto or a Base Pointer ([Appendix xviii] to [Appendix xxi])
- * and The Cost of virtual ([Appendix xxiii]) are there too, with copies of the
- * runtime and compile_time classes of this file.
+ * ../../appendix/src/appendix.cpp: [Appendix iv] and [Appendix v]. The
+ * appendix frames auto or a Base Pointer ([Appendix xv] to [Appendix xviii]),
+ * The Cost of virtual ([Appendix xx]) and One Overload per Class
+ * ([Appendix xxx]) are there too, with copies of the runtime and compile_time
+ * classes of this file.
  */
 #include <iostream>
 #include <string>
@@ -43,7 +44,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // Compile-time polymorphism: no virtual.
 // ---------------------------------------------------------------------------
 namespace compile_time {
-// [Slide 70] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
+// [Slide 61] Compile-Time Polymorphism: this Vehicle and this RoboTaxi.
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
@@ -56,7 +57,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 72] Redefinition
+// [Slide 63] Redefinition
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
@@ -86,7 +87,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 78] Through a Base Reference
+// [Slide 67] Through a Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -98,30 +99,17 @@ void run() {
 }
 }  // namespace base_reference
 
-// [Slide 76] One Overload per Class. In their own namespace, so the calls
-// of [Slide 78] above still find only start_shift(const Vehicle&, const Route&).
-namespace overloads {
-void start_shift(const RoboTaxi& robotaxi, const Route& route) { robotaxi.drive(route); }
-void start_shift(const Taxi& taxi, const Route& route) { taxi.drive(route); }
-
-void run() {
-  RoboTaxi robotaxi{13.4};
-  Taxi taxi{13.4, "Ana"};
-  start_shift(robotaxi, make_trip());  // RoboTaxi: drives itself 500 m
-  start_shift(taxi, make_trip());      // Taxi: Ana drives 500 m
-}
-}  // namespace overloads
 }  // namespace compile_time
 
 // ---------------------------------------------------------------------------
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 80] virtual Methods in the Base Class
+// [Slide 68] virtual Methods in the Base Class
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 87]
+  virtual ~Vehicle() = default;  // why: [Slide 74]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -131,7 +119,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 84] override: RoboTaxi::drive is marked override.
+// [Slide 71] override: RoboTaxi::drive is marked override.
 class RoboTaxi : public Vehicle {
  public:
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
@@ -152,7 +140,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 81] Slicing
+// [Slide 69] Slicing
 namespace slicing {
 void run() {
   Taxi taxi{13.4, "Ana"};
@@ -168,7 +156,7 @@ void run() {
 }  // namespace runtime
 
 // ---------------------------------------------------------------------------
-// [Slide 85] A Typo That Compiles: no override.
+// [Slide 72] A Typo That Compiles: no override.
 // ---------------------------------------------------------------------------
 namespace typo {
 class Vehicle {
@@ -197,16 +185,15 @@ void run() {
 // Mistake 2 on the slide, "void drive(const Route& route);" (no const), is
 // left out here: it compiles too, but -Wall warns (-Woverloaded-virtual=), and
 // this build has no warnings.
-// [Slide 86] override Catches Both. With override, both stop the build.
+// [Slide 73] override Catches Both. With override, both stop the build.
 }  // namespace typo
 
 std::vector<Slide> slides() {
   return {
-      {72, "Redefinition", compile_time::redefinition::run},
-      {78, "Through a Base Reference", compile_time::base_reference::run},
-      {76, "One Overload per Class", compile_time::overloads::run},
-      {81, "Slicing", runtime::slicing::run},
-      {85, "A Typo That Compiles", typo::run},
+      {63, "Redefinition", compile_time::redefinition::run},
+      {67, "Through a Base Reference", compile_time::base_reference::run},
+      {69, "Slicing", runtime::slicing::run},
+      {72, "A Typo That Compiles", typo::run},
   };
 }
 

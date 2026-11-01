@@ -27,7 +27,7 @@ class Passenger #back:FFFFFF;line:A0A0A0;text:8A8A8A {
   + board(shared_ptr<Vehicle>) : void
   + leave() : void
 }
-abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+abstract class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   - id_ : int
   - {static} next_id_ : int
   - max_speed_ : double
@@ -72,10 +72,10 @@ class Position <<struct>> #back:FFFFFF;line:A0A0A0;text:8A8A8A {
   + x : double
   + y : double
 }
-class RoboTaxi <<final>> #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class RoboTaxi <<final>> #back:F3E8FF;line:6A1B9A;text:000000 {
   + drive(const Route&) : void
 }
-class Taxi <<final>> #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Taxi <<final>> #back:F3E8FF;line:6A1B9A;text:000000 {
   - driver_name_ : string
   + drive(const Route&) : void
 }

@@ -9,7 +9,9 @@
 
 namespace fleet {
 
-// Step 4: Taxi::drive() prints "Taxi: ", the driver's name, " drives ", the
-//         route's length and " m".
+// Step 4: Taxi::drive() first checks the driver: if driver_name_ is empty, it
+//         prints "Taxi: no driver, stays parked" and returns. Otherwise it
+//         prints "Taxi: ", the driver's name, " drives ", the route's length
+//         and " m".
 
 }  // namespace fleet

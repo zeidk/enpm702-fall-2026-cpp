@@ -15,13 +15,13 @@ hide empty members
 
 left to right direction
 
-class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Vehicle #back:F3E8FF;line:6A1B9A;text:000000 {
   + drive(const Route&) : void
 }
-class RoboTaxi #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class RoboTaxi #back:F3E8FF;line:6A1B9A;text:000000 {
   + drive(const Route&) : void
 }
-class Taxi #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+class Taxi #back:F3E8FF;line:6A1B9A;text:000000 {
   + drive(const Route&) : void
 }
 

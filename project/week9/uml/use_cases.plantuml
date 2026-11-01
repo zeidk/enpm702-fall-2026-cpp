@@ -13,7 +13,7 @@ actor Driver
 actor Operator
 actor "Sensor" as Sensor <<hardware>>
 
-rectangle "Robotaxi fleet software" {
+rectangle "Ride service software" {
   usecase "Request a ride\n(FR-1)" as UC1
   usecase "Board and leave\na vehicle (FR-12)" as UC2
   usecase "Query a vehicle's\nstatus (FR-6)" as UC3
