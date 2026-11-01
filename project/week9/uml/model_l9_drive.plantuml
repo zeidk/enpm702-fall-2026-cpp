@@ -1,0 +1,30 @@
+@startuml model_l9_drive
+' Generated for the slides.
+!theme mono
+skinparam backgroundColor white
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 75
+skinparam ArrowThickness 1.5
+hide circle
+hide empty members
+
+
+left to right direction
+
+class Vehicle #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  + drive(const Route&) : void
+}
+class RoboTaxi #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  + drive(const Route&) : void
+}
+class Taxi #back:F3E8FF;line:6A1B9A;text:6A1B9A {
+  + drive(const Route&) : void
+}
+
+Vehicle <|-[#6A1B9A,thickness=2]- RoboTaxi
+Vehicle <|-[#6A1B9A,thickness=2]- Taxi
+@enduml

@@ -47,6 +47,7 @@ abstract class Vehicle {
   + sensor_count() : size_t
   + get_sensors() : const vector<unique_ptr<Sensor>>&
   + {abstract} drive(const Route&) : void
+  # log_event(const string&) : void
 }
 class Sensor {
   - id_ : int
@@ -84,7 +85,7 @@ Passenger "0..*" --> "0..1" Vehicle : rides
 Vehicle "1" *-- "0..*" Sensor : owns
 Vehicle ..> Route : uses
 Route "1" *-- "0..*" Position : has
-Sensor ..> SensorType
+Sensor -[hidden]-> SensorType
 Vehicle <|-- RoboTaxi
 Vehicle <|-- Taxi
 @enduml

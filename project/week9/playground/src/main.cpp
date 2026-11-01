@@ -8,7 +8,7 @@
  * @code
  * 702build week9_playground
  * 702run week9_playground        # every slide, in order
- * 702run week9_playground 80     # only [Slide 80]
+ * 702run week9_playground 78     # only [Slide 78]
  * @endcode
  *
  * @c "[Slide N]" is the number in the top-left corner of the slide. The code

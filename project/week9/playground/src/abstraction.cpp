@@ -11,7 +11,8 @@
  * g++ 13.3 gives (-std=c++20 -Wall -Wextra -pedantic-errors -Wshadow).
  *
  * The frames that Live Coding: Steps 6 and 7 replace are in
- * ../../appendix/src/appendix.cpp: [Appendix vi], [Appendix vii] and [Appendix viii].
+ * ../../appendix/src/appendix.cpp: [Appendix ix], [Appendix x] and [Appendix xi].
+ * A final Method is there too: [Appendix xii].
  */
 #include <memory>
 #include <vector>
@@ -43,13 +44,13 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return maya_ride;
 }
 
-// [Slide 104] Forgetting One Override. Taxi without drive():
+// [Slide 97] Forgetting One Override. Taxi without drive():
 //   Taxi taxi{13.4, "Ana"};
 // error: cannot declare variable 'taxi' to be of abstract type 'Taxi'
 // note:   because the following virtual functions are pure within 'Taxi':
 // note:     'virtual void Vehicle::drive(const Route&) const'
 
-// [Slide 105] The Whole Program
+// [Slide 98] Fleet and Passenger Do Not Change
 namespace whole_program {
 void run() {
   const Route maya_ride{make_trip()};
@@ -59,33 +60,33 @@ void run() {
   auto taxi{std::make_shared<Taxi>(13.4, "Ana")};
 
   Fleet fleet;
-  fleet.add(robotaxi);  // std::shared_ptr<RoboTaxi> converts
+  fleet.add(robotaxi);  // converts to std::shared_ptr<Vehicle>
   fleet.add(taxi);
   Passenger maya{"Maya"};
   maya.board(robotaxi);
 
   const std::vector<std::shared_ptr<Vehicle>> today{robotaxi, taxi};
   for (const std::shared_ptr<Vehicle>& vehicle : today) {
-    vehicle->drive(maya_ride);
+    vehicle->drive(maya_ride);  // maya_ride: the 500 m route
   }
 }
 }  // namespace whole_program
 
-// [Slide 110] A final Method. Does not compile:
-//   class Taxi : public Vehicle {  // Taxi not final, drive() final
+// [Slide 104] The Reason for Each final. Compiles only if RoboTaxi were not
+// final:
+//   class FastRoboTaxi : public RoboTaxi {
 //    public:
-//     void drive(const Route& route) const final;
+//     using RoboTaxi::RoboTaxi;
+//     void drive(const Route& route) const override {
+//       std::cout << "FastRoboTaxi: drives " << route.length() << " m\n";
+//     }  // no sensor check
 //   };
-//   class NightTaxi : public Taxi {
-//    public:
-//     void drive(const Route& route) const override;
-//   };
-// error: virtual function 'virtual void NightTaxi::drive(const Route&) const' overriding final function
-// note: overridden function is 'virtual void Taxi::drive(const Route&) const'
+// With final removed from RoboTaxi, a FastRoboTaxi with 0 sensors, driven
+// through a const RoboTaxi&, prints "FastRoboTaxi: drives 500 m".
 
 std::vector<Slide> slides() {
   return {
-      {105, "The Whole Program", whole_program::run},
+      {98, "Fleet and Passenger Do Not Change", whole_program::run},
   };
 }
 

@@ -7,7 +7,8 @@
  * sensors first: a robotaxi with no sensor does not move (the requirement FR-4
  * asks for one or more). It adds no data member: the sensors are Vehicle's.
  *
- * RoboTaxi is final: no class derives from it.
+ * RoboTaxi is final: a derived class could override drive() and skip the
+ * sensor check.
  */
 #pragma once
 

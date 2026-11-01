@@ -33,7 +33,25 @@ using fleet::Position;
 using fleet::Route;
 using l8::Vehicle;
 
-// [Appendix iii] A Passenger Rides a Vehicle. The class only: [Slide 26] runs it,
+// [Slide 5] Owners Keep Objects Alive
+// car_a is the only owner of its Vehicle. car_b and copy_b are two owners of
+// one Vehicle; watcher observes it without owning it, so use_count() is 2.
+// The Vehicle is destroyed when the last owner lets go: then watcher expires.
+namespace ownership {
+void run() {
+  auto car_a{std::make_unique<Vehicle>(13.4)};
+  auto car_b{std::make_shared<Vehicle>(13.4)};
+  auto copy_b{car_b};  // a second owner
+  std::weak_ptr<Vehicle> watcher{car_b};  // not an owner
+  std::cout << std::boolalpha << car_b.use_count()
+            << ' ' << watcher.expired() << '\n';  // 2 false
+  car_b.reset();
+  copy_b.reset();  // the last owner lets go
+  std::cout << watcher.expired() << '\n';  // true: the Vehicle is destroyed
+}
+}  // namespace ownership
+
+// [Appendix vi] A Passenger Rides a Vehicle. The class only: [Slide 25] runs it,
 // and Live Coding: Step 1 writes it in ../../live.
 class Passenger {
  public:
@@ -50,7 +68,7 @@ class Passenger {
   std::weak_ptr<Vehicle> ride_;  // does not own the Vehicle
 };
 
-// [Slide 26] Two Separate Lifetimes
+// [Slide 25] Two Separate Lifetimes
 // watcher is a second std::weak_ptr, only for the check: expired() is true
 // once the Vehicle is destroyed, while maya's std::weak_ptr still refers to it.
 namespace association {
@@ -68,7 +86,7 @@ void run() {
 }
 }  // namespace association
 
-// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 34] runs it.
+// Fleet, as Live Coding: Step 2 writes it in ../../live. [Slide 35] runs it.
 // The same code as ../../common/src/fleet.cpp.
 class Fleet {
  public:
@@ -91,7 +109,7 @@ class Fleet {
   std::vector<std::shared_ptr<Vehicle>> vehicles_;  // shares each Vehicle
 };
 
-// [Slide 34] The Vehicles Outlive the Fleet
+// [Slide 35] The Vehicles Outlive the Fleet
 namespace aggregation {
 void run() {
   auto car_a{std::make_shared<Vehicle>(13.4)};
@@ -124,7 +142,10 @@ void run() {
 }
 }  // namespace composition
 
-// [Slide 47] A Route for One Call
+// [Slide 48] A Route for One Call
+// l8::Vehicle is the concrete class the students already have: its drive()
+// prints the route's length and length / speed. The slide says so; the
+// Abstraction section makes drive() pure virtual (../../common).
 namespace dependency {
 void run() {
   Vehicle car_a{13.4};
@@ -144,10 +165,11 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {26, "Two Separate Lifetimes", association::run},
-      {34, "The Vehicles Outlive the Fleet", aggregation::run},
+      {5, "Owners Keep Objects Alive", ownership::run},
+      {25, "Two Separate Lifetimes", association::run},
+      {35, "The Vehicles Outlive the Fleet", aggregation::run},
       {42, "Each Route Has Its Own Positions", composition::run},
-      {47, "A Route for One Call", dependency::run},
+      {48, "A Route for One Call", dependency::run},
   };
 }
 

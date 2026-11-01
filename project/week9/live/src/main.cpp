@@ -89,7 +89,7 @@ int main() {
   //   fleet::Fleet fleet;
   //   fleet.add(std::make_shared<fleet::RoboTaxi>(13.4));
   //   fleet.add(std::make_shared<fleet::Taxi>(13.4, "Ana"));
-  //   fleet.drive_all(trip);
+  //   fleet.drive_all(maya_ride);
   // }
 
   // Step 5: a Taxi deleted through a Vehicle pointer. The name has 19
@@ -98,7 +98,7 @@ int main() {
   // {
   //   std::cout << "[Step 5]\n";
   //   std::unique_ptr<fleet::Vehicle> vehicle{std::make_unique<fleet::Taxi>(13.4, "Ana Maria Rodrigues")};
-  //   vehicle->drive(trip);
+  //   vehicle->drive(maya_ride);
   // }
 
   // Step 6: no Vehicle object. Uncomment the line, build, read the error, then

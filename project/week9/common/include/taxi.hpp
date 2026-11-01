@@ -7,7 +7,8 @@
  * adds no rule of its own, so its invariant is Vehicle's. An empty name means
  * the taxi has no driver, and then it does not move.
  *
- * Taxi is final: no class derives from it.
+ * Taxi is final: a derived class could override drive() and skip the
+ * driver check.
  */
 #pragma once
 

@@ -131,7 +131,7 @@ void run() {
 }
 }  // namespace let_go
 
-// [Slide 76] Deletion by the Last Owner
+// [Slide 77] Deletion by the Last Owner
 namespace last_owner {
 void run() {
   std::vector<std::shared_ptr<Obstacle>> tracker;
@@ -156,7 +156,7 @@ std::vector<Slide> slides() {
       {68, "The Control Block", control_block::run},
       {69, "use_count", use_count_steps::run},
       {70, "Three Ways to Let Go", let_go::run},
-      {76, "Deletion by the Last Owner", last_owner::run},
+      {77, "Deletion by the Last Owner", last_owner::run},
   };
 }
 

@@ -39,7 +39,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return maya_ride;
 }
 
-// [Slide 68] Discussion: What Prints First? A Taxi whose
+// [Slide 64] Discussion: What Prints First? A Taxi whose
 // base prints and whose member prints.
 namespace order {
 class Vehicle {
@@ -80,7 +80,7 @@ void run() {
 // warning:   base 'discussions::order::Vehicle' [-Wreorder]
 }  // namespace order
 
-// [Slide 86] Discussion: Which drive() Runs?
+// [Slide 82] Discussion: Which drive() Runs?
 namespace which {
 class Vehicle {
  public:
@@ -108,15 +108,14 @@ void run() {
   Vehicle& ref{robotaxi};
   Vehicle* ptr{&robotaxi};
   Vehicle copy{robotaxi};
-  robotaxi.drive(maya_ride);      // 1: RoboTaxi: drives itself 500 m
-  ref.drive(maya_ride);           // 2: RoboTaxi: drives itself 500 m
-  ptr->drive(maya_ride);          // 3: RoboTaxi: drives itself 500 m
-  copy.drive(maya_ride);          // 4: Vehicle: drives 500 m
-  ref.Vehicle::drive(maya_ride);  // 5: Vehicle: drives 500 m
+  robotaxi.drive(maya_ride);  // 1: RoboTaxi: drives itself 500 m
+  ref.drive(maya_ride);       // 2: RoboTaxi: drives itself 500 m
+  ptr->drive(maya_ride);      // 3: RoboTaxi: drives itself 500 m
+  copy.drive(maya_ride);      // 4: Vehicle: drives 500 m
 }
 }  // namespace which
 
-// [Slide 96] Discussion: Who Needs a virtual Destructor?
+// [Slide 90] Discussion: Who Needs a virtual Destructor?
 namespace who_needs {
 void run() {
   std::cout << std::boolalpha << std::has_virtual_destructor_v<Vehicle> << ' '
@@ -129,10 +128,10 @@ void run() {
 }
 }  // namespace who_needs
 
-// [Slide 106] Discussion: Add a RoboBus. One answer: a new
+// [Slide 99] Discussion: Add a RoboBus. One answer: a new
 // class, and no change to Fleet. Its invariant: more than 0 seats.
 namespace robobus {
-class RoboBus final : public Vehicle {
+class RoboBus : public Vehicle {
  public:
   RoboBus(double max_speed, int seats) : Vehicle{max_speed}, seats_{seats} {
     if (seats_ <= 0) {
@@ -158,10 +157,10 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {68, "Discussion: What Prints First?", order::run},
-      {86, "Discussion: Which drive() Runs?", which::run},
-      {96, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
-      {106, "Discussion: Add a RoboBus", robobus::run},
+      {64, "Discussion: What Prints First?", order::run},
+      {82, "Discussion: Which drive() Runs?", which::run},
+      {90, "Discussion: Who Needs a virtual Destructor?", who_needs::run},
+      {99, "Discussion: Add a RoboBus", robobus::run},
   };
 }
 

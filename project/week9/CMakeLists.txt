@@ -10,6 +10,11 @@
 #   702run week9_appendix         run the code of every appendix frame
 #   702run week9_appendix x       run only the code of [Appendix x]
 #   702run week9_live             run the classes of the Live Coding steps
+#   702run week9_operators        run every part of the reading page Operator
+#                                 Overloading
+#   702run week9_operators print  run only the part "print" of that page
+#   702run week9_cycle            two headers that need each other, built with
+#                                 forward declarations
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week9_playground)
@@ -18,6 +23,11 @@
 #                 (abstract), RoboTaxi, Taxi, Fleet, Passenger, and L8's Sensor,
 #                 SensorType, Position and Route
 #   undefined/    the slides that have undefined behavior, built with sanitizers
+#   operators/    the program of the reading page Operator Overloading on Read
+#                 the Docs, one file per part (week9_operators), with its own
+#                 Position and Route
+#   cycle/        a small Vehicle and Passenger that refer to each other, with
+#                 forward declarations instead of a cyclic include (week9_cycle)
 #   live/         the classes of the "Live Coding" slides (week9_live):
 #                 Vehicle, Sensor, Route and Position are given; Passenger,
 #                 Fleet, RoboTaxi and Taxi are written in class, Step 1 with
@@ -73,6 +83,28 @@ target_include_directories(week9_appendix PRIVATE common/include)
 target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
+# The reading page Operator Overloading (Read the Docs): one program, one
+# source file per part of the page. Pass the part's key, the name of its file:
+# 702run week9_operators print. Position and Route are copies of common's,
+# with the operators the page adds, so the program builds on its own. It is
+# compiled with AddressSanitizer and UndefinedBehaviorSanitizer, as
+# week8_rule_of_five is.
+# -----------------------------------------------------------------------------
+add_executable(week9_operators operators/src/main.cpp
+    operators/src/calls.cpp
+    operators/src/print.cpp
+    operators/src/compare.cpp
+    operators/src/member_output.cpp
+    operators/src/by_value.cpp
+    operators/src/no_const.cpp
+    operators/src/position.cpp
+    operators/src/route.cpp)
+target_include_directories(week9_operators PRIVATE operators/include)
+target_compile_options(week9_operators PRIVATE -fsanitize=address,undefined
+    -fno-omit-frame-pointer)
+target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
+
+# -----------------------------------------------------------------------------
 # Live coding: L8's Vehicle and the classes of L9, written in class, step by
 # step (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on
 # your own, Steps 6 and 7 at home. One header and one source
@@ -96,3 +128,49 @@ add_executable(week9_live live/src/main.cpp
 target_include_directories(week9_live PRIVATE live/include)
 target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
 target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
+
+# -----------------------------------------------------------------------------
+# [Slide 28] Two Headers That Include Each Other
+# [Slide 29] A Forward Declaration Breaks the Cycle
+# A small Vehicle that keeps its riders and a small Passenger that rides it: a
+# two-way association. Each header needs the other class's name, and a forward
+# declaration gives it the name only. The program prints "built".
+#
+# [Slide 28] includes each header from the other instead. These two headers,
+# "// ..." line included, are the files that gave the errors below.
+# vehicle.hpp:
+#
+#   #pragma once
+#   #include <vector>
+#   #include "passenger.hpp"
+#   class Vehicle {
+#     // ...
+#    private:
+#     std::vector<const Passenger*> riders_;
+#   };
+#
+# passenger.hpp:
+#
+#   #pragma once
+#   #include <memory>
+#   #include "vehicle.hpp"
+#   class Passenger {
+#     // ...
+#    private:
+#     std::weak_ptr<Vehicle> ride_;
+#   };
+#
+# A main.cpp whose first line is #include "vehicle.hpp" stops with these two
+# errors, the first of three (g++ 13.3, -std=c++20):
+#
+#   passenger.hpp:7:17: error: 'Vehicle' was not declared in this scope
+#   passenger.hpp:7:24: error: template argument 1 is invalid
+#
+# vehicle.hpp includes passenger.hpp, which includes vehicle.hpp again;
+# #pragma once skips that copy, so Passenger is compiled before Vehicle is
+# declared.
+# -----------------------------------------------------------------------------
+add_executable(week9_cycle cycle/src/main.cpp
+    cycle/src/vehicle.cpp
+    cycle/src/passenger.cpp)
+target_include_directories(week9_cycle PRIVATE cycle/include)

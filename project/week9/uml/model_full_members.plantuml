@@ -90,7 +90,7 @@ Passenger "0..*" --> "-ride_  0..1" Vehicle : rides
 Vehicle "1" *-- "-sensors_  0..*" Sensor : owns
 Vehicle ..> Route : uses
 Route "1" *-- "-waypoints_  0..*" Position : has
-Sensor ..> SensorType
+Sensor -[hidden]-> SensorType
 Vehicle <|-- RoboTaxi
 Vehicle <|-- Taxi
 @enduml
