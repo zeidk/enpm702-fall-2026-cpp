@@ -60,7 +60,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 25] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 68], drive()
+// The classes of [Appendix iv]: as on [Slide 69], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
 // ([Appendix xvi] and [Appendix xvii]) and The Cost of virtual ([Appendix xx])
 // use them too.
@@ -113,7 +113,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 75], fixed.
+// virtual. The run is the code of [Slide 76], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -298,8 +298,8 @@ void run() {
 // error: use of deleted function 'Taxi::Taxi(const Taxi&)'
 
 // [Appendix xx] The Cost of virtual: one hidden pointer per object.
-// compile_time::Vehicle is a copy of the Vehicle of [Slide 61], with no virtual
-// method; runtime::Vehicle above is a copy of the one of [Slide 68]. Both have
+// compile_time::Vehicle is a copy of the Vehicle of [Slide 62], with no virtual
+// method; runtime::Vehicle above is a copy of the one of [Slide 69]. Both have
 // the same data members.
 // The frame's nm line reads week9_playground's object file, where the
 // originals are: nm -C polymorphism.cpp.o, in build/project/week9/CMakeFiles/
@@ -405,7 +405,7 @@ void run() {
 }  // namespace inside
 
 // [Appendix xxx] One Overload per Class. RoboTaxi and Taxi redefine drive(),
-// as on [Slide 63], Redefinition: copies of the classes of
+// as on [Slide 64], Redefinition: copies of the classes of
 // ../../playground/src/polymorphism.cpp, on the compile_time::Vehicle above.
 namespace compile_time {
 class RoboTaxi : public Vehicle {

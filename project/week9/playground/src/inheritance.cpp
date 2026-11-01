@@ -30,7 +30,7 @@ class RoboTaxi : public l8::Vehicle {
   explicit RoboTaxi(double max_speed) : Vehicle{max_speed} {}
 };
 
-// Taxi's constructor is also on [Slide 56], Base Class Initializer.
+// Taxi's constructor is also on [Slide 57], Base Class Initializer.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -63,7 +63,7 @@ void run() {
 }
 }  // namespace taxi_pointer
 
-// [Slide 49] A Vehicle Reference and a Vehicle Pointer to a Taxi. No cast:
+// [Slide 50] A Vehicle Reference and a Vehicle Pointer to a Taxi. No cast:
 // both refer to the Vehicle part of taxi, its base subobject.
 namespace base_ref {
 void run() {
@@ -76,11 +76,11 @@ void run() {
 }
 }  // namespace base_ref
 
-// [Slide 50] Not the Other Way. Does not compile:
+// [Slide 51] Not the Other Way. Does not compile:
 //   Taxi* back{pointer};
 // error: invalid conversion from 'l8::Vehicle*' to 'inheritance::Taxi*' [-fpermissive]
 
-// [Slide 51] protected Members. L8's Vehicle with one protected method:
+// [Slide 52] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 // The class declares log_event(); its body is below the class, as it is in
@@ -119,12 +119,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 52] private Stays private. Does not compile:
+// [Slide 53] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
-// The fix goes through Vehicle's public methods: [Slide 54].
+// The fix goes through Vehicle's public methods: [Slide 55].
 
-// [Slide 53] protected Data. If speed_ were protected, a derived class could
+// [Slide 54] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -153,7 +153,7 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 54] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
+// [Slide 55] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
 // reads it with get_speed() and writes it with set_speed(), so the check runs.
 namespace through_methods {
 class RoboTaxi : public l8::Vehicle {
@@ -177,12 +177,12 @@ void run() {
 }
 }  // namespace through_methods
 
-// [Slide 55] public Inheritance. With "class RoboTaxi : Vehicle"
+// [Slide 56] public Inheritance. With "class RoboTaxi : Vehicle"
 // (no public), the base is private, and main() cannot call get_speed():
 // error: 'double Vehicle::get_speed() const' is inaccessible within this context
 // error: 'Vehicle' is not an accessible base of 'RoboTaxi'
 
-// [Slide 57] Without the Base Class Initializer. Does not compile:
+// [Slide 58] Without the Base Class Initializer. Does not compile:
 //   explicit RoboTaxi(double max_speed) {}
 // error: no matching function for call to 'Vehicle::Vehicle()'
 // note: candidate: 'Vehicle::Vehicle(double, double)'
@@ -195,7 +195,7 @@ void run() {
 // A Base Member in the List is an appendix frame: [Appendix xiv], in
 // ../../appendix/src/appendix.cpp.
 
-// [Slide 58] Construction and Destruction Order. Both classes
+// [Slide 59] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -232,11 +232,11 @@ std::vector<Slide> slides() {
   return {
       {47, "A RoboTaxi in Memory", robotaxi_memory::run},
       {48, "A Taxi through a Pointer", taxi_pointer::run},
-      {49, "A Vehicle Reference and a Vehicle Pointer to a Taxi", base_ref::run},
-      {51, "protected Members", protected_member::run},
-      {53, "protected Data", protected_data::run},
-      {54, "Through Vehicle's public Methods", through_methods::run},
-      {58, "Construction and Destruction Order", order::run},
+      {50, "A Vehicle Reference and a Vehicle Pointer to a Taxi", base_ref::run},
+      {52, "protected Members", protected_member::run},
+      {54, "protected Data", protected_data::run},
+      {55, "Through Vehicle's public Methods", through_methods::run},
+      {59, "Construction and Destruction Order", order::run},
   };
 }
 
