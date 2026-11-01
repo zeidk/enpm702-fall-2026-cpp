@@ -85,7 +85,7 @@ Passenger "<color:#8A8A8A>0..*</color>" -[#A0A0A0]-> "<color:#8A8A8A>0..1</color
 Vehicle "<color:#8A8A8A>1</color>" *-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Sensor : <color:#8A8A8A>owns</color>
 Vehicle .[#A0A0A0].> Route : <color:#8A8A8A>uses</color>
 Route "<color:#8A8A8A>1</color>" *-[#A0A0A0]- "<color:#8A8A8A>0..*</color>" Position : <color:#8A8A8A>has</color>
-Sensor -[hidden]-> SensorType
+Sensor -[#A0A0A0]-> "<color:#8A8A8A>1</color>" SensorType : <color:#8A8A8A>has type</color>
 Vehicle <|-[#A0A0A0]- RoboTaxi
 Vehicle <|-[#A0A0A0]- Taxi
 @enduml

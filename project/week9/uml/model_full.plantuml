@@ -85,7 +85,7 @@ Passenger "0..*" --> "0..1" Vehicle : rides
 Vehicle "1" *-- "0..*" Sensor : owns
 Vehicle ..> Route : uses
 Route "1" *-- "0..*" Position : has
-Sensor -[hidden]-> SensorType
+Sensor --> "1" SensorType : has type
 Vehicle <|-- RoboTaxi
 Vehicle <|-- Taxi
 @enduml
