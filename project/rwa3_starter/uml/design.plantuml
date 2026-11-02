@@ -1,0 +1,13 @@
+@startuml design
+' The class diagram of your design (R2). Replace the example below with your
+' classes and their relationships. Render it with the PlantUML extension of
+' VS Code, and put the image in your report.
+!theme mono
+skinparam classAttributeIconSize 0
+
+class Example {
+  - value_ : int
+  + get_value() : int
+}
+
+@enduml

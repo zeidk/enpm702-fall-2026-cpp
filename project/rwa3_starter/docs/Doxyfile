@@ -1,0 +1,11 @@
+# Run from this folder: doxygen Doxyfile. The pages go to docs/html.
+PROJECT_NAME           = "RWA3"
+INPUT                  = ../include ../src
+FILE_PATTERNS          = *.hpp *.cpp
+RECURSIVE              = YES
+OUTPUT_DIRECTORY       = .
+EXTRACT_PRIVATE        = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES
