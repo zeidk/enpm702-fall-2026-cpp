@@ -4,7 +4,7 @@
  *        only a.hpp.
  * @author Zeid Kootbally
  */
-// [Appendix xxxviii] A Forward Declaration Breaks the Cycle
+// [Appendix xli] A Forward Declaration Breaks the Cycle
 #include "a.hpp"
 
 void A::set_b(B* b) { b_ = b; }

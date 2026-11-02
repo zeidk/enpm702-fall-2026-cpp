@@ -7,7 +7,7 @@
  * @details a_ is a pointer to A, so this header needs only the name A: a
  * forward declaration. b.cpp includes a.hpp, because link calls a method of A.
  */
-// [Appendix xxxviii] A Forward Declaration Breaks the Cycle
+// [Appendix xli] A Forward Declaration Breaks the Cycle
 #pragma once
 
 class A;  // name only
