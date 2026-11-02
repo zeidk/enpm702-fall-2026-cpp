@@ -38,6 +38,14 @@
 # =============================================================================
 
 # -----------------------------------------------------------------------------
+# week9_playground and week9_appendix are built from common/, playground/,
+# appendix/ and undefined/, which hold the finished classes of the Live Coding
+# steps. Those folders join the repository after the Live Coding deadline
+# (Nov 10); until then, only the programs below them are built.
+# -----------------------------------------------------------------------------
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/common AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/playground)
+
+# -----------------------------------------------------------------------------
 # Undefined behavior: the code of those slides is in undefined/src/undefined.cpp.
 # This one file is always compiled with AddressSanitizer and
 # UndefinedBehaviorSanitizer, so a delete through the wrong type stops with a
@@ -82,6 +90,8 @@ add_executable(week9_appendix appendix/src/appendix.cpp
     common/src/slides.cpp)
 target_include_directories(week9_appendix PRIVATE common/include playground/include)
 target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
+
+endif()
 
 # -----------------------------------------------------------------------------
 # The reading page Operator Overloading (Read the Docs): one program, one
