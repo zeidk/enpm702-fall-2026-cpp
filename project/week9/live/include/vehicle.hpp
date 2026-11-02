@@ -4,8 +4,8 @@
  * @author Zeid Kootbally
  *
  * @details Given, not written in class: its speed stays from 0 to its maximum
- * speed. L9 changes it: a virtual drive() (Step 4), a virtual destructor
- * (Step 5), and drive() pure virtual (Step 6), so Vehicle becomes abstract.
+ * speed. L9 changes it: a virtual drive() and a virtual destructor (Step 4),
+ * and drive() pure virtual (Step 5), so Vehicle becomes abstract.
  * One class per file: the classes derived from Vehicle are in their own
  * files, and this file never names them.
  *
@@ -42,10 +42,10 @@ class Vehicle {
   /// value breaks the invariant.
   Vehicle(double max_speed, double speed) : Vehicle{max_speed} { set_speed(speed); }
 
-  // Step 5: first add the destructor here, virtual and = default:
+  // Step 4: first add the destructor here, virtual and = default:
   //         virtual ~Vehicle() = default;
   //         Deleting a RoboTaxi or a Taxi through a Vehicle pointer then runs
-  //         its own destructor first, then ~Vehicle. Then uncomment the Step 5
+  //         its own destructor first, then ~Vehicle. Then uncomment the Step 4
   //         block in main.cpp.
 
   /// Drives @p route and prints one line: "Vehicle: drives <length> m".
@@ -55,7 +55,7 @@ class Vehicle {
   //         Vehicle& or a Vehicle* runs the drive() of the object's own class:
   //         virtual void drive(const Route& route) const;
   //         Its body in vehicle.cpp does not change.
-  // Step 6: drive() becomes pure virtual (= 0).
+  // Step 5: drive() becomes pure virtual (= 0).
   void drive(const Route& route) const;
 
   /// Throws std::invalid_argument if @p speed is not from 0 to the maximum speed.

@@ -1,6 +1,6 @@
 /**
  * @file taxi.hpp
- * @brief L9, live coding: the class Taxi (Steps 3, 4 and 7), which you write in class.
+ * @brief L9, live coding: the class Taxi (Steps 3, 4 and 6), which you write in class.
  * @author Zeid Kootbally
  *
  * @details A Taxi is a Vehicle with a driver (inheritance). It has its own
@@ -25,6 +25,6 @@ namespace fleet {
 //         name, parameter and const as Vehicle's, then override:
 //         void drive(const Route& route) const override;
 //         Its body goes to taxi.cpp.
-// Step 7: the class becomes final.
+// Step 6: the class becomes final.
 
 }  // namespace fleet

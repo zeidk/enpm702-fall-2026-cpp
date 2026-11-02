@@ -6,7 +6,7 @@
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
 #   702run week9_appendix         run the code of every appendix frame
-#   702run week9_appendix x      run only the code of [Appendix x]
+#   702run week9_appendix viii   run only the code of [Appendix viii]
 #   702run week9_live             run the classes of the Live Coding steps
 #   702run week9_operators        run every part of the reading page Operator
 #                                 Overloading
@@ -27,8 +27,8 @@
 #   live/         the classes of the "Live Coding" slides (week9_live):
 #                 Vehicle, Sensor, SensorType, AutomationLevel, Route and
 #                 Position are given; Passenger, Fleet, RoboTaxi and Taxi are
-#                 written in class, Step 1 with the instructor, Steps 2 to 5
-#                 on your own, 6 and 7 at home. One header and one source file
+#                 written in class, Steps 1 to 3 with the instructor, Step 4
+#                 on your own, 5 and 6 at home. One header and one source file
 #                 per class (Position, SensorType and AutomationLevel: a header
 #                 only), and main.cpp
 # =============================================================================
@@ -84,14 +84,14 @@ target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
 # Live coding: Vehicle and the classes of L9, written in class, step by step
-# (the "Live Coding" slides): Step 1 with the instructor, Steps 2 to 5 on your
-# own, Steps 6 and 7 at home. One header and one source file per class in
+# (the "Live Coding" slides): Steps 1 to 3 with the instructor, Step 4 on
+# your own, Steps 5 and 6 at home. One header and one source file per class in
 # live/, and main.cpp, which has one commented block per step. Route, Position,
 # Sensor, SensorType and AutomationLevel are given in live/ too, so week9_live
-# is built from live/ alone. The Step 5 block deletes a Taxi through a Vehicle pointer,
+# is built from live/ alone. The Step 4 block deletes a Taxi through a Vehicle pointer,
 # so the whole program is built with AddressSanitizer and
 # UndefinedBehaviorSanitizer: without the virtual destructor
-# that Step 5 adds to Vehicle, the run would stop with a report.
+# that Step 4 adds to Vehicle, the run would stop with a report.
 # -----------------------------------------------------------------------------
 add_executable(week9_live live/src/main.cpp
     live/src/vehicle.cpp

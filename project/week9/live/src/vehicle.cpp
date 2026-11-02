@@ -56,7 +56,7 @@ void Vehicle::log_event(const std::string& event) const {
   std::cout << "vehicle " << id_ << ": " << event << '\n';
 }
 
-// Step 6: delete this body. drive() is pure virtual now, and Vehicle gives it
+// Step 5: delete this body. drive() is pure virtual now, and Vehicle gives it
 //         no body: RoboTaxi and Taxi each define their own.
 void Vehicle::drive(const Route& route) const {
   std::cout << "Vehicle: drives " << route.length() << " m\n";

@@ -1,6 +1,6 @@
 /**
  * @file robotaxi.hpp
- * @brief L9, live coding: the class RoboTaxi (Steps 3, 4 and 7), which you write in class.
+ * @brief L9, live coding: the class RoboTaxi (Steps 3, 4 and 6), which you write in class.
  * @author Zeid Kootbally
  *
  * @details A RoboTaxi is a Vehicle (inheritance). It has its own file and
@@ -38,6 +38,6 @@ namespace fleet {
 //         same name, parameter and const as Vehicle's, then override:
 //         void drive(const Route& route) const override;
 //         Its body goes to robotaxi.cpp.
-// Step 7: the class becomes final.
+// Step 6: the class becomes final.
 
 }  // namespace fleet
