@@ -29,7 +29,7 @@ using fleet::AutomationLevel;
 // sizes are on [Appendix xxvii], Inside a Taxi Object, in
 // ../../appendix/src/appendix.cpp, with copies of these two classes. Each has
 // one method that Vehicle does not have, change_zone() and assign_driver(), for
-// [Slide 58] and [Slide 57]. Each class declares it; its body is below the
+// [Slide 60] and [Slide 58]. Each class declares it; its body is below the
 // class, as it is in robotaxi.cpp and taxi.cpp in the program.
 class RoboTaxi : public l8::Vehicle {
  public:
@@ -49,7 +49,7 @@ void RoboTaxi::change_zone(std::string operating_zone) {
   operating_zone_ = std::move(operating_zone);
 }
 
-// Taxi's constructor is also on [Slide 65], Base Class Initializer.
+// Taxi's constructor is also on [Slide 68], Base Class Initializer.
 class Taxi : public l8::Vehicle {
  public:
   Taxi(double max_speed, std::string driver_name)
@@ -87,24 +87,24 @@ void run() {
 }
 }  // namespace taxi_pointer
 
-// [Slide 57] A Base Class Reference to a Derived Object. No cast: vehicle is
+// [Slide 58] A Base Class Reference to a Derived Object. No cast: base_ref is
 // another name for the Vehicle part of taxi, its base subobject. The compiler
-// checks a call through vehicle against Vehicle's members only, so
+// checks a call through base_ref against Vehicle's members only, so
 // assign_driver() is reachable only through taxi.
 namespace base_ref {
 void run() {
   Taxi taxi{13.4, "Ana"};
-  taxi.assign_driver("Ben");   // a Taxi method
-  l8::Vehicle& vehicle{taxi};  // no cast needed
-  // vehicle.assign_driver("Ben");  // does not compile
-  vehicle.set_speed(10.0);
+  taxi.assign_driver("Ben");    // a Taxi method
+  l8::Vehicle& base_ref{taxi};  // no cast needed
+  // base_ref.assign_driver("Ben");  // does not compile
+  base_ref.set_speed(10.0);
   std::cout << taxi.get_speed() << '\n';  // 10: taxi itself changed
 }
 // Uncommented, the line gives:
 // error: 'class l8::Vehicle' has no member named 'assign_driver'
 }  // namespace base_ref
 
-// [Slide 58] A Base Class Pointer to a Derived Object. No cast: pointer holds
+// [Slide 60] A Base Class Pointer to a Derived Object. No cast: pointer holds
 // the address of the Vehicle part of robotaxi, then of taxi. As with a
 // reference, change_zone() is reachable only through robotaxi.
 namespace base_ptr {
@@ -122,11 +122,11 @@ void run() {
 // error: 'class l8::Vehicle' has no member named 'change_zone'
 }  // namespace base_ptr
 
-// [Slide 59] Not the Other Way. Does not compile:
+// [Slide 62] Not the Other Way. Does not compile:
 //   Taxi* back{pointer};
 // error: invalid conversion from 'l8::Vehicle*' to 'inheritance::Taxi*' [-fpermissive]
 
-// [Slide 60] protected Members. L8's Vehicle with one protected method:
+// [Slide 63] protected Members. L8's Vehicle with one protected method:
 // Vehicle's methods and the methods of RoboTaxi and Taxi can call log_event(),
 // and other code cannot. Only the members this slide needs are written here.
 // The class declares log_event(); its body is below the class, as it is in
@@ -173,12 +173,12 @@ void run() {
 // error: 'void Vehicle::log_event(const std::string&) const' is protected within this context
 }  // namespace protected_member
 
-// [Slide 61] private Stays private. Does not compile:
+// [Slide 64] private Stays private. Does not compile:
 //   void go() { speed_ = get_max_speed(); }  // inside RoboTaxi
 // error: 'double l8::Vehicle::speed_' is private within this context
-// The fix goes through Vehicle's public methods: [Slide 63].
+// The fix goes through Vehicle's public methods: [Slide 66].
 
-// [Slide 62] protected Data. If speed_ were protected, a derived class could
+// [Slide 65] protected Data. If speed_ were protected, a derived class could
 // skip set_speed()'s check.
 namespace protected_data {
 class Vehicle {
@@ -215,7 +215,7 @@ void run() {
 }
 }  // namespace protected_data
 
-// [Slide 63] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
+// [Slide 66] Through Vehicle's public Methods. speed_ stays private: RoboTaxi
 // reads it with get_speed() and writes it with set_speed(), so the check runs.
 namespace through_methods {
 class RoboTaxi : public l8::Vehicle {
@@ -269,7 +269,7 @@ void run() {
 // A Base Member in the List is an appendix frame: [Appendix xiii], in
 // ../../appendix/src/appendix.cpp.
 
-// [Slide 66] Construction and Destruction Order. Both classes
+// [Slide 69] Construction and Destruction Order. Both classes
 // print from their constructor and destructor. (They declare a destructor and
 // nothing else of the five: fine here, they own nothing.)
 namespace order {
@@ -314,12 +314,12 @@ std::vector<Slide> slides() {
   return {
       {55, "A RoboTaxi in Memory", robotaxi_memory::run},
       {56, "A Taxi through a Pointer", taxi_pointer::run},
-      {57, "A Base Class Reference to a Derived Object", base_ref::run},
-      {58, "A Base Class Pointer to a Derived Object", base_ptr::run},
-      {60, "protected Members", protected_member::run},
-      {62, "protected Data", protected_data::run},
-      {63, "Through Vehicle's public Methods", through_methods::run},
-      {66, "Construction and Destruction Order", order::run},
+      {58, "A Base Class Reference to a Derived Object", base_ref::run},
+      {60, "A Base Class Pointer to a Derived Object", base_ptr::run},
+      {63, "protected Members", protected_member::run},
+      {65, "protected Data", protected_data::run},
+      {66, "Through Vehicle's public Methods", through_methods::run},
+      {69, "Construction and Destruction Order", order::run},
   };
 }
 

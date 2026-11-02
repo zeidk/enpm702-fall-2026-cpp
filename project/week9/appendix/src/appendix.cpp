@@ -62,7 +62,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // output. The class is in ../../playground/src/relationships.cpp, where
 // [Slide 26] runs it.
 
-// The classes of [Appendix iv]: as on [Slide 75], drive()
+// The classes of [Appendix iv]: as on [Slide 78], drive()
 // is virtual, and RoboTaxi and Taxi override it. auto or a Base Pointer
 // ([Appendix xv] and [Appendix xvi]) and The Cost of virtual ([Appendix xix])
 // use them too.
@@ -123,7 +123,7 @@ void run() {
 }  // namespace runtime
 
 // [Appendix v] With a virtual Destructor. Both destructors print; ~Vehicle is
-// virtual. The run is the code of [Slide 84], fixed.
+// virtual. The run is the code of [Slide 88], fixed.
 namespace virtual_dtor {
 class Vehicle {
  public:
@@ -208,45 +208,48 @@ void run() {
 // [Appendix x] Multiple Inheritance, the Code. The class diagram is on
 // [Slide 52], Multiple Inheritance.
 namespace multiple {
-class Animal {
+class Lion {
  public:
-  explicit Animal(bool has_wings) : has_wings_{has_wings} {}
-  [[nodiscard]] bool can_fly() const noexcept { return has_wings_; }
+  void run() const { std::cout << "Lion: runs on " << leg_count_ << " legs\n"; }
 
  private:
-  bool has_tail_{true};
-  bool has_wings_{false};
-  bool has_horns_{false};
+  int leg_count_{4};
 };
 
 class Human {
  public:
   void speak() const { std::cout << "Human: speaks\n"; }
-
- private:
-  bool is_bipedal_{true};
 };
 
-class MythicalCreature : public Animal, public Human {
+class Bird {
  public:
-  MythicalCreature(bool has_wings, std::vector<std::string> powers)
-      : Animal{has_wings}, powers_{std::move(powers)} {}
-  void use_power(const std::string& power) const {
-    const bool has_it{std::ranges::find(powers_, power) != powers_.end()};
-    std::cout << (has_it ? "uses " : "does not have ") << power << '\n';
-  }
+  explicit Bird(double wing_span) : wing_span_{wing_span} {}
+  [[nodiscard]] bool can_fly() const noexcept { return wing_span_ > 0.0; }
 
  private:
-  std::vector<std::string> powers_;
+  double wing_span_;
+};
+
+// A sphinx has the body of a lion, the head of a human and the wings of a bird.
+class Sphinx : public Lion, public Human, public Bird {
+ public:
+  Sphinx(double wing_span, std::string riddle)
+      : Bird{wing_span}, riddle_{std::move(riddle)} {}
+  void ask_riddle() const { std::cout << "Sphinx: " << riddle_ << '\n'; }
+
+ private:
+  std::string riddle_;
 };
 
 void run() {
-  MythicalCreature sphinx{true, {"riddle"}};
-  const Animal& animal{sphinx};
+  Sphinx sphinx{2.5, "What walks on four legs in the morning?"};
+  const Lion& lion{sphinx};
   const Human& human{sphinx};
-  std::cout << std::boolalpha << animal.can_fly() << '\n';  // true
-  human.speak();               // Human: speaks
-  sphinx.use_power("riddle");  // uses riddle
+  const Bird& bird{sphinx};
+  lion.run();                                             // Lion: runs on 4 legs
+  human.speak();                                          // Human: speaks
+  std::cout << std::boolalpha << bird.can_fly() << '\n';  // true
+  sphinx.ask_riddle();  // Sphinx: What walks on four legs in the morning?
 }
 }  // namespace multiple
 
@@ -350,8 +353,8 @@ void run() {
 // error: use of deleted function 'Taxi::Taxi(const Taxi&)'
 
 // [Appendix xix] The Cost of virtual: one hidden pointer per object.
-// compile_time::Vehicle is a copy of the Vehicle of [Slide 69], with no virtual
-// method; runtime::Vehicle above is a copy of the one of [Slide 75]. Both have
+// compile_time::Vehicle is a copy of the Vehicle of [Slide 73], with no virtual
+// method; runtime::Vehicle above is a copy of the one of [Slide 78]. Both have
 // the same data members.
 // The frame's nm line reads week9_playground's object file, where the
 // originals are: nm -C polymorphism.cpp.o, in build/project/week9/CMakeFiles/
@@ -467,7 +470,7 @@ void run() {
 }  // namespace inside
 
 // [Appendix xxix] One Overload per Class. RoboTaxi and Taxi redefine drive(),
-// as on [Slide 71], Redefinition: copies of the classes of
+// as on [Slide 74], Redefinition: copies of the classes of
 // ../../playground/src/polymorphism.cpp, on the compile_time::Vehicle above.
 namespace compile_time {
 class RoboTaxi : public Vehicle {

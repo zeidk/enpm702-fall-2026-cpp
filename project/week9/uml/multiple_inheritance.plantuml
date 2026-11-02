@@ -9,20 +9,22 @@ skinparam classAttributeIconSize 0
 skinparam ArrowThickness 1.5
 hide circle
 hide empty attributes
-class Animal {
-  - has_tail_ : bool
-  - has_wings_ : bool
-  - has_horns_ : bool
-  + can_fly() : bool
+class Lion {
+  - leg_count_ : int
+  + run() : void
 }
 class Human {
-  - is_bipedal_ : bool
   + speak() : void
 }
-class MythicalCreature {
-  - powers_ : vector<string>
-  + use_power(power : string) : void
+class Bird {
+  - wing_span_ : double
+  + can_fly() : bool
 }
-Animal <|-- MythicalCreature
-Human <|-- MythicalCreature
+class Sphinx {
+  - riddle_ : string
+  + ask_riddle() : void
+}
+Lion <|-- Sphinx
+Human <|-- Sphinx
+Bird <|-- Sphinx
 @enduml

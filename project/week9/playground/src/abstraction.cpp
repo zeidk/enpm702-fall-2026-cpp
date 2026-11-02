@@ -45,13 +45,13 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
   return maya_ride;
 }
 
-// [Slide 91] Forgetting One Override. Taxi without drive():
+// [Slide 96] Forgetting One Override. Taxi without drive():
 //   Taxi taxi{13.4, "Ana"};
 // error: cannot declare variable 'taxi' to be of abstract type 'Taxi'
 // note:   because the following virtual functions are pure within 'Taxi':
 // note:     'virtual void Vehicle::drive(const Route&) const'
 
-// [Slide 92] Fleet and Passenger Do Not Change
+// [Slide 97] Fleet and Passenger Do Not Change
 namespace whole_program {
 void run() {
   const Route maya_ride{make_trip()};
@@ -73,7 +73,7 @@ void run() {
 }
 }  // namespace whole_program
 
-// [Slide 96] The Reason for Each final. Compiles only if RoboTaxi were not
+// [Slide 101] The Reason for Each final. Compiles only if RoboTaxi were not
 // final:
 //   class FastRoboTaxi : public RoboTaxi {
 //    public:
@@ -87,7 +87,7 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {92, "Fleet and Passenger Do Not Change", whole_program::run},
+      {97, "Fleet and Passenger Do Not Change", whole_program::run},
   };
 }
 
