@@ -15,6 +15,14 @@ namespace fleet {
 //         operating_zone_ and automation_level_. change_zone() moves its
 //         parameter into operating_zone_ (std::move).
 
+// Step 3: given. Uncomment it once robotaxi.hpp declares check_level.
+// void RoboTaxi::check_level(AutomationLevel automation_level) {
+//   if (automation_level < AutomationLevel::level_0 ||
+//       automation_level > AutomationLevel::level_5) {
+//     throw std::invalid_argument{"unknown automation level"};
+//   }
+// }
+
 // Step 4: define RoboTaxi::drive(const Route& route) const. Its body prints one
 //         line to std::cout: "RoboTaxi: drives itself ", then route.length(),
 //         then " m" and a new line. For the 500 m route it prints
