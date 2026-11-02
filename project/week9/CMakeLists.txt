@@ -5,8 +5,6 @@
 #
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
-#   702run week9_playground       run the code of every slide
-#   702run week9_playground 77    run only the code of [Slide 77]
 #   702run week9_appendix         run the code of every appendix frame
 #   702run week9_appendix x      run only the code of [Appendix x]
 #   702run week9_live             run the classes of the Live Coding steps
@@ -17,12 +15,10 @@
 #                                 forward declarations
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
-#   playground/   the code of every slide, one file per section (week9_playground)
 #   appendix/     the code of the appendix frames (week9_appendix)
 #   common/       run_slides() and the classes of the class diagram: Vehicle
 #                 (abstract), RoboTaxi and its AutomationLevel, Taxi, Fleet, Passenger, and
 #                 L8's Sensor, SensorType, Position and Route
-#   undefined/    the slides that have undefined behavior, built with sanitizers
 #   operators/    the program of the reading page Operator Overloading on Read
 #                 the Docs, one file per part (week9_operators), with its own
 #                 Position and Route
@@ -38,45 +34,16 @@
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# week9_playground and week9_appendix are built from common/, playground/,
-# appendix/ and undefined/, which hold the finished classes of the Live Coding
-# steps. Those folders join the repository after the Live Coding deadline
-# (Nov 10); until then, only the programs below them are built.
+# week9_appendix is built from common/ and appendix/, which hold the finished
+# classes of the Live Coding steps. Those folders join the repository after the
+# Live Coding deadline (Nov 10); until then, only the programs below are built.
 # -----------------------------------------------------------------------------
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/common AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/playground)
-
-# -----------------------------------------------------------------------------
-# Undefined behavior: the code of those slides is in undefined/src/undefined.cpp.
-# This one file is always compiled with AddressSanitizer and
-# UndefinedBehaviorSanitizer, so a delete through the wrong type stops with a
-# report. The program is linked with -fsanitize as well,
-# which adds the runtime that prints the reports.
-# -----------------------------------------------------------------------------
-set_source_files_properties(undefined/src/undefined.cpp PROPERTIES
-    COMPILE_OPTIONS "-fsanitize=address,undefined;-fno-omit-frame-pointer")
-
-add_executable(week9_playground playground/src/main.cpp
-    playground/src/relationships.cpp
-    playground/src/inheritance.cpp
-    playground/src/polymorphism.cpp
-    playground/src/abstraction.cpp
-    undefined/src/undefined.cpp
-    common/src/sensor.cpp
-    common/src/route.cpp
-    common/src/vehicle.cpp
-    common/src/robotaxi.cpp
-    common/src/taxi.cpp
-    common/src/fleet.cpp
-    common/src/passenger.cpp
-    common/src/slides.cpp)
-target_include_directories(week9_playground PRIVATE
-    common/include playground/include undefined/include)
-target_link_options(week9_playground PRIVATE -fsanitize=address,undefined)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/common AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/appendix)
 
 # -----------------------------------------------------------------------------
 # The appendix: the code of every appendix frame that has code. Pass the
 # frame's number, as a roman numeral (x) or not (10). The program is linked
-# with -fsanitize, as week9_playground is, so
+# with -fsanitize, so
 # the run of "With a virtual Destructor" is checked for a leak and a wrong
 # delete.
 # -----------------------------------------------------------------------------
@@ -88,7 +55,7 @@ add_executable(week9_appendix appendix/src/appendix.cpp
     common/src/taxi.cpp
     common/src/fleet.cpp
     common/src/slides.cpp)
-target_include_directories(week9_appendix PRIVATE common/include playground/include)
+target_include_directories(week9_appendix PRIVATE common/include appendix/include)
 target_link_options(week9_appendix PRIVATE -fsanitize=address,undefined)
 
 endif()
@@ -123,7 +90,7 @@ target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
 # Sensor, SensorType and AutomationLevel are given in live/ too, so week9_live
 # is built from live/ alone. The Step 5 block deletes a Taxi through a Vehicle pointer,
 # so the whole program is built with AddressSanitizer and
-# UndefinedBehaviorSanitizer, as undefined/ is: without the virtual destructor
+# UndefinedBehaviorSanitizer: without the virtual destructor
 # that Step 5 adds to Vehicle, the run would stop with a report.
 # -----------------------------------------------------------------------------
 add_executable(week9_live live/src/main.cpp
