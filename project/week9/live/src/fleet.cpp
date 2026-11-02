@@ -3,9 +3,8 @@
  * @brief L9, live coding: the methods of Fleet (Steps 2 and 4).
  * @author Zeid Kootbally
  *
- * @details Step 2: each method below has an empty body, so the program builds
- * before you start. [[maybe_unused]] stops the unused-parameter warning while
- * a body is empty; delete it when you write the body.
+ * @details The Step 2 methods are given: we review them in class. You write
+ * drive_all() in Step 4.
  */
 #include "fleet.hpp"
 
@@ -15,20 +14,27 @@
 
 namespace fleet {
 
-// Step 2: throw std::invalid_argument if vehicle is null. Otherwise, add it
-//         to vehicles_ (std::move) only if std::find (from <algorithm>) does
-//         not find it there: std::find returns vehicles_.end() when the
-//         vehicle is not in vehicles_.
-void Fleet::add([[maybe_unused]] std::shared_ptr<Vehicle> vehicle) {}
+// Step 2, given: a null vehicle is rejected, and a vehicle already in the
+//         fleet is not added twice (std::find returns vehicles_.end() when the
+//         vehicle is not in vehicles_).
+void Fleet::add(std::shared_ptr<Vehicle> vehicle) {
+  if (!vehicle) {
+    throw std::invalid_argument{"a fleet cannot hold a null vehicle"};
+  }
+  if (std::find(vehicles_.begin(), vehicles_.end(), vehicle) == vehicles_.end()) {
+    vehicles_.push_back(std::move(vehicle));
+  }
+}
 
-// Step 2: erase the vehicle whose get_id() is id, with std::erase_if (C++20),
-//         which returns how many elements it removed. Return true if it
-//         removed one. Replace "return false;".
-bool Fleet::remove([[maybe_unused]] int id) { return false; }
+// Step 2, given: std::erase_if (C++20) returns how many elements it removed.
+bool Fleet::remove(int id) {
+  return std::erase_if(vehicles_, [id](const std::shared_ptr<Vehicle>& vehicle) {
+           return vehicle->get_id() == id;
+         }) > 0;
+}
 
-// Step 2: return how many vehicles the fleet holds, the number of elements in
-//         vehicles_. Replace "return 0;".
-std::size_t Fleet::size() const noexcept { return 0; }
+// Step 2, given.
+std::size_t Fleet::size() const noexcept { return vehicles_.size(); }
 
 // Step 4: define Fleet::drive_all(const Route& route) const. Its body is one
 //         range-based for loop over vehicles_ that calls drive(route) on each

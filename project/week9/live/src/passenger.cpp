@@ -8,7 +8,10 @@
 
 namespace fleet {
 
-// Step 1: Passenger::board() stores the vehicle in ride_. Passenger::leave()
-//         resets ride_, and is noexcept.
+// Step 1, given.
+void Passenger::board(const std::shared_ptr<Vehicle>& vehicle) { ride_ = vehicle; }
+
+// Step 1, given.
+void Passenger::leave() noexcept { ride_.reset(); }
 
 }  // namespace fleet

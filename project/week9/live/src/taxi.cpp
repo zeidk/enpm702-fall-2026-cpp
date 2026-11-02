@@ -10,7 +10,8 @@
 
 namespace fleet {
 
-// Step 3: assign_driver() moves its parameter into driver_name_ (std::move).
+// Step 3, given.
+void Taxi::assign_driver(std::string driver_name) { driver_name_ = std::move(driver_name); }
 
 // Step 4: define Taxi::drive(const Route& route) const. Its body prints one
 //         line to std::cout, in one of two cases:

@@ -26,9 +26,9 @@
 #                 forward declarations instead of a cyclic include (week9_cycle)
 #   live/         the classes of the "Live Coding" slides (week9_live):
 #                 Vehicle, Sensor, SensorType, AutomationLevel, Route and
-#                 Position are given; Passenger, Fleet, RoboTaxi and Taxi are
-#                 written in class, Steps 1 to 3 with the instructor, Step 4
-#                 on your own, 5 and 6 at home. One header and one source file
+#                 Position are given; Passenger, Fleet, RoboTaxi and Taxi as
+#                 Steps 1 to 3 leave them are given too and reviewed in class;
+#                 Step 4 on your own, 5 and 6 at home. One header and one source file
 #                 per class (Position, SensorType and AutomationLevel: a header
 #                 only), and main.cpp
 # =============================================================================
@@ -83,10 +83,10 @@ target_compile_options(week9_operators PRIVATE -fsanitize=address,undefined
 target_link_options(week9_operators PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
-# Live coding: Vehicle and the classes of L9, written in class, step by step
-# (the "Live Coding" slides): Steps 1 to 3 with the instructor, Step 4 on
-# your own, Steps 5 and 6 at home. One header and one source file per class in
-# live/, and main.cpp, which has one commented block per step. Route, Position,
+# Live coding: Vehicle and the classes of L9, step by step (the "Live Coding"
+# slides): Steps 1 to 3 are given and reviewed in class, Step 4 on your own,
+# Steps 5 and 6 at home. One header and one source file per class in live/, and
+# main.cpp, which has one block per step (Steps 4 to 6 commented out). Route, Position,
 # Sensor, SensorType and AutomationLevel are given in live/ too, so week9_live
 # is built from live/ alone. The Step 4 block deletes a Taxi through a Vehicle pointer,
 # so the whole program is built with AddressSanitizer and

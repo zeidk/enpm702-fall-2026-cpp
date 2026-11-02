@@ -5,9 +5,9 @@
  *
  * @details A Fleet shares its vehicles with the rest of the program
  * (aggregation, Step 2) and drives them all in one loop (Step 4). It names
- * only Vehicle, so a new kind of vehicle needs no change here. The class is
- * given: in Step 2 you write the bodies of its methods in fleet.cpp, and in
- * Step 4 you add drive_all().
+ * only Vehicle, so a new kind of vehicle needs no change here. The class and
+ * the bodies of its methods in fleet.cpp are given (Step 2, reviewed in class);
+ * in Step 4 you add drive_all().
  */
 #pragma once
 
@@ -28,7 +28,7 @@
  */
 namespace fleet {
 
-// Step 2: the class is given. Write the bodies of its methods in fleet.cpp.
+// Step 2: the class is given. Its method bodies, given too, are in fleet.cpp.
 /**
  * @brief The vehicles one company runs.
  *
