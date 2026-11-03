@@ -17,7 +17,7 @@
 
 namespace static_members {
 
-// [Slide 92] Two Vehicles, the Same Id
+// [Slide 91] Two Vehicles, the Same Id
 namespace same_ids {
 class Vehicle {
  public:
@@ -43,7 +43,7 @@ void run() {
 }
 }  // namespace same_ids
 
-// [Slide 93] One Counter for the Class
+// [Slide 92] One Counter for the Class
 namespace one_counter {
 class Vehicle {
  public:
@@ -71,7 +71,7 @@ void run() {
 }
 }  // namespace one_counter
 
-// [Slide 94] The Counter's First Value: without inline, two steps. The class
+// [Slide 93] The Counter's First Value: without inline, two steps. The class
 // declares the counter; one definition outside every function, at namespace
 // scope (vehicle.cpp on the slide), gives it its first value. In one step,
 // static int next_id_{1}; in the class does not compile:
@@ -96,8 +96,8 @@ void run() {
 }
 }  // namespace counter_definition
 
-// [Slide 95] A static Method Has No this: get_next_id() is called on the
-// class, with no object. The class is that of [Slide 93], with a counter
+// [Slide 94] A static Method Has No this: get_next_id() is called on the
+// class, with no object. The class is that of [Slide 92], with a counter
 // of its own, so it starts at 1 whatever ran before.
 namespace static_method {
 class Vehicle {
@@ -127,7 +127,7 @@ void run() {
 // error: invalid use of member 'Vehicle::speed_' in static member function
 }  // namespace static_method
 
-// [Slide 97] A Method That Uses No Member: mph_to_mps() reads no data member,
+// [Slide 96] A Method That Uses No Member: mph_to_mps() reads no data member,
 // so it needs no this. It is static and is called on the class.
 namespace no_member {
 class Vehicle {
@@ -146,11 +146,11 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {92, "Two Vehicles, the Same Id", same_ids::run},
-      {93, "One Counter for the Class", one_counter::run},
-      {94, "The Counter's First Value", counter_definition::run},
-      {95, "A static Method Has No this", static_method::run},
-      {97, "A Method That Uses No Member", no_member::run},
+      {91, "Two Vehicles, the Same Id", same_ids::run},
+      {92, "One Counter for the Class", one_counter::run},
+      {93, "The Counter's First Value", counter_definition::run},
+      {94, "A static Method Has No this", static_method::run},
+      {96, "A Method That Uses No Member", no_member::run},
   };
 }
 
