@@ -15,7 +15,7 @@
  * Vehicle of param_ctor below is that version. [Slide 62] shows it split into
  * a header and a source file; the course defines every constructor in the
  * class. From [Slide 63] on, the slides use the full class, Vehicle in
- * ../../common/include/vehicle.hpp, whose constructors, defined in the class,
+ * ../include/vehicle.hpp, whose constructors, defined in the class,
  * use the member initializer list of [Slide 69].
  *
  * The Live Coding slide (Step 5) has no code here: we write that code together
@@ -105,7 +105,7 @@ void run() {
 
 // [Slide 60] Constructor with Parameters: a first version, written in the
 // class (declared and defined in one place), where the body assigns each
-// member. ../../common/include/vehicle.hpp uses the member initializer list of
+// member. ../include/vehicle.hpp uses the member initializer list of
 // [Slide 69] instead.
 namespace param_ctor {
 class Vehicle {
@@ -279,7 +279,7 @@ void run() {
 
 // [Slide 69] Member Initializer List: the constructor of [Slide 60], defined
 // in the class with the list. The run uses the full class,
-// ../../common/include/vehicle.hpp, whose list also sets id_ from the static
+// ../include/vehicle.hpp, whose list also sets id_ from the static
 // counter of the appendix's static Members.
 namespace init_list {
 void run() {
@@ -319,7 +319,7 @@ void run() {
 }
 }  // namespace list_fixes
 
-// [Slide 71] The Range Check: Sensor's constructor, of ../../common/include/sensor.hpp,
+// [Slide 71] The Range Check: Sensor's constructor, of ../../live/include/sensor.hpp,
 // sets every member in the list, then checks the range.
 namespace range_check {
 void run() {
@@ -350,7 +350,7 @@ void run() {
 // (the slide's code has no namespaces, so the slide's warnings name Vehicle only)
 
 // [Slide 74] explicit and [Slide 75] A Conversion Nobody Asked For: the
-// constructor of Vehicle in ../../common/include/vehicle.hpp is explicit.
+// constructor of Vehicle in ../include/vehicle.hpp is explicit.
 namespace conversion {
 void show(const Vehicle& vehicle) {
   std::cout << vehicle.get_max_speed() << ' '

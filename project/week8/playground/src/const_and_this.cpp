@@ -25,7 +25,7 @@ namespace const_and_this {
 // not compile is commented out, with what g++ 13.3 says (the slide's code has no
 // namespaces, so there the errors name Vehicle only). The Vehicle here is the
 // class of The Class So Far, cut to what this slide uses: it owns nothing by
-// hand, so it can be copied. The Vehicle of ../../common/include/vehicle.hpp
+// hand, so it can be copied. The Vehicle of ../include/vehicle.hpp
 // also has sensors_, so it cannot be copied.
 namespace const_cannot {
 class Vehicle {
@@ -107,19 +107,21 @@ namespace one_method {
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  void set_speed(double speed) {
-    std::cout << "this:   " << this << '\n';
-    if (speed < 0.0 || speed > max_speed_) {
-      throw std::invalid_argument{
-          "speed must be from 0 to the maximum speed"};
-    }
-    speed_ = speed;  // means this->speed_
-  }
+  void set_speed(double speed);
 
  private:
   double max_speed_;
   double speed_{0.0};
 };
+
+void Vehicle::set_speed(double speed) {
+  std::cout << "this:   " << this << '\n';
+  if (speed < 0.0 || speed > max_speed_) {
+    throw std::invalid_argument{
+        "speed must be from 0 to the maximum speed"};
+  }
+  speed_ = speed;  // means this->speed_
+}
 
 void run() {
   Vehicle car_a{13.4};
@@ -158,11 +160,7 @@ class Vehicle {
     return speed_;
   }
 
-  // [Slide 83] Returning *this
-  Vehicle& speed_up(double step) {
-    set_speed(speed_ + step);  // the check runs here
-    return *this;              // the object itself
-  }
+  Vehicle& speed_up(double step);
 
   // [Slide 82] The Type of this: this cannot be assigned:
   // void reseat() { this = nullptr; }
@@ -172,6 +170,12 @@ class Vehicle {
   double max_speed_;
   double speed_{0.0};
 };
+
+// [Slide 83] Returning *this
+Vehicle& Vehicle::speed_up(double step) {
+  set_speed(speed_ + step);  // the check runs here
+  return *this;              // the object itself
+}
 
 // [Slide 82] The Type of this: the two static_asserts in the class are
 // checked when this file compiles. If either type were wrong, the build would

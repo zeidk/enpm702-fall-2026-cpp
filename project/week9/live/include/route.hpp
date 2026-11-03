@@ -16,14 +16,21 @@ namespace fleet {
 /// The waypoints of one trip, in order.
 class Route {
  public:
-  /// Adds a waypoint at the end of the route.
+  /**
+   * @brief Adds a waypoint at the end of the route.
+   * @param waypoint The point to add, in m on the map.
+   */
   void add(Position waypoint);
 
-  /// The length of the route, in m: the sum of the straight segments.
+  /**
+   * @brief Returns the length of the route.
+   * @return The sum of the straight segments between consecutive waypoints,
+   *         in m; 0 for fewer than two waypoints.
+   */
   [[nodiscard]] double length() const;
 
  private:
-  std::vector<Position> waypoints_;
+  std::vector<Position> waypoints_;  ///< in order; the Route owns them (by value)
 };
 
 }  // namespace fleet

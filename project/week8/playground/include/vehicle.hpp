@@ -106,7 +106,7 @@ class Vehicle {
   void drive(const Route& route) const;
 
   /// The id the next Vehicle gets.
-  [[nodiscard]] static int next_id() noexcept;
+  [[nodiscard]] static int get_next_id() noexcept;
 
  private:
   inline static int next_id_{1};  ///< one counter for the whole class

@@ -3,9 +3,10 @@
  * @brief L8, live coding: the class Vehicle, finished.
  * @author Zeid Kootbally
  *
- * @details A Vehicle holds its maximum speed, its speed, its color and its
- * mileage (the distance it has driven). Its invariant: the speed stays from 0 to
- * the maximum speed. It owns its sensors, each through a std::unique_ptr, so it
+ * @details A Vehicle holds an id, its maximum speed, its speed, its color and
+ * its mileage (the distance it has driven). Its invariant: the speed stays from
+ * 0 to the maximum speed. One static counter, shared by every Vehicle, gives
+ * each new object the next id. Its members give back their own memory, so it
  * writes none of the five special member functions (the rule of zero).
  *
  * Speeds are in meters per second. 13.4 m/s is about 30 mph
@@ -13,33 +14,28 @@
  */
 #pragma once
 
-#include <cstddef>    // std::size_t
-#include <memory>     // std::unique_ptr
 #include <stdexcept>  // std::invalid_argument
 #include <string>
-#include <vector>
-
-#include "sensor.hpp"  // Sensor and SensorType, in ../../common/include
 
 /**
  * @brief A vehicle of the robotaxi fleet.
  *
  * Invariant: its maximum speed is greater than 0, and its speed stays from 0
- * to its maximum speed. It owns its sensors (composition).
+ * to its maximum speed. Every Vehicle has its own id: 1, 2, ...
  */
 class Vehicle {
  public:
   /**
-   * @brief A vehicle that stands still.
+   * @brief A vehicle that stands still, with the next id.
    *
-   * The member initializer list sets max_speed_ and color_, then the body
-   * checks the maximum speed.
+   * The member initializer list sets id_ from the counter (then adds 1 to it),
+   * max_speed_ and color_; then the body checks the maximum speed.
    * @param max_speed The maximum speed, in m/s. Must be greater than 0.
    * @param color The color of the body.
    * @throw std::invalid_argument if @p max_speed is not greater than 0.
    */
   explicit Vehicle(double max_speed, const std::string& color = "white")
-      : max_speed_{max_speed}, color_{color} {
+      : id_{next_id_++}, max_speed_{max_speed}, color_{color} {
     if (max_speed_ <= 0.0) {
       throw std::invalid_argument{"maximum speed must be greater than 0"};
     }
@@ -75,30 +71,22 @@ class Vehicle {
   [[nodiscard]] const std::string& get_color() const noexcept;
 
   /**
-   * @brief Adds a sensor that the vehicle owns.
-   * @param type What kind of sensor.
-   * @param range How far it sees, in m. Must be at least 0.
-   * @return The new Sensor's id: 1, 2, ...
-   * @throw std::invalid_argument if @p range is less than 0 (from Sensor's
-   *        constructor).
+   * @brief Returns the vehicle's id.
+   * @return The id the constructor took from the counter.
    */
-  int add_sensor(SensorType type, double range);
+  [[nodiscard]] int get_id() const noexcept;
   /**
-   * @brief Returns how many sensors the vehicle has.
-   * @return The number of elements in sensors_.
+   * @brief Returns the id the next Vehicle gets. Called on the class, with no
+   *        object: Vehicle::get_next_id().
+   * @return The value of the counter.
    */
-  [[nodiscard]] std::size_t sensor_count() const noexcept;
-  /**
-   * @brief Gives read access to the sensors.
-   * @return The sensors, in the order they were added. The vehicle still owns
-   *         them.
-   */
-  [[nodiscard]] const std::vector<std::unique_ptr<Sensor>>& get_sensors() const noexcept;
+  [[nodiscard]] static int get_next_id() noexcept;
 
  private:
+  inline static int next_id_{1};  ///< one counter for the class, in no object
+  int id_;                        ///< from next_id_
   double max_speed_;              ///< m/s, greater than 0
   double speed_{0.0};             ///< m/s, from 0 to max_speed_
   std::string color_;             ///< set by the constructor
   double mileage_{0.0};           ///< m driven
-  std::vector<std::unique_ptr<Sensor>> sensors_;  ///< the only owner of each Sensor
 };

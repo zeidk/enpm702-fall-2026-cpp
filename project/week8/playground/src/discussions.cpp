@@ -49,7 +49,7 @@ void run() {
 // [Appendix ix] Discussion: Will It Compile? A Vehicle with the speed
 // members and the two constructors, copied here. It owns nothing by hand, so the compiler writes its copy
 // constructor and copy assignment, and lines 7 and 8 compile. The Vehicle of
-// ../../common/include/vehicle.hpp also has sensors_, a std::vector of
+// ../include/vehicle.hpp also has sensors_, a std::vector of
 // std::unique_ptr, so it is move-only: with it, lines 7 and 8 do not compile.
 namespace will_it_compile {
 class Vehicle {

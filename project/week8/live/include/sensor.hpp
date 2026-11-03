@@ -1,6 +1,6 @@
 /**
  * @file sensor.hpp
- * @brief The robotaxi's sensors, shared by every file of week 8.
+ * @brief L8, live coding: the class Sensor and its SensorType, given.
  * @author Zeid Kootbally
  *
  * @details A robotaxi carries several sensors: a lidar on the roof, cameras,

@@ -34,9 +34,9 @@ void Vehicle::add_mileage(double meters) {
 }
 
 int Vehicle::add_sensor(SensorType type, double range) {
-  const int id{static_cast<int>(sensors_.size()) + 1};
-  sensors_.push_back(std::make_unique<Sensor>(id, type, range));
-  return id;
+  sensors_.push_back(
+      std::make_unique<Sensor>(sensors_.size() + 1, type, range));
+  return sensors_.back()->get_id();
 }
 
 std::size_t Vehicle::sensor_count() const noexcept { return sensors_.size(); }
@@ -54,4 +54,4 @@ void Vehicle::drive(const Route& route) const {
   }
 }
 
-int Vehicle::next_id() noexcept { return next_id_; }
+int Vehicle::get_next_id() noexcept { return next_id_; }

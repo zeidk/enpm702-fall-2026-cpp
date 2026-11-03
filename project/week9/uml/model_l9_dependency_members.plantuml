@@ -36,7 +36,7 @@ abstract class Vehicle #back:FFF3E0;line:E65100;text:000000 {
   + sensor_count() : size_t
   + get_sensors() : const vector<unique_ptr<Sensor>>&
   + {abstract} drive(const Route&) : void
-  + {static} next_id() : int
+  + {static} get_next_id() : int
   # log_event(const string&) : void
 }
 class Route #back:FFF3E0;line:E65100;text:000000 {

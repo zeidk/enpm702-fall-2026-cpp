@@ -15,21 +15,25 @@
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
 #   playground/   the code of every slide, one file per section (week8_playground).
-#                 Each file also holds the appendix frames of its section.
+#                 Each file also holds the appendix frames of its section. It also
+#                 holds run_slides() (slides.hpp, slides.cpp) and the finished
+#                 Vehicle of the lecture (vehicle.hpp, vehicle.cpp).
 #   appendix/     the program of the appendix frames (week8_appendix)
-#   common/       run_slides(), and the classes of the lecture: Vehicle, Sensor
-#                 with its SensorType, the Position struct, and Route (drive() takes one)
 #   rule_of_five/ the program of the reading page Rule of Five and Rule of
 #                 Zero on Read the Docs, one file per part (week8_rule_of_five)
 #   live/         the class Vehicle we write together on the "Live Coding" slides
-#                 (week8_live): one header, one source file and main.cpp
+#                 (week8_live): vehicle.hpp, vehicle.cpp and main.cpp. It also
+#                 holds Sensor (and its SensorType), the Position struct and Route,
+#                 which the other programs use
 # =============================================================================
 
 # -----------------------------------------------------------------------------
 # 1. The section files: one per section of the deck. Each lists the slides of
 #    the lecture in its slides() and the appendix frames of its section in its
-#    appendix_slides(), so both programs below build them, with the classes of
-#    common/.
+#    appendix_slides(), so both programs below build them. They use the finished
+#    Vehicle and run_slides() of playground/, and Sensor, Position and Route of
+#    live/. playground/include comes first, so "vehicle.hpp" is the finished
+#    Vehicle, not the one of the Live Coding.
 # -----------------------------------------------------------------------------
 set(WEEK8_SECTIONS
     playground/src/classes.cpp
@@ -41,10 +45,10 @@ set(WEEK8_SECTIONS
     playground/src/destructors.cpp
     playground/src/static_members.cpp
     playground/src/discussions.cpp
-    common/src/vehicle.cpp
-    common/src/sensor.cpp
-    common/src/route.cpp
-    common/src/slides.cpp)
+    playground/src/vehicle.cpp
+    playground/src/slides.cpp
+    live/src/sensor.cpp
+    live/src/route.cpp)
 
 # -----------------------------------------------------------------------------
 # 2. The playground: the code of every slide, in one program. Pass a slide
@@ -52,7 +56,7 @@ set(WEEK8_SECTIONS
 #    only when asked for by its number.
 # -----------------------------------------------------------------------------
 add_executable(week8_playground playground/src/main.cpp ${WEEK8_SECTIONS})
-target_include_directories(week8_playground PRIVATE common/include playground/include)
+target_include_directories(week8_playground PRIVATE playground/include live/include)
 target_link_options(week8_playground PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
@@ -62,7 +66,7 @@ target_link_options(week8_playground PRIVATE -fsanitize=address,undefined)
 add_executable(week8_appendix appendix/src/appendix.cpp
     appendix/src/speed_user.cpp
     ${WEEK8_SECTIONS})
-target_include_directories(week8_appendix PRIVATE common/include playground/include
+target_include_directories(week8_appendix PRIVATE playground/include live/include
     appendix/include)
 target_link_options(week8_appendix PRIVATE -fsanitize=address,undefined)
 
@@ -86,9 +90,10 @@ add_executable(week8_rule_of_five rule_of_five/src/main.cpp
     rule_of_five/src/move_bug.cpp
     rule_of_five/src/move_only.cpp
     rule_of_five/src/file_owner.cpp
-    common/src/sensor.cpp
-    common/src/slides.cpp)
-target_include_directories(week8_rule_of_five PRIVATE common/include rule_of_five/include)
+    live/src/sensor.cpp
+    playground/src/slides.cpp)
+target_include_directories(week8_rule_of_five PRIVATE rule_of_five/include playground/include
+    live/include)
 target_compile_options(week8_rule_of_five PRIVATE -fsanitize=address,undefined
     -fno-omit-frame-pointer)
 target_link_options(week8_rule_of_five PRIVATE -fsanitize=address,undefined)
@@ -96,12 +101,9 @@ target_link_options(week8_rule_of_five PRIVATE -fsanitize=address,undefined)
 # -----------------------------------------------------------------------------
 # 5. Live coding: the class Vehicle we write together in class, step by step
 #    (the "Live Coding" slides). One header and one source file in live/, and
-#    main.cpp, which has one commented block per step. Step 6 uses the course's
-#    Sensor, so the target also builds common/src/sensor.cpp and finds
-#    sensor.hpp in common/include. live/include comes first, so "vehicle.hpp"
-#    is the one we write, not common's.
+#    main.cpp, which has one commented block per step, and a last block for
+#    the static counter. live/ builds on its own.
 # -----------------------------------------------------------------------------
 add_executable(week8_live live/src/main.cpp
-    live/src/vehicle.cpp
-    common/src/sensor.cpp)
-target_include_directories(week8_live PRIVATE live/include common/include)
+    live/src/vehicle.cpp)
+target_include_directories(week8_live PRIVATE live/include)

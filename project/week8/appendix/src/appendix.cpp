@@ -18,8 +18,8 @@
  * ../../playground/src/, listed in its appendix_slides(): State and Behavior
  * (classes.cpp), Header and Source (encapsulation.cpp), The Compiler Checks
  * const and A Broken Rule Is Caught (accessors.cpp), A Constructor That Throws
- * and The Class So Far (constructors.cpp), const Objects (const_and_this.cpp and discussions.cpp) and static Members
- * (static_members.cpp). This file holds One Definition in Many Files.
+ * and The Class So Far (constructors.cpp), and const Objects (const_and_this.cpp
+ * and discussions.cpp). This file holds One Definition in Many Files.
  *
  * The code of the reading page Rule of Five and Rule of Zero, on Read the
  * Docs, is its own program: ../../rule_of_five/, target week8_rule_of_five.
@@ -69,8 +69,7 @@ int main(int argc, char* argv[]) {
   for (const std::vector<Slide>& section :
        {classes::appendix_slides(), encapsulation::appendix_slides(),
         accessors::appendix_slides(), constructors::appendix_slides(),
-        const_and_this::appendix_slides(), discussions::appendix_slides(),
-        static_members::appendix_slides()}) {
+        const_and_this::appendix_slides(), discussions::appendix_slides()}) {
     slides.insert(slides.end(), section.begin(), section.end());
   }
   return run_slides(slides, argc, argv, Part::appendix);

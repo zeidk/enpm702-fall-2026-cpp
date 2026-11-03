@@ -50,7 +50,7 @@ std::vector<Slide> slides();  ///< Destructors: destructors.cpp
 }  // namespace destructors
 
 namespace static_members {
-std::vector<Slide> appendix_slides();  ///< static Members, in the appendix: static_members.cpp
+std::vector<Slide> slides();  ///< static Members: static_members.cpp
 }
 
 namespace discussions {

@@ -44,13 +44,22 @@ class Sensor {
     }
   }
 
-  /// Its id.
+  /**
+   * @brief Returns its id.
+   * @return The id that Vehicle::add_sensor() picked.
+   */
   [[nodiscard]] int get_id() const noexcept;
 
-  /// What kind of sensor it is.
+  /**
+   * @brief Returns what kind of sensor it is.
+   * @return lidar, camera or radar.
+   */
   [[nodiscard]] SensorType get_type() const noexcept;
 
-  /// How far it sees, in m.
+  /**
+   * @brief Returns how far it sees.
+   * @return The range, in m, at least 0.
+   */
   [[nodiscard]] double get_range() const noexcept;
 
  private:

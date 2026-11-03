@@ -12,12 +12,12 @@
  * @endcode
  *
  * L9 builds on the given Vehicle in six steps. Steps 1 to 3 (Passenger,
- * Fleet's methods, RoboTaxi and Taxi) are given: we review their code in
- * class, and their blocks below already run. You write Step 4 in class, on
- * your own, and Steps 5 and 6 at home.
- * main() has one block for each step that prints something; the blocks of
- * Steps 4 to 6 are commented out: when you finish a step, uncomment its block,
- * then build and run. Each block prints "[Step N]", then what that step adds.
+ * Fleet's methods, RoboTaxi and Taxi) are given, and we review their code in
+ * class. You write Steps 4, 5 and 6 in class, on your own.
+ * main() has one block for each step that prints something. Only the Step 1
+ * block runs at first: for each next step, uncomment its block, comment out
+ * the block of the step before, then build and run. Each block prints
+ * "[Step N]", then what that step adds.
  * Each class has its own header in ../include and its own source file here.
  * Every class is in the namespace fleet, so main() writes fleet:: before each
  * name.
@@ -36,6 +36,12 @@
 //         class SuperRoboTaxi : public fleet::RoboTaxi {};
 //         Build, read the error, then delete it.
 
+/**
+ * @brief Runs one block for each step of the live coding.
+ *
+ * Each block prints "[Step N]", then what that step adds.
+ * @return 0.
+ */
 int main() {
   // maya_ride, the 500 m route of the slides: (0, 0) to (300, 400), the long side of a
   // 300, 400, 500 right triangle. Step 4 drives it.
@@ -57,32 +63,32 @@ int main() {
   }
 
   // Step 2: a Fleet shares its vehicles.
-  {
-    std::cout << "[Step 2]\n";
-    auto car_a{std::make_shared<fleet::Vehicle>(13.4)};  // Step 5: RoboTaxi
-    auto car_b{std::make_shared<fleet::Vehicle>(13.4)};  // Step 5: RoboTaxi
-    fleet::Fleet fleet;
-    fleet.add(car_a);
-    fleet.add(car_b);
-    fleet.add(car_a);  // already in the fleet: not added again
-    std::cout << fleet.size() << ' ' << car_a.use_count() << '\n';
-    fleet.remove(car_b->get_id());
-    std::cout << fleet.size() << ' ' << car_b.use_count() << '\n';
-  }
+  // {
+  //   std::cout << "[Step 2]\n";
+  //   auto car_a{std::make_shared<fleet::Vehicle>(13.4)};  // Step 5: RoboTaxi
+  //   auto car_b{std::make_shared<fleet::Vehicle>(13.4)};  // Step 5: RoboTaxi
+  //   fleet::Fleet fleet;
+  //   fleet.add(car_a);
+  //   fleet.add(car_b);
+  //   fleet.add(car_a);  // already in the fleet: not added again
+  //   std::cout << fleet.size() << ' ' << car_a.use_count() << '\n';
+  //   fleet.remove(car_b->get_id());
+  //   std::cout << fleet.size() << ' ' << car_b.use_count() << '\n';
+  // }
 
   // Step 3: RoboTaxi and Taxi use Vehicle's methods, and a Fleet holds both.
-  {
-    std::cout << "[Step 3]\n";
-    fleet::RoboTaxi robotaxi{13.4};
-    robotaxi.add_sensor(fleet::SensorType::lidar, 100.0);
-    fleet::Taxi taxi{13.4, "Ana"};
-    taxi.set_speed(10.0);
-    std::cout << robotaxi.sensor_count() << ' ' << taxi.get_speed() << '\n';
-    fleet::Fleet fleet;
-    fleet.add(std::make_shared<fleet::RoboTaxi>(13.4));
-    fleet.add(std::make_shared<fleet::Taxi>(13.4, "Ana"));
-    std::cout << fleet.size() << '\n';
-  }
+  // {
+  //   std::cout << "[Step 3]\n";
+  //   fleet::RoboTaxi robotaxi{13.4};
+  //   robotaxi.add_sensor(fleet::SensorType::lidar, 100.0);
+  //   fleet::Taxi taxi{13.4, "Ana"};
+  //   taxi.set_speed(10.0);
+  //   std::cout << robotaxi.sensor_count() << ' ' << taxi.get_speed() << '\n';
+  //   fleet::Fleet fleet;
+  //   fleet.add(std::make_shared<fleet::RoboTaxi>(13.4));
+  //   fleet.add(std::make_shared<fleet::Taxi>(13.4, "Ana"));
+  //   std::cout << fleet.size() << '\n';
+  // }
 
   // Step 4: one loop drives both kinds, each with its own drive(). Then a Taxi
   //         deleted through a Vehicle pointer: the name has 19 characters, so

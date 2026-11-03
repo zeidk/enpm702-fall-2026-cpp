@@ -7,9 +7,9 @@
  * section file and runs them. Code that does not compile is commented out
  * where its slide shows it: uncomment it, build, and you get the slide's error.
  *
- * [Slide 25] uses the Vehicle of ../../common/include/vehicle.hpp, whose
+ * [Slide 25] uses the Vehicle of ../include/vehicle.hpp, whose
  * set_speed() checks the invariant. [Slide 27] uses the Sensor of
- * ../../common/include/sensor.hpp; its constructor, defined in the class there,
+ * ../../live/include/sensor.hpp; its constructor, defined in the class there,
  * runs in constructors.cpp ([Slide 71]).
  */
 #include <iostream>
@@ -72,16 +72,16 @@ void run() {
 
 // [Slide 29] A Rule Nothing Checks
 namespace nothing_checks {
-struct VehicleData {
+struct Vehicle {
   double max_speed{13.4};  // m/s
   double speed{0.0};       // m/s, must stay from 0 to max_speed
 };
 
 void run() {
-  VehicleData data;
-  data.speed = 20.0;  // compiles: any code can break the rule
-  std::cout << data.speed << " > "
-            << data.max_speed << '\n';  // 20 > 13.4
+  Vehicle vehicle;
+  vehicle.speed = 20.0;  // compiles: any code can break the rule
+  std::cout << vehicle.speed << " > "
+            << vehicle.max_speed << '\n';  // 20 > 13.4
 }
 }  // namespace nothing_checks
 
