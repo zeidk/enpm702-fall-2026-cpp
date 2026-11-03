@@ -3,18 +3,31 @@
  * @brief L8, live coding: the methods of Vehicle. Its constructors are defined in
  *        the class, in vehicle.hpp.
  * @author Zeid Kootbally
- *
- * @details Each "Step N" comment below says what that step adds here.
  */
 #include "vehicle.hpp"
 
-#include <stdexcept>  // Step 4: std::invalid_argument
+#include <stdexcept>  // std::invalid_argument
 
-// Step 3: the bodies of set_speed() and get_speed(), each named with Vehicle::.
-// Step 4: get_speed() gets const and noexcept here too, not [[nodiscard]].
-//         set_speed() throws std::invalid_argument when the speed is below 0
-//         or above max_speed_, and changes speed_ only after that check.
-// Step 5: the body of get_color(). The constructors go in vehicle.hpp.
-// Step 6: add_sensor() creates a Sensor with the next id (1, 2, ...), stores it
-//         in sensors_, and returns its id. sensor_count() returns
-//         sensors_.size(), and get_sensors() returns sensors_ by const&.
+void Vehicle::set_speed(double speed) {
+  if (speed < 0.0 || speed > max_speed_) {
+    throw std::invalid_argument{"speed must be from 0 to the maximum speed"};
+  }
+  speed_ = speed;
+}
+
+// const and noexcept are written here too; [[nodiscard]] is not.
+double Vehicle::get_speed() const noexcept { return speed_; }
+
+const std::string& Vehicle::get_color() const noexcept { return color_; }
+
+int Vehicle::add_sensor(SensorType type, double range) {
+  const int id{static_cast<int>(sensors_.size()) + 1};
+  sensors_.push_back(std::make_unique<Sensor>(id, type, range));
+  return id;
+}
+
+std::size_t Vehicle::sensor_count() const noexcept { return sensors_.size(); }
+
+const std::vector<std::unique_ptr<Sensor>>& Vehicle::get_sensors() const noexcept {
+  return sensors_;
+}
