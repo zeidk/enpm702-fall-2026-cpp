@@ -106,13 +106,13 @@ target_compile_options(week9_live PRIVATE -fsanitize=address,undefined -fno-omit
 target_link_options(week9_live PRIVATE -fsanitize=address,undefined)
 
 # -----------------------------------------------------------------------------
-# [Appendix xl] Two Headers That Include Each Other
-# [Appendix xli] A Forward Declaration Breaks the Cycle
+# [Appendix xxxviii] Two Headers That Include Each Other
+# [Appendix xxxix] A Forward Declaration Breaks the Cycle
 # A class A that refers to a B and a class B that refers back to its A: a
 # two-way association. Each header needs the other class's name, and
 # a forward declaration gives it the name only. The program prints "built".
 #
-# [Appendix xl] includes each header from the other instead. These two headers,
+# [Appendix xxxviii] includes each header from the other instead. These two headers,
 # comment line and "// ..." line included, are the files that gave the error
 # below.
 #

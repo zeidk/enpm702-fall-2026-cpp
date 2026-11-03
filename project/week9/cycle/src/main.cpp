@@ -9,7 +9,7 @@
  * header from the other, and its errors, is in a comment in ../CMakeLists.txt.
  * Run it: 702run week9_cycle
  */
-// [Appendix xli] A Forward Declaration Breaks the Cycle
+// [Appendix xxxix] A Forward Declaration Breaks the Cycle
 #include <iostream>
 
 #include "a.hpp"

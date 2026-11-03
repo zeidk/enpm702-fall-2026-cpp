@@ -4,7 +4,7 @@
  *        b.cpp includes a.hpp.
  * @author Zeid Kootbally
  */
-// [Appendix xli] A Forward Declaration Breaks the Cycle
+// [Appendix xxxix] A Forward Declaration Breaks the Cycle
 #include "b.hpp"
 
 #include "a.hpp"  // a call needs the full class

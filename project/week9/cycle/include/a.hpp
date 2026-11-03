@@ -8,7 +8,7 @@
  * forward declaration. a.cpp does not include b.hpp either: set_b stores the
  * address of a B and calls none of its methods.
  */
-// [Appendix xli] A Forward Declaration Breaks the Cycle
+// [Appendix xxxix] A Forward Declaration Breaks the Cycle
 #pragma once
 
 class B;  // name only
