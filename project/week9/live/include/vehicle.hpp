@@ -74,7 +74,8 @@ class Vehicle {
   // Step 4: add virtual in front of this declaration, so a call through a
   //         Vehicle& or a Vehicle* runs the drive() of the object's own class:
   //         virtual void drive(const Route& route) const;
-  //         Its body in vehicle.cpp does not change.
+  //         Its body in vehicle.cpp does not change: the definition does not
+  //         repeat virtual, only this declaration has it.
   // Step 5: drive() becomes pure virtual (= 0).
   void drive(const Route& route) const;
 
