@@ -154,7 +154,7 @@ show_log() {
 repo_shown="${ENPM702_WS/#$HOME/\~}"
 echo
 echo "  ${cyan}╭──────────────────────────────────────────────╮${reset}"
-echo "  ${cyan}│${reset}  ${bold}ENPM702${reset} · Live Coding setup check           ${cyan}│${reset}"
+echo "  ${cyan}│${reset}  ${bold}ENPM702${reset} · Setup check                       ${cyan}│${reset}"
 echo "  ${cyan}╰──────────────────────────────────────────────╯${reset}"
 echo
 echo "  ${bold}Repository${reset}  $repo_shown"

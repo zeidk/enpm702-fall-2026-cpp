@@ -15,6 +15,7 @@ C++ code snippets from lecture slides.
 enpm702-fall-2026-cpp/
 ├── CMakeLists.txt        # top-level, adds project/weekN
 ├── project/
+│   ├── enpm702_setup.sh  # live8, live9, playground9: build, then run
 │   ├── week1/
 │   │   ├── CMakeLists.txt
 │   │   └── src/
@@ -181,6 +182,45 @@ For a quick one-off compile during a lecture, without CMake:
 ./example
 702memcheck ./example
 ```
+
+## Build and run in one step: `enpm702_setup.sh`
+
+`project/enpm702_setup.sh` builds a program and, if it compiles, runs it. It
+finds the repository from its own place in `project/`, so it works wherever you
+cloned it, and it changes no file in the repository. Run every command below
+from the repository's top folder.
+
+1. Get the script: `git pull`.
+2. Check once that the programs build and run, for every week or for one:
+
+   ```bash
+   bash project/enpm702_setup.sh       # weeks 8 and 9
+   bash project/enpm702_setup.sh 9     # week 9 only
+   ```
+
+   Each check shows ✔ when it passed, or ✘ and the lines to fix.
+3. Load the commands into your terminal, with `source` instead of `bash`:
+
+   ```bash
+   source project/enpm702_setup.sh
+   ```
+
+4. Then use them:
+
+   | Command | What it does |
+   |---|---|
+   | `live8` | Build `week8_live` and run it |
+   | `live9` | Build `week9_live` and run it |
+   | `playground9` | Build `week9_playground` and run the code of every slide |
+   | `playground9 63` | The same, for the code of slide 63 only |
+
+The commands exist only in the terminal where you typed `source`; in a new
+terminal, type it again. `playground9` needs `project/week9/common/` and
+`project/week9/playground/`, which join the repository after the Live Coding
+deadline (Nov 10).
+
+`702run` only runs what is already in `build/`. After you change the code, run
+`702build <target>` first, or use these commands, which build before they run.
 
 ## Documentation with Doxygen
 
