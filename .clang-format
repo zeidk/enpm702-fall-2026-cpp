@@ -30,6 +30,10 @@ UseTab: Never
 # "int main() {", not a brace on its own line.
 BreakBeforeBraces: Attach
 
+# A function body never sits on the declaration's line: "void f() { g(); }" becomes
+# three lines (user, 2026-11-04).
+AllowShortFunctionsOnASingleLine: None
+
 ColumnLimit: 100
 ReflowComments: false           # leave the hand-drawn comment banners alone
 SortIncludes: Never             # include order is not something this course teaches
