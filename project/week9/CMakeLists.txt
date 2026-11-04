@@ -5,6 +5,8 @@
 #
 #   702configure                  once, after pulling
 #   702build                      build every week-9 program
+#   702run week9_playground       run the code of every slide
+#   702run week9_playground 77    run only the code of [Slide 77]
 #   702run week9_appendix         run the code of every appendix frame
 #   702run week9_appendix viii   run only the code of [Appendix viii]
 #   702run week9_live             run the classes of the Live Coding steps
@@ -15,6 +17,8 @@
 #                                 forward declarations
 #
 # Folders (each keeps its .cpp files in src/ and its .hpp files in include/):
+#   playground/   the code of every slide, one file per section (week9_playground)
+#   undefined/    the slides that have undefined behavior, built with sanitizers
 #   appendix/     the code of the appendix frames (week9_appendix)
 #   common/       run_slides() and the classes of the class diagram: Vehicle
 #                 (abstract), RoboTaxi and its AutomationLevel, Taxi, Fleet, Passenger, and
@@ -32,6 +36,41 @@
 #                 per class (Position, SensorType and AutomationLevel: a header
 #                 only), and main.cpp
 # =============================================================================
+
+# -----------------------------------------------------------------------------
+# week9_playground is built from common/, playground/ and undefined/. common/
+# holds the finished classes of the Live Coding steps, so it joins the repository
+# after the Live Coding deadline (Nov 10); until then this program is skipped.
+# -----------------------------------------------------------------------------
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/common AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/playground)
+
+# Undefined behavior: the code of those slides is in undefined/src/undefined.cpp.
+# This one file is always compiled with AddressSanitizer and
+# UndefinedBehaviorSanitizer, so a delete through the wrong type stops with a
+# report. The program is linked with -fsanitize as well, which adds the runtime
+# that prints the reports.
+set_source_files_properties(undefined/src/undefined.cpp PROPERTIES
+    COMPILE_OPTIONS "-fsanitize=address,undefined;-fno-omit-frame-pointer")
+
+add_executable(week9_playground playground/src/main.cpp
+    playground/src/relationships.cpp
+    playground/src/inheritance.cpp
+    playground/src/polymorphism.cpp
+    playground/src/abstraction.cpp
+    undefined/src/undefined.cpp
+    common/src/sensor.cpp
+    common/src/route.cpp
+    common/src/vehicle.cpp
+    common/src/robotaxi.cpp
+    common/src/taxi.cpp
+    common/src/fleet.cpp
+    common/src/passenger.cpp
+    common/src/slides.cpp)
+target_include_directories(week9_playground PRIVATE
+    common/include playground/include undefined/include)
+target_link_options(week9_playground PRIVATE -fsanitize=address,undefined)
+
+endif()
 
 # -----------------------------------------------------------------------------
 # week9_appendix is built from common/ and appendix/, which hold the finished
