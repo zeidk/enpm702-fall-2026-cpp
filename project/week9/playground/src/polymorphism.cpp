@@ -10,7 +10,7 @@
  * - compile_time: drive() is not virtual. Each class redefines it.
  * - runtime: drive() is virtual, and RoboTaxi and Taxi override it.
  *
- * Slicing ([Slide 66]) is in the Inheritance part of the deck, before virtual,
+ * Slicing ([Slide 67]) is in the Inheritance part of the deck, before virtual,
  * so it uses the compile_time classes.
  *
  * The frames that Live Coding: Steps 4 and 5 replace are in
@@ -47,7 +47,7 @@ Route make_trip() {  // 500 m: (0, 0) to (300, 400)
 // Compile-time polymorphism: no virtual.
 // ---------------------------------------------------------------------------
 namespace compile_time {
-// [Slide 80] Redefinition: Vehicle, RoboTaxi and Taxi each write drive().
+// [Slide 81] Redefinition: Vehicle, RoboTaxi and Taxi each write drive().
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
@@ -88,7 +88,7 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 66] Slicing. With g++ 13.3, this Vehicle is two doubles (16 bytes)
+// [Slide 67] Slicing. With g++ 13.3, this Vehicle is two doubles (16 bytes)
 // and its Taxi adds a 32-byte std::string (48).
 namespace slicing {
 void run() {
@@ -103,7 +103,7 @@ void run() {
 }
 }  // namespace slicing
 
-// [Slide 81] Each object runs its own class's drive().
+// [Slide 82] Each object runs its own class's drive().
 namespace redefinition {
 void run() {
   Vehicle vehicle{13.4};
@@ -115,7 +115,7 @@ void run() {
 }
 }  // namespace redefinition
 
-// [Slide 82] The Challenge: Two Vectors. by_value keeps only the Vehicle
+// [Slide 83] The Challenge: Two Vectors. by_value keeps only the Vehicle
 // parts (slicing); through a Vehicle*, the compiler calls Vehicle::drive.
 namespace two_vectors {
 void run() {
@@ -136,7 +136,7 @@ void run() {
 }
 }  // namespace two_vectors
 
-// [Slide 83] The Challenge: A Base Reference
+// [Slide 84] The Challenge: A Base Reference
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
 namespace base_reference {
@@ -154,14 +154,14 @@ void run() {
 // Runtime polymorphism: virtual.
 // ---------------------------------------------------------------------------
 namespace runtime {
-// [Slide 86] Step 1: public Inheritance: does not compile. The code and its error are in
-// ../not_compiling/slide_086_private_inheritance.cpp.
+// [Slide 87] Step 1: public Inheritance: does not compile. The code and its error are in
+// ../not_compiling/slide_087_private_inheritance.cpp.
 
-// [Slide 87] Step 2: A virtual Method in the Base Class
+// [Slide 88] Step 2: A virtual Method in the Base Class
 class Vehicle {
  public:
   explicit Vehicle(double max_speed) : max_speed_{max_speed} {}
-  virtual ~Vehicle() = default;  // why: [Slide 64]
+  virtual ~Vehicle() = default;  // why: [Slide 65]
   virtual void drive(const Route& route) const {
     std::cout << "Vehicle: drives " << route.length() << " m\n";
   }
@@ -171,7 +171,7 @@ class Vehicle {
   double speed_{0.0};
 };
 
-// [Slide 88] Step 2: Overriding and override, and [Slide 89] RoboTaxi Marks
+// [Slide 89] Step 2: Overriding and override, and [Slide 90] RoboTaxi Marks
 // drive override.
 class RoboTaxi : public Vehicle {
  public:
@@ -201,8 +201,8 @@ class Taxi : public Vehicle {
   std::string driver_name_;
 };
 
-// [Slide 90] Step 3: A Base Reference or Pointer. The code of the challenge
-// ([Slide 82] and [Slide 83]), now with drive() virtual: each object runs its
+// [Slide 91] Step 3: A Base Reference or Pointer. The code of the challenge
+// ([Slide 83] and [Slide 84]), now with drive() virtual: each object runs its
 // own drive().
 void start_shift(const Vehicle& vehicle, const Route& route) { vehicle.drive(route); }
 
@@ -224,11 +224,11 @@ void run() {
 
 std::vector<Slide> slides() {
   return {
-      {66, "Slicing", compile_time::slicing::run},
-      {81, "Redefinition", compile_time::redefinition::run},
-      {82, "The Challenge: Two Vectors", compile_time::two_vectors::run},
-      {83, "The Challenge: A Base Reference", compile_time::base_reference::run},
-      {90, "Step 3: A Base Reference or Pointer", runtime::base_reference::run},
+      {67, "Slicing", compile_time::slicing::run},
+      {82, "Redefinition", compile_time::redefinition::run},
+      {83, "The Challenge: Two Vectors", compile_time::two_vectors::run},
+      {84, "The Challenge: A Base Reference", compile_time::base_reference::run},
+      {91, "Step 3: A Base Reference or Pointer", runtime::base_reference::run},
   };
 }
 
