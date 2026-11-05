@@ -15,7 +15,6 @@ C++ code snippets from lecture slides.
 enpm702-fall-2026-cpp/
 ├── CMakeLists.txt        # top-level, adds project/weekN
 ├── project/
-│   ├── enpm702_setup.sh  # live8, live9, playground9: build, then run
 │   ├── week1/
 │   │   ├── CMakeLists.txt
 │   │   └── src/
@@ -183,41 +182,41 @@ For a quick one-off compile during a lecture, without CMake:
 702memcheck ./example
 ```
 
-## Build and run in one step: `enpm702_setup.sh`
+## Build and run in one step: `week8.sh` and `week9.sh`
 
-`project/enpm702_setup.sh` builds a program and, if it compiles, runs it. It
-finds the repository from its own place in `project/`, so it works wherever you
-cloned it, and it changes no file in the repository. Run every command below
-from the repository's top folder.
+Weeks 8 and 9 each have a script in their folder, `project/week8/week8.sh` and
+`project/week9/week9.sh`. A script builds the week's programs and, if they
+compile, runs one. It finds the repository from its own place, so it works
+wherever you cloned it, and it changes no file in the repository. Run every
+command below from the repository's top folder.
 
-1. Get the script: `git pull`.
-2. Check once that the programs build and run, for every week or for one:
+1. Get the scripts: `git pull`.
+2. Check once that the week's programs build and run:
 
    ```bash
-   bash project/enpm702_setup.sh       # weeks 8 and 9
-   bash project/enpm702_setup.sh 9     # week 9 only
+   bash project/week8/week8.sh
+   bash project/week9/week9.sh
    ```
 
    Each check shows ✔ when it passed, or ✘ and the lines to fix.
-3. Load the commands into your terminal, with `source` instead of `bash`:
+3. Load the week's command into your terminal, with `source` instead of `bash`:
 
    ```bash
-   source project/enpm702_setup.sh
+   source project/week9/week9.sh
    ```
 
-4. Then use them:
+4. Then use it:
 
    | Command | What it does |
    |---|---|
-   | `live8` | Build `week8_live` and run it |
-   | `live9` | Build `week9_live` and run it |
-   | `playground9` | Build `week9_playground` and run the code of every slide |
-   | `playground9 63` | The same, for the code of slide 63 only |
+   | `live8` | Build `week8_live` and run it (after `source project/week8/week8.sh`) |
+   | `week9` | Build every week-9 program, then run `week9_ride_service` |
+   | `week9 62` | The same, then run the code of slide 62 instead |
+   | `week9 xl` | The same, then run the code of appendix page xl instead |
 
 The commands exist only in the terminal where you typed `source`; in a new
-terminal, type it again. `playground9` needs `project/week9/common/` and
-`project/week9/playground/`, which join the repository after the Live Coding
-deadline (Nov 10).
+terminal, type it again. `project/week9/playground/README.md` says what each
+playground folder holds, and lists the slides whose code does not compile.
 
 `702run` only runs what is already in `build/`. After you change the code, run
 `702build <target>` first, or use these commands, which build before they run.
