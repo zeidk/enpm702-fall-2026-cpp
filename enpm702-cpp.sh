@@ -45,6 +45,10 @@
 #       export ENPM702_WS="$HOME/somewhere/enpm702-fall-2026-cpp"
 #   - After you `git pull`, open a new terminal so the latest version of this
 #     file is loaded.
+#   - Each new terminal prints a status check: the repository, the tools and the
+#     build folder. To hide it, set ENPM702_QUIET=1 before the source line:
+#       export ENPM702_QUIET=1
+#     702status prints it again at any time.
 #
 # Repository layout assumed by this script:
 #   enpm702-fall-2026-cpp/
@@ -249,7 +253,62 @@ _enpm702_help() {
     echo "  Run       : 702run <executable> [args], 702exe"
     echo "  Compile   : 702g++ <file.cpp> [-o name]   (single file, ${ENPM702_STD})"
     echo "  Debug     : 702memcheck <executable>"
-    echo "  Help      : 702help"
+    echo "  Help      : 702help, 702status"
+}
+
+# Print a status check: the file is loaded, the repository is found, the tools are
+# installed, and whether the build folder is configured. Shown once when this file is
+# sourced in an interactive terminal (unless ENPM702_QUIET=1), and by 702status.
+# Usage: 702status
+_enpm702_status() {
+    local line="########################################################################"
+    local rule="------------------------------------------------------------------------"
+    local ok=0 bad=0
+    echo "$line"
+    echo "#  ENPM702 C++ environment: enpm702-cpp.sh loaded"
+    echo "$line"
+    if [ -f "$ENPM702_WS/CMakeLists.txt" ] && [ -d "$ENPM702_PROJECT" ]; then
+        printf '  [ OK ] %-10s %s\n' "repository" "$ENPM702_WS"
+        ok=$((ok + 1))
+    else
+        printf '  [FAIL] %-10s %s\n' "repository" "not found at $ENPM702_WS (set ENPM702_WS)"
+        bad=$((bad + 1))
+    fi
+    echo "$rule"
+    # tool, package, how to read its version
+    local tool pkg ver
+    for tool in g++ cmake gdb valgrind; do
+        case "$tool" in
+            g++) pkg=build-essential ;;
+            *)   pkg=$tool ;;
+        esac
+        if command -v "$tool" > /dev/null 2>&1; then
+            case "$tool" in
+                g++)      ver=$(g++ -dumpfullversion 2>/dev/null) ;;
+                cmake)    ver=$(cmake --version 2>/dev/null | head -n 1 | awk '{print $3}') ;;
+                gdb)      ver=$(gdb --version 2>/dev/null | head -n 1 | awk '{print $NF}') ;;
+                valgrind) ver=$(valgrind --version 2>/dev/null | sed 's/^valgrind-//') ;;
+            esac
+            printf '  [ OK ] %-10s %s\n' "$tool" "${ver:-installed}"
+            ok=$((ok + 1))
+        else
+            printf '  [FAIL] %-10s %s\n' "$tool" "missing: sudo apt install $pkg"
+            bad=$((bad + 1))
+        fi
+    done
+    echo "$rule"
+    if [ -f "$ENPM702_BUILD/CMakeCache.txt" ]; then
+        printf '  [ OK ] %-10s %s\n' "build" "configured in $ENPM702_BUILD"
+    else
+        printf '  [ -- ] %-10s %s\n' "build" "not configured yet: run 702configure after enpm702"
+    fi
+    echo "$line"
+    if [ "$bad" -eq 0 ]; then
+        echo "#  All $ok checks passed. Type  enpm702  to load the 702* shortcuts."
+    else
+        echo "#  $bad check(s) failed: fix them above, then open a new terminal."
+    fi
+    echo "$line"
 }
 
 # --- Entry point ------------------------------------------------------------
@@ -301,6 +360,15 @@ enpm702() {
 
     # Usage: 702help
     alias 702help="_enpm702_help"
+    alias 702status="_enpm702_status"
 
     _enpm702_help
 }
+
+# --- Status at source time --------------------------------------------------
+# Only in an interactive terminal: output from a startup file in a non-interactive
+# shell (scp, rsync, scripts) can break those tools. Set ENPM702_QUIET=1 before the
+# source line to hide it; 702status shows it at any time.
+case "$-" in
+    *i*) [ "${ENPM702_QUIET:-0}" = 1 ] || _enpm702_status ;;
+esac
